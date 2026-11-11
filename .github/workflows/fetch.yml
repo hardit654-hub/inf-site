@@ -1,0 +1,39 @@
+name: Скачать исходные файлы заданий
+
+on:
+  push:
+    branches: [main]
+    paths: ["sources/*-urls.txt"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Скачать файлы по спискам sources/*-urls.txt
+        run: |
+          set -u
+          for list in sources/*-urls.txt; do
+            dir="sources/$(basename "$list" -urls.txt)"
+            mkdir -p "$dir"
+            while read -r name url; do
+              [ -z "${name:-}" ] && continue
+              [ -s "$dir/$name" ] && continue
+              if curl -fsSL --retry 3 -A "Mozilla/5.0" -o "$dir/$name" "$url"; then
+                echo "OK   $name $(stat -c %s "$dir/$name")"
+              else
+                echo "FAIL $name $url"; rm -f "$dir/$name"
+              fi
+            done < "$list"
+          done
+      - name: Сохранить в репозиторий
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sources
+          git diff --cached --quiet || git commit -m "Исходные файлы заданий"
+          git push
