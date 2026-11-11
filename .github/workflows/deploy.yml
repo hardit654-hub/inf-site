@@ -25,3 +25,33 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./site/
           server-dir: ./
+
+      # Пароль базы кладём на хостинг отдельно и только если PHP там действительно выполняется.
+      # Иначе файл с паролем отдавался бы как обычный текст — поэтому сначала проверка, после — ещё одна.
+      - name: Проверить PHP и положить настройки базы (config.php)
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SITE: https://gsvv.ru/inf
+        run: |
+          if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASSWORD" ]; then echo "::warning::Нет секретов DB_* — личные кабинеты не настроены"; exit 0; fi
+          body=$(curl -s --max-time 25 "$SITE/api/index.php?action=health&t=$(date +%s)" || true)
+          case "$body" in
+            "{"*) echo "PHP на хостинге работает";;
+            *) echo "::warning::PHP на хостинге не выполняется — config.php НЕ загружен. Включите PHP для сайта gsvv.ru в панели хостинга и запустите загрузку ещё раз."; exit 0;;
+          esac
+          umask 077
+          php -r '$c=["dsn"=>"mysql:host=localhost;dbname=".getenv("DB_NAME").";charset=utf8mb4","user"=>getenv("DB_USER"),"pass"=>getenv("DB_PASSWORD"),"setup_code"=>getenv("DB_PASSWORD")];
+                  file_put_contents(getenv("RUNNER_TEMP")."/config.php","<?php\n// создано автоматически при загрузке\nreturn ".var_export($c,true).";\n");'
+          curl -s --show-error -T "$RUNNER_TEMP/config.php" "ftp://$FTP_SERVER/api/config.php" --user "$FTP_USERNAME:$FTP_PASSWORD"
+          rm -f "$RUNNER_TEMP/config.php"
+          check=$(curl -s --max-time 25 "$SITE/api/config.php?t=$(date +%s)" || true)
+          if printf '%s' "$check" | grep -q "php\|pass"; then
+            curl -s "ftp://$FTP_SERVER/" --user "$FTP_USERNAME:$FTP_PASSWORD" -Q "DELE api/config.php" >/dev/null || true
+            echo "::error::config.php отдаётся как текст — удалён с хостинга"; exit 1
+          fi
+          echo "Проверка: $(curl -s --max-time 25 "$SITE/api/index.php?action=health")"
