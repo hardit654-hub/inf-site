@@ -1,0 +1,6 @@
+# Файлы к заданиям: всегда скачивать, а не открывать в браузере
+<IfModule mod_headers.c>
+  <FilesMatch "\.(xlsx|xls|ods|txt|zip|csv)$">
+    Header set Content-Disposition "attachment"
+  </FilesMatch>
+</IfModule>
