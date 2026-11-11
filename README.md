@@ -20,3 +20,15 @@
 | `FTP_PASSWORD` | пароль FTP |
 
 Проверить загрузку вручную: вкладка **Actions → Загрузка сайта на хостинг → Run workflow**.
+
+## Ссылки для Telegram
+
+Telegram не может получить превью напрямую с хостинга, поэтому для отправки в Telegram есть короткие ссылки на GitHub Pages (папка `share/`). Они показывают превью и сразу перебрасывают на сайт:
+
+| Ссылка для Telegram | Куда ведёт |
+|---|---|
+| https://hardit654-hub.github.io/inf-site/ | https://gsvv.ru/inf/ |
+| https://hardit654-hub.github.io/inf-site/kurs/ | курс № 19–21 |
+| https://hardit654-hub.github.io/inf-site/demo/ | демоверсия ЕГЭ‑2027 |
+
+Один раз нужно включить GitHub Pages: **Settings → Pages → Source: GitHub Actions**.
