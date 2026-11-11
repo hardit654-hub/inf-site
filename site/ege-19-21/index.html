@@ -1,0 +1,3003 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>№ 19–21 · Решение в Python</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#16181c">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Лучший репетитор по информатике">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="№ 19–21. Решение в Python — курс">
+<meta property="og:description" content="Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.">
+<meta property="og:url" content="https://gsvv.ru/inf/ege-19-21/">
+<meta property="og:image" content="https://gsvv.ru/inf/og-course.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.">
+<script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("toc")==="closed")document.documentElement.classList.add("toc-closed")}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: Stepik-like learning shell — dark header with the step strip, dark collapsible table of contents on the left, white lesson page with a grey footer band */
+:root{
+  --bar:#222326; --bar-2:#2d2e32; --bar-ink:#e8e8ea; --bar-muted:#9a9ca3; --bar-line:#3a3b40;
+  --green:#66cc66; --green-d:#4fae4f; --green-ink:#2e8b2e; --green-soft:#e8f6e8;
+  --bg:#ffffff; --page:#f4f5f6; --ink:#222222; --muted:#6b6f76; --line:#e1e3e6; --line-strong:#22222255;
+  --code-bg:#f6f8fa; --accent:#2f7dd1;
+  --bad:#d64541; --bad-soft:#fdeceb; --warn:#c27c0e; --warn-soft:#fdf3e1;
+  --kw:#7c3aed; --str:#0f7b5f; --com:#8a94a6; --num:#b45309;
+  --f-body:"Roboto",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --toc-w:300px; --head-h:60px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17181b; --page:#1e1f23; --ink:#e6e7ea; --muted:#9a9ea6; --line:#2e3036; --line-strong:#e6e7ea55;
+  --code-bg:#111215; --accent:#7fb2ff; --green-ink:#7ad67a; --green-soft:#1c3320;
+  --bad:#ff7d78; --bad-soft:#3a1d1c; --warn:#f0b354; --warn-soft:#352812;
+  --kw:#c4a5ff; --str:#6fdcb6; --com:#6f7b8f; --num:#f5b26b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17181b; --page:#1e1f23; --ink:#e6e7ea; --muted:#9a9ea6; --line:#2e3036; --line-strong:#e6e7ea55;
+  --code-bg:#111215; --accent:#7fb2ff; --green-ink:#7ad67a; --green-soft:#1c3320;
+  --bad:#ff7d78; --bad-soft:#3a1d1c; --warn:#f0b354; --warn-soft:#352812;
+  --kw:#c4a5ff; --str:#6fdcb6; --com:#6f7b8f; --num:#f5b26b; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.65 var(--f-body)}
+a{color:var(--accent)}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+/* header */
+.head{position:fixed;inset:0 0 auto 0;height:calc(var(--head-h) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);background:var(--bar);color:var(--bar-ink);z-index:30;display:flex;align-items:center;gap:14px;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
+.logo{display:flex;align-items:center;gap:10px;color:var(--bar-ink);text-decoration:none;flex:none;width:calc(var(--toc-w) - 28px);min-width:0}
+.logo .mark{width:34px;height:34px;border-radius:9px;background:var(--green);color:#10331a;display:flex;align-items:center;justify-content:center;font:700 15px var(--f-mono);flex:none}
+.logo .lt{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.logo .lt b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo .lt small{font-size:12px;color:var(--bar-muted)}
+.strip{flex:1;min-width:0;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:6px 2px 10px}
+.strip::-webkit-scrollbar{display:none}
+.sq{flex:none;width:32px;height:32px;border-radius:3px;border:0;background:#55575d;color:#d7d8db;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;position:relative;font:700 15px var(--f-body)}
+.sq svg{width:16px;height:16px}
+.sq.seen,.sq.ok{background:var(--green);color:#10331a}
+.sq.bad{background:var(--bad);color:#fff}
+.sq.rev{background:var(--warn);color:#2a1a00}
+.sq.on{outline:2px solid #fff;outline-offset:1px}
+.sq.on::after{content:"";position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);border:6px solid transparent;border-bottom-color:var(--bg)}
+.hright{display:flex;align-items:center;gap:10px;flex:none}
+.pts{font:500 13px var(--f-body);color:var(--bar-muted);white-space:nowrap}
+.pts b{color:var(--bar-ink)}
+.iconbtn{width:38px;height:38px;border-radius:9px;border:1px solid var(--bar-line);background:var(--bar-2);color:var(--bar-ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;text-decoration:none}
+.iconbtn svg{width:19px;height:19px}
+.iconbtn:hover{border-color:var(--bar-muted)}
+
+/* table of contents */
+.toc{position:fixed;top:calc(var(--head-h) + env(safe-area-inset-top,0px));bottom:0;left:0;width:var(--toc-w);background:var(--bar-2);color:var(--bar-ink);z-index:20;display:flex;flex-direction:column;transition:transform .25s ease;border-right:1px solid var(--bar-line)}
+.toc-closed .toc{transform:translateX(-100%)}
+.toc-top{padding:18px 18px 14px;padding-left:max(18px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--bar-line)}
+.toc-top h2{margin:0 0 10px;font:700 16px/1.3 var(--f-body)}
+.prog{font-size:13px;color:var(--bar-muted)}
+.prog b{color:var(--bar-ink)}
+.pbar{height:6px;border-radius:9px;background:#45474d;margin-top:8px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--green);border-radius:9px;width:0;transition:width .3s}
+.toc-list{flex:1;overflow-y:auto;padding:8px 0 24px}
+.mod{display:flex;gap:8px;align-items:baseline;padding:14px 18px 8px;font:700 15px/1.3 var(--f-body)}
+.mod .n{color:var(--bar-muted)}
+.les{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;color:var(--bar-ink);padding:10px 22px 10px 30px;cursor:pointer;position:relative;font-size:15px;line-height:1.3}
+.les::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:#4a4c52}
+.les.part::before{background:linear-gradient(var(--green) var(--p,0%),#4a4c52 var(--p,0%))}
+.les.done::before{background:var(--green)}
+.les .n{color:var(--bar-muted);font-weight:500;min-width:30px}
+.les .t{flex:1;min-width:0}
+.les .c{font:500 12px var(--f-mono);color:var(--bar-muted)}
+.les.done .c{color:var(--green)}
+.les:hover{background:#ffffff0d}
+.les.on{background:var(--green-d);color:#fff}
+.les.on .n,.les.on .c{color:#eaffea}
+.les.on::after{content:"";position:absolute;right:0;top:50%;transform:translateY(-50%);border:9px solid transparent;border-right-color:var(--bg)}
+.les[disabled]{opacity:.45;cursor:default}
+.les[disabled]:hover{background:none}
+
+/* the big toggle arrow on the TOC edge */
+.tocbtn{position:fixed;z-index:25;top:50%;left:var(--toc-w);transform:translate(-50%,-50%);width:44px;height:64px;border-radius:12px;border:2px solid var(--green);background:var(--bar);color:var(--green);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;box-shadow:0 4px 14px #0004;transition:left .25s ease,background .15s}
+.tocbtn svg{width:26px;height:26px;transition:transform .25s}
+.tocbtn:hover{background:var(--green);color:#10331a}
+.toc-closed .tocbtn{left:22px}
+.toc-closed .tocbtn svg{transform:rotate(180deg)}
+
+/* main */
+.main{padding-top:calc(var(--head-h) + env(safe-area-inset-top,0px));margin-left:var(--toc-w);transition:margin-left .25s ease;min-height:100%;display:flex;flex-direction:column}
+.toc-closed .main{margin-left:0}
+.lbar{border-bottom:1px solid var(--line);padding:14px 32px;display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;font-size:15px;
+  padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.lbar b{font-weight:500}
+.lbar span{color:var(--muted)}
+.content{flex:1;padding:28px 32px 40px;padding-left:max(48px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.toc-closed .content{padding-left:max(84px,env(safe-area-inset-left,0px))}
+.step{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:14px;min-width:0}
+.step h2{font:700 26px/1.25 var(--f-body);margin:6px 0;text-align:center;text-wrap:balance}
+.step h2.left{text-align:left}
+.step h3{font:700 19px/1.3 var(--f-body);margin:10px 0 0}
+.step p{margin:0}
+.html{display:flex;flex-direction:column;gap:12px;min-width:0}
+ul.dash{margin:0;padding-left:22px;list-style:none;display:flex;flex-direction:column;gap:2px}
+ul.dash li::before{content:"– ";margin-left:-14px}
+code{font:14px var(--f-mono);background:var(--code-bg);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.cond{border:1px solid var(--line);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.codebox{position:relative;min-width:0}
+.codebox pre{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:6px;padding:14px 16px;overflow-x:auto;font:14px/1.55 var(--f-mono);tab-size:4}
+.codebox pre code{background:none;border:0;padding:0}
+.copy{position:absolute;top:8px;right:8px;border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:5px;font-size:12px;padding:3px 8px;cursor:pointer}
+.k{color:var(--kw);font-weight:600}.s{color:var(--str)}.c{color:var(--com);font-style:italic}.d{color:var(--num)}
+details.box{border:1px solid var(--line);border-radius:6px;padding:0 16px;background:var(--bg)}
+details.box>summary{cursor:pointer;font-weight:500;padding:12px 0;color:var(--accent)}
+details.box[open]>summary{border-bottom:1px solid var(--line);margin-bottom:12px}
+details.box>div{display:flex;flex-direction:column;gap:10px;padding-bottom:14px}
+.locked{display:flex;gap:12px;align-items:center;border:1px dashed var(--line-strong);border-radius:6px;padding:11px 16px;color:var(--muted)}
+.locked svg{width:18px;height:18px;flex:none}
+.locked span{display:flex;flex-direction:column;gap:1px}
+.locked b{color:var(--ink);font-weight:500}
+.locked small{font-size:13px}
+.vwrap{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:6px;overflow:hidden;background:#000}
+.vwrap iframe{width:100%;height:100%;border:0;display:block}
+.video{aspect-ratio:16/9;max-width:100%;border-radius:6px;background:#2d2e32;color:#c9cbd0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px}
+.video .pl{width:72px;height:72px;border-radius:50%;background:#ffffff1a;display:flex;align-items:center;justify-content:center}
+.video .pl svg{width:30px;height:30px;color:var(--green)}
+.video b{color:#fff;font-weight:500}
+.treewrap{overflow-x:auto;max-width:100%;border:1px solid var(--line);border-radius:6px;padding:10px;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:20px 20px;background-color:var(--bg)}
+svg.tree{max-width:100%;height:auto;display:block}
+svg.tree line{stroke:var(--ink);stroke-width:1.6}
+svg.tree circle{stroke:var(--ink);stroke-width:1.6}
+svg.tree .w{fill:var(--bg)} svg.tree .g{fill:#2fa54a} svg.tree .r{fill:#e5413a}
+svg.tree rect{fill:var(--bg);stroke:var(--ink);stroke-width:1.2}
+svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
+
+/* quiz — like Stepik's framed answer block */
+.quiz{border:2px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px;margin-top:6px;box-shadow:0 0 0 6px var(--page)}
+.quiz.ok{border-color:var(--green);box-shadow:0 0 0 6px var(--green-soft)}
+.quiz.bad{border-color:var(--bad);box-shadow:0 0 0 6px var(--bad-soft)}
+.qt{font:700 17px var(--f-body)}
+.verdict{display:flex;align-items:center;gap:8px;font-weight:500;padding:9px 12px;border-radius:6px}
+.verdict svg{width:18px;height:18px;flex:none}
+.verdict.ok{background:var(--green-soft);color:var(--green-ink)} .verdict.bad{background:var(--bad-soft);color:var(--bad)}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.opt input{margin-top:5px;accent-color:var(--green-d)}
+.opt.ok{border-color:var(--green);background:var(--green-soft)} .opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.fields{display:flex;flex-direction:column;gap:8px}
+.frow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.frow label{font-weight:500;min-width:52px}
+.frow input{font:600 16px var(--f-mono);width:130px;max-width:100%;padding:8px 10px;border:1px solid var(--line-strong);border-radius:5px;background:var(--bg);color:var(--ink)}
+.frow input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.frow input.ok{border-color:var(--green);background:var(--green-soft);color:var(--green-ink)}
+.frow input.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.qact{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.btn{appearance:none;border:0;border-radius:5px;font-weight:500;font-size:16px;padding:10px 20px;cursor:pointer;background:var(--green-d);color:#fff;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn:hover{background:#45a045}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong)}
+.btn.ghost:hover{background:var(--page)}
+.btn.warn{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
+.btn[disabled]{opacity:.5;cursor:default}
+.btn svg{width:18px;height:18px}
+.att{font-size:14px;color:var(--muted)}
+.reveal{background:var(--warn-soft);border-left:3px solid var(--warn);padding:8px 12px;border-radius:0 6px 6px 0;font-size:15px}
+.reveal b{font-family:var(--f-mono)}
+
+.foot{background:var(--page);border-top:1px solid var(--line);padding:22px 32px;padding-left:max(48px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.toc-closed .foot{padding-left:max(84px,env(safe-area-inset-left,0px))}
+.foot-in{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.foot .soon{color:var(--muted)}
+.foot .note{width:100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.foot .note .btn{font-size:13px;padding:5px 10px}
+
+.scrim{display:none}
+@media (max-width:900px){
+  :root{--toc-w:290px}
+  .logo{width:auto}
+  .logo .lt{display:none}
+  .pts{display:none}
+  .main{margin-left:0}
+  .content,.foot,.toc-closed .content,.toc-closed .foot{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .lbar{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .tocbtn{width:38px;height:56px;top:auto;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translateX(-50%)}
+  .toc-closed .tocbtn{left:24px}
+  html:not(.toc-closed) .scrim{display:block;position:fixed;inset:0;background:#0007;z-index:15}
+  .step h2{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){.toc,.tocbtn,.main,.tocbtn svg{transition:none}}
+</style>
+</head>
+<body>
+<header class="head">
+  <a class="logo" href="../" title="На главную"><span class="mark">AS</span><span class="lt"><b>Артём Свинченко</b><small>← На главную</small></span></a>
+  <nav class="strip" id="strip" aria-label="Шаги урока"></nav>
+  <div class="hright">
+    <span class="pts" id="pts"></span>
+    <button class="iconbtn" id="theme" type="button" aria-label="Переключить тему"></button>
+  </div>
+</header>
+
+<aside class="toc" id="toc" aria-label="Оглавление курса">
+  <div class="toc-top">
+    <h2 id="ctitle"></h2>
+    <div class="prog">Прогресс по курсу: <b id="pnum"></b></div>
+    <div class="pbar"><i id="pfill"></i></div>
+  </div>
+  <div class="toc-list" id="toclist"></div>
+</aside>
+<button class="tocbtn" id="tocbtn" type="button" aria-label="Скрыть оглавление" title="Скрыть / показать оглавление"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+<div class="scrim" id="scrim"></div>
+
+<div class="main">
+  <div class="lbar" id="lbar"></div>
+  <main class="content"><article class="step" id="step"></article></main>
+  <footer class="foot"><div class="foot-in" id="foot"></div></footer>
+</div>
+
+<script>
+/* Данные курса. Чтобы добавить урок — допишите его в lessons. */
+window.COURSE = {
+ "id": "ege-inf",
+ "title": "ЕГЭ по информатике",
+ "section": {
+  "num": 40,
+  "title": "№ 19-21 Решение в Python",
+  "lessons": [
+   {
+    "num": "40.1",
+    "title": "Как решать № 19-21???",
+    "steps": [
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Задание № 19-21 на тему теория игр из ЕГЭ можно решать разными способами:</p>\n<h3>✅ Рекурсия</h3>\n<p>Этот способ подходит для решения № 19-21 из ЕГЭ. Он простой и универсальный. Его мы рекомендуем использовать в качестве основного способа. Он реально очень хорош в рамках ЕГЭ.</p>\n<h3>✅ Динамика</h3>\n<p>Альтернативный способ решения № 19-21. Рекурсия имеет недостаток – долгое время работы. Поэтому есть очень маленькая вероятность, что на ЕГЭ встретится задача, которую рекурсией не решить. Недостатки есть и у динамики – она очень быстрая, но не универсальная. Например, реализовать в ней \"повторение ходов\" проблематично.</p>\n<h3>Вывод:</h3>\n<p>Рекурсия решит задачу из ЕГЭ с вероятностью 99%. Но есть шанс, что задача не решится рекурсией. И шанс, что не решится динамикой. Поэтому в идеале нужно владеть обоими способами решения.</p>"
+       }
+      ]
+     },
+     {
+      "type": "text",
+      "title": "Как решать № 19-21???",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Важно понимать, что теория игр это не только задачи про Петю и Ваню!</p>\n<p>Теория игр — раздел прикладной математики, точнее исследования операций.</p>\n<p>Чаще всего методы теории игр находят применение в международных отношениях, экономике, чуть реже в других общественных науках — социологии, политологии, психологии, этике, юриспруденции и других.</p>\n<p>Начиная с 1970-х годов, её взяли на вооружение биологи для исследования поведения животных и теории эволюции.</p>\n<p>Очень важное значение она имеет для искусственного интеллекта и кибернетики, особенно с проявлением интереса к интеллектуальным агентам.</p>\n<p>Если вам интересна данная тема, то обязательно изучите способ решения № 19-21 динамикой!</p>"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "num": "40.2",
+    "title": "Одна куча",
+    "steps": [
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h3>Содержание урока</h3><p>В этом уроке мы научимся решать задания № 19-21 на одну кучу.</p><p>К каждой задаче из этого модуля во вкладке <b>Решение</b> есть наше решение задачи.</p>"
+       }
+      ]
+     },
+     {
+      "type": "video",
+      "title": "Разбор: демоверсия 2024, одна куча"
+     },
+     {
+      "type": "choice",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h3>Мы играем за Ваню. При умной игре Вани...</h3>"
+       },
+       {
+        "t": "tree",
+        "labels": [
+         "Петя",
+         "Ваня"
+        ],
+        "v": [
+         [
+          "g",
+          "r"
+         ],
+         [
+          "g",
+          "r"
+         ]
+        ]
+       },
+       {
+        "t": "html",
+        "v": "<p>Зелёный кружок – победил нужный нам игрок, красный – победил противник.</p>"
+       }
+      ],
+      "options": [
+       "Ваня гарантированно сможет победить своим первым ходом",
+       "Ваня не сможет гарантированно победить своим первым ходом"
+      ],
+      "answer": 0
+     },
+     {
+      "type": "choice",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h3>Мы играем за Петю. При умной игре Пети...</h3>"
+       },
+       {
+        "t": "tree",
+        "labels": [
+         "Петя",
+         "Ваня",
+         "Петя"
+        ],
+        "v": [
+         [
+          "r",
+          [
+           "r",
+           "r"
+          ]
+         ],
+         [
+          "r",
+          [
+           "r",
+           "g"
+          ]
+         ]
+        ]
+       },
+       {
+        "t": "html",
+        "v": "<p>Зелёный кружок – победил нужный нам игрок, красный – победил противник.</p>"
+       }
+      ],
+      "options": [
+       "Петя гарантированно сможет победить своим первым или вторым ходом",
+       "Петя не сможет гарантированно победить своим первым или вторым ходом"
+      ],
+      "answer": 1
+     },
+     {
+      "type": "choice",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h3>Мы играем за Ваню. При умной игре Вани...</h3>"
+       },
+       {
+        "t": "tree",
+        "labels": [
+         "Петя",
+         "Ваня",
+         "Петя",
+         "Ваня",
+         "Петя",
+         "Ваня"
+        ],
+        "v": [
+         [
+          [
+           [
+            "g",
+            [
+             [
+              "g",
+              "r"
+             ],
+             [
+              "r",
+              "r"
+             ]
+            ]
+           ],
+           [
+            "r",
+            "g"
+           ]
+          ]
+         ],
+         [
+          [
+           "r",
+           "r"
+          ],
+          [
+           [
+            [
+             [
+              "r",
+              "g"
+             ],
+             [
+              "g",
+              "g"
+             ]
+            ],
+            "r"
+           ]
+          ]
+         ]
+        ]
+       },
+       {
+        "t": "html",
+        "v": "<p>Зелёный кружок – победил нужный нам игрок, красный – победил противник.</p>"
+       }
+      ],
+      "options": [
+       "Ваня гарантированно сможет победить не более чем за три своих хода",
+       "Ваня не сможет гарантированно победить не более чем за три своих хода"
+      ],
+      "answer": 0
+     },
+     {
+      "type": "video",
+      "title": "Решение демоверсии 2024 по шаблону"
+     },
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h2 class=\"center\">Шаблон решения № 19-21 на одну кучу</h2>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if ???:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [???]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(???):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)"
+       },
+       {
+        "t": "html",
+        "v": "<h2 class=\"center\">Пример использования шаблона</h2><div class=\"cond\">\n<p>(Демо 2024) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в кучу <b>один камень</b> или увеличить количество камней в куче <b>в два раза</b>. Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p>\n<p>Игра завершается в тот момент, когда количество камней в куче становится не менее 129. Победителем считается игрок, сделавший последний ход, т.е. первым получивший кучу из 129 или больше камней.</p>\n<p>В начальный момент в куче было S камней, 1 ≤ S ≤ 128.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p></div>\n<h3>№ 19</h3><p>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p>\n<p><b>Решение.</b></p><p>Петя не может выиграть за один ход <code>f(s, 0, [1]) == 0</code>.<br>Ваня может выиграть своим первым ходом <code>f(s, 0, [2]) == 1</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x >= 129:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x * 2, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 128 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 19: 64"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>Ответ: 64.</b></p>"
+       },
+       {
+        "t": "html",
+        "v": "<h3>№ 20</h3><p>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:</p><ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul><p>Найденные значения запишите в ответе в порядке возрастания.</p>\n<p><b>Решение.</b></p><p>Петя не может выиграть за один ход <code>f(s, 0, [1]) == 0</code>.<br>Петя может выиграть своим вторым ходом <code>f(s, 0, [3]) == 1</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x >= 129:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x * 2, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 128 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 20: 32\n№ 20: 63"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>Ответ: 32 63.</b></p>"
+       },
+       {
+        "t": "html",
+        "v": "<h3>№ 21</h3><p>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:</p><ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul><p>Если найдено несколько значений S, в ответе запишите минимальное из них.</p>\n<p><b>Решение.</b></p><p>У Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети <code>f(s, 0, [2, 4]) == 1</code>.<br>У Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом <code>f(s, 0, [2]) == 0</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x >= 129:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x * 2, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 128 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 21: 62"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>Ответ: 62.</b></p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в кучу <b>один камень</b> или увеличить количество камней в куче <b>в два раза</b>. Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда количество камней в куче становится не менее 149. Победителем считается игрок, сделавший последний ход, т.е. первым получивший кучу из 149 или больше камней.</p><p>В начальный момент в куче было S камней, 1 ≤ S ≤ 148.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите такое значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в предыдущем задании, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "def f(x, c, win):\n    if x >= 149:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x * 2, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 148 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4\n"
+         },
+         {
+          "t": "html",
+          "v": "<p>Вывод программы.</p>"
+         },
+         {
+          "t": "code",
+          "v": "№ 20: 37\n№ 21: 72\n№ 20: 73\n№ 19: 74"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "74"
+       ],
+       [
+        "37",
+        "73"
+       ],
+       [
+        "72"
+       ]
+      ]
+     },
+     {
+      "type": "video",
+      "title": "Разбор задач на одну кучу"
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в кучу <b>один камень</b> или увеличить количество камней в куче <b>в три раза</b>. Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда количество камней в куче становится не менее 58. Победителем считается игрок, сделавший последний ход, т.е. первым получивший кучу из 58 или больше камней.</p><p>В начальный момент в куче было S камней, 1 ≤ S ≤ 57.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите такое значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в предыдущем задании, найдите значение S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul></p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "def f(x, c, win):\n    if x >= 58:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x * 3, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 57 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4\n"
+         },
+         {
+          "t": "html",
+          "v": "<p>Вывод программы.</p>"
+         },
+         {
+          "t": "code",
+          "v": "№ 21: 17\n№ 20: 18\n№ 19: 19"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 1
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "19"
+       ],
+       [
+        "18"
+       ],
+       [
+        "17"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в кучу <b>один</b> или <b>четыре</b> камня либо увеличить количество камней в куче <b>в три раза</b>. Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда количество камней в куче становится не менее 40. Победителем считается игрок, сделавший последний ход, т.е. первым получивший кучу, состоящую из 40 или больше камней.</p><p>В начальный момент в куче было S камней; 1 ≤ S ≤ 39.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите такое значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите два таких <b>минимальных</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul>Если найдено несколько значений S, в ответе запишите наименьшее из них.</p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "def f(x, c, win):\n    if x >= 40:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x + 4, c + 1, win), f(x * 3, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 39 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4\n"
+         },
+         {
+          "t": "html",
+          "v": "<p>Вывод программы.</p>"
+         },
+         {
+          "t": "code",
+          "v": "№ 21: 8\n№ 20: 9\n№ 21: 11\n№ 20: 12\n№ 19: 13"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "13"
+       ],
+       [
+        "9",
+        "12"
+       ],
+       [
+        "8"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(А. Кабанов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может</p>\n<ul class=\"dash\"><li>добавить в кучу один камень;</li><li>добавить в кучу два камня;</li><li>увеличить количество камней в куче в три раза.</li></ul>\n<p>Игра завершается в тот момент, когда количество камней в куче превышает 54. Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 55 или больше камней.</p>\n<p>В начальный момент в куче было S камней, 1 ≤ S ≤ 54.</p><p>&nbsp;</p><p><b>№ 19</b><br>Найдите значение S, при котором Ваня выигрывает своим первым ходом при любой игре Пети.</p><p><b>№ 20</b><br>Найдите <b>минимальное</b> и <b>максимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "def f(x, c, win):\n    if x >= 55:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x + 2, c + 1, win), f(x * 3, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 54 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4\n"
+         },
+         {
+          "t": "html",
+          "v": "<p>Вывод программы.</p>"
+         },
+         {
+          "t": "code",
+          "v": "№ 20: 6\n№ 21: 15\n№ 20: 16\n№ 20: 17\n№ 19: 18"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "18"
+       ],
+       [
+        "6",
+        "17"
+       ],
+       [
+        "15"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(А. Кабанов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может</p>\n<ul class=\"dash\"><li>добавить в кучу один камень;</li><li>добавить в кучу два камня;</li><li>добавить в кучу три камня;</li><li>увеличить количество камней в куче в два раза.</li></ul>\n<p>Игра завершается в тот момент, когда количество камней в куче превышает 32. Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 33 или больше камней.</p>\n<p>В начальный момент в куче было S камней, 1 ≤ S ≤ 32.</p><p>&nbsp;</p><p><b>№ 19</b><br>Найдите значение S, при котором Ваня выигрывает своим первым ходом при любой игре Пети.</p><p><b>№ 20</b><br>Найдите <b>минимальное</b> и <b>максимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "def f(x, c, win):\n    if x >= 33:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x + 2, c + 1, win), f(x + 3, c + 1, win), f(x * 2, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 32 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4\n"
+         },
+         {
+          "t": "html",
+          "v": "<p>Вывод программы.</p>"
+         },
+         {
+          "t": "code",
+          "v": "№ 20: 8\n№ 21: 12\n№ 20: 13\n№ 20: 14\n№ 20: 15\n№ 19: 16"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "16"
+       ],
+       [
+        "8",
+        "15"
+       ],
+       [
+        "12"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в кучу один камень, или три камня или семь камней. Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p>\n<p>Игра завершается в тот момент, когда количество камней в куче становится числом, оканчивающимся на ноль. Победителем считается игрок, сделавший последний ход, т.е. первым получивший кучу, количество камней в которой оканчивается на ноль. К примеру, игра заканчивается, когда в куче стало 10, 200, 6800 камней.</p>\n<p>В начальный момент в куче было S камней. S – двузначное число, не оканчивающееся на ноль.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите <b>количество</b> значений S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul></p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>сумму</b> значений S, при которых одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка 1",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>Условие окончания игры</p>"
+         },
+         {
+          "t": "code",
+          "v": "if x % 10 == 0:  # Указываем условие окончания игры\n    return c in win"
+         }
+        ]
+       },
+       {
+        "t": "details",
+        "title": "Подсказка 2",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>Перебор значений S и вычисление ответа.</p>"
+         },
+         {
+          "t": "code",
+          "v": "count_20 = 0\nsum_21 = 0\nfor s in range(10, 99 + 1):  # Перебираем стартовое количество камней в куче\n    if s % 10 == 0:\n        continue\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        count_20 += 1\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        sum_21 += s\nprint()\nprint('№ 20', count_20)\nprint('№ 21', sum_21)"
+         }
+        ]
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "def f(x, c, win):\n    if x % 10 == 0:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x + 1, c + 1, win), f(x + 3, c + 1, win), f(x + 7, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\ncount_20 = 0\nsum_21 = 0\nfor s in range(10, 99 + 1):  # Перебираем стартовое количество камней в куче\n    if s % 10 == 0:\n        continue\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        count_20 += 1\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        sum_21 += s\nprint()\nprint('№ 20', count_20)\nprint('№ 21', sum_21)\n# П1 В1 П2 В2\n# 1  2  3  4\n"
+         },
+         {
+          "t": "html",
+          "v": "<p>Вывод программы.</p>"
+         },
+         {
+          "t": "code",
+          "v": "№ 19: 16\n№ 19: 26\n№ 19: 36\n№ 19: 46\n№ 19: 56\n№ 19: 66\n№ 19: 76\n№ 19: 86\n№ 19: 96\n\n№ 20 9\n№ 21 468"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 1
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "16"
+       ],
+       [
+        "9"
+       ],
+       [
+        "468"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "num": "40.3",
+    "title": "Две кучи",
+    "steps": [
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h3>Содержание урока</h3><p>В этом уроке решаем задания № 19-21 на две кучи.</p>"
+       }
+      ]
+     },
+     {
+      "type": "video",
+      "title": "Разбор: две кучи"
+     },
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h2 class=\"center\">Шаблон решения № 19-21 на две кучи</h2><h3>№ 19</h3><p>Так как Петя делает неудачный ход, то мы должны поменять <code>all()</code> на <code>any()</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x1, x2, c, win):\n    if x1 + x2 >= ???:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [???]\n    if c % 2 != max(win) % 2:\n        return any(moves)  \n    else:\n        return any(moves)  # В №19 МЕНЯЕМ all на any!!!\n\nfor s in range(1, ??? + 1):  # Перебираем стартовое количество камней в куче\n    if f(???, ???, 0, [2]) == 1:\n        print('№ 19:', s)"
+       },
+       {
+        "t": "html",
+        "v": "<h3>№ 20-21</h3>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x1, x2, c, win):\n    if x1 + x2 >= ???:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [???]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, ??? + 1):  # Перебираем стартовое количество камней в куче\n    if f(???, ???, 0, [1]) == 0 and f(???, ???, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(???, ???, 0, [2, 4]) == 1 and f(???, ???, 0, [2]) == 0:\n        print('№ 21:', s)"
+       },
+       {
+        "t": "html",
+        "v": "<h2 class=\"center\">Пример использования шаблона</h2><div class=\"cond\"><p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в одну из куч <b>один камень</b> или увеличить количество камней в куче <b>в два раза</b>. Чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда суммарное количество камней в кучах становится не менее 77. Победителем считается игрок, сделавший последний ход, т. е. первым получивший позицию, в которой в кучах будет 77 или больше камней.</p><p>В начальный момент в первой куче было 7 камней, во второй куче – S камней, 1 ≤ S ≤ 69.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p></div><h3>№ 19</h3><p>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>Решение.</b></p><p>Ваня выиграл своим первым ходом после неудачного первого хода Пети. В начальный момент в первой куче было 7 камней, во второй куче – S камней.</p><p><code>f(7, s, 0, [2]) == 1</code></p><p>Не забываем поменять <code>all()</code> на <code>any()</code>!!!</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x1, x2, c, win):\n    if x1 + x2 >= 77:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 + 1, x2, c + 1, win), f(x1, x2 + 1, c + 1, win),\n             f(x1 * 2, x2, c + 1, win), f(x1, x2 * 2, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return any(moves)  # Ходит противник\n\nfor s in range(1, 69 + 1):  # Перебираем стартовое количество камней в куче\n    if f(7, s, 0, [2]) == 1:\n        print('№ 19:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 19: 18\n№ 19: 19\n№ 19: 20\n№ 19: 21\n........\n№ 19: 66\n№ 19: 67\n№ 19: 68"
+       },
+       {
+        "t": "html",
+        "v": "<p>По условию задачи в ответ нужно взять минимальное значение.</p><p><b>Ответ: 18.</b></p><h3>№ 20</h3><p>Найдите два таких значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</p><p>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>Решение.</b></p><p>В начальный момент в первой куче было 7 камней, во второй куче – S камней.</p><p>Петя не может выиграть первым ходом <code>f(7, s, 0, [1]) == 0</code>.<br>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня <code>f(7, s, 0, [3]) == 1</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x1, x2, c, win):\n    if x1 + x2 >= 77:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 + 1, x2, c + 1, win), f(x1, x2 + 1, c + 1, win),\n             f(x1 * 2, x2, c + 1, win), f(x1, x2 * 2, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 69 + 1):  # Перебираем стартовое количество камней в куче\n    if f(7, s, 0, [1]) == 0 and f(7, s, 0, [3]) == 1:\n        print('№ 20:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 20: 31\n№ 20: 34"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>Ответ: 31 34.</b></p><h3>№ 21</h3><p>Укажите минимальное значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, и при этом у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</p><p><b>Решение.</b></p><p>В начальный момент в первой куче было 7 камней, во второй куче – S камней.</p><p>У Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети <code>f(7, s, 0, [2, 4]) == 1</code>.<br>У Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом <code>f(7, s, 0, [2]) == 0</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x1, x2, c, win):\n    if x1 + x2 >= 77:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 + 1, x2, c + 1, win), f(x1, x2 + 1, c + 1, win),\n             f(x1 * 2, x2, c + 1, win), f(x1, x2 * 2, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 69 + 1):  # Перебираем стартовое количество камней в куче\n    if f(7, s, 0, [2, 4]) == 1 and f(7, s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 21: 30\n№ 21: 33"
+       },
+       {
+        "t": "html",
+        "v": "<p>По условию задачи в ответ нужно взять минимальное значение.</p><p><b>Ответ: 30.</b></p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в одну из куч <b>один камень</b> или увеличить количество камней в куче <b>в два раза</b>. Чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда суммарное количество камней в кучах становится не менее 71. Победителем считается игрок, сделавший последний ход, т. е. первым получивший позицию, в которой в кучах будет 71 или больше камней.</p><p>В начальный момент в первой куче было 8 камней, во второй куче – S камней, 1 ≤ S ≤ 62. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Найдите два таких значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Укажите <b>минимальное</b> значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, и при этом у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "16"
+       ],
+       [
+        "27",
+        "30"
+       ],
+       [
+        "26"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в одну из куч <b>один камень</b> или увеличить количество камней в куче <b>в три раза</b>. Чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда суммарное количество камней в кучах становится не менее 51. Победителем считается игрок, сделавший последний ход, т. е. первым получивший позицию, в которой в кучах будет 51 или больше камней.</p><p>В начальный момент в первой куче было 4 камней, во второй куче – S камней, 1 ≤ S ≤ 46. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Найдите два таких значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Укажите такое значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, и при этом у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "6"
+       ],
+       [
+        "12",
+        "15"
+       ],
+       [
+        "14"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в одну из куч <b>один камень</b> или увеличить количество камней в куче <b>в два раза</b>. Чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда суммарное количество камней в кучах становится не менее 79. Победителем считается игрок, сделавший последний ход, т. е. первым получивший позицию, в которой в кучах будет 79 или больше камней.</p><p>В начальный момент в первой куче было 8 камней, во второй куче – S камней, 1 ≤ S ≤ 70. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Найдите два таких значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.<br>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Укажите <b>минимальное</b> значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, и при этом у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "18"
+       ],
+       [
+        "31",
+        "34"
+       ],
+       [
+        "30"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в одну из куч <b>два камня</b> или увеличить количество камней в куче <b>в два раза</b>. Чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда суммарное количество камней в кучах становится не менее 60. Победителем считается игрок, сделавший последний ход, т. е. первым получивший позицию, в которой в кучах будет 60 или больше камней.</p><p>В начальный момент в первой куче было 4 камней, во второй куче – S камней, 1 ≤ S ≤ 55. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Укажите <b>минимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</p><p><b>№ 21</b><br>Найдите два значения S, при которых у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, и при этом у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.<br>Найденные значения запишите в ответе в порядке возрастания.</p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 1
+       },
+       {
+        "label": "№ 21",
+        "n": 2
+       }
+      ],
+      "answer": [
+       [
+        "14"
+       ],
+       [
+        "25"
+       ],
+       [
+        "23",
+        "24"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(К.Ю. Поляков) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в любую кучу один камень или увеличить количество камней в любой куче в четыре раза.</p><p>Игра завершается в тот момент, когда общее количество камней в двух кучах становится не менее 103. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 5 камней, а во второй – S камней, 1 ≤ S ≤ 97.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Найдите <b>минимальное</b> и <b>максимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "7"
+       ],
+       [
+        "20",
+        "24"
+       ],
+       [
+        "23"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(К.Ю. Поляков) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в любую кучу один камень или добавить в любую кучу столько камней, сколько их в данный момент в другой куче.</p><p>Игра завершается в тот момент, когда общее количество камней в двух кучах становится не менее 69. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 7 камней, а во второй – S камней, 1 ≤ S ≤ 61.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Найдите <b>минимальное</b> и <b>максимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>За один ход игрок может добавить в любую кучу один камень или добавить в любую кучу столько камней, сколько их в данный момент в другой куче.</p><p>В первой куче x1 камней, во второй куче x2 камней.</p><p>Значит можно получить позиции:</p><ul class=\"dash\"><li>Добавить один камень в первую кучу: x1+1, x2</li><li>Добавить один камень во вторую кучу: x1, x2+1</li><li>Добавить в первую кучу камни из второй кучи: x1+x2, x2</li><li>Добавить во вторую кучу камни из первой кучи: x1, x2+x1</li></ul><p>Список moves должен выглядеть так.</p>"
+         },
+         {
+          "t": "code",
+          "v": "moves = [f(x1 + 1, x2, c + 1, win), f(x1, x2 + 1, c + 1, win),\n         f(x1 + x2, x2, c + 1, win), f(x1, x1 + x2, c + 1, win)]"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "19"
+       ],
+       [
+        "18",
+        "30"
+       ],
+       [
+        "29"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(И. Баженов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит две кучи камней. Игроки ходят по очереди, первый ход делает Петя. У каждого игрока есть 4 варианта хода:</p><ul class=\"dash\"><li>добавить четыре камня в первую кучу;</li><li>добавить три камня во вторую кучу;</li><li>увеличить в 2 раза количество камней в первой куче;</li><li>увеличить в 3 раза количество камней во второй куче.</li></ul><p>Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда суммарное количество камней в двух кучах становится не менее 180. Победителем считается игрок, сделавший последний ход, т. е. первым получивший суммарно в двух кучах 180 или больше камней.</p><p>В начальный момент в первой куче было 23 камня, во второй куче было S камней; 1 ≤ S ≤ 156.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Укажите минимальное значение S, при котором такая ситуация возможна.</p><p><b>№ 20</b><br>Найдите <b>сумму</b> всех значений S, при которых Петя имеет выигрышную стратегию, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul></p><p><b>№ 21</b><br>Найдите <b>произведение</b> всех значений S, при которых одновременно выполняются два условия:<ul class=\"dash\"><li>у Пети есть выигрышная стратегия, позволяющая ему выиграть первым, вторым или третьим ходом при любой игре Вани;</li><li>у Пети нет стратегии, которая позволит ему гарантированно выиграть первым или вторым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка 1",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>Записать это условие</p><ul class=\"dash\"><li>у Пети есть выигрышная стратегия, позволяющая ему выиграть первым, вторым или третьим ходом при любой игре Вани;</li><li>у Пети нет стратегии, которая позволит ему гарантированно выиграть первым или вторым ходом.</li></ul><p>Нужно так:</p>"
+         },
+         {
+          "t": "code",
+          "v": "if f(23, s, 0, [1, 3, 5]) == 1 and f(23, s, 0, [1, 3]) == 0:"
+         }
+        ]
+       },
+       {
+        "t": "details",
+        "title": "Подсказка 2",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>Посчитать сумму и произведение можно так:</p>"
+         },
+         {
+          "t": "code",
+          "v": "sum_20 = 0\npr_21 = 1\nfor s in range(1, 156 + 1):  # Перебираем стартовое количество камней в куче\n    if f(23, s, 0, [1]) == 0 and f(23, s, 0, [3]) == 1:  # № 20\n        sum_20 += s\n    if f(23, s, 0, [1, 3, 5]) == 1 and f(23, s, 0, [1, 3]) == 0:  # № 21\n        pr_21 = pr_21 * s\nprint(sum_20)\nprint(pr_21)"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 1
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "18"
+       ],
+       [
+        "208"
+       ],
+       [
+        "2726880"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "num": "40.4",
+    "title": "Убирание камней",
+    "steps": [
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h3>Содержание урока</h3><p>В этом уроке решаем задания № 19-21, в которых камни не добавляют в кучи, а убирают.</p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(Демо 2025) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может: убрать из кучи два камня или убрать из кучи пять камней или уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется до меньшего).<br>Например, из кучи в 20 камней за один ход можно получить кучу из 18, 15 или 6 камней.</p><p>Игра завершается, когда количество камней в куче становится не более 19.<br>Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 19 или меньше камней.</p><p>В начальный момент в куче было S камней, S ≥ 20.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "60"
+       ],
+       [
+        "62",
+        "63"
+       ],
+       [
+        "64"
+       ]
+      ]
+     },
+     {
+      "type": "video",
+      "title": "Разбор демоверсии 2025"
+     },
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h2 class=\"center\">Шаблон решения № 19-21 на убирание камней</h2><div class=\"cond\"><p>(Демо 2025) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может: убрать из кучи два камня или убрать из кучи пять камней или уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется до меньшего).<br>Например, из кучи в 20 камней за один ход можно получить кучу из 18, 15 или 6 камней.</p><p>Игра завершается, когда количество камней в куче становится не более 19.<br>Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 19 или меньше камней.</p><p>В начальный момент в куче было S камней, S ≥ 20.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p></div><h3>Решение</h3><p><b>1. Записываем ходы</b></p><p>За один ход игрок может: убрать из кучи два камня или убрать из кучи пять камней или уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется до меньшего).<br>Например, из кучи в 20 камней за один ход можно получить кучу из 18, 15 или 6 камней.</p>"
+       },
+       {
+        "t": "code",
+        "v": "moves = [f(x - 2, c + 1, win), f(x - 5, c + 1, win), f(x // 3, c + 1, win)]"
+       },
+       {
+        "t": "html",
+        "v": "<p>Фраза <i>уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется до меньшего)</i> означает деление нацело на 3. Поэтому мы использовали оператор целочисленного деления <code>//</code>.</p><p><b>2. Условие окончания игры</b></p><p>Игра завершается, когда количество камней в куче становится не более 19.</p>"
+       },
+       {
+        "t": "code",
+        "v": "if x <= 19:  # Указываем условие окончания игры\n    return c in win"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>3. Перебор стартового количества камней в куче</b></p><p>В начальный момент в куче было S камней, S ≥ 20.</p>"
+       },
+       {
+        "t": "code",
+        "v": "for s in range(20, 1000 + 1):"
+       },
+       {
+        "t": "html",
+        "v": "<p>Начинаем перебор с 20 и идём до большого числа. Числа 1000 должно хватить. На всякий случай можно сделать перебор до 10000.</p><h3>№ 19</h3><p>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>Решение.</b></p><p>Петя не может выиграть за один ход <code>f(s, 0, [1]) == 0</code>.<br>Ваня может выиграть своим первым ходом <code>f(s, 0, [2]) == 1</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x <= 19:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x - 2, c + 1, win), f(x - 5, c + 1, win), f(x // 3, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(20, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 19: 60\n№ 19: 61"
+       },
+       {
+        "t": "html",
+        "v": "<p>По условию задачи, в ответ нужно взять минимальное значение.</p><p><b>Ответ: 60.</b></p><h3>№ 20</h3><p>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>Решение.</b></p><p>Петя не может выиграть за один ход <code>f(s, 0, [1]) == 0</code>.<br>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня <code>f(s, 0, [3]) == 1</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x <= 19:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x - 2, c + 1, win), f(x - 5, c + 1, win), f(x // 3, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(20, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 20: 62\n№ 20: 63\n№ 20: 65\n№ 20: 66\n№ 20: 180\n№ 20: 181\n№ 20: 182\n№ 20: 183\n№ 20: 184\n№ 20: 185"
+       },
+       {
+        "t": "html",
+        "v": "<p>По условию задачи, в ответ нужно взять два наименьших значения.</p><p><b>Ответ: 62 63.</b></p><h3>№ 21</h3><p>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p><p><b>Решение.</b></p><p>У Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети <code>f(s, 0, [2, 4]) == 1</code>.<br>У Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом <code>f(s, 0, [2]) == 0</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x <= 19:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f(x - 2, c + 1, win), f(x - 5, c + 1, win), f(x // 3, c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(20, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "html",
+        "v": "<p>Вывод программы.</p>"
+       },
+       {
+        "t": "code",
+        "v": "№ 21: 64\n№ 21: 67\n№ 21: 68\n№ 21: 186\n№ 21: 187"
+       },
+       {
+        "t": "html",
+        "v": "<p>По условию задачи, в ответ нужно взять минимальное значение.</p><p><b>Ответ: 64.</b></p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может: убрать из кучи один камень или убрать из кучи десять камней или уменьшить количество камней в куче в пять раз (количество камней, полученное при делении, округляется до меньшего).</p><p>Игра завершается, когда количество камней в куче становится не более 26.<br>Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 26 или меньше камней.</p><p>В начальный момент в куче было S камней, S ≥ 27.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "135"
+       ],
+       [
+        "136",
+        "145"
+       ],
+       [
+        "137"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может: убрать из кучи три камня или убрать из кучи шесть камней или уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется до меньшего).</p><p>Игра завершается, когда количество камней в куче становится не более 17.<br>Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 17 или меньше камней.</p><p>В начальный момент в куче было S камней, S ≥ 18.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>максимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>максимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "56"
+       ],
+       [
+        "57",
+        "58"
+       ],
+       [
+        "173"
+       ]
+      ]
+     },
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h2>Как округлять?</h2><p>1. «Уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется <b>до меньшего</b>)»</p><p>То есть мы должны разделить нацело на 3 — <code>x // 3</code>. Для этого просто используем целочисленное деление <code>//</code>.</p><p>2. «Уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется <b>до большего</b>)»</p><p>То есть мы должны разделить на 3 с округлением вверх.</p><p>Проще всего использовать функцию <code>ceil()</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "from math import ceil\nceil(x / 3) # Используем одну палочку!!! Нам не нужно делить нацело."
+       },
+       {
+        "t": "html",
+        "v": "<p>Второй способ. Чтобы реализовать округление вверх без использования функции <code>ceil()</code>, можно разделить нацело на 3 и добавить единицу, если остаток при делении на 3 не равен нулю <code>x//3 + (x % 3 != 0)</code>.</p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может: убрать из кучи один камень или уменьшить количество камней в куче в два раза (количество камней, полученное при делении, округляется до большего).<br>Например, из кучи в 25 камней за один ход можно получить кучу из 24 или 13 камней.</p><p>Игра завершается, когда количество камней в куче становится не более 23.<br>Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 23 или меньше камней.</p><p>В начальный момент в куче было S камней, S ≥ 24.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "from math import ceil\n\ndef f(x, c, win):\n    if x <= 23:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = [f((x - 1), c + 1, win), f(ceil(x / 2), c + 1, win)]  # Записываем все возможные ходы\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(24, 10000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "47"
+       ],
+       [
+        "48",
+        "93"
+       ],
+       [
+        "49"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может: убрать из кучи два камня или убрать из кучи пять камней или уменьшить количество камней в куче в три раза (количество камней, полученное при делении, округляется до большего).<br>Например, из кучи в 23 камней за один ход можно получить кучу из 21, 18 или 8 камней.</p><p>Игра завершается, когда количество камней в куче становится не более 21.<br>Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 21 или меньше камней.</p><p>В начальный момент в куче было S камней, S ≥ 22.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "64"
+       ],
+       [
+        "66",
+        "67"
+       ],
+       [
+        "68"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(А. Минак) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может убрать из кучи два или три камня либо уменьшить количество камней в куче в два раза. В случае, если уменьшается в два раза нечётное количество камней, то сначала убирают один камень, а затем уменьшают в два раза. Например, имея кучу из 11 камней, за один ход можно получить кучу из 9, 8 или 5 камней. Нельзя убрать больше камней, чем их имеется в куче.</p><p>Игра завершается в тот момент, когда в куче не останется камней. При этом победителем считается игрок, сделавший последний ход.</p><p>В начальный момент в куче было S камней, 1 ≤ S ≤ 30. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>количество</b> всех возможных значений S, при которых Петя не может выиграть своим первым ходом, но при любом ходе Пети, Ваня выигрывает своим первым ходом.</p><p><b>№ 20</b><br>Найдите два <b>наибольших</b> значения S, когда Петя имеет выигрышную стратегию, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите <b>наибольшее</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul><p>Решение задачи смотрите на следующем шаге.</p></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "2"
+       ],
+       [
+        "10",
+        "11"
+       ],
+       [
+        "13"
+       ]
+      ]
+     },
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h2>Ограничения на ходы</h2><h3>Пример задачи</h3><div class=\"cond\"><p>(А. Минак) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может убрать из кучи два или три камня либо уменьшить количество камней в куче в два раза. В случае, если уменьшается в два раза нечётное количество камней, то сначала убирают один камень, а затем уменьшают в два раза. Например, имея кучу из 11 камней, за один ход можно получить кучу из 9, 8 или 5 камней. Нельзя убрать больше камней, чем их имеется в куче.</p><p>Игра завершается в тот момент, когда в куче не останется камней. При этом победителем считается игрок, сделавший последний ход.</p><p>В начальный момент в куче было S камней, 1 ≤ S ≤ 30. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>количество</b> всех возможных значений S, при которых Петя не может выиграть своим первым ходом, но при любом ходе Пети, Ваня выигрывает своим первым ходом.</p><p><b>№ 20</b><br>Найдите два <b>наибольших</b> значения S, когда Петя имеет выигрышную стратегию, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите <b>наибольшее</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p></div><h3>Решение</h3><p><b>1. Записываем условие окончания игры</b></p>"
+       },
+       {
+        "t": "code",
+        "v": "if x == 0:  # Указываем условие окончания игры\n    return c in win"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>2. Записываем ходы</b></p><p>За один ход игрок может убрать из кучи два или три камня либо уменьшить количество камней в куче в два раза. В случае, если уменьшается в два раза нечётное количество камней, то сначала убирают один камень, а затем уменьшают в два раза. Нельзя убрать больше камней, чем их имеется в куче.</p><p>Фраза <i>уменьшить количество камней в куче в два раза. В случае, если уменьшается в два раза нечётное количество камней, то сначала убирают один камень, а затем уменьшают в два раза.</i> означает деление нацело на 2.</p><p><b>Важно.</b> В данной задаче мы не можем просто записать ходы в список moves. Вот так нельзя <code>moves = [f(x - 2, c + 1, win), f(x - 3, c + 1, win), f(x // 2, c + 1, win)]</code>.</p><p>Мы должны учесть, что нельзя убрать больше камней, чем их имеется в куче. Например, если в куче 2 камня, то запрещено сделать ход -3.</p><p>Чтобы это учесть, мы будем добавлять в список moves только те ходы, которые можно сделать.</p>"
+       },
+       {
+        "t": "code",
+        "v": "moves = []  # Изначально список ходов пустой\nif x - 2 >= 0:  # Если можем сделать ход -2\n    moves.append(f(x - 2, c + 1, win))  # То добавляем его в список moves\nif x - 3 >= 0:  # Если можем сделать ход -3\n    moves.append(f(x - 3, c + 1, win))  # То добавляем его в список moves\nif x // 2 >= 0:  # Если можем сделать ход //2\n    moves.append(f(x // 2, c + 1, win))  # То добавляем его в список moves"
+       },
+       {
+        "t": "html",
+        "v": "<h3>Весь код</h3>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x == 0:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n\n    moves = []  # Изначально список ходов пустой\n    if x - 2 >= 0:  # Если можем сделать ход -2\n        moves.append(f(x - 2, c + 1, win))  # То добавляем его в список moves\n    if x - 3 >= 0:  # Если можем сделать ход -3\n        moves.append(f(x - 3, c + 1, win))  # То добавляем его в список moves\n    if x // 2 >= 0:  # Если можем сделать ход //2\n        moves.append(f(x // 2, c + 1, win))  # То добавляем его в список moves\n\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 30 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(А. Минак) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может убрать из кучи четыре или пять камней либо уменьшить количество камней в куче в два раза. В случае, если уменьшается в два раза нечётное количество камней, то сначала убирают один камень, а затем уменьшают в два раза. Например, имея кучу из 11 камней, за один ход можно получить кучу из 7, 6 или 5 камней. Нельзя убрать больше камней, чем их имеется в куче.</p><p>Игра завершается в тот момент, когда в куче не останется камней. При этом победителем считается игрок, сделавший последний ход.</p><p>В начальный момент в куче было S камней, 1 ≤ S ≤ 40. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>количество</b> всех возможных значений S, при которых Петя не может выиграть своим первым ходом, но при любом ходе Пети, Ваня выигрывает своим первым ходом.</p><p><b>№ 20</b><br>Найдите два <b>наибольших</b> значения S, когда Петя имеет выигрышную стратегию, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите <b>наибольшее</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "3"
+       ],
+       [
+        "18",
+        "19"
+       ],
+       [
+        "12"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(А. Кабанов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может убрать из кучи один камень или уменьшить количество камней в любой куче в два раза (если количество камней нечётно, то остаётся на один камень меньше, чем убирается). Нельзя убирать камни из кучи, если в ней ноль камней. Ход делить на 2 к такой куче тоже запрещено применить.</p><p>Игра завершается в тот момент, когда общее количество камней в двух кучах становится не более 20, побеждает игрок, сделавший последний ход. В начальный момент в первой куче было K ≥ 1 камней, а во второй – S ≥ 1 камней, S+K ≥ 21.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что из начальной позиции (M; M) Ваня выигрывает первым ходом при любой игре Пети. При каком значении M это возможно?</p><p><b>№ 20</b><br>При K=15, найдите <b>минимальное</b> и <b>максимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>При каком минимальном значении N для начальной пары (N; N) одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "html",
+          "v": "<h3>№ 19</h3>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if x1 + x2 <= 20:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = []\n    if x1 > 0:\n        moves.append(f(x1 - 1, x2, c + 1, win))\n        moves.append(f(x1 // 2, x2, c + 1, win))\n    if x2 > 0:\n        moves.append(f(x1, x2 - 1, c + 1, win))\n        moves.append(f(x1, x2 // 2, c + 1, win))\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\n# Так как по условию S+K ≥ 21, то начинаем перебор с 11\nfor M in range(11, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(M, M, 0, [2]) == 1:\n        print('№ 19:', M)"
+         },
+         {
+          "t": "html",
+          "v": "<h3>№ 20</h3>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if x1 + x2 <= 20:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = []\n    if x1 > 0:\n        moves.append(f(x1 - 1, x2, c + 1, win))\n        moves.append(f(x1 // 2, x2, c + 1, win))\n    if x2 > 0:\n        moves.append(f(x1, x2 - 1, c + 1, win))\n        moves.append(f(x1, x2 // 2, c + 1, win))\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\n# Так как по условию S+K ≥ 21, то начинаем перебор с 6\nfor s in range(6, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(15, s, 0, [1]) == 0 and f(15, s, 0, [3]) == 1:\n        print('№ 20:', s)"
+         },
+         {
+          "t": "html",
+          "v": "<h3>№ 21</h3>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if x1 + x2 <= 20:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = []\n    if x1 > 0:\n        moves.append(f(x1 - 1, x2, c + 1, win))\n        moves.append(f(x1 // 2, x2, c + 1, win))\n    if x2 > 0:\n        moves.append(f(x1, x2 - 1, c + 1, win))\n        moves.append(f(x1, x2 // 2, c + 1, win))\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\n# Так как по условию S+K ≥ 21, то начинаем перебор с 11\nfor N in range(11, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(N, N, 0, [2, 4]) == 1 and f(N, N, 0, [2]) == 0:\n        print('№ 21:', N)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "14"
+       ],
+       [
+        "14",
+        "28"
+       ],
+       [
+        "15"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(Резерв 2026) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может:</p><ul class=\"dash\"><li>убрать из одной из куч (по своему выбору) 3 камня;</li><li>уменьшить количество камней в одной из куч (по своему выбору) в 3 раза (количество камней, полученное при делении, округляется до меньшего).</li></ul><p>Например, пусть в одной куче 20 камней, а в другой 30 камней; такую позицию в игре обозначим (20, 30). Тогда за один ход можно получить любую из четырёх позиций: (17, 30), (20, 27), (6, 30), (20, 10).</p><p>Игра завершается в тот момент, когда суммарное количество камней в двух кучах становится не более 53. Победителем считается игрок, сделавший последний ход, то есть первым получивший такую игровую позицию, при которой в двух кучах суммарно 53 камня или меньше. В начальный момент в первой куче было 19 камней, во второй куче — S камней; S ≥ 35.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного хода Пети. Укажите минимальное значение S, при котором такая ситуация возможна.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите наименьшее и наибольшее значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите наименьшее значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul><p>Решение задачи находится на следующем шаге!</p></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "38"
+       ],
+       [
+        "108",
+        "323"
+       ],
+       [
+        "111"
+       ]
+      ]
+     },
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h2>Решение № 19-21</h2><h3>№ 19</h3><div class=\"cond\"><p>(Резерв 2026) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может:</p><ul class=\"dash\"><li>убрать из одной из куч (по своему выбору) 3 камня;</li><li>уменьшить количество камней в одной из куч (по своему выбору) в 3 раза (количество камней, полученное при делении, округляется до меньшего).</li></ul><p>Например, пусть в одной куче 20 камней, а в другой 30 камней; такую позицию в игре обозначим (20, 30). Тогда за один ход можно получить любую из четырёх позиций: (17, 30), (20, 27), (6, 30), (20, 10).</p><p>Игра завершается в тот момент, когда суммарное количество камней в двух кучах становится не более 53. Победителем считается игрок, сделавший последний ход, то есть первым получивший такую игровую позицию, при которой в двух кучах суммарно 53 камня или меньше. В начальный момент в первой куче было 19 камней, во второй куче — S камней; S ≥ 35.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного хода Пети. Укажите минимальное значение S, при котором такая ситуация возможна.</p></div><h3>Решение</h3>"
+       },
+       {
+        "t": "code",
+        "v": "# Код для № 19\ndef f(x1, x2, c, win):\n    if x1 + x2 <= 53:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы -3, //3 в обе кучи.\n    moves = [f(x1 - 3, x2, c + 1, win), f(x1, x2 - 3, c + 1, win),\n             f(x1 // 3, x2, c + 1, win), f(x1, x2 // 3, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)\n    else:\n        return any(moves)  # Меняем all() на any. Так как сказано в условии про неудачный ход.\n\n# Перебираем стартовое количество камней во второй куче\n# В первой куче по условию 19 камней\nfor s in range(35, 1000):\n    # Ваня выиграл своим первым ходом f(19, s, 0, [2]) == 1.\n    if f(19, s, 0, [2]) == 1:\n        print('№ 19:', s)"
+       },
+       {
+        "t": "code",
+        "v": "№ 19: 38\n№ 19: 39\n№ 19: 40\n.........\n№ 19: 311\n№ 19: 312\n№ 19: 313\n№ 19: 314"
+       },
+       {
+        "t": "html",
+        "v": "<p>Минимальное значение – 38.<br><b>Ответ: 38.</b></p><h3>Важно!</h3><p>Нужно проверить только, что Ваня может выиграть своим первым ходом. Проверять, что Петя не может выиграть своим первым ходом ни в коем случае нельзя. Получите неправильный ответ.</p><p><i>Известно, что Ваня выиграл своим первым ходом после неудачного хода Пети. Укажите минимальное значение S, при котором такая ситуация возможна.</i></p><p>Проверяем только то, что сказано в условии. Сказано Ваня выигрывает первым ходом, поэтому пишем <code>if f(19, s, 0, [2]) == 1:</code>. Про Петю не сказано, что он может или не может победить – поэтому ничего про него не пишем.</p><p>Только <code>all()</code> на <code>any()</code> меняем из-за неудачного хода.</p><h3>Важно!</h3><p>Из-за того, что в задаче две кучи, и убирание камней, то нужно проверять, что после хода число камней получается не отрицательным. И что после хода число камней меняется.</p><p>В условии не сказано, что делать в таких ситуациях.</p><ul class=\"dash\"><li>К куче, в которой ноль камней, мы не можем применить никакой ход? Наверное, не можем.</li><li>Если в куче 2 камня, то сделать ход, который убирает три камня, мы можем? Наверное, не можем.</li><li>Можно ли делать ход // 3 из кучи, в которой 1 или 2 камня. Наверное, можно.</li><li>Можно ли делать ход // 3 из кучи, в которой 0 камней. Наверное, нельзя.</li></ul><p>Поэтому перед тем как добавить ход в список moves, нужно сделать проверку, что данный ход можно сделать.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x1, x2, c, win):\n    if x1 + x2 <= 53:  \n        return c in win\n    if c > max(win):\n        return 0\n\n    moves = []\n    if x1 > 0:\n        moves.append(f(x1 // 3, x2, c + 1, win))\n    if x1 >= 3:\n        moves.append(f(x1 - 3, x2, c + 1, win))\n    if x2 > 0:\n        moves.append(f(x1, x2 // 3, c + 1, win))\n    if x2 >= 3:\n        moves.append(f(x1, x2 - 3, c + 1, win))\n\n    if c % 2 != max(win) % 2:\n        return any(moves)\n    else:\n        return all(moves)"
+       },
+       {
+        "t": "html",
+        "v": "<p>В данной задаче ответ получается правильным и без данных проверок. Но в другой задаче уже может так не повезти.</p><h3>Решение № 20-21</h3><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите наименьшее и наибольшее значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите наименьшее значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "code",
+        "v": "# Код для № 20-21\ndef f(x1, x2, c, win):\n    if x1 + x2 <= 53:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    moves = []\n    if x1 > 0:\n        moves.append(f(x1 // 3, x2, c + 1, win))\n    if x1 >= 3:\n        moves.append(f(x1 - 3, x2, c + 1, win))\n    if x2 > 0:\n        moves.append(f(x1, x2 // 3, c + 1, win))\n    if x2 >= 3:\n        moves.append(f(x1, x2 - 3, c + 1, win))\n    if c % 2 != max(win) % 2:\n        return any(moves)\n    else:\n        return all(moves)\n\n# Перебираем стартовое количество камней во второй куче\n# В первой куче по условию 19 камней\nfor s in range(35, 10000):\n    # № 20\n    # Петя не может выиграть за один ход f(19, s, 0, [1]) == 0.\n    # Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня f(19, s, 0, [3]) == 1.\n    if f(19, s, 0, [1]) == 0 and f(19, s, 0, [3]) == 1:\n        print('№ 20:', s)\n\n    # № 21\n    # У Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети f(19, s, 0, [2, 4]) == 1.\n    # У Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом f(19, s, 0, [2]) == 0.\n    if f(19, s, 0, [2, 4]) == 1 and f(19, s, 0, [2]) == 0:\n        print('№ 21:', s)"
+       },
+       {
+        "t": "html",
+        "v": "<p>Перебор лучше сделать до 10 тысяч, чтобы его точно хватило!</p><p>Обратите внимание, что в № 20 нужно найти не два наименьших значения, а наименьшее и наибольшее значения.</p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(ЕГЭ 2026) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может:</p><ul class=\"dash\"><li>убрать из одной из куч (по своему выбору) 2 камня;</li><li>уменьшить количество камней в одной из куч (по своему выбору) в 3 раза (количество камней, полученное при делении, округляется до меньшего).</li></ul><p>Например, пусть в одной куче 20 камней, а в другой 30 камней; такую позицию в игре обозначим (20, 30). Тогда за один ход можно получить любую из четырёх позиций: (18, 30), (20, 28), (6, 30), (20, 10).</p><p>Игра завершается в тот момент, когда суммарное количество камней в двух кучах становится не более 51. Победителем считается игрок, сделавший последний ход, то есть первым получивший такую игровую позицию, при которой в двух кучах суммарно 51 камней или меньше. В начальный момент в первой куче было 18 камней, во второй куче — S камней; S ≥ 34.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного хода Пети. Укажите минимальное значение S, при котором такая ситуация возможна.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите наименьшее и наибольшее значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите наименьшее значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "36"
+       ],
+       [
+        "104",
+        "311"
+       ],
+       [
+        "106"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "num": "40.5",
+    "title": "Тренировка",
+    "steps": [
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(А. Богданов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может убрать из любой кучи один или три камня. Игра завершается в тот момент, когда количество камней в любой из куч становится менее 12.</p><p>Победителем считается игрок, сделавший последний ход, т.е. первым получивший кучу, в которой меньше 12 камней. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>В начальный момент в кучах было по S камней (S ≥ 12). Найдите такое значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Известно, что в первой куче 15 камней, а во второй – S камней (S ≥ 12). Найдите наименьшее и наибольшее значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Запишите в ответе сначала наименьшее значение, затем – наибольшее.</p><p><b>№ 21</b><br>Известно, что в первой куче 15 камней, а во второй – S камней (S ≥ 12). Найдите наименьшее и наибольшее значения S, при которых одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul>Запишите в ответе сначала наименьшее значение, затем – наибольшее.</p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>Записать условие окончания игры можно так.</p>"
+         },
+         {
+          "t": "code",
+          "v": "if (x1 < 12) or (x2 < 12):  # Указываем условие окончания игры\n    return c in win"
+         }
+        ]
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "html",
+          "v": "<h3>№ 19</h3>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if (x1 < 12) or (x2 < 12):  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 - 1, x2, c + 1, win), f(x1, x2 - 1, c + 1, win),\n             f(x1 - 3, x2, c + 1, win), f(x1, x2 - 3, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(12, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, s, 0, [1]) == 0 and f(s, s, 0, [2]) == 1:\n        print('№ 19:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+         },
+         {
+          "t": "html",
+          "v": "<h3>№ 20-21</h3>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if (x1 < 12) or (x2 < 12):  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 - 1, x2, c + 1, win), f(x1, x2 - 1, c + 1, win),\n             f(x1 - 3, x2, c + 1, win), f(x1, x2 - 3, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(12, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(15, s, 0, [1]) == 0 and f(15, s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(15, s, 0, [2, 4]) == 1 and f(15, s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 2
+       }
+      ],
+      "answer": [
+       [
+        "15"
+       ],
+       [
+        "16",
+        "18"
+       ],
+       [
+        "17",
+        "19"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. </p><p>За один ход игрок может убрать из одной из куч один камень или уменьшить количество камней в куче в два раза (если количество камней в куче нечётно, остаётся на 1 камень больше, чем убирается). Например, пусть в одной куче 6, а в другой 9 камней; такую позицию мы будем обозначать (6, 9). За один ход из позиции (6, 9) можно получить любую из четырёх позиций: (5, 9), (3, 9), (6, 8), (6, 5).</p><p>Игра завершается в тот момент, когда суммарное количество камней в кучах становится не более 22. Победителем считается игрок, сделавший последний ход, то есть первым получивший позицию, в которой в кучах будет 22 или меньше камней.</p><p>В начальный момент в первой куче было 11 камней, во второй куче – S камней, S &gt; 11.</p><p>&nbsp;</p><p><b>№ 19</b><br>Найдите значение S, при котором Ваня выигрывает своим первым ходом при любой игре Пети.</p><p><b>№ 20</b><br>Найдите <b>минимальное</b> и <b>максимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>Ходы можно записать так.</p><p>За один ход игрок может убрать из одной из куч один камень или уменьшить количество камней в куче в два раза (если количество камней в куче нечётно, остаётся на 1 камень больше, чем убирается).</p>"
+         },
+         {
+          "t": "code",
+          "v": "moves = [f(x1 - 1, x2, c + 1, win), f(x1, x2 - 1, c + 1, win),\n         f(ceil(x1/2), x2, c + 1, win), f(x1, ceil(x2/2), c + 1, win)]"
+         },
+         {
+          "t": "html",
+          "v": "<p>Фраза <i>уменьшить количество камней в куче в два раза (если количество камней в куче нечётно, остаётся на 1 камень больше, чем убирается)</i> означает, что мы должны разделить количество камней на 2 с округлением вверх.</p>"
+         }
+        ]
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "from math import ceil\n\ndef f(x1, x2, c, win):\n    if x1 + x2 <= 22:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 - 1, x2, c + 1, win), f(x1, x2 - 1, c + 1, win),\n             f(ceil(x1/2), x2, c + 1, win), f(x1, ceil(x2/2), c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(12, 1000 + 1):  # Перебираем стартовое количество камней в куче\n    if f(11, s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(11, s, 0, [1]) == 0 and f(11, s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(11, s, 0, [2, 4]) == 1 and f(11, s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "23"
+       ],
+       [
+        "24",
+        "46"
+       ],
+       [
+        "26"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(А. Кабанов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может убрать из одной из куч один камень или уменьшить количество камней в куче в два раза (если количество камней в куче нечётно, остаётся на 1 камень больше, чем убирается). Например, пусть в одной куче 6, а в другой 9 камней; такую позицию мы будем обозначать (6, 9). За один ход из позиции (6, 9) можно получить любую из четырёх позиций: (5, 9), (3, 9), (6, 8), (6, 5).</p><p>Игра завершается в тот момент, когда суммарное количество камней в кучах становится не более 36. Победителем считается игрок, сделавший последний ход, то есть первым получивший позицию, в которой в кучах будет 36 или меньше камней.</p><p>В начальный момент в первой куче было 20 камней, во второй куче – S камней, S &gt; 16.</p><p>&nbsp;</p><p><b>№ 19</b><br>Найдите значение S, при котором Ваня выигрывает своим первым ходом при любой игре Пети.</p><p><b>№ 20</b><br>Найдите <b>минимальное</b> и <b>максимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "33"
+       ],
+       [
+        "34",
+        "66"
+       ],
+       [
+        "36"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(ЕГЭ 2026) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может:</p><ul class=\"dash\"><li>убрать из одной из куч (по своему выбору) 2 камня;</li><li>уменьшить количество камней в одной из куч (по своему выбору) в 3 раза (количество камней, полученное при делении, округляется до меньшего).</li></ul><p>Например, пусть в одной куче 20 камней, а в другой 30 камней; такую позицию в игре обозначим (20, 30). Тогда за один ход можно получить любую из четырёх позиций: (18, 30), (20, 28), (6, 30), (20, 10).</p><p>Игра завершается в тот момент, когда суммарное количество камней в двух кучах становится не более 45. Победителем считается игрок, сделавший последний ход, то есть первым получивший такую игровую позицию, при которой в двух кучах суммарно 45 камней или меньше. В начальный момент в первой куче было 15 камней, во второй куче — S камней; S ≥ 31.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного хода Пети. Укажите минимальное значение S, при котором такая ситуация возможна.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите наименьшее и наибольшее значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите наименьшее значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "33"
+       ],
+       [
+        "95",
+        "284"
+       ],
+       [
+        "97"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(Сборник Ушакова) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в кучу один или два камня или увеличить количество камней в куче в два раза. Например, имея кучу из 15 камней, за один ход можно получить кучу из 16, 17 или 30 камней. У каждого игрока, чтобы делать ходы, есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда количество камней в куче становится не менее 31. Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 31 или больше камней.</p><p>В начальный момент в куче было S камней, 1 ≤ S ≤ 30.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника. Описать стратегию игрока — значит описать, какой ход он должен сделать в любой ситуации, которая ему может встретиться при различной игре противника. В описание выигрышной стратегии не следует включать ходы играющего по этой стратегии игрока, не являющиеся для него безусловно выигрышными, т. е. не являющиеся выигрышными независимо от игры противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Укажите минимальное значение S, когда такая ситуация возможна.</p><p><b>№ 20</b><br>Для игры, описанной в предыдущем задании, найдите два таких значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>В № 19 Петя делает неудачный ход. Поэтому нужно поменять <code>all()</code> на <code>any()</code>.</p>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x, c, win):\n    if x >= 31:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x + 1, c + 1, win), f(x + 2, c + 1, win), f(x * 2, c + 1, win)]  \n    if c % 2 != max(win) % 2:\n        return any(moves) \n    else:\n        return any(moves)  \n\nfor s in range(1, 30 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [2]) == 1:\n        print('№ 19:', s)"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "8"
+       ],
+       [
+        "13",
+        "14"
+       ],
+       [
+        "12"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(PRO100 ЕГЭ) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в кучу один камень или увеличить количество камней в куче в два раза. Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Игра завершается в тот момент, когда количество камней в куче становится не менее 25. Победителем считается игрок, сделавший последний ход, т.е. первым получивший кучу из 25 или больше камней.</p><p>В начальный момент в куче было S камней, 1 ≤ S ≤ 24.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Найдите <b>минимальное</b> значение S, при котором у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul></p><p><b>№ 20</b><br><i>(№ 20 ЕГЭ)</i> Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p><p><b>№ 21</b><br><i>(№ 21 ЕГЭ)</i> Для игры, описанной в задании 19, найдите два минимальных значения S, при которых одновременно выполняются три условия:<ul class=\"dash\"><li>у Пети есть выигрышная стратегия, позволяющая ему выиграть первым, вторым или третьим ходом при любой игре Вани;</li><li>у Пети нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li><li>у Пети нет стратегии, которая позволит ему гарантированно выиграть первым или вторым ходом.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "code",
+          "v": "for s in range(1, 24 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 19:', s)\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 20:', s)\n    if f(s, 0, [1, 3, 5]) == 1 and f(s, 0, [1]) == 0 and f(s, 0, [1, 3]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2 П3\n# 1  2  3  4  5"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 1
+       },
+       {
+        "label": "№ 21",
+        "n": 2
+       }
+      ],
+      "answer": [
+       [
+        "6"
+       ],
+       [
+        "10"
+       ],
+       [
+        "5",
+        "9"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может добавить в одну из куч 1 или 2 камня. Игра завершается в тот момент, когда в сумме в кучах будет хотя бы 17 камней. Победителем считается игрок, сделавший последний ход. В начальный момент в первой куче было 4 камня, во второй – S камней, 1 ≤ S ≤ 12.</p><p>&nbsp;</p><p><b>№ 19</b><br>Петя мог выиграть первым ходом, но сделал неудачный ход и Ваня выиграл. При каком <b>минимальном</b> значении S это возможно?</p><p><b>№ 20</b><br>Найдите <b>минимальное</b> и <b>максимальное</b> значения S, при которых Петя при оптимальной игре может выиграть своим вторым ходом при любой игре Вани.</p><p><b>№ 21</b><br>Найдите значение S, при котором Ваня при оптимальной игре может выиграть именно своим вторым ходом при любых ходах Пети.</p>"
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "html",
+          "v": "<h3>№ 19</h3><p>Петя мог выиграть первым ходом, но сделал неудачный ход и Ваня выиграл.</p><p>Так как Петя сделал неудачный ход, меняем <code>all()</code> на <code>any()</code>.</p><p>Петя мог выиграть первым ходом <code>f(4, s, 0, [1]) == 1</code>.<br>Петя сделал неудачный ход и Ваня выиграл <code>f(4, s, 0, [2]) == 1</code>.</p><p>Когда мы проверяем, что Петя может выиграть за один ход, по-хорошему, мы должны использовать <code>all()</code> на ходах противника и <code>any()</code> на ходах нашего игрока. Но так как игра заканчивается за один ход, то противник ходить не будет, поэтому можно оставить у него <code>any()</code>. Такую хитрость мы сделали, чтобы не писать два разных кода.</p>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if x1 + x2 >= 17:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 + 1, x2, c + 1, win), f(x1, x2 + 1, c + 1, win),\n             f(x1 + 2, x2, c + 1, win), f(x1, x2 + 2, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  \n    else:\n        return any(moves)  \n\nfor s in range(1, 12 + 1):  # Перебираем стартовое количество камней в куче\n    if f(4, s, 0, [1]) == 1 and f(4, s, 0, [2]) == 1:\n        print('№ 19:', s)"
+         },
+         {
+          "t": "html",
+          "v": "<h3>№ 20</h3><p>Здесь Ваня играет оптимально, поэтому у противника снова пишем <code>all()</code>.</p><p>Петя при оптимальной игре может выиграть своим вторым ходом при любой игре Вани <code>f(4, s, 0, [3]) == 1</code>.</p>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if x1 + x2 >= 17:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 + 1, x2, c + 1, win), f(x1, x2 + 1, c + 1, win),\n             f(x1 + 2, x2, c + 1, win), f(x1, x2 + 2, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  \n    else:\n        return all(moves)  \n\nfor s in range(1, 12 + 1):  # Перебираем стартовое количество камней в куче\n    if f(4, s, 0, [3]) == 1:\n        print('№ 20:', s)"
+         },
+         {
+          "t": "html",
+          "v": "<h3>№ 21</h3><p>Найдите значение S, при котором Ваня при оптимальной игре может выиграть именно своим вторым ходом при любых ходах Пети.</p>"
+         },
+         {
+          "t": "code",
+          "v": "for s in range(1, 12 + 1):  # Перебираем стартовое количество камней в куче\n    if f(4, s, 0, [4]) == 1:\n        print('№ 21:', s)"
+         },
+         {
+          "t": "html",
+          "v": "<p>Второй ход Вани – это четвёртый ход в игре.</p>"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "11"
+       ],
+       [
+        "8",
+        "9"
+       ],
+       [
+        "7"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(PRO100 ЕГЭ) Два игрока, Петя и Ваня, играют в следующую игру. На координатной плоскости стоит фишка. В начале игры фишка находится в точке с координатами (S, 3), при этом 1 ≤ S ≤ 14.</p><p>Игроки ходят по очереди, первый ход делает Петя. Ход состоит в том, что игрок перемещает фишку из точки с координатами (x, y) в одну из трех точек: или в точку с координатами (x+3, y), или в точку с координатами (x, y+3), или в точку с координатами (x, y+4).</p><p>Выигрывает игрок, после хода которого расстояние по прямой от фишки до точки с координатами (0, 0) не меньше 15 единиц.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul>Если найдено несколько значений S, в ответе запишите минимальное из них.</p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>Выигрывает игрок, после хода которого расстояние по прямой от фишки до точки с координатами (0, 0) не меньше 15 единиц.</p><p>Чтобы найти расстояние от начала координат до точки с координатами (x, y), нужно найти длину гипотенузы прямоугольного треугольника, у которого катеты равны x и y. То есть расстояние будет вычисляться по формуле <b>√(x² + y²)</b>.</p><h3>№ 19</h3>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if (x1**2 + x2**2)**0.5 >= 15:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 + 3, x2, c + 1, win), f(x1, x2 + 3, c + 1, win), f(x1, x2 + 4, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return any(moves)  # Ходит противник\n\nfor s in range(1, 14 + 1):  # Перебираем стартовое значение S\n    if f(s, 3, 0, [2]) == 1:\n        print('№ 19:', s)"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "9"
+       ],
+       [
+        "8",
+        "9"
+       ],
+       [
+        "5"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>(PRO100 ЕГЭ) Два игрока играют в следующую игру. Перед ними лежат три кучки камней, в первой из которых 2, во второй – 3, в третьей – S (1 ≤ S ≤ 21) камней.</p><p>У каждого игрока неограниченно много камней. Игроки ходят по очереди, первый ход делает Петя. Ход состоит в том, что игрок или удваивает число камней в какой-то куче или добавляет по два камня в каждую из куч.</p><p>Выигрывает игрок, после хода которого в одной из куч становится не менее 22 камней, или общее число камней во всех трех кучах становится не менее 27.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите такое значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в предыдущем задании, найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Для игры, описанной в задании 19, найдите <b>минимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказки",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>1. Так как игроки играют с тремя кучами, то функция f должна выглядеть так <code>def f(x1, x2, x3, c, win):</code>.</p><p>2. Ход состоит в том, что игрок или удваивает число камней в какой-то куче или добавляет по два камня в каждую из куч.</p>"
+         },
+         {
+          "t": "code",
+          "v": "moves = [f(x1 * 2, x2, x3, c + 1, win), f(x1, x2 * 2, x3, c + 1, win), f(x1, x2, x3 * 2, c + 1, win), f(x1 + 2, x2 + 2, x3 + 2, c + 1, win)]"
+         },
+         {
+          "t": "html",
+          "v": "<p>3. Выигрывает игрок, после хода которого в одной из куч становится не менее 22 камней, или общее число камней во всех трех кучах становится не менее 27.</p>"
+         },
+         {
+          "t": "code",
+          "v": "# Указываем условие окончания игры\nif (x1 >= 22) or (x2 >= 22) or (x3 >= 22) or (x1+x2+x3 >= 27):  \n    return c in win"
+         },
+         {
+          "t": "html",
+          "v": "<p><b>Полный код</b></p>"
+         },
+         {
+          "t": "code",
+          "v": "def f(x1, x2, x3, c, win):\n    if (x1 >= 22) or (x2 >= 22) or (x3 >= 22) or (x1+x2+x3 >= 27):  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n    # Записываем все возможные ходы\n    moves = [f(x1 * 2, x2, x3, c + 1, win),\n             f(x1, x2 * 2, x3, c + 1, win),\n             f(x1, x2, x3 * 2, c + 1, win),\n             f(x1 + 2, x2 + 2, x3 + 2, c + 1, win)]\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\n\nfor s in range(1, 21 + 1):  # Перебираем стартовое количество камней в куче\n    if f(2, 3, s, 0, [1]) == 0 and f(2, 3, s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(2, 3, s, 0, [1]) == 0 and f(2, 3, s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(2, 3, s, 0, [2]) == 0 and f(2, 3, s, 0, [2, 4]) == 1:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "10"
+       ],
+       [
+        "4",
+        "5"
+       ],
+       [
+        "2"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "num": "40.6",
+    "title": "Условия на ходы",
+    "steps": [
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h3>Содержание урока</h3><p>В этом уроке мы порешаем более сложные задания № 19-21.</p><p>Похожие задания могут встретиться на ЕГЭ. Но вероятность их встречи не большая.</p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>(С.А. Скопинцева) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может увеличить количество камней в куче в три раза, добавить в кучу один камень, или 3 камня, при этом после каждого хода в куче должно быть нечетное количество камней.</p><p>Например, пусть в куче было 8 камней. Тогда за один ход можно получить кучу из 9 камней или из 11 камней (увеличить количество камней в три раза нельзя, т.к. после этого хода получится четное количество камней – 24). Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Выигрывает тот игрок, после хода которого количество камней в куче становится не менее 51.</p><p>В начальный момент в куче было S камней; 1 ≤ S ≤ 50. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Найдите два <b>наибольших</b> значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Сколько существует значений S, при которых одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul><p>Текстовое решение задачи смотрите на следующем шаге.</p></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "7"
+       ],
+       [
+        "12",
+        "14"
+       ],
+       [
+        "2"
+       ]
+      ]
+     },
+     {
+      "type": "text",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<h2>Ограничение на ходы</h2><h3>Решим задачу</h3><div class=\"cond\"><p>(С.А. Скопинцева) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может увеличить количество камней в куче в три раза, добавить в кучу один камень, или 3 камня, при этом после каждого хода в куче должно быть нечетное количество камней.</p><p>Например, пусть в куче было 8 камней. Тогда за один ход можно получить кучу из 9 камней или из 11 камней (увеличить количество камней в три раза нельзя, т.к. после этого хода получится четное количество камней – 24). Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Выигрывает тот игрок, после хода которого количество камней в куче становится не менее 51.</p><p>В начальный момент в куче было S камней; 1 ≤ S ≤ 50. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p></div><h3>Решение</h3><p>За один ход игрок может увеличить количество камней в куче в три раза, добавить в кучу один камень, или 3 камня, при этом после каждого хода в куче должно быть нечетное количество камней.</p>"
+       },
+       {
+        "t": "code",
+        "v": "moves = []  # Изначально список ходов пустой\nif (x*3) % 2 == 1:  # Если можем сделать ход *3\n    moves.append(f(x * 3, c + 1, win))  # То добавляем его в список moves\nif (x+1) % 2 == 1:  # Если можем сделать ход +1\n    moves.append(f(x + 1, c + 1, win))  # То добавляем его в список moves\nif (x+3) % 2 == 1:  # Если можем сделать ход +3\n    moves.append(f(x + 3, c + 1, win))  # То добавляем его в список moves"
+       },
+       {
+        "t": "html",
+        "v": "<h3>№ 19</h3><p>Известно, что Ваня выиграл своим первым ходом после первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p>То есть игроки просто играли и Ваня выиграл своим первым ходом. Петя мог играть не оптимально. Значит <code>all()</code> меняем на <code>any()</code>.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x >= 51:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n\n    moves = []  # Изначально список ходов пустой\n    if (x*3) % 2 == 1:  # Если можем сделать ход *3\n        moves.append(f(x * 3, c + 1, win))  # То добавляем его в список moves\n    if (x+1) % 2 == 1:  # Если можем сделать ход +1\n        moves.append(f(x + 1, c + 1, win))  # То добавляем его в список moves\n    if (x+3) % 2 == 1:  # Если можем сделать ход +3\n        moves.append(f(x + 3, c + 1, win))  # То добавляем его в список moves\n\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return any(moves)  # Ходит противник\n\nfor s in range(1, 50 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [2]) == 1:\n        print('№ 19:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "code",
+        "v": "№ 19: 7\n№ 19: 9\n.......\n№ 19: 46\n№ 19: 48"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>Ответ: 7.</b></p><h3>№ 20</h3><p>Найдите два <b>наибольших</b> значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Найденные значения запишите в ответе в порядке возрастания.</p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x >= 51:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n\n    moves = []  # Изначально список ходов пустой\n    if (x*3) % 2 == 1:  # Если можем сделать ход *3\n        moves.append(f(x * 3, c + 1, win))  # То добавляем его в список moves\n    if (x+1) % 2 == 1:  # Если можем сделать ход +1\n        moves.append(f(x + 1, c + 1, win))  # То добавляем его в список moves\n    if (x+3) % 2 == 1:  # Если можем сделать ход +3\n        moves.append(f(x + 3, c + 1, win))  # То добавляем его в список moves\n\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 50 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [1]) == 0 and f(s, 0, [3]) == 1:\n        print('№ 20:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "code",
+        "v": "№ 20: 3\n№ 20: 4\n№ 20: 5\n№ 20: 6\n№ 20: 8\n№ 20: 10\n№ 20: 12\n№ 20: 14"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>Ответ: 12 14.</b></p><h3>№ 21</h3><p>Сколько существует значений S, при которых одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "code",
+        "v": "def f(x, c, win):\n    if x >= 51:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n\n    moves = []  # Изначально список ходов пустой\n    if (x*3) % 2 == 1:  # Если можем сделать ход *3\n        moves.append(f(x * 3, c + 1, win))  # То добавляем его в список moves\n    if (x+1) % 2 == 1:  # Если можем сделать ход +1\n        moves.append(f(x + 1, c + 1, win))  # То добавляем его в список moves\n    if (x+3) % 2 == 1:  # Если можем сделать ход +3\n        moves.append(f(x + 3, c + 1, win))  # То добавляем его в список moves\n\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 50 + 1):  # Перебираем стартовое количество камней в куче\n    if f(s, 0, [2, 4]) == 1 and f(s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+       },
+       {
+        "t": "code",
+        "v": "№ 21: 1\n№ 21: 2"
+       },
+       {
+        "t": "html",
+        "v": "<p><b>Ответ: 2.</b></p>"
+       }
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может увеличить количество камней в куче в два раза, добавить в кучу два камня, или четыре камня, при этом после каждого хода в куче должно быть чётное количество камней. Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней.</p><p>Выигрывает тот игрок, после хода которого количество камней в куче становится не менее 57.</p><p>В начальный момент в куче было S камней; 1 ≤ S ≤ 56. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после первого хода Пети. Назовите минимальное значение S, при котором это возможно.</p><p><b>№ 20</b><br>Найдите два <b>наибольших</b> значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Сколько существует значений S, при которых одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "15"
+       ],
+       [
+        "24",
+        "26"
+       ],
+       [
+        "3"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>(А. Богданов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в меньшую кучу один или три камня. Изменять количество камней в большей куче не разрешается.</p><p>Игра завершается, когда количество камней в кучах становится равным. Победителем считается игрок, сделавший последний ход, то есть первым сравнявшим количество камней в двух кучах. Игроки играют рационально, т. е. без ошибок.</p><p>В начальный момент в первой куче было 15 камней, а во второй – S камней, 1 ≤ S ≤ 27.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>минимальное</b> значение S, при котором Петя не может выиграть за один ход, но при любом ходе Пети Ваня может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите <b>минимальное</b> значение S, при котором одновременно выполняются оба условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p>1. Игра завершается, когда количество камней в кучах становится равным.</p>"
+         },
+         {
+          "t": "code",
+          "v": "if x1 == x2:  # Указываем условие окончания игры\n    return c in win"
+         },
+         {
+          "t": "html",
+          "v": "<p>2. За один ход игрок может добавить в меньшую кучу один или три камня. Изменять количество камней в большей куче не разрешается.</p>"
+         },
+         {
+          "t": "code",
+          "v": "if x1 < x2:\n    moves = [f(x1 + 1, x2, c + 1, win), f(x1 + 3, x2, c + 1, win)]\nelse:\n    moves = [f(x1, x2 + 1, c + 1, win), f(x1, x2 + 3, c + 1, win)]"
+         },
+         {
+          "t": "html",
+          "v": "<p>То есть, если в первой куче меньше камней, чем во второй, то можно добавить в первую кучу один или 3 камня. Если во второй куче меньше камней, то можно во вторую кучу добавить 1 или 3 камня.</p>"
+         }
+        ]
+       },
+       {
+        "t": "details",
+        "title": "Решение",
+        "v": [
+         {
+          "t": "code",
+          "v": "def f(x1, x2, c, win):\n    if x1 == x2:  # Указываем условие окончания игры\n        return c in win\n    if c > max(win):\n        return 0\n\n    if x1 < x2:\n        moves = [f(x1 + 1, x2, c + 1, win), f(x1 + 3, x2, c + 1, win)]\n    else:\n        moves = [f(x1, x2 + 1, c + 1, win), f(x1, x2 + 3, c + 1, win)]\n\n    if c % 2 != max(win) % 2:\n        return any(moves)  # Ходит наш игрок\n    else:\n        return all(moves)  # Ходит противник\n\nfor s in range(1, 27 + 1):  # Перебираем стартовое количество камней в куче\n    if f(15, s, 0, [1]) == 0 and f(15, s, 0, [2]) == 1:\n        print('№ 19:', s)\n    if f(15, s, 0, [1]) == 0 and f(15, s, 0, [3]) == 1:\n        print('№ 20:', s)\n    if f(15, s, 0, [2, 4]) == 1 and f(15, s, 0, [2]) == 0:\n        print('№ 21:', s)\n\n# П1 В1 П2 В2\n# 1  2  3  4"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "11"
+       ],
+       [
+        "8",
+        "10"
+       ],
+       [
+        "7"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>(СтатГрад) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в кучу один камень, добавить два камня или увеличить количество камней в куче в два раза. Например, если в начале игры в куче 3 камня, Петя может первым ходом получить кучу из 4, 5 или 6 камней.</p><p>Общий запас игроков составляет 55 камней (включая те, что уже лежат в куче). Например, если в куче уже есть 30 камней, то следующим ходом удвоение сделать нельзя – камней не хватит.</p><p>Игра завершается, когда количество камней в куче становится не менее 45. Победителем считается игрок, сделавший последний ход, то есть первым получивший кучу, в которой будет 45 или больше камней. В начальный момент в куче было S камней, 1 ≤ S ≤ 44.</p><p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выигрывать при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите такое значение S, при котором у Вани есть выигрышная стратегия, позволяющая ему выигрывать первым или вторым ходом при любой игре Пети, но у Вани нет стратегии, которая позволяла бы ему гарантированно выигрывать первым ходом.</p><p><b>№ 20</b><br>Для игры, описанной в задании 19, укажите два значения S, при которых у Вани есть выигрышная стратегия, позволяющая ему выигрывать первым, вторым или третьим ходом при любой игре Пети, но у Вани нет стратегии, которая позволяла бы ему гарантированно выигрывать первым или вторым ходом.<br>В ответе запишите найденные значения в порядке возрастания: сначала меньше, затем больше.</p><p><b>№ 21</b><br>Найдите два <b>наибольших</b> значения S, при которых у Пети есть выигрышная стратегия, причём Петя не может выиграть первым ходом, но может выиграть своим вторым ходом независимо от того, как будет ходить Ваня. Найденные значения запишите в ответе в порядке возрастания.</p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "code",
+          "v": "moves = []\nif x + 1 <= 55:\n    moves.append(f(x + 1, c + 1, win))\nif x + 2 <= 55:\n    moves.append(f(x + 2, c + 1, win))\nif x * 2 <= 55:\n    moves.append(f(x * 2, c + 1, win))"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 2
+       }
+      ],
+      "answer": [
+       [
+        "39"
+       ],
+       [
+        "19",
+        "36"
+       ],
+       [
+        "40",
+        "41"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>(А. Минак) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в кучу один камень либо увеличить количество камней в куче в два раза. Например, имея кучу из 10 камней, за один ход можно получить кучу из 11 или 20 камней. Для того чтобы делать ходы, у игроков есть только 75 камней, включая те, которые находятся в куче в начальный момент.</p><p>Игра завершается в тот момент, когда количество камней в куче становится не менее 57. Победителем считается игрок, сделавший последний ход.</p><p>В начальный момент в куче было S камней; 1 ≤ S ≤ 56. Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p><p>&nbsp;</p><p><b>№ 19</b><br>Укажите <b>количество</b> значений S, при которых Петя может выиграть своим первым ходом.</p><p><b>№ 20</b><br>Найдите два <b>наименьших</b> значения S, когда Петя имеет выигрышную стратегию, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "10"
+       ],
+       [
+        "14",
+        "27"
+       ],
+       [
+        "53"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>(СтатГрад) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. В каждой куче при старте игры содержится хотя бы один камень. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в меньшую кучу любое количество камней от одного до количества камней в этой куче. Изменять количество камней в большей куче не разрешается. Если кучи содержат равное количество камней, добавлять камни можно в любую из них. Пусть, например, в начале игры в первой куче 3 камня, а во второй – 5 камней, будем обозначать такую позицию (3, 5). Петя первым ходом должен добавить в первую кучу от 1 до 3 камней, он может получить позиции (4, 5), (5, 5) и (6, 5). Если Петя создаёт позицию (4, 5), то Ваня своим ходом может добавить от 1 до 4 камней в первую кучу, а если Петя создаёт позицию (6, 5), то Ваня может добавить от 1 до 5 камней во вторую кучу, так как теперь она стала меньшей. В позиции (5, 5) Ваня может добавить от 1 до 5 камней в любую кучу.</p><p>Игра завершается, когда общее количество камней в кучах становится более 49. Победителем считается игрок, сделавший последний ход, то есть первым получивший 50 или больше камней в двух кучах.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Петя смог выиграть первым ходом. Какое <b>наименьшее</b> число камней могло быть суммарно в двух кучах?</p><p><b>№ 20</b><br>В игре, описанной в задании 19, в начальный момент в первой куче было 5 камней, а во второй – S камней, 1 ≤ S ≤ 40.<br>Укажите минимальное и максимальное из таких значений S, при которых Петя не может выиграть первым ходом, но у Пети есть выигрышная стратегия, позволяющая ему выиграть вторым ходом при любой игре Вани.<br>В ответе запишите сначала минимальное значение, затем максимальное.</p><p><b>№ 21</b><br>В игре, описанной в задании 19, в начальный момент в первой куче было 5 камней, а во второй – S камней, 1 ≤ S ≤ 40.<br>Найдите минимальное из таких значений S, при котором у Вани есть стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, но у Вани нет стратегии, которая позволяла бы ему гарантированно выиграть первым ходом.</p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказки",
+        "v": [
+         {
+          "t": "html",
+          "v": "<p><b>1. Список moves</b></p>"
+         },
+         {
+          "t": "code",
+          "v": "moves = []\nif x1 <= x2:\n     for i in range(1, x1+1):\n         moves.append(f(x1+i, x2, c+1, win))\nelse:\n    for i in range(1, x2+1):\n        moves.append(f(x1, x2+i, c+1, win))"
+         },
+         {
+          "t": "html",
+          "v": "<p><b>2. № 19</b></p>"
+         },
+         {
+          "t": "code",
+          "v": "ans_19 = []\nfor s1 in range(1, 100 + 1):\n    for s2 in range(1, 100 + 1):\n        if f(s1, s2, 0, [1]) == 1:\n            ans_19.append(s1+s2)\nprint(min(ans_19))"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "34"
+       ],
+       [
+        "28",
+        "37"
+       ],
+       [
+        "24"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>(СтатГрад) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. В каждой куче при старте игры содержится хотя бы один камень. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может добавить в большую кучу любое количество камней от одного до трёх или удвоить количество камней в меньшей куче. Если кучи содержат равное количество камней, можно добавить в любую из них от одного до трёх камней, удвоение в этой ситуации запрещено.</p><p>Игра завершается, когда общее количество камней в кучах становится более 44.</p><p>Победителем считается игрок, сделавший последний ход, то есть первым получивший 45 или больше камней в двух кучах.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Петя смог выиграть первым ходом. Какое <b>наименьшее</b> число камней могло быть суммарно в двух кучах?</p><p><b>№ 20</b><br>В игре, описанной в задании 19, в начальный момент в первой куче было 5 камней, а во второй – S камней, 1 ≤ S ≤ 39. Укажите минимальное и максимальное из таких значений S, при которых Петя не может выиграть первым ходом, но у Пети есть выигрышная стратегия, позволяющая ему выиграть вторым ходом при любой игре Вани.<br>В ответе запишите сначала минимальное значение, затем максимальное.</p><p><b>№ 21</b><br>В игре, описанной в задании 19, в начальный момент в первой куче было 19 камней, а во второй – S камней, 1 ≤ S ≤ 25. Найдите такое значение S, при котором у Вани есть стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети, но у Вани нет стратегии, которая позволяла бы ему гарантированно выиграть первым ходом.</p>"
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "31"
+       ],
+       [
+        "24",
+        "33"
+       ],
+       [
+        "10"
+       ]
+      ]
+     },
+     {
+      "type": "fill",
+      "blocks": [
+       {
+        "t": "html",
+        "v": "<p>🔥</p><p>(А. Богданов) Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя.</p><p>За один ход игрок может изменить количество камней в куче на 1, 3 или 7, но обязательно в сторону числа 50: если в куче больше 50 камней, то он забирает камни из кучи, а если меньше 50, то добавляет камни.</p><p>Игра завершается в тот момент, когда количество камней в куче становится ровно 50. Игрок, первым получивший кучу из 50 камней, считается победителем.</p><p>В начальный момент в куче было S камней, S ≥ 1, S ≠ 50.</p><p>&nbsp;</p><p><b>№ 19</b><br>Известно, что Ваня выиграл своим первым ходом после неудачного первого хода Пети. Укажите <b>минимальное</b> значение S, когда такая ситуация возможна.</p><p><b>№ 20</b><br>Найдите два <b>наименьших</b> значения S, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:<ul class=\"dash\"><li>Петя не может выиграть за один ход;</li><li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li></ul>Найденные значения запишите в ответе в порядке возрастания.</p><p><b>№ 21</b><br>Найдите <b>максимальное</b> значение S, при котором одновременно выполняются два условия:<ul class=\"dash\"><li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li><li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li></ul></p>"
+       },
+       {
+        "t": "details",
+        "title": "Подсказка",
+        "v": [
+         {
+          "t": "code",
+          "v": "if x < 50:\n    moves = [f(x+1, c+1, win), f(x+3, c+1, win), f(x+7, c+1, win)]\nelse:\n    moves = [f(x-1, c+1, win), f(x-3, c+1, win), f(x-7, c+1, win)]"
+         }
+        ]
+       }
+      ],
+      "fields": [
+       {
+        "label": "№ 19",
+        "n": 1
+       },
+       {
+        "label": "№ 20",
+        "n": 2
+       },
+       {
+        "label": "№ 21",
+        "n": 1
+       }
+      ],
+      "answer": [
+       [
+        "36"
+       ],
+       [
+        "39",
+        "45"
+       ],
+       [
+        "58"
+       ]
+      ]
+     }
+    ]
+   }
+  ]
+ }
+};
+
+</script>
+<script>
+(function(){
+const C=window.COURSE, SEC=C.section, KEY="course-"+C.id+"-s"+SEC.num;
+let S={pos:null,st:{}};
+try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&x.st)S=x}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>String(s||"").replace(/\s+/g,"").replace(",",".").toLowerCase();
+const ICON={
+  text:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 4h10M3 8h10M3 12h6"/></svg>',
+  video:'<svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>',
+  task:'?',
+  check:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>',
+  cross:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
+  next:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+  prev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  lock:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>'
+};
+const isTask=s=>s.type==="choice"||s.type==="fill";
+const lessons=SEC.lessons;
+const sid=(li,si)=>lessons[li].num+"/"+(si+1);
+const st=(li,si)=>S.st[sid(li,si)]||(S.st[sid(li,si)]={});
+const passed=(li,si)=>{const s=lessons[li].steps[si],x=S.st[sid(li,si)]||{};return isTask(s)?!!x.ok:!!x.seen};
+
+/* python highlighting */
+function hl(src){
+  const KW=/\b(def|return|if|else|elif|for|in|and|or|not|while|import|from|print|range|max|min|any|all|continue|break|True|False|None|lambda|sum|len)\b/g;
+  return src.split("\n").map(line=>{
+    let code=line,com="";
+    const i=line.indexOf("#");
+    if(i>=0&&!/['"]/.test(line.slice(0,i).replace(/'[^']*'|"[^"]*"/g,""))){code=line.slice(0,i);com=line.slice(i)}
+    let out="",last=0;const re=/('[^']*'|"[^"]*")/g;let m;
+    const tok=t=>esc(t).replace(KW,'<span class="k">$1</span>').replace(/\b(\d+)\b/g,'<span class="d">$1</span>');
+    while((m=re.exec(code))){out+=tok(code.slice(last,m.index))+'<span class="s">'+esc(m[0])+'</span>';last=m.index+m[0].length}
+    out+=tok(code.slice(last));
+    return out+(com?'<span class="c">'+esc(com)+'</span>':"");
+  }).join("\n");
+}
+/* game tree */
+function tree(spec,labels){
+  const LW=46,LH=72,R=16,PAD=26;let leaf=0;const nodes=[],edges=[];let depth=0;
+  (function walk(n,d){
+    depth=Math.max(depth,d);
+    const me={d,kind:Array.isArray(n)?"w":n};nodes.push(me);
+    if(Array.isArray(n)){const kids=n.map(k=>walk(k,d+1));me.x=kids.reduce((a,k)=>a+k.x,0)/kids.length;kids.forEach(k=>edges.push([me,k]))}
+    else{me.x=PAD+R+leaf*LW;leaf++}
+    return me;
+  })(spec,0);
+  const W=PAD*2+R*2+(leaf-1)*LW+80, H=PAD*2+R*2+depth*LH, y=d=>PAD+R+d*LH;
+  let s=`<svg class="tree" viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="Дерево игры">`;
+  edges.forEach(([a,b])=>s+=`<line x1="${a.x}" y1="${y(a.d)}" x2="${b.x}" y2="${y(b.d)}"/>`);
+  nodes.forEach(n=>s+=`<circle class="${n.kind}" cx="${n.x}" cy="${y(n.d)}" r="${R}"/>`);
+  const lx=PAD+R*2+(leaf-1)*LW+16;
+  (labels||[]).forEach((t,i)=>{s+=`<rect x="${lx}" y="${y(i+1)-12}" width="54" height="24"/><text x="${lx+27}" y="${y(i+1)+4}" text-anchor="middle">${esc(t)}</text>`});
+  return s+"</svg>";
+}
+/* hints and solutions inside task steps open step by step */
+function need(title){const m=/Подсказка\s*(\d+)/.exec(title);if(m)return +m[1];if(/Подсказк/.test(title))return 1;if(/Решени/.test(title))return 3;return 0}
+function lockText(n,title){const w=n===1?"1-й":n===2?"2-й":"3-й";return /Решени/.test(title)?`Откроется после ${w} неверной попытки или когда задача будет решена`:`Откроется после ${w} неверной попытки`}
+function blocks(list,x){
+  return list.map(b=>{
+    if(b.t==="details"&&x){const n=need(b.title);if(n&&!x.ok&&!x.rev&&(x.att||0)<n)return `<div class="locked">${ICON.lock}<span><b>${esc(b.title)}</b><small>${lockText(n,b.title)}</small></span></div>`}
+    if(b.t==="html") return `<div class="html">${b.v}</div>`;
+    if(b.t==="code") return `<div class="codebox"><pre><code>${hl(b.v)}</code></pre><button class="copy" type="button">Копировать</button></div>`;
+    if(b.t==="tree") return `<div class="treewrap">${tree(b.v,b.labels)}</div>`;
+    if(b.t==="details") return `<details class="box"><summary>${esc(b.title)}</summary><div>${blocks(b.v)}</div></details>`;
+    return "";
+  }).join("");
+}
+
+let cur={li:0,si:0};
+function lessonStat(li){
+  const L=lessons[li];if(!L.steps)return null;
+  let done=0,tasks=0,ok=0;
+  L.steps.forEach((s,i)=>{if(passed(li,i))done++;if(isTask(s)){tasks++;if(passed(li,i))ok++}});
+  return {done,total:L.steps.length,ok,tasks};
+}
+function renderToc(){
+  $("ctitle").textContent=C.title+". "+SEC.title;
+  let allDone=0,all=0;
+  let h=`<div class="mod"><span class="n">${SEC.num}</span><span>✅ ${esc(SEC.title)}</span></div>`;
+  lessons.forEach((L,li)=>{
+    if(!L.steps){h+=`<button class="les" disabled><span class="n">${L.num}</span><span class="t">${esc(L.title)}</span><span class="c">скоро</span></button>`;return}
+    const p=lessonStat(li);allDone+=p.done;all+=p.total;
+    const cls=p.done===p.total?" done":p.done?" part":"";
+    h+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.num}</span><span class="t">${esc(L.title)}</span><span class="c">${p.done}/${p.total}</span></button>`;
+  });
+  $("toclist").innerHTML=h;
+  $("toclist").querySelectorAll(".les[data-li]").forEach(b=>b.onclick=()=>{go(+b.dataset.li,null);if(matchMedia("(max-width:900px)").matches)setToc(false)});
+  $("pnum").textContent=allDone+"/"+all;
+  $("pfill").style.width=(all?allDone/all*100:0)+"%";
+}
+function sqHTML(li,i){
+  const s=lessons[li].steps[i],x=S.st[sid(li,i)]||{};
+  let c="sq",icon=s.type==="video"?ICON.video:isTask(s)?ICON.task:ICON.text;
+  if(isTask(s)){if(x.ok){c+=x.rev?" rev":" ok";icon=ICON.check}else if(x.att){c+=" bad";icon=ICON.cross}}
+  else if(x.seen)c+=" seen";
+  if(i===cur.si)c+=" on";
+  return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}" title="Шаг ${i+1}">${icon}</button>`;
+}
+function render(){
+  const L=lessons[cur.li], s=L.steps[cur.si], x=st(cur.li,cur.si);
+  if(!isTask(s)&&!x.seen){x.seen=true;save()}
+  document.title=L.num+" "+L.title+" · шаг "+(cur.si+1);
+  $("strip").innerHTML=L.steps.map((_,i)=>sqHTML(cur.li,i)).join("");
+  const on=$("strip").querySelector(".sq.on");if(on)on.scrollIntoView({inline:"center",block:"nearest"});
+  const p=lessonStat(cur.li);
+  $("lbar").innerHTML=`<b>${L.num} ${esc(L.title)}</b><span>${p.done} из ${p.total} шагов пройдено</span><span>${p.ok} из ${p.tasks} баллов получено</span>`;
+  $("pts").innerHTML=`Шаг <b>${cur.si+1}</b> из ${L.steps.length}`;
+  let h="";
+  if(s.title&&s.type!=="video") h+=`<h2 class="left">${esc(s.title)}</h2>`;
+  if(s.type==="video"){
+    if(s.embed) h+=`<div class="vwrap"><iframe src="${esc(s.embed)}" title="${esc(s.title||"Видео")}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock" allowfullscreen loading="lazy"></iframe></div>`;
+    else if(s.src) h+=`<video class="vwrap" controls preload="metadata" playsinline src="${esc(s.src)}"></video>`;
+    else h+=`<div class="video"><span class="pl">${ICON.video}</span><b>${esc(s.title||"Видео")}</b><span>Видео к этому шагу появится позже</span></div>`;
+  }
+  if(s.blocks) h+=blocks(s.blocks,isTask(s)?x:null);
+  if(s.type==="choice") h+=choiceHTML(s,x);
+  if(s.type==="fill") h+=fillHTML(s,x);
+  $("step").innerHTML=h;
+  const prev=prevPos(), next=nextPos();
+  $("foot").innerHTML=`${prev?`<button class="btn ghost" id="prev">${ICON.prev}Назад</button>`:"<span></span>"}${next?`<button class="btn" id="next">${next.li!==cur.li?"Следующий урок":"Следующий шаг"}${ICON.next}</button>`:`<span class="soon">Это последний шаг раздела</span>`}
+    <div class="note"><span>Ответы сохраняются на этом устройстве.</span><button class="btn ghost" id="rst">Сбросить прогресс</button><span id="rstc" hidden>Точно стереть все ответы? <button class="btn ghost" id="rsty" style="color:var(--bad)">Да, стереть</button> <button class="btn ghost" id="rstn">Нет</button></span></div>`;
+  wire(s,x);
+  renderToc();
+}
+function nextPos(){
+  if(cur.si<lessons[cur.li].steps.length-1) return {li:cur.li,si:cur.si+1};
+  for(let li=cur.li+1;li<lessons.length;li++) if(lessons[li].steps) return {li,si:0};
+  return null;
+}
+function prevPos(){
+  if(cur.si>0) return {li:cur.li,si:cur.si-1};
+  for(let li=cur.li-1;li>=0;li--) if(lessons[li].steps) return {li,si:lessons[li].steps.length-1};
+  return null;
+}
+function verdict(x,okText,badText){
+  if(x.ok) return `<div class="verdict ok">${ICON.check}${okText}</div>`;
+  if(x.att&&x.last===false) return `<div class="verdict bad">${ICON.cross}${badText}</div>`;
+  return "";
+}
+function choiceHTML(s,x){
+  const sel=x.v!=null?x.v:-1;
+  let h=`<div class="quiz${x.ok?" ok":x.att&&x.last===false?" bad":""}" id="quiz"><span class="qt">Выберите один вариант из списка</span>`+verdict(x,"Верно!","Неверно. Попробуйте ещё раз.");
+  s.options.forEach((o,i)=>{
+    const mark=x.last!=null&&i===sel?(x.ok?" ok":(x.last===false?" bad":"")):"";
+    h+=`<label class="opt${mark}"><input type="radio" name="opt" value="${i}" ${i===sel?"checked":""} ${x.ok?"disabled":""}><span>${esc(o)}</span></label>`;
+  });
+  return h+actions(s,x)+`</div>`;
+}
+function fillHTML(s,x){
+  const v=x.v||[];
+  let h=`<div class="quiz${x.ok?" ok":x.att&&x.last===false?" bad":""}" id="quiz"><span class="qt">Заполните пропуски</span>`+verdict(x,"Верно!","Есть ошибки — неверные поля подсвечены красным.")+`<div class="fields">`;
+  s.fields.forEach((f,fi)=>{
+    h+=`<div class="frow"><label for="f${fi}_0">${esc(f.label)}</label>`;
+    for(let k=0;k<f.n;k++){
+      const val=(v[fi]||[])[k]||"";
+      let cls="";if(x.last!=null&&val!=="")cls=norm(val)===norm(s.answer[fi][k])?"ok":"bad";
+      if(x.ok)cls="ok";
+      h+=`<input id="f${fi}_${k}" data-f="${fi}" data-k="${k}" inputmode="numeric" autocomplete="off" value="${esc(val)}" class="${cls}" ${x.ok?"readonly":""} aria-label="${esc(f.label)}${f.n>1?", значение "+(k+1):""}">`;
+    }
+    h+=`</div>`;
+  });
+  return h+`</div>`+actions(s,x)+`</div>`;
+}
+function actions(s,x){
+  let h=`<div class="qact">`;
+  h+=x.ok?`<button class="btn ghost" id="again">Решить снова</button>`:`<button class="btn" id="send">Отправить</button>`;
+  if(x.att) h+=`<span class="att">Неверных попыток: ${x.att}</span>`;
+  if(!x.ok&&x.att>=3&&!x.rev) h+=`<button class="btn warn" id="showans">Показать ответ</button>`;
+  h+=`</div>`;
+  if(x.rev){
+    const a=s.type==="choice"?esc(s.options[s.answer]):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
+    h+=`<div class="reveal">Правильный ответ:<br>${a}</div>`;
+  }
+  return h;
+}
+function wire(s,x){
+  $("strip").querySelectorAll(".sq").forEach(b=>b.onclick=()=>go(cur.li,+b.dataset.si));
+  document.querySelectorAll(".copy").forEach(b=>b.onclick=async()=>{
+    const t=b.previousElementSibling.innerText;
+    try{await navigator.clipboard.writeText(t);b.textContent="Скопировано"}catch(e){const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const sl=getSelection();sl.removeAllRanges();sl.addRange(r);b.textContent="Выделено"}
+    setTimeout(()=>b.textContent="Копировать",1500);
+  });
+  const p=$("prev"),n=$("next");
+  if(p)p.onclick=()=>{const q=prevPos();if(q)go(q.li,q.si)};
+  if(n)n.onclick=()=>{const q=nextPos();if(q)go(q.li,q.si)};
+  $("rst").onclick=()=>{$("rstc").hidden=false;$("rst").hidden=true};
+  $("rstn").onclick=()=>{$("rstc").hidden=true;$("rst").hidden=false};
+  $("rsty").onclick=()=>{S={pos:null,st:{}};save();go(0,0)};
+  if(!isTask(s))return;
+  if(s.type==="choice"){
+    document.querySelectorAll('input[name="opt"]').forEach(r=>r.onchange=()=>{x.v=+r.value;x.last=null;save();render()});
+  }else{
+    document.querySelectorAll(".frow input").forEach(inp=>{
+      inp.oninput=()=>{x.v=x.v||[];(x.v[inp.dataset.f]=x.v[inp.dataset.f]||[])[inp.dataset.k]=inp.value;inp.classList.remove("ok","bad");save()};
+      inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();submit(s,x)}};
+    });
+  }
+  const send=$("send");if(send)send.onclick=()=>submit(s,x);
+  const ag=$("again");if(ag)ag.onclick=()=>{x.ok=false;x.last=null;x.v=s.type==="choice"?null:[];save();render()};
+  const sa=$("showans");if(sa)sa.onclick=()=>{x.rev=true;save();render()};
+}
+function submit(s,x){
+  let good;
+  if(s.type==="choice"){
+    if(x.v==null){flash("Выберите вариант ответа");return}
+    good=x.v===s.answer;
+  }else{
+    const v=x.v||[];
+    const empty=s.fields.every((f,fi)=>[...Array(f.n)].every((_,k)=>!((v[fi]||[])[k]||"").trim()));
+    if(empty){flash("Впишите ответ");return}
+    good=s.fields.every((f,fi)=>[...Array(f.n)].every((_,k)=>norm((v[fi]||[])[k])===norm(s.answer[fi][k])));
+  }
+  x.last=good;if(good)x.ok=true;else x.att=(x.att||0)+1;
+  save();render();
+  const q=$("quiz");if(q)q.scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+function flash(t){const a=document.querySelector(".qact");if(!a)return;let m=a.querySelector(".att.tmp");if(!m){m=document.createElement("span");m.className="att tmp";a.appendChild(m)}m.textContent=t}
+function go(li,si){
+  if(!lessons[li]||!lessons[li].steps)return;
+  if(si==null){const p=S.last&&S.last[li];si=p!=null?p:0}
+  cur={li,si};S.pos=cur;S.last=S.last||{};S.last[li]=si;save();
+  history.replaceState(null,"","#"+lessons[li].num+"-"+(si+1));
+  render();window.scrollTo({top:0});
+}
+function fromHash(){
+  const m=location.hash.match(/^#([\d.]+)-(\d+)$/);
+  if(m){const li=lessons.findIndex(L=>L.num===m[1]);if(li>=0&&lessons[li].steps){go(li,Math.max(0,Math.min(+m[2]-1,lessons[li].steps.length-1)));return}}
+  if(S.pos&&lessons[S.pos.li]&&lessons[S.pos.li].steps)go(S.pos.li,S.pos.si);else go(0,0);
+}
+
+/* table of contents toggle */
+function setToc(open){
+  root.classList.toggle("toc-closed",!open);
+  try{localStorage.setItem("toc",open?"open":"closed")}catch(e){}
+  const b=$("tocbtn");b.setAttribute("aria-label",open?"Скрыть оглавление":"Показать оглавление");b.setAttribute("aria-expanded",open);
+}
+if(matchMedia("(max-width:900px)").matches&&!root.classList.contains("toc-closed"))setToc(false);
+$("tocbtn").onclick=()=>setToc(root.classList.contains("toc-closed"));
+$("scrim").onclick=()=>setToc(false);
+$("tocbtn").setAttribute("aria-expanded",!root.classList.contains("toc-closed"));
+
+/* theme toggle */
+(function(){
+  const b=$("theme");
+  const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>';
+  const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>';
+  const isDark=()=>root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  const paint=()=>{const d=isDark();b.innerHTML=d?SUN:MOON;b.title=d?"Светлая тема":"Тёмная тема";b.setAttribute("aria-label",b.title)};
+  b.onclick=()=>{const t=isDark()?"light":"dark";root.dataset.theme=t;try{localStorage.setItem("theme",t)}catch(e){}paint()};
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change",paint);
+  paint();
+})();
+window.addEventListener("hashchange",fromHash);
+fromHash();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Демоверсия ЕГЭ‑2027 по информатике</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#16181c">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Лучший репетитор по информатике">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Демоверсия ЕГЭ‑2027 по информатике">
+<meta property="og:description" content="Все 27 заданий демоверсии с файлами и проверкой ответов. Артём Свинченко.">
+<meta property="og:url" content="https://gsvv.ru/inf/ege-demo-site/">
+<meta property="og:image" content="https://gsvv.ru/inf/og-demo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Все 27 заданий демоверсии с файлами и проверкой ответов. Артём Свинченко.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: exam booklet in one column — sticky progress bar, task map, then boxed-number task cards with answer cells under each */
+:root{
+  --bg:#f3f5f9; --surface:#ffffff; --ink:#152033; --muted:#5b687c; --line:#d5dce7; --line-strong:#15203366;
+  --accent:#1d5bc4; --accent-soft:#e4edfb;
+  --ok:#15803d; --ok-soft:#dff3e6; --bad:#c42b2b; --bad-soft:#fce8e8; --warn:#9a5b00; --warn-soft:#fbefd9;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f141c; --surface:#171e29; --ink:#e3e9f2; --muted:#98a5b8; --line:#2a3443; --line-strong:#e3e9f266;
+  --accent:#86aaff; --accent-soft:#1c2945;
+  --ok:#5ad08a; --ok-soft:#14301f; --bad:#ff8a84; --bad-soft:#3a1b1b; --warn:#f2b45a; --warn-soft:#352610; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f141c; --surface:#171e29; --ink:#e3e9f2; --muted:#98a5b8; --line:#2a3443; --line-strong:#e3e9f266;
+  --accent:#86aaff; --accent-soft:#1c2945;
+  --ok:#5ad08a; --ok-soft:#14301f; --bad:#ff8a84; --bad-soft:#3a1b1b; --warn:#f2b45a; --warn-soft:#352610; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img,svg{max-width:100%}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+
+/* sticky bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;
+  background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{max-width:820px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.bar b{font:600 14px var(--f-body);white-space:nowrap}
+.home{font:600 14px var(--f-body);color:var(--accent);text-decoration:none;white-space:nowrap}
+.home:hover{text-decoration:underline}
+.meter{flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden;display:flex;min-width:60px}
+.meter i{display:block;height:100%}
+.meter .m-ok{background:var(--ok)}
+.meter .m-rev{background:var(--warn)}
+.bar .count{font:600 14px var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+header.hero{padding-top:28px;display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font:700 clamp(24px,5.2vw,38px)/1.12 var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.lede{margin:0;color:var(--muted);max-width:62ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--muted)}
+.facts span b{color:var(--ink);font-weight:600}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.panel h2{font:600 15px var(--f-body);margin:0 0 12px}
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:6px}
+.map a{display:flex;align-items:center;justify-content:center;height:40px;border-radius:7px;border:1px solid var(--line);
+  color:var(--ink);text-decoration:none;font:600 13px var(--f-mono);background:var(--bg)}
+.map a small{font-size:10px;color:var(--muted);margin-left:2px}
+.map a.s-ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.map a.s-bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.map a.s-rev{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid var(--line)}
+.allfiles{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+
+details.conv summary{cursor:pointer;font-weight:600}
+details.conv ol{margin:12px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;max-width:68ch}
+
+/* task */
+.task{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.task-top{display:flex;align-items:flex-start;gap:14px;min-width:0}
+.no{flex:none;min-width:44px;height:34px;padding:0 8px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;
+  font:700 16px var(--f-display);border-radius:3px}
+.task-top .body{flex:1;min-width:0;max-width:100%;display:flex;flex-direction:column;gap:10px}
+.task p{margin:0;max-width:70ch}
+.task ul.dash{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:2px}
+.task ul.dash li::before{content:"– "}
+.task ol{margin:0;padding-left:22px}
+.filebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 12px;border:1px dashed var(--line-strong);border-radius:8px;font-size:14px}
+.filebar .lbl{font-style:italic;font-weight:600}
+.file{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:7px;background:var(--accent-soft);color:var(--accent);
+  text-decoration:none;font:600 14px var(--f-mono)}
+.file:hover{text-decoration:underline}
+.file svg{width:15px;height:15px;flex:none}
+.file .sz{font:400 12px var(--f-body);opacity:.8}
+.file.busy{opacity:.6}
+.dlmsg{font-size:13px;color:var(--muted)}
+.ili{align-self:center;font:700 14px var(--f-display);color:var(--bad);letter-spacing:.08em;padding:4px 0}
+.ex{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.formula{text-align:center;font-size:17px;padding:4px 0;overflow-x:auto}
+.scroll{overflow-x:auto;max-width:100%}
+.fig{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+table.t{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+table.t td,table.t th{border:1px solid var(--line-strong);text-align:center;padding:4px 8px;min-width:30px;height:28px}
+table.t th{font-weight:600;background:var(--accent-soft)}
+table.t td.x{background:var(--line)}
+table.t th.c0{background:transparent}
+table.t.mono td{font-family:var(--f-mono)}
+table.t td.l{text-align:left}
+pre.code{margin:0;font:14px/1.5 var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;overflow-x:auto;max-width:100%}
+.cmd b{font-weight:700}
+svg.graph{width:290px;max-width:100%;height:auto}
+svg.graph .e{stroke:var(--ink);stroke-width:1.7;fill:none}
+svg.graph .v{fill:var(--ink)}
+svg.graph text{fill:var(--ink);font:500 15px var(--f-body)}
+svg.graph text.w{font:500 13px var(--f-mono);fill:var(--muted)}
+svg.db{width:560px;max-width:100%;height:auto}
+svg.db rect.box{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.2}
+svg.db rect.hd{fill:var(--accent-soft)}
+svg.db text{fill:var(--ink);font:13px var(--f-body)}
+svg.db text.h{font-weight:600}
+svg.db text.k{font-weight:600;text-decoration:underline}
+svg.db path{stroke:var(--ink);stroke-width:1.3;fill:none}
+table.tape td{min-width:34px;font-family:var(--f-mono)}
+.head{font:12px var(--f-mono);color:var(--muted)}
+table.robot td{width:40px;height:36px;font-size:16px;border:1px solid var(--line-strong)}
+table.robot{border:3px solid var(--ink);align-self:flex-start}
+.body > table, .body > svg{align-self:flex-start}
+table.robot td.wr{border-right:3px solid var(--ink)}
+table.robot td.wb{border-bottom:3px solid var(--ink)}
+
+/* answers */
+.ans{display:flex;flex-direction:column;gap:10px;border-top:1px dashed var(--line);padding-top:14px;margin-top:4px}
+.ans-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.ans-row > label{font-weight:600}
+.cells{display:flex;gap:6px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,180px));gap:6px}
+.ans input{font:600 17px var(--f-mono);color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:7px;
+  padding:8px 10px;width:170px;max-width:100%;min-width:0;transition:border-color .15s,background-color .15s}
+.grid input{width:100%}
+.ans input:focus-visible{outline:none;border-color:var(--accent)}
+.ans input.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.ans input.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.btn{appearance:none;border:0;border-radius:7px;font:600 15px var(--f-body);padding:10px 18px;cursor:pointer;background:var(--accent);color:var(--surface)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong)}
+.btn.warn{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
+.btn:focus-visible,.file:focus-visible,.map a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn[disabled]{opacity:.5;cursor:default}
+.status{font-size:14px;font-weight:600}
+.status.ok{color:var(--ok)} .status.bad{color:var(--bad)} .status.muted{color:var(--muted);font-weight:500}
+.reveal{font-size:15px;background:var(--warn-soft);color:var(--ink);border-left:3px solid var(--warn);padding:8px 12px;border-radius:0 7px 7px 0}
+.reveal b{font-family:var(--f-mono)}
+.reset{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.confirm{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--bad-soft);padding:12px 14px;border-radius:9px}
+footer{font-size:13px;color:var(--muted);max-width:68ch}
+@media (max-width:520px){.task{padding:16px}.task-top{flex-direction:column;gap:10px}.task-top .body{width:100%}.bar .ttl{display:none}}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="bar-in">
+  <a class="home" href="../">← На главную</a>
+  <b class="ttl">ЕГЭ‑2027 · демо</b>
+  <div class="meter" aria-hidden="true"><i class="m-ok" id="mOk" style="width:0"></i><i class="m-rev" id="mRev" style="width:0"></i></div>
+  <span class="count" id="count">0 / 30</span>
+</div></div>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Информатика · 11 класс · ФИПИ, проект от 21.08.2026</span>
+    <h1>Демонстрационный вариант ЕГЭ‑2027 по информатике</h1>
+    <p class="lede">Решите задание, впишите ответ и нажмите «Проверить» (или Enter). Зелёный — верно, красный — неверно. После трёх неверных попыток появится кнопка «Показать ответ».</p>
+    <div class="facts"><span><b>27</b> заданий с кратким ответом</span><span><b>3 ч 55 мин</b> на экзамене</span><span>В демо: <b>3</b> примера задания 14 и <b>2</b> примера задания 25</span></div>
+  </header>
+
+  <section class="panel" aria-label="Карта заданий">
+    <h2>Карта заданий</h2>
+    <nav class="map" id="map"></nav>
+    <div class="legend">
+      <span><i style="background:var(--bg)"></i>не решено</span>
+      <span><i style="background:var(--ok-soft);border-color:var(--ok)"></i>верно</span>
+      <span><i style="background:var(--bad-soft);border-color:var(--bad)"></i>есть ошибка</span>
+      <span><i style="background:var(--warn-soft);border-color:var(--warn)"></i>ответ показан</span>
+    </div>
+    <div class="allfiles">
+      <span>Все файлы одним архивом (оригинальные .ods и .txt):</span>
+      <a class="file" href="files/EGE-2027_demo_files.zip" download>ICON EGE-2027_demo_files.zip <span class="sz">4,7 МБ</span></a>
+    </div>
+  </section>
+
+  <section class="panel">
+    <details class="conv">
+      <summary>Соглашения, которые используются в заданиях</summary>
+      <ol>
+        <li>Обозначения логических операций: отрицание — ¬ (¬A); конъюнкция — ∧ (A ∧ B) или &amp; (A &amp; B); дизъюнкция — ∨ (A ∨ B) или | (A | B); следование (импликация) — → (A → B); тождество — ≡ (A ≡ B). Выражение A ≡ B истинно тогда и только тогда, когда значения A и B совпадают. Символ 1 обозначает истину, символ 0 — ложь.</li>
+        <li>Два логических выражения с переменными называются равносильными (эквивалентными), если их значения совпадают при любых значениях переменных. Так, выражения A → B и (¬A) ∨ B равносильны, а A ∨ B и A ∧ B неравносильны.</li>
+        <li>Приоритеты логических операций: инверсия, конъюнкция, дизъюнкция, импликация, тождество. Так, ¬A ∧ B ∨ C ∧ D означает то же, что ((¬A) ∧ B) ∨ (C ∧ D). Возможна запись A ∧ B ∧ C вместо (A ∧ B) ∧ C; то же относится к дизъюнкции.</li>
+        <li>Мбайт и Кбайт используются в традиционном для информатики смысле — соотношение с байтом выражается степенью двойки.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- 1 -->
+  <article class="task" id="t1"><div class="task-top"><span class="no">1</span><div class="body">
+    <p>На рисунке схема дорог <i>N</i>-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>
+    <div class="fig">
+      <div class="scroll"><table class="t">
+        <tr><th class="c0"></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+        <tr><th>1</th><td class="x"></td><td>39</td><td></td><td></td><td>53</td><td>30</td></tr>
+        <tr><th>2</th><td>39</td><td class="x"></td><td>21</td><td></td><td></td><td></td></tr>
+        <tr><th>3</th><td></td><td>21</td><td class="x"></td><td>8</td><td>3</td><td></td></tr>
+        <tr><th>4</th><td></td><td></td><td>8</td><td class="x"></td><td>13</td><td>5</td></tr>
+        <tr><th>5</th><td>53</td><td></td><td>3</td><td>13</td><td class="x"></td><td></td></tr>
+        <tr><th>6</th><td>30</td><td></td><td></td><td>5</td><td></td><td class="x"></td></tr>
+      </table></div>
+      <svg class="graph" viewBox="0 0 300 200" role="img" aria-label="Граф: C–B, C–F, F–D, D–B, D–E, B–E, F–A, A–E">
+        <path class="e" d="M96 30 L262 52 M96 30 L40 128 M40 128 L176 88 M176 88 L262 52 M176 88 L246 154 M262 52 L246 154 M40 128 L144 192 M144 192 L246 154"/>
+        <circle class="v" cx="96" cy="30" r="3.5"/><circle class="v" cx="262" cy="52" r="3.5"/><circle class="v" cx="176" cy="88" r="3.5"/>
+        <circle class="v" cx="40" cy="128" r="3.5"/><circle class="v" cx="246" cy="154" r="3.5"/><circle class="v" cx="144" cy="192" r="3.5"/>
+        <text x="74" y="24">C</text><text x="272" y="52">B</text><text x="168" y="78">D</text><text x="18" y="134">F</text><text x="256" y="168">E</text><text x="126" y="198">A</text>
+      </svg>
+    </div>
+    <p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта <i>E</i> в пункт <i>A</i> и из пункта <i>B</i> в пункт <i>C</i>.</p>
+    <p>В ответе запишите целое число.</p>
+    <div class="ans" data-k="1"></div>
+  </div></div></article>
+
+  <!-- 2 -->
+  <article class="task" id="t2"><div class="task-top"><span class="no">2</span><div class="body">
+    <p>Миша заполнял таблицу истинности логической функции <i>F</i></p>
+    <p class="formula">((<i>x</i> ≡ ¬<i>y</i>) → ¬(<i>w</i> → <i>x</i>)) ∨ ¬<i>z</i>,</p>
+    <p>но успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных <i>w</i>, <i>x</i>, <i>y</i>, <i>z</i>.</p>
+    <div class="scroll"><table class="t mono">
+      <tr><th class="c0" style="min-width:44px"></th><th class="c0" style="min-width:44px"></th><th class="c0" style="min-width:44px"></th><th class="c0" style="min-width:44px"></th><th style="min-width:70px"><i>F</i></th></tr>
+      <tr><td></td><td>0</td><td>1</td><td>0</td><td><b>0</b></td></tr>
+      <tr><td>0</td><td></td><td></td><td>0</td><td><b>0</b></td></tr>
+      <tr><td></td><td>1</td><td>1</td><td></td><td><b>0</b></td></tr>
+    </table></div>
+    <p>Определите, какому столбцу таблицы соответствует каждая из переменных <i>w</i>, <i>x</i>, <i>y</i>, <i>z</i>.</p>
+    <p>В ответе напишите буквы <i>w</i>, <i>x</i>, <i>y</i>, <i>z</i> в том порядке, в котором идут соответствующие им столбцы (сначала буква, соответствующая первому столбцу; затем буква, соответствующая второму столбцу, и т.д.). Буквы в ответе пишите подряд, никаких разделителей между буквами ставить не нужно.</p>
+    <p><i>Например</i>, функция задана выражением ¬<i>x</i> ∨ <i>y</i>, зависящим от двух переменных, а фрагмент таблицы имеет следующий вид.</p>
+    <div class="scroll"><table class="t mono">
+      <tr><th class="c0" style="min-width:44px"></th><th class="c0" style="min-width:44px"></th><th style="min-width:70px"><i>F</i></th></tr>
+      <tr><td>0</td><td>1</td><td><b>0</b></td></tr>
+    </table></div>
+    <p>В этом случае первому столбцу соответствует переменная <i>y</i>, а второму столбцу — переменная <i>x</i>. В ответе следует написать: <i>yx</i>.</p>
+    <div class="ans" data-k="2"></div>
+  </div></div></article>
+
+  <!-- 3 -->
+  <article class="task" id="t3"><div class="task-top"><span class="no">3</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_3.xlsx" download>ICON demo_3.xlsx <span class="sz">173 КБ</span></a>
+      <a class="file" href="files/demo_3.ods" download>ICON demo_3.ods <span class="sz">130 КБ</span></a></div>
+    <p>В файле приведён фрагмент базы данных «Кондитерские изделия» о поставках конфет и печенья в магазины районов города. База данных состоит из трёх таблиц.</p>
+    <p>Таблица «Движение товаров» содержит записи о поступлении товаров со склада в магазины в течение июня 2025 г., а также информацию о проданных товарах. Поле <i>Тип операции</i> содержит значение <i>Поступление</i> или <i>Продажа</i>, а в соответствующее поле <i>Количество упаковок, шт.</i> внесена информация о том, сколько упаковок товара поступило в магазин или было продано в течение дня. Заголовок таблицы имеет следующий вид.</p>
+    <div class="scroll"><table class="t"><tr><td>ID операции</td><td>Дата</td><td>ID магазина</td><td>Артикул</td><td>Количество упаковок, шт.</td><td>Тип операции</td></tr></table></div>
+    <p>Таблица «Товар» содержит информацию об основных характеристиках каждого товара. Заголовок таблицы имеет следующий вид.</p>
+    <div class="scroll"><table class="t"><tr><td>Артикул</td><td>Отдел</td><td>Наименование товара</td><td>Ед_изм</td><td>Количество в упаковке</td><td>Цена за упаковку</td></tr></table></div>
+    <p>Таблица «Магазин» содержит информацию о местонахождении магазинов. Заголовок таблицы имеет следующий вид.</p>
+    <div class="scroll"><table class="t"><tr><td>ID магазина</td><td>Район</td><td>Адрес</td></tr></table></div>
+    <p>На рисунке приведена схема указанной базы данных.</p>
+    <svg class="db" viewBox="0 0 560 300" role="img" aria-label="Схема БД: Движение товаров.ID магазина связано с Магазин.ID магазина, Движение товаров.Артикул связано с Товар.Артикул">
+      <rect class="box" x="10" y="80" width="190" height="150" rx="4"/><rect class="hd" x="11" y="81" width="188" height="24" rx="3"/>
+      <text class="h" x="20" y="98">Движение товаров</text>
+      <text class="k" x="22" y="124">ID операции</text><text x="22" y="142">Дата</text><text x="22" y="160">ID магазина</text><text x="22" y="178">Артикул</text><text x="22" y="196">Количество упаковок, шт.</text><text x="22" y="214">Тип операции</text>
+      <rect class="box" x="340" y="10" width="190" height="100" rx="4"/><rect class="hd" x="341" y="11" width="188" height="24" rx="3"/>
+      <text class="h" x="350" y="28">Магазин</text>
+      <text class="k" x="352" y="54">ID магазина</text><text x="352" y="72">Район</text><text x="352" y="90">Адрес</text>
+      <rect class="box" x="340" y="150" width="190" height="140" rx="4"/><rect class="hd" x="341" y="151" width="188" height="24" rx="3"/>
+      <text class="h" x="350" y="168">Товар</text>
+      <text class="k" x="352" y="194">Артикул</text><text x="352" y="212">Отдел</text><text x="352" y="230">Наименование товара</text><text x="352" y="248">Ед_изм</text><text x="352" y="266">Количество в упаковке</text><text x="352" y="284">Цена за упаковку</text>
+      <path d="M200 156 H270 V50 H340"/><path d="M200 174 H270 V190 H340"/>
+    </svg>
+    <p>Используя информацию из приведённой базы данных, определите общую массу (в кг) всех видов зефира, полученного магазинами, расположенными на Прибрежной улице, за период с 5 по 19 июня включительно.</p>
+    <p>В ответе запишите только число.</p>
+    <div class="ans" data-k="3"></div>
+  </div></div></article>
+
+  <!-- 4 -->
+  <article class="task" id="t4"><div class="task-top"><span class="no">4</span><div class="body">
+    <p>По каналу связи передаются сообщения, содержащие только буквы из набора: Б, К, Л, О, Н. Для передачи используется двоичный код, удовлетворяющий условию Фано. Кодовые слова для некоторых букв известны: Б — 00, Н — 010, Л — 111. Для двух оставшихся букв К и О кодовые слова неизвестны. Какое количество двоичных знаков требуется для кодирования слова КОЛОБОК, если известно, что оно закодировано минимально возможным количеством двоичных знаков?</p>
+    <p style="font-size:15px;color:var(--muted)"><i>Примечание.</i> Условие Фано означает, что никакое кодовое слово не является началом другого кодового слова. Это обеспечивает возможность однозначной расшифровки закодированных сообщений.</p>
+    <div class="ans" data-k="4"></div>
+  </div></div></article>
+
+  <!-- 5 -->
+  <article class="task" id="t5"><div class="task-top"><span class="no">5</span><div class="body">
+    <p>На вход алгоритма подаётся натуральное число <i>N</i>. Алгоритм строит по нему новое число <i>R</i> следующим образом.</p>
+    <ol>
+      <li>Строится двоичная запись числа <i>N</i>.</li>
+      <li>Далее эта запись обрабатывается по следующему правилу:
+        <br>а) если число <i>N</i> чётное, то к этой записи справа и слева дописываются по две единицы;
+        <br>б) если число <i>N</i> нечётное, то в конец двоичной записи (справа) дописываются два нуля, а в начало (слева) дописывается единица.
+        <br>Полученная таким образом запись (в ней на три или четыре разряда больше, чем в записи исходного числа <i>N</i>) является двоичной записью искомого числа <i>R</i>.</li>
+      <li>Результат переводится в десятичную систему и выводится на экран.</li>
+    </ol>
+    <p><i>Например</i>, для исходного числа 13<sub>10</sub> = 1101<sub>2</sub> результатом является число 1110100<sub>2</sub> = 116<sub>10</sub>, а для исходного числа 6<sub>10</sub> = 110<sub>2</sub> это число 1111011<sub>2</sub> = 123<sub>10</sub>.</p>
+    <p>Укажите <b>наименьшее</b> число <i>R</i>, превышающее 95, которое может быть результатом работы данного алгоритма. В ответе запишите это число в десятичной системе счисления.</p>
+    <div class="ans" data-k="5"></div>
+  </div></div></article>
+
+  <!-- 6 -->
+  <article class="task" id="t6"><div class="task-top"><span class="no">6</span><div class="body">
+    <p class="cmd">Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. При опущенном хвосте Черепаха оставляет на поле след в виде линии. В каждый конкретный момент известно положение исполнителя и направление его движения. У исполнителя существует 6 команд: <b>Поднять хвост</b>, означающая переход к перемещению без рисования; <b>Опустить хвост</b>, означающая переход в режим рисования; <b>Вперёд <i>n</i></b> (где <i>n</i> — целое число), вызывающая передвижение Черепахи на <i>n</i> единиц в том направлении, куда указывает её голова; <b>Назад <i>n</i></b> (где <i>n</i> — целое число), вызывающая передвижение в противоположном голове направлении; <b>Направо <i>m</i></b> (где <i>m</i> — целое число), вызывающая изменение направления движения на <i>m</i> градусов по часовой стрелке; <b>Налево <i>m</i></b> (где <i>m</i> — целое число), вызывающая изменение направления движения на <i>m</i> градусов против часовой стрелки.</p>
+    <p class="cmd">Запись <b>Повтори <i>k</i> [Команда1 Команда2 … Команда<i>S</i>]</b> означает, что последовательность из <i>S</i> команд повторится <i>k</i> раз.</p>
+    <p>Черепахе был дан для исполнения следующий алгоритм.</p>
+    <pre class="code"><b>Повтори 6 [Вперёд 24 Направо 90 Вперёд 30 Направо 90]
+Поднять хвост
+Вперёд 2 Направо 90 Вперёд 10 Налево 90
+Опустить хвост
+Повтори 6 [Вперёд 75 Направо 90 Вперёд 71 Направо 90]</b></pre>
+    <p>Определите, сколько точек с целочисленными координатами находятся внутри области пересечения фигур, ограниченных заданными алгоритмом линиями, включая точки на границах этого пересечения.</p>
+    <div class="ans" data-k="6"></div>
+  </div></div></article>
+
+  <!-- 7 -->
+  <article class="task" id="t7"><div class="task-top"><span class="no">7</span><div class="body">
+    <p>Лена записывает голосовое сообщение для своей подруги. Перед отправкой сообщение оцифровывается в формате стерео с частотой дискретизации 32 000 Гц и глубиной кодирования 16 бит. Определите наименьшее количество Кбайт, необходимое для сохранения сообщения в памяти (без учёта заголовка), если его длительность — 2 минуты 27 секунд.</p>
+    <p>В ответе укажите только число.</p>
+    <div class="ans" data-k="7"></div>
+  </div></div></article>
+
+  <!-- 8 -->
+  <article class="task" id="t8"><div class="task-top"><span class="no">8</span><div class="body">
+    <p>Все пятибуквенные слова, составленные из букв А, К, Ц, Е, Н, Т, записаны в алфавитном порядке и пронумерованы.</p>
+    <p>Вот начало списка:</p>
+    <pre class="code">1. ААААА
+2. ААААЕ
+3. ААААК
+4. ААААН
+5. ААААТ
+6. ААААЦ
+……</pre>
+    <p>Определите, под каким номером в этом списке стоит первое слово с чётным номером, которое не начинается с букв А, Е или К и при этом содержит в своей записи не менее одной буквы Т.</p>
+    <p style="font-size:15px;color:var(--muted)"><i>Примечание.</i> Слово — последовательность идущих подряд букв, не обязательно осмысленная.</p>
+    <div class="ans" data-k="8"></div>
+  </div></div></article>
+
+  <!-- 9 -->
+  <article class="task" id="t9"><div class="task-top"><span class="no">9</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_9.xlsx" download>ICON demo_9.xlsx <span class="sz">622 КБ</span></a>
+      <a class="file" href="files/demo_9.ods" download>ICON demo_9.ods <span class="sz">577 КБ</span></a></div>
+    <p>Откройте файл электронной таблицы, содержащей в каждой строке пять натуральных чисел. Определите количество строк таблицы, для которых выполнены оба условия:</p>
+    <ul class="dash">
+      <li>в строке все числа различны;</li>
+      <li>удвоенная сумма максимального и минимального чисел строки больше суммы оставшихся трёх её чисел.</li>
+    </ul>
+    <p>В ответе запишите только число.</p>
+    <div class="ans" data-k="9"></div>
+  </div></div></article>
+
+  <!-- 10 -->
+  <article class="task" id="t10"><div class="task-top"><span class="no">10</span><div class="body">
+    <p>В терминологии сетей TCP/IP маской сети называют двоичное число, которое показывает, какая часть IP-адреса узла сети относится к адресу сети, а какая — к адресу узла в этой сети. Адрес сети получается в результате применения поразрядной конъюнкции к заданному адресу узла и его маске.</p>
+    <p>Даны адрес узла 192.168.159.86 и маска 255.255.252.0. Найдите адрес сети. В ответе укажите сумму числовых значений октетов найденного IP-адреса. Например, если бы найденный адрес был равен 100.20.3.4, то в ответе следовало бы записать: 127.</p>
+    <div class="ans" data-k="10"></div>
+  </div></div></article>
+
+  <!-- 11 -->
+  <article class="task" id="t11"><div class="task-top"><span class="no">11</span><div class="body">
+    <p>На предприятии каждой изготовленной детали присваивают серийный номер, состоящий из 157 символов. В базе данных для хранения каждого серийного номера отведено одинаковое и минимально возможное целое число байт. При этом используется посимвольное кодирование серийных номеров, все символы кодируются одинаковым и минимально возможным числом бит. Известно, что для хранения 12 450 серийных номеров отведено не более 955 Кбайт памяти. Определите максимально возможную мощность алфавита, используемого для записи серийных номеров. В ответе запишите только целое число.</p>
+    <div class="ans" data-k="11"></div>
+  </div></div></article>
+
+  <!-- 12 -->
+  <article class="task" id="t12"><div class="task-top"><span class="no">12</span><div class="body">
+    <p>Исполнитель МТ представляет собой читающую и записывающую головку, которая может передвигаться вдоль бесконечной горизонтальной ленты, разделённой на равные ячейки. В каждой ячейке находится ровно один символ из алфавита исполнителя (множество символов <b><i>A</i> = {<i>a</i><sub>0</sub>, <i>a</i><sub>1</sub>, …, <i>a</i><sub><i>n</i>–1</sub>}</b>), включая специальный пустой символ <b><i>a</i><sub>0</sub></b>.</p>
+    <p>Время работы исполнителя делится на дискретные такты (шаги). На каждом такте головка МТ находится в одном из множества допустимых состояний <b><i>Q</i> = {<i>q</i><sub>0</sub>, <i>q</i><sub>1</sub>, …, <i>q</i><sub><i>n</i>–1</sub>}</b>. В начальный момент времени головка находится в начальном состоянии <b><i>q</i><sub>0</sub></b>.</p>
+    <p>На каждом такте головка обозревает одну ячейку ленты, называемую текущей ячейкой. За один такт головка исполнителя может изменить символ в текущей ячейке и переместиться в соседнюю ячейку слева или справа от неё. После каждого такта головка переходит в новое состояние или остаётся в прежнем состоянии.</p>
+    <p>Программа работы исполнителя МТ задаётся в табличном виде.</p>
+    <div class="scroll"><table class="t">
+      <tr><th class="c0"></th><th><i>a</i><sub>0</sub></th><th><i>a</i><sub>1</sub></th><th>…</th><th><i>a</i><sub><i>n</i>–1</sub></th></tr>
+      <tr><th><i>q</i><sub>0</sub></th><td>команда</td><td>команда</td><td>…</td><td>команда</td></tr>
+      <tr><th><i>q</i><sub>1</sub></th><td>команда</td><td>команда</td><td>…</td><td>команда</td></tr>
+      <tr><th>…</th><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+      <tr><th><i>q</i><sub><i>n</i>–1</sub></th><td>команда</td><td>команда</td><td>…</td><td>команда</td></tr>
+    </table></div>
+    <p>В первой строке перечислены все возможные символы в текущей ячейке ленты, в первом столбце — возможные состояния головки. На пересечении <i>i</i>-й строки и <i>j</i>-го столбца находится команда, которую выполняет МТ, когда головка обозревает <i>j</i>-й символ, находясь в <i>i</i>-м состоянии. Если пара «символ — состояние» невозможна, то клетка для команды остаётся пустой.</p>
+    <p>Каждая команда состоит из трёх элементов, разделённых запятыми: первый элемент — записываемый в текущую ячейку символ алфавита (может совпадать с тем, который там уже записан). Второй элемент — один из трёх символов «L», «R», «S». Символы «L» и «R» означают сдвиг в левую или правую ячейки соответственно, «S» — завершение работы исполнителя МТ после выполнения текущей команды. Сдвиг происходит после записи символа в текущую ячейку. Третий элемент — новое состояние головки после выполнения команды.</p>
+    <p><i>Например</i>, команда 0, L, <i>q</i><sub>3</sub> выполняется следующим образом: в текущую ячейку записывается символ «0», затем головка сдвигается в соседнюю слева ячейку и переходит в состояние <i>q</i><sub>3</sub>.</p>
+    <p>Приведём пример выполнения программы, заданной таблично. На ленте записано неизвестное ненулевое количество расположенных подряд в соседних ячейках символов «Z», все остальные ячейки ленты заполнены пустым символом «λ». В начальный момент времени головка находится на неизвестном расстоянии справа от самого правого символа «Z».</p>
+    <p>Программа</p>
+    <div class="scroll"><table class="t mono">
+      <tr><th class="c0"></th><th>λ</th><th>Z</th></tr>
+      <tr><th><i>q</i><sub>0</sub></th><td>λ, L, <i>q</i><sub>0</sub></td><td>X, L, <i>q</i><sub>1</sub></td></tr>
+      <tr><th><i>q</i><sub>1</sub></th><td>λ, L, <i>q</i><sub>1</sub></td><td>X, L, <i>q</i><sub>2</sub></td></tr>
+      <tr><th><i>q</i><sub>2</sub></th><td>λ, S, <i>q</i><sub>2</sub></td><td>X, L, <i>q</i><sub>2</sub></td></tr>
+    </table></div>
+    <p>заменяет на ленте все символы «Z» на «X» и останавливает исполнителя в первой ячейке слева от последовательности символов «X».</p>
+    <p>Возможное начальное состояние исполнителя:</p>
+    <div class="scroll"><table class="t tape">
+      <tr><td>…</td><td>λ</td><td>λ</td><td>Z</td><td>Z</td><td>Z</td><td>Z</td><td>λ</td><td>λ</td><td>…</td></tr>
+      <tr><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0" class="head">▲ q<sub>0</sub></td><td style="border:0"></td></tr>
+    </table></div>
+    <p>Конечное состояние исполнителя после завершения выполнения программы:</p>
+    <div class="scroll"><table class="t tape">
+      <tr><td>…</td><td>λ</td><td>λ</td><td>X</td><td>X</td><td>X</td><td>X</td><td>λ</td><td>λ</td><td>…</td></tr>
+      <tr><td style="border:0"></td><td style="border:0"></td><td style="border:0" class="head">▲ q<sub>2</sub></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td><td style="border:0"></td></tr>
+    </table></div>
+    <p><u>Выполните задание.</u></p>
+    <p>На ленте в соседних ячейках записано двоичное представление числа 2025 без ведущих нулей. Ячейки справа и слева от последовательности заполнены пустыми символами «λ». В начальный момент времени головка расположена в ближайшей справа к последовательности ячейке.</p>
+    <p>Программа работы исполнителя:</p>
+    <div class="scroll"><table class="t mono">
+      <tr><th class="c0"></th><th>λ</th><th>0</th><th>1</th></tr>
+      <tr><th><i>q</i><sub>0</sub></th><td>λ, L, <i>q</i><sub>1</sub></td><td></td><td></td></tr>
+      <tr><th><i>q</i><sub>1</sub></th><td>1, L, <i>q</i><sub>2</sub></td><td>0, L, <i>q</i><sub>1</sub></td><td>1, L, <i>q</i><sub>1</sub></td></tr>
+      <tr><th><i>q</i><sub>2</sub></th><td>λ, S, <i>q</i><sub>2</sub></td><td></td><td></td></tr>
+    </table></div>
+    <p>Определите результат выполнения программы. В ответе запишите получившееся число в десятичной системе счисления.</p>
+    <div class="ans" data-k="12"></div>
+  </div></div></article>
+
+  <!-- 13 -->
+  <article class="task" id="t13"><div class="task-top"><span class="no">13</span><div class="body">
+    <p>Исполнитель преобразует число на экране. У исполнителя есть две команды, которые обозначены латинскими буквами:</p>
+    <p><b><i>A</i>. Прибавь 1</b><br><b><i>B</i>. Поменяй местами</b></p>
+    <p>Первая из этих команд увеличивает число на экране на 1. Вторая команда применяется только к числу, у которого цифра в разряде десятков по значению меньше цифры, стоящей в разряде единиц, и действует, заменяя число на экране числом, в котором цифры двух младших разрядов поменялись местами.</p>
+    <p>Программа для исполнителя — это последовательность команд.</p>
+    <p>Сколько существует программ, для которых при исходном числе 100 результатом является число 141?</p>
+    <p>Траектория вычислений программы — это последовательность результатов выполнения всех команд программы. <i>Например</i>, для программы <b><i>ABA</i></b> при исходном числе 13 траектория состоит из чисел 14, 41, 42.</p>
+    <div class="ans" data-k="13"></div>
+  </div></div></article>
+
+  <!-- 14 -->
+  <article class="task" id="t14"><div class="task-top"><span class="no">14</span><div class="body">
+    <span class="ex" id="t14a">Пример 1</span>
+    <p>Операнды арифметического выражения записаны в системе счисления с основанием 22.</p>
+    <p class="formula">27<i>x</i>98876<sub>22</sub> + 26<i>x</i>51<sub>22</sub> + 711<i>x</i>5<sub>22</sub></p>
+    <p>В записи чисел переменной <i>x</i> обозначена неизвестная цифра из алфавита 22-ричной системы счисления. Определите <b>наименьшее</b> значение <i>x</i>, при котором значение данного арифметического выражения кратно 21. Для найденного <i>x</i> вычислите частное от деления значения арифметического выражения на 21 и укажите его в ответе в десятичной системе счисления. Основание системы счисления указывать не нужно.</p>
+    <div class="ans" data-k="14a"></div>
+    <span class="ili">ИЛИ</span>
+    <span class="ex" id="t14b">Пример 2</span>
+    <p>Значение арифметического выражения</p>
+    <p class="formula">3 · 3125<sup>8</sup> + 2 · 625<sup>7</sup> − 4 · 625<sup>6</sup> + 3 · 125<sup>5</sup> − 2 · 25<sup>4</sup> − 2025</p>
+    <p>записали в системе счисления с основанием 25. Сколько значащих нулей содержится в этой записи?</p>
+    <div class="ans" data-k="14b"></div>
+    <span class="ili">ИЛИ</span>
+    <span class="ex" id="t14c">Пример 3</span>
+    <p>Значение арифметического выражения 7<sup>170</sup> + 7<sup>100</sup> − <i>x</i>, где <i>x</i> — целое положительное число, не превышающее 2030, записали в 7-ричной системе счисления. Определите наибольшее значение <i>x</i>, при котором в данной записи значения арифметического выражения содержится ровно 71 нуль.</p>
+    <p>В ответе запишите число в десятичной системе счисления.</p>
+    <div class="ans" data-k="14c"></div>
+  </div></div></article>
+
+  <!-- 15 -->
+  <article class="task" id="t15"><div class="task-top"><span class="no">15</span><div class="body">
+    <p>Обозначим через ДЕЛ(<i>n</i>, <i>m</i>) утверждение «натуральное число <i>n</i> делится без остатка на натуральное число <i>m</i>»; пусть на числовой прямой дан отрезок <i>B</i> = [70; 90].</p>
+    <p>Для какого наибольшего натурального числа <i>А</i> логическое выражение</p>
+    <p class="formula">ДЕЛ(<i>x</i>, <i>A</i>) ∨ ((<i>x</i> ∈ <i>B</i>) → ¬ДЕЛ(<i>x</i>, 22))</p>
+    <p>истинно (т.е. принимает значение 1) при любом целом положительном значении переменной <i>х</i>?</p>
+    <div class="ans" data-k="15"></div>
+  </div></div></article>
+
+  <!-- 16 -->
+  <article class="task" id="t16"><div class="task-top"><span class="no">16</span><div class="body">
+    <p>Алгоритм вычисления значения функции <i>F</i>(<i>n</i>), где <i>n</i> — <i>натуральное</i> число, задан следующими соотношениями:</p>
+    <p style="padding-left:20px"><i>F</i>(<i>n</i>) = 1 при <i>n</i> = 1;<br><i>F</i>(<i>n</i>) = <i>n</i> × <i>F</i>(<i>n</i> − 1), если <i>n</i> &gt; 1.</p>
+    <p>Чему равно значение выражения (<i>F</i>(3038) + 5 × <i>F</i>(3037)) / <i>F</i>(3036)?</p>
+    <div class="ans" data-k="16"></div>
+  </div></div></article>
+
+  <!-- 17 -->
+  <article class="task" id="t17"><div class="task-top"><span class="no">17</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_17.txt" download>ICON demo_17.txt <span class="sz">67 КБ</span></a></div>
+    <p>В файле содержится последовательность натуральных чисел. Её элементы могут принимать целые значения от 1 до 100 000 включительно. Определите количество пар последовательности, в которых остаток от деления на 33 хотя бы одного из элементов равен минимальному элементу последовательности. В ответе запишите количество найденных пар, затем максимальную из сумм элементов таких пар. В данной задаче под парой подразумевается два идущих подряд элемента последовательности.</p>
+    <div class="ans" data-k="17"></div>
+  </div></div></article>
+
+  <!-- 18 -->
+  <article class="task" id="t18"><div class="task-top"><span class="no">18</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_18.xlsx" download>ICON demo_18.xlsx <span class="sz">7 КБ</span></a>
+      <a class="file" href="files/demo_18.ods" download>ICON demo_18.ods <span class="sz">18 КБ</span></a></div>
+    <p>Квадрат разлинован на <i>N</i> × <i>N</i> клеток (1 &lt; <i>N</i> &lt; 30). Исполнитель Робот может перемещаться по клеткам, выполняя за одно перемещение одну из двух команд: <b>вправо</b> или <b>вниз</b>. По команде <b>вправо</b> Робот перемещается в соседнюю правую клетку, по команде <b>вниз</b> — в соседнюю нижнюю. Квадрат ограничен внешними стенами. Между соседними клетками квадрата также могут быть внутренние стены. Сквозь стену Робот пройти не может.</p>
+    <p>Перед каждым запуском Робота в каждой клетке квадрата лежит монета достоинством от 1 до 100. Посетив клетку, Робот забирает монету с собой; это также относится к начальной и конечной клеткам маршрута Робота.</p>
+    <p>В «угловых» клетках поля — тех, которые справа и снизу ограничены стенами, Робот не может продолжать движение, поэтому накопленная сумма считается итоговой. Таких конечных клеток на поле может быть несколько, включая правую нижнюю клетку поля. При разных запусках итоговые накопленные суммы могут различаться.</p>
+    <p>Определите максимальную и минимальную денежные суммы среди всех возможных итоговых сумм, которые может собрать Робот, пройдя из левой верхней клетки в конечную клетку маршрута. В ответе укажите два числа — сначала максимальную сумму, затем минимальную.</p>
+    <p>Исходные данные представляют собой электронную таблицу размером <i>N</i> × <i>N</i>, каждая ячейка которой соответствует клетке квадрата. Внутренние и внешние стены обозначены утолщёнными линиями.</p>
+    <p><i>Типовой пример организации данных в файле</i></p>
+    <table class="t robot">
+      <tr><td>1</td><td>8</td><td>8</td><td>4</td></tr>
+      <tr><td>10</td><td class="wr wb">1</td><td class="wr">1</td><td>3</td></tr>
+      <tr><td>1</td><td>3</td><td class="wr">12</td><td>2</td></tr>
+      <tr><td>2</td><td>3</td><td>5</td><td>6</td></tr>
+    </table>
+    <p><b>Типовой пример имеет иллюстративный характер. Для выполнения задания используйте данные из прилагаемого файла.</b></p>
+    <div class="ans" data-k="18"></div>
+  </div></div></article>
+
+  <!-- 19 -->
+  <article class="task" id="t19"><div class="task-top"><span class="no">19</span><div class="body">
+    <p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежат две кучи камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может:</p>
+    <ul class="dash">
+      <li>добавить в одну из куч (по своему выбору) 4 камня;</li>
+      <li>увеличить количество камней в одной из куч (по своему выбору) в 2 раза.</li>
+    </ul>
+    <p><i>Например</i>, пусть в одной куче 20 камней, а в другой 30 камней; такую позицию в игре обозначим (20, 30). Тогда за один ход можно получить любую из четырёх позиций: (24, 30), (20, 34), (40, 30), (20, 60).</p>
+    <p>Для того чтобы делать ходы, у каждого игрока есть неограниченное количество камней. Игра завершается в тот момент, когда суммарное количество камней в двух кучах становится не менее 133. Победителем считается игрок, сделавший последний ход, то есть первым получивший такую игровую позицию, при которой в двух кучах суммарно 133 камня или больше. В начальный момент в первой куче было 17 камней, во второй куче — <i>S</i> камней; 1 ≤ <i>S</i> ≤ 115.</p>
+    <p>Будем говорить, что игрок имеет выигрышную стратегию, если он может выиграть при любых ходах противника.</p>
+    <p>Известно, что Ваня выиграл своим первым ходом. Укажите минимальное значение <i>S</i>, при котором такая ситуация возможна.</p>
+    <div class="ans" data-k="19"></div>
+  </div></div></article>
+
+  <!-- 20 -->
+  <article class="task" id="t20"><div class="task-top"><span class="no">20</span><div class="body">
+    <p>Для игры, описанной в задании 19, найдите два наименьших значения <i>S</i>, при которых у Пети есть выигрышная стратегия, причём одновременно выполняются два условия:</p>
+    <ul class="dash">
+      <li>Петя не может выиграть за один ход;</li>
+      <li>Петя может выиграть своим вторым ходом независимо от того, как будет ходить Ваня.</li>
+    </ul>
+    <p>Найденные значения запишите в ответе в порядке возрастания.</p>
+    <div class="ans" data-k="20"></div>
+  </div></div></article>
+
+  <!-- 21 -->
+  <article class="task" id="t21"><div class="task-top"><span class="no">21</span><div class="body">
+    <p>Для игры, описанной в задании 19, найдите наименьшее значение <i>S</i>, при котором одновременно выполняются два условия:</p>
+    <ul class="dash">
+      <li>у Вани есть выигрышная стратегия, позволяющая ему выиграть первым или вторым ходом при любой игре Пети;</li>
+      <li>у Вани нет стратегии, которая позволит ему гарантированно выиграть первым ходом.</li>
+    </ul>
+    <div class="ans" data-k="21"></div>
+  </div></div></article>
+
+  <!-- 22 -->
+  <article class="task" id="t22"><div class="task-top"><span class="no">22</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_22.xlsx" download>ICON demo_22.xlsx <span class="sz">6 КБ</span></a>
+      <a class="file" href="files/demo_22.ods" download>ICON demo_22.ods <span class="sz">21 КБ</span></a></div>
+    <p>В файле содержится информация о совокупности <i>N</i> вычислительных процессов, которые могут выполняться параллельно или последовательно. Приостановка выполнения процесса не допускается. Будем говорить, что процесс <i>B</i> зависит от процесса <i>A</i>, если для выполнения процесса <i>B</i> необходимы результаты выполнения процесса <i>A</i>. В этом случае процессы <i>A</i> и <i>B</i> могут выполняться только последовательно.</p>
+    <p>Информация о процессах представлена в файле в виде таблицы. В первом столбце таблицы указан идентификатор процесса (ID), во втором столбце таблицы — время его выполнения в миллисекундах, в третьем столбце перечислены с разделителем «;» ID процессов, от которых зависит данный процесс. Если процесс независимый, то в таблице указано значение 0.</p>
+    <p>Определите максимальное количество процессов, которые параллельно выполняются на 7-й мс. Считать, что каждый процесс начинается в самое раннее допустимое время. Нумерация миллисекунд начинается с 1.</p>
+    <p><i>Типовой пример организации данных в файле</i></p>
+    <div class="scroll"><table class="t">
+      <tr><th>ID процесса <i>B</i></th><th>Время выполнения процесса <i>B</i> (мс)</th><th>ID процесса(-ов) <i>A</i></th></tr>
+      <tr><td>1</td><td>3</td><td>0</td></tr><tr><td>2</td><td>4</td><td>1</td></tr><tr><td>3</td><td>2</td><td>2; 4</td></tr>
+      <tr><td>4</td><td>5</td><td>0</td></tr><tr><td>5</td><td>8</td><td>1; 4</td></tr><tr><td>6</td><td>3</td><td>1</td></tr>
+    </table></div>
+    <p>Для приведённой таблицы процесс 3 начинается на 8-й мс, заканчивается на 9-й мс.</p>
+    <p><b>Типовой пример имеет иллюстративный характер. Для выполнения задания используйте данные из прилагаемого файла.</b></p>
+    <div class="ans" data-k="22"></div>
+  </div></div></article>
+
+  <!-- 23 -->
+  <article class="task" id="t23"><div class="task-top"><span class="no">23</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_23.txt" download>ICON demo_23.txt <span class="sz">5 КБ</span></a></div>
+    <p>В текстовом файле содержится описание ациклического ориентированного взвешенного графа. В каждой строке файла записаны два натуральных числа (<i>L</i>, <i>M</i>) и одно положительное вещественное число (<i>W</i>). <i>L</i> и <i>M</i> — номера вершин графа, <i>W</i> — вес ребра, ведущего из вершины <i>L</i> в вершину <i>M</i>. Таким образом, количество строк в файле равно количеству рёбер в графе. Две вершины графа не могут быть соединены более чем одним ребром.</p>
+    <p>Найдите и запишите в ответе целую часть длины кратчайшего пути из вершины с номером 1 в вершину с номером 100. Существование хотя бы одного такого пути гарантируется. Под длиной кратчайшего пути понимается минимальная сумма весов рёбер, составляющих путь. Для выполнения этого задания следует написать программу.</p>
+    <p>Вершины графа могут быть пронумерованы не подряд. <i>L</i> ≤ 1000, <i>M</i> ≤ 1000; <i>W</i> ≤ 10 000. Количество строк в файле не превосходит 200. Числа в строках разделены произвольным ненулевым количеством пробелов и/или табуляций.</p>
+    <p><i>Типовой пример организации данных во входном файле для графа на рисунке</i></p>
+    <div class="fig">
+      <svg class="graph" style="width:420px" viewBox="0 0 470 190" role="img" aria-label="Ориентированный граф: 6→7 (7.0), 6→1 (1.0), 1→7 (5.5), 7→100 (2.0), 1→100 (12.0), 1→4 (2.5), 4→100 (8.0), 100→12 (1.0)">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="v"/></marker></defs>
+        <g class="e" marker-end="url(#arr)">
+          <line x1="34" y1="26" x2="152" y2="64"/><line x1="30" y1="32" x2="96" y2="140"/><line x1="104" y1="140" x2="154" y2="80"/>
+          <line x1="170" y1="76" x2="300" y2="110"/><line x1="112" y1="146" x2="296" y2="118"/><line x1="112" y1="152" x2="200" y2="160"/>
+          <line x1="216" y1="154" x2="296" y2="124"/><line x1="340" y1="114" x2="420" y2="102"/>
+        </g>
+        <text x="16" y="24">6</text><text x="158" y="76">7</text><text x="96" y="160">1</text><text x="204" y="166">4</text><text x="304" y="124">100</text><text x="428" y="104">12</text>
+        <text class="w" x="80" y="34">7.0</text><text class="w" x="40" y="96">1.0</text><text class="w" x="100" y="112">5.5</text><text class="w" x="232" y="82">2.0</text>
+        <text class="w" x="176" y="124">12.0</text><text class="w" x="140" y="176">2.5</text><text class="w" x="254" y="160">8.0</text><text class="w" x="366" y="96">1.0</text>
+      </svg>
+      <pre class="code">100  12   1.0
+6    7    7.0
+6    1    1.0
+1    7    5.5
+7    100  2.0
+4    100  8.0
+1    100  12.0
+1    4    2.5</pre>
+    </div>
+    <p><i>Для приведённого примера верным ответом будет 7.</i></p>
+    <p><b>Типовой пример имеет иллюстративный характер. Для выполнения задания используйте данные из прилагаемого файла.</b></p>
+    <div class="ans" data-k="23"></div>
+  </div></div></article>
+
+  <!-- 24 -->
+  <article class="task" id="t24"><div class="task-top"><span class="no">24</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_24.txt" download>ICON demo_24.txt <span class="sz">9,5 МБ</span></a></div>
+    <p>Текстовый файл состоит из цифр 0, 6, 7, 8, 9 и знаков арифметических операций «–» и «*» (вычитание и умножение). Определите максимальное количество символов в непрерывной последовательности, которая является корректным арифметическим выражением с целыми неотрицательными числами. В этом выражении никакие два знака арифметических операций не стоят рядом, в записи чисел отсутствуют незначащие (ведущие) нули и число 0 не имеет знака.</p>
+    <p>В ответе укажите количество символов.</p>
+    <div class="ans" data-k="24"></div>
+  </div></div></article>
+
+  <!-- 25 -->
+  <article class="task" id="t25"><div class="task-top"><span class="no">25</span><div class="body">
+    <span class="ex" id="t25a">Пример 1</span>
+    <p>Напишите программу, которая перебирает целые числа, бо́льшие 1 103 285 717, в порядке возрастания и ищет среди них числа, представленные в виде произведения ровно двух простых множителей, не обязательно различных, каждый из которых ровно один раз содержит в своей записи 16 (16 — идущие подряд друг за другом в указанном порядке цифры 1 и 6).</p>
+    <p>В ответе в первом столбце таблицы запишите первые 5 найденных чисел в порядке возрастания, а во втором столбце — для каждого из них соответствующий наименьший найденный множитель.</p>
+    <p>Количество строк в таблице для ответа избыточно.</p>
+    <div class="ans" data-k="25a"></div>
+    <span class="ili">ИЛИ</span>
+    <span class="ex" id="t25b">Пример 2</span>
+    <p>Назовём маской числа последовательность цифр, в которой также могут встречаться следующие символы:</p>
+    <ul class="dash">
+      <li>символ «?» означает ровно одну произвольную цифру;</li>
+      <li>символ «*» означает любую последовательность цифр произвольной длины; в том числе «*» может задавать и пустую последовательность.</li>
+    </ul>
+    <p>Например, маске 123*4?5 соответствуют числа 123405 и 12300405.</p>
+    <p>Среди натуральных чисел, не превышающих 10<sup>10</sup>, найдите все числа, соответствующие маске 3?12?14*5, делящиеся на 1917 без остатка.</p>
+    <p>В ответе запишите в первом столбце таблицы все найденные числа в порядке возрастания, а во втором столбце — соответствующие им результаты деления этих чисел на 1917.</p>
+    <p>Количество строк в таблице для ответа избыточно.</p>
+    <div class="ans" data-k="25b"></div>
+  </div></div></article>
+
+  <!-- 26 -->
+  <article class="task" id="t26"><div class="task-top"><span class="no">26</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_26.txt" download>ICON demo_26.txt <span class="sz">293 КБ</span></a></div>
+    <p>Сервер выполняет запросы на передачу данных, при этом сведения о каждом выполненном запросе (время регистрации, идентификатор клиента, объём переданных данных) сохраняются в журнале работы, а переданные данные — в специальном разделе памяти сервера, имеющем ограниченный объём. Каждый раз, когда остаётся недостаточно свободной памяти, сервер создаёт резервную копию всех накопленных там данных, после чего освобождает раздел и продолжает выполнение запросов. Напишите программу обработки журнала работы сервера и определите идентификатор клиентского устройства, с которого на сервер был передан наибольший общий объём данных, а также сумму объёмов (в Кбайт) двух наибольших резервных копий специального раздела, созданных не позднее 11:59:59.</p>
+    <p><b>Входные данные</b></p>
+    <p>Первая строка входного файла (журнала работы сервера) содержит два натуральных числа: <i>N</i> (<i>N</i> &lt; 1 000 000) — количество строк в журнале и <i>K</i> (<i>K</i> &lt; 1 000 000) — вместимость специального раздела памяти сервера в Кбайт. Каждая из следующих <i>N</i> строк содержит информацию об одном выполненном запросе: время регистрации запроса в формате ЧЧ:ММ:СС (часы, минуты, секунды) и два натуральных числа: <i>C</i> (<i>C</i> &lt; 1 000 000) — идентификатор клиентского устройства и <i>S</i> (<i>S</i> &lt; <i>K</i>) — объём данных запроса в Кбайт.</p>
+    <p><b>Выходные данные</b></p>
+    <p>В ответе запишите два числа: сначала идентификатор устройства, с которого был передан наибольший суммарный объём данных, а затем сумму объёмов (в Кбайт) двух наибольших резервных копий специального раздела, выполненных не позднее 11:59:59.</p>
+    <p><i>Типовой пример организации данных во входном файле</i></p>
+    <pre class="code">8 140000
+01:01:01 101 20000
+03:03:03 202 110000
+05:05:05 101 90000
+07:07:07 303 62000
+10:10:10 101 48000
+15:15:15 202 12000
+21:21:21 303 120000
+23:23:23 404 134000</pre>
+    <p>При таких исходных данных резервное копирование специального раздела выполняется четыре раза: в 05:05:05 (в объёме 130 000 Кбайт), в 07:07:07 (в объёме 90 000 Кбайт), в 21:21:21 (в объёме 122 000 Кбайт) и в 23:23:23 (в объёме 120 000 Кбайт). Всего на сервер передано 596 000 Кбайт данных: 158 000, 122 000, 182 000 и 134 000 Кбайт от клиентов с идентификаторами 101, 202, 303 и 404 соответственно.</p>
+    <p>Ответ для приведённого примера: 303 220 000.</p>
+    <p><b>Типовой пример имеет иллюстративный характер. Для выполнения задания используйте данные из прилагаемого файла.</b></p>
+    <div class="ans" data-k="26"></div>
+  </div></div></article>
+
+  <!-- 27 -->
+  <article class="task" id="t27"><div class="task-top"><span class="no">27</span><div class="body">
+    <div class="filebar"><span class="lbl">Задание выполняется с использованием прилагаемого файла.</span>
+      <a class="file" href="files/demo_27.txt" download>ICON demo_27.txt <span class="sz">131 КБ</span></a></div>
+    <p>Рассматриваются частицы на плоскости, обладающие следующими характеристиками: декартовы координаты, вектор скорости, масса, а также признак, характеризующий внутреннее строение частицы, обозначаемый числами от I до VII (в римской системе счисления).</p>
+    <p>Учёный решил провести кластеризацию частиц по значениям их кинетической энергии, то есть разбить их множество на <i>K</i> непересекающихся непустых подмножеств (кластеров), таких, что модуль разности кинетических энергий любых двух частиц каждого подмножества не превосходит значения <i>R</i>. Гарантируется, что такое разбиение существует и единственно для заданного <i>R</i>.</p>
+    <p>Будем называть центром кластера такую его частицу, для которой сумма модулей разности кинетических энергий со всеми остальными частицами этого кластера минимальна. Для каждого кластера гарантируется единственность его центра.</p>
+    <p>В каждой строке текстового файла хранится информация об одной частице: координаты <i>x</i> и <i>y</i>, проекции вектора скорости <i>V<sub>x</sub></i> и <i>V<sub>y</sub></i>, масса <i>m</i> и признак. Значения даны в одинаковых для всех частиц единицах измерения, обозначения единиц измерения в файле не приводятся. Значения в строке разделяются одним или несколькими пробелами и/или символами табуляции. Количество строк в файле не превышает 10 000. Абсолютная величина каждого числового значения не превышает 100,0.</p>
+    <p>Известно, что все описанные в файле частицы подразделяются ровно на 4 кластера (<i>K</i> = 4) с <i>R</i> = 2,0 для каждого.</p>
+    <p>Для каждого кластера определите его центр, затем найдите два числа: <i>Q</i><sub>1</sub> — наибольшее евклидово расстояние между частицами одного кластера, имеющими признак II, и <i>Q</i><sub>2</sub> — максимальное значение кинетической энергии для центра кластера.</p>
+    <p>В ответе запишите два числа: сначала целую часть произведения <i>Q</i><sub>1</sub> × 10 000, затем целую часть произведения <i>Q</i><sub>2</sub> × 10 000.</p>
+    <p><i>Для справки</i></p>
+    <p>Кинетическая энергия <i>E</i> частицы массы <i>m</i>, обладающей скоростью <i>V</i> = (<i>V<sub>x</sub></i>; <i>V<sub>y</sub></i>), вычисляется по формуле: <i>E</i> = ½·<i>m</i>(<i>V<sub>x</sub></i><sup>2</sup> + <i>V<sub>y</sub></i><sup>2</sup>).</p>
+    <p>Евклидово расстояние между двумя точками на плоскости <i>A</i>(<i>x</i><sub>1</sub>, <i>y</i><sub>1</sub>) и <i>B</i>(<i>x</i><sub>2</sub>, <i>y</i><sub>2</sub>) вычисляется по формуле: <i>d</i>(<i>A</i>, <i>B</i>) = √((<i>x</i><sub>2</sub> − <i>x</i><sub>1</sub>)<sup>2</sup> + (<i>y</i><sub>2</sub> − <i>y</i><sub>1</sub>)<sup>2</sup>).</p>
+    <p><i>Типовой пример организации данных во входном файле</i><br><i>Три строки файла для трёх частиц:</i></p>
+    <pre class="code">0,67   –2,14   3,0    –4,0   0,2     V
+3,14   7,22    3,2    4,3    0,7     II
+1,33   5,56    0,00   5,22   0,456   IV</pre>
+    <p><i>Для частицы из первой строки примера кинетическая энергия равна 2,5.</i></p>
+    <p><b>Типовой пример имеет иллюстративный характер. Для выполнения задания используйте данные из прилагаемого файла.</b></p>
+    <div class="ans" data-k="27"></div>
+  </div></div></article>
+
+  <section class="reset">
+    <button class="btn ghost" id="resetBtn">Начать заново</button>
+    <div class="confirm" id="confirm" hidden>
+      <span>Стереть все ответы и попытки на этом устройстве?</span>
+      <button class="btn" id="resetYes" style="background:var(--bad)">Да, стереть</button>
+      <button class="btn ghost" id="resetNo">Отмена</button>
+    </div>
+  </section>
+
+  <footer>Задания и ответы: демонстрационный вариант КИМ ЕГЭ 2027 года по информатике (проект), ФИПИ. Таблицы к заданиям 3, 9, 18 и 22 даны в двух форматах: оригинальный .ods и копия в .xlsx.</footer>
+</div>
+
+<script>
+const ICON='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 6.8 8 10.3l3.5-3.5M2.5 13.5h11"/></svg>';
+document.querySelectorAll("a.file").forEach(a=>{a.innerHTML=a.innerHTML.replace("ICON",ICON)});
+
+/* answers from the official key */
+const KEY={
+ "1":["26"],"2":["yxzw"],"3":["1630"],"4":["17"],"5":["100"],"6":["483"],"7":["18375"],"8":["3914"],"9":["4874"],
+ "10":["516"],"11":["8"],"12":["4073"],"13":["16"],"14a":["276296118"],"14b":["10"],"14c":["2029"],"15":["88"],
+ "16":["9241591"],"17":["622","174933"],"18":["2598","803"],"19":["29"],"20":["28","48"],"21":["44"],"22":["8"],
+ "23":["10971"],"24":["154"],
+ "25a":["1103299319","1693","1103309477","1693","1103322107","16187","1103323021","1693","1103328547","3169"],
+ "25b":["351261495","183235","3212614035","1675855","3412614645","1780185","3712414275","1936575","3912414885","2040905"],
+ "26":["7040","52204"],"27":["539936","100704"]
+};
+const ORDER=["1","2","3","4","5","6","7","8","9","10","11","12","13","14a","14b","14c","15","16","17","18","19","20","21","22","23","24","25a","25b","26","27"];
+const LABEL=k=>k.replace(/^(\d+)([abc])$/,(m,n,l)=>n+"<small>."+({a:1,b:2,c:3})[l]+"</small>");
+const ANCHOR=k=>/[abc]$/.test(k)?"t"+k:"t"+k;
+const TOTAL=ORDER.length;
+document.getElementById("count").textContent="0 / "+TOTAL;
+
+const SK="ege27-demo-v1";
+let S={};
+try{S=JSON.parse(localStorage.getItem(SK)||"{}")||{}}catch(e){S={}}
+const save=()=>{try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}};
+const st=k=>S[k]||(S[k]={att:0,ok:false,rev:false,v:[]});
+const norm=s=>String(s||"").toLowerCase().replace(/\s+/g,"").replace(/[–—−]/g,"-");
+
+function build(box){
+  const k=box.dataset.k, n=KEY[k].length, isTable=n>2;
+  const s=st(k);
+  let cells="";
+  for(let i=0;i<n;i++){
+    const lab=isTable?`Строка ${Math.floor(i/2)+1}, столбец ${i%2+1}`:(n>1?`Ответ, ячейка ${i+1}`:"Ответ");
+    cells+=`<input type="text" id="in-${k}-${i}" aria-label="${lab}" autocomplete="off" spellcheck="false" ${k==="2"?'inputmode="text"':'inputmode="numeric"'}>`;
+  }
+  box.innerHTML=`<div class="ans-row"><label for="in-${k}-0">Ответ:</label>
+    <div class="${isTable?"grid":"cells"}">${cells}</div></div>
+    <div class="ans-row"><button class="btn" type="button" data-act="check">Проверить</button>
+    <span class="status" aria-live="polite"></span>
+    <button class="btn warn" type="button" data-act="reveal" hidden>Показать ответ</button></div>
+    <div class="reveal" hidden></div>`;
+  const ins=[...box.querySelectorAll("input")];
+  ins.forEach((inp,i)=>{
+    inp.value=s.v[i]||"";
+    inp.addEventListener("input",()=>{inp.classList.remove("ok","bad");s.v[i]=inp.value;save()});
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();check(box)}});
+  });
+  box.querySelector('[data-act="check"]').addEventListener("click",()=>check(box));
+  box.querySelector('[data-act="reveal"]').addEventListener("click",()=>reveal(box));
+  paint(box,false);
+}
+function paint(box,fresh){
+  const k=box.dataset.k, s=st(k), key=KEY[k], ins=[...box.querySelectorAll("input")];
+  const status=box.querySelector(".status"), rb=box.querySelector('[data-act="reveal"]'), rv=box.querySelector(".reveal"), cb=box.querySelector('[data-act="check"]');
+  if(s.ok){
+    ins.forEach(i=>{i.classList.add("ok");i.classList.remove("bad");i.readOnly=true});
+    status.className="status ok";status.textContent=s.rev?"Верно (после подсказки)":"Верно!";cb.disabled=true;
+  }else if(s.att>0){
+    if(fresh) ins.forEach((inp,i)=>{const good=norm(inp.value)===norm(key[i]);inp.classList.toggle("ok",good);inp.classList.toggle("bad",!good)});
+    status.className="status bad";
+    status.textContent="Неверно · попыток: "+s.att+(s.att<3&&!s.rev?" (ответ можно открыть после 3-й)":"");
+  }else{status.className="status muted";status.textContent=""}
+  rb.hidden=!(s.att>=3&&!s.rev&&!s.ok);
+  if(s.rev){
+    rv.hidden=false;
+    rv.innerHTML=key.length>2
+      ?"Правильный ответ:<br>"+key.reduce((a,v,i)=>a+(i%2?" — <b>"+v+"</b><br>":"<b>"+v+"</b>"),"")
+      :"Правильный ответ: "+key.map(v=>"<b>"+v+"</b>").join(" и ");
+  }else rv.hidden=true;
+}
+function check(box){
+  const k=box.dataset.k, s=st(k);
+  if(s.ok) return;
+  const ins=[...box.querySelectorAll("input")];
+  if(ins.every(i=>!i.value.trim())){const st0=box.querySelector(".status");st0.className="status muted";st0.textContent="Сначала впишите ответ";ins[0].focus();return}
+  const all=ins.every((inp,i)=>norm(inp.value)===norm(KEY[k][i]));
+  if(all) s.ok=true; else s.att++;
+  save();paint(box,true);updateNav();
+}
+function reveal(box){const s=st(box.dataset.k);s.rev=true;save();paint(box,true);updateNav()}
+
+const map=document.getElementById("map");
+map.innerHTML=ORDER.map(k=>`<a href="#${ANCHOR(k)}" id="nav-${k}">${LABEL(k)}</a>`).join("");
+function updateNav(){
+  let ok=0,rev=0;
+  ORDER.forEach(k=>{
+    const s=S[k]||{}, a=document.getElementById("nav-"+k);
+    a.className=s.ok&&!s.rev?"s-ok":s.rev?"s-rev":s.att>0?"s-bad":"";
+    if(s.ok&&!s.rev) ok++; else if(s.rev) rev++;
+  });
+  document.getElementById("count").textContent=ok+" / "+TOTAL;
+  document.getElementById("mOk").style.width=(ok/TOTAL*100)+"%";
+  document.getElementById("mRev").style.width=(rev/TOTAL*100)+"%";
+}
+document.querySelectorAll(".ans").forEach(build);
+updateNav();
+
+/* reset */
+const rb=document.getElementById("resetBtn"),cf=document.getElementById("confirm");
+rb.addEventListener("click",()=>{cf.hidden=false;rb.hidden=true});
+document.getElementById("resetNo").addEventListener("click",()=>{cf.hidden=true;rb.hidden=false});
+document.getElementById("resetYes").addEventListener("click",()=>{S={};save();cf.hidden=true;rb.hidden=false;document.querySelectorAll(".ans").forEach(build);updateNav();window.scrollTo(0,0)});
+
+</script>
+</body>
+</html>
