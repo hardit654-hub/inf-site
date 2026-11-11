@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Личный кабинет · Артём Свинченко</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16181c">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Кабинет: тёмная полоса как на главной, ниже карточки. Ученик видит свои курсы, учитель — учеников и их прогресс. */
+:root{
+  --hero:#0f1114; --hero-2:#1b1e22; --hero-ink:#eef0f3; --hero-muted:#9aa0aa;
+  --green:#66cc66; --green-d:#4fae4f; --green-ink:#2e8b2e; --green-soft:#e9f6e9;
+  --red:#d9534f; --red-soft:#fbeaea; --amber:#c98a12; --amber-soft:#fdf3df;
+  --bg:#f5f6f4; --card:#ffffff; --ink:#1c1f24; --muted:#636a74; --line:#dfe3e0; --chip:#eef0ee;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111316; --card:#1a1d21; --ink:#e7e9ec; --muted:#9aa0aa; --line:#2a2e34; --chip:#23272c; --green-ink:#7ad67a; --green-soft:#1b3020;
+  --red:#ec6b67; --red-soft:#3a1f1f; --amber:#e3a83a; --amber-soft:#3a2f17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111316; --card:#1a1d21; --ink:#e7e9ec; --muted:#9aa0aa; --line:#2a2e34; --chip:#23272c; --green-ink:#7ad67a; --green-soft:#1b3020;
+  --red:#ec6b67; --red-soft:#3a1f1f; --amber:#e3a83a; --amber-soft:#3a2f17; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);min-height:100vh}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.bar{background:var(--hero);color:var(--hero-ink);padding-top:env(safe-area-inset-top,0px);position:relative;overflow:hidden}
+.bar::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+.bar-in{position:relative;display:flex;align-items:center;gap:12px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.mark{width:36px;height:36px;border-radius:10px;background:var(--green);color:#10331a;display:flex;align-items:center;justify-content:center;font:700 15px var(--f-mono);flex:none}
+.brand span{font:600 14px var(--f-body);color:var(--hero-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grow{flex:1}
+.who{font:500 14px var(--f-body);color:var(--hero-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.who small{color:var(--hero-muted);font-size:12px;margin-left:6px}
+.hbtn{height:38px;border-radius:10px;border:1px solid #ffffff22;background:var(--hero-2);color:var(--hero-ink);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:0 12px;font:500 14px var(--f-body);flex:none;text-decoration:none}
+.hbtn.sq{width:38px;padding:0}
+.hbtn svg{width:18px;height:18px}
+.hbtn:hover{border-color:#ffffff55}
+.title{position:relative;padding-block:6px 26px}
+.title h1{font:700 clamp(22px,4vw,32px)/1.2 var(--f-display);margin:0;letter-spacing:-.01em}
+.title p{margin:6px 0 0;color:var(--hero-muted);font-size:15px}
+
+main{padding-block:24px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card+.card{margin-top:16px}
+.card h2{font:600 19px/1.3 var(--f-body);margin:0 0 4px}
+.card .sub{color:var(--muted);font-size:14px;margin:0 0 16px}
+.narrow{max-width:440px;margin:0 auto}
+label{display:block;font-size:14px;font-weight:500;margin:0 0 6px}
+.field{margin-bottom:14px}
+input[type=text],input[type=password],input:not([type]){width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:16px var(--f-body);padding:0 12px}
+input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc6633}
+.btn{height:44px;border-radius:10px;border:0;background:var(--green);color:#0f2a12;font:600 15px var(--f-body);padding:0 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--green-d)}
+.btn[disabled]{opacity:.6;cursor:default}
+.btn.wide{width:100%}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--muted)}
+.btn.small{height:34px;padding:0 12px;font-size:13.5px;font-weight:500}
+.btn.danger{background:transparent;color:var(--red);border:1px solid var(--line)}
+.btn.danger:hover{border-color:var(--red)}
+.btn.danger.sure{background:var(--red);color:#fff;border-color:var(--red)}
+.msg{font-size:14px;margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--red-soft);color:var(--red)}
+.msg.good{background:var(--green-soft);color:var(--green-ink)}
+.hint{font-size:13.5px;color:var(--muted);margin-top:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.row .field{flex:1 1 180px;margin-bottom:0}
+
+/* курсы ученика */
+.courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px}
+.course{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.course h3{margin:0;font:600 17px/1.3 var(--f-body)}
+.meter{height:8px;border-radius:99px;background:var(--chip);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--green);border-radius:99px}
+.cnum{font:600 13px var(--f-mono);color:var(--muted)}
+.lrow{display:grid;grid-template-columns:minmax(0,1fr) 64px 46px;gap:10px;align-items:center;font-size:14px}
+.lrow span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .meter{height:6px}
+.lrow b{font:500 12.5px var(--f-mono);color:var(--muted);text-align:right}
+.course .btn{align-self:flex-start;margin-top:4px}
+
+/* вкладки учителя */
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{height:38px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 14.5px var(--f-body);padding:0 16px;cursor:pointer}
+.tab[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cred{margin-top:16px;border:1px dashed var(--green);background:var(--green-soft);border-radius:12px;padding:14px 16px}
+.cred pre{margin:0 0 10px;font:500 14.5px/1.6 var(--f-mono);white-space:pre-wrap;word-break:break-word;color:var(--ink)}
+.cred p{margin:0 0 10px;font-size:13.5px;color:var(--muted)}
+.tbl-wrap{overflow-x:auto;margin:0 -22px;padding:0 22px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{font-weight:500;color:var(--muted);font-size:13px;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.mono{font-family:var(--f-mono);font-size:13.5px}
+td.acts{white-space:nowrap;text-align:right}
+td.acts .btn{margin-left:6px}
+.muted{color:var(--muted)}
+.empty{color:var(--muted);text-align:center;padding:28px 10px}
+.note{font-size:13px;color:var(--muted)}
+
+/* прогресс класса */
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pt td,.pt th{text-align:center}
+.pt td:first-child,.pt th:first-child{text-align:left}
+.pt tr.srow{cursor:pointer}
+.pt tr.srow:hover td{background:var(--bg)}
+.cell{display:inline-flex;flex-direction:column;align-items:center;gap:4px;min-width:52px}
+.cell b{font:600 13px var(--f-mono)}
+.cell .meter{width:46px;height:5px}
+.cell.full b{color:var(--green-ink)}
+.cell.zero b{color:var(--muted);font-weight:400}
+.detail td{background:var(--bg);text-align:left!important;padding:14px 16px}
+.dl{display:flex;flex-direction:column;gap:12px}
+.dl h4{margin:0 0 6px;font:500 13.5px var(--f-body)}
+.sqs{display:flex;flex-wrap:wrap;gap:6px}
+.sq{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;font:600 12px var(--f-mono);color:var(--muted);position:relative;cursor:default}
+.sq.ok{background:var(--green-soft);border-color:var(--green);color:var(--green-ink)}
+.sq.bad{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.sq.rev::after{content:"";position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:var(--amber);border:2px solid var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin-top:14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .sq{width:18px;height:18px;border-radius:5px;font-size:0}
+.legend .sq.rev::after{width:7px;height:7px;top:-3px;right:-3px}
+
+details.pw{margin-top:16px}
+details.pw summary{cursor:pointer;color:var(--muted);font-size:14px}
+details.pw .row{margin-top:12px}
+.loading{color:var(--muted);text-align:center;padding:60px 0}
+@media (max-width:560px){.card{padding:18px}.tbl-wrap{margin:0 -18px;padding:0 18px}.hide-sm{display:none}.brand span:not(.mark){display:none}td.acts{white-space:normal;width:1%}td.acts .btn{display:flex;width:100%;margin:0 0 6px}td.acts .btn:last-child{margin:0}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="brand" href="../"><span class="mark">AS</span><span>Артём Свинченко · информатика</span></a>
+    <div class="grow"></div>
+    <span class="who" id="who" hidden></span>
+    <button class="hbtn" id="logout" type="button" hidden>Выйти</button>
+    <button class="hbtn sq" id="theme" type="button" aria-label="Переключить тему"></button>
+  </div>
+  <div class="wrap title"><h1 id="h1">Личный кабинет</h1><p id="hsub">Вход для учеников</p></div>
+</header>
+
+<main class="wrap" id="app"><div class="loading">Загрузка…</div></main>
+
+<script>
+(function(){
+const API="../api/index.php";
+const app=document.getElementById("app");
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SITE=location.origin+location.pathname.replace(/kabinet\/.*$/,"kabinet/");
+let ME=null,CAT=null;
+
+async function api(action,body,params){
+  const url=API+"?action="+action+(params?"&"+new URLSearchParams(params):"");
+  const opt=body?{method:"POST",headers:{"Content-Type":"application/json","X-Inf":"1"},body:JSON.stringify(body),credentials:"same-origin"}:{credentials:"same-origin",cache:"no-store"};
+  let r;
+  try{r=await fetch(url,opt)}catch(e){throw new Error("Нет связи с сервером. Проверьте интернет.")}
+  let j=null;try{j=await r.json()}catch(e){}
+  if(!j)throw new Error("Сервер ответил ошибкой ("+r.status+")");
+  if(!j.ok)throw new Error(j.error||"Ошибка");
+  return j;
+}
+async function catalog(){
+  if(!CAT){const r=await fetch("courses.json",{cache:"no-store"});CAT=(await r.json()).courses}
+  return CAT;
+}
+function header(){
+  const who=document.getElementById("who"),lo=document.getElementById("logout");
+  who.hidden=lo.hidden=!ME;
+  if(ME)who.innerHTML=esc(ME.name)+'<small class="hide-sm">'+esc(ME.login)+"</small>";
+  document.getElementById("h1").textContent=ME?(ME.role==="teacher"?"Кабинет учителя":"Привет, "+ME.name.split(" ")[0]+"!"):"Личный кабинет";
+  document.getElementById("hsub").textContent=ME?(ME.role==="teacher"?"Ученики и их прогресс по курсам":"Твои курсы и прогресс — сохраняется на любом устройстве"):"Вход для учеников";
+}
+function setBusy(btn,on,text){if(on){btn.dataset.t=btn.textContent;btn.textContent=text||"Подождите…";btn.disabled=true}else{btn.textContent=btn.dataset.t||btn.textContent;btn.disabled=false}}
+function msg(el,text,good){el.hidden=!text;el.textContent=text||"";el.className="msg"+(good?" good":"")}
+const nextUrl=()=>{const n=new URLSearchParams(location.search).get("next")||"";return /^\.\.\/[\w\-\/]*\/?(#[\w.\-]*)?$/.test(n)?n:""};
+function clearLocal(){try{Object.keys(localStorage).filter(k=>k.indexOf("course-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}}
+
+/* ---------- вход ---------- */
+function viewLogin(teacherExists){
+  if(!teacherExists)return viewSetup();
+  app.innerHTML=`<div class="card narrow"><h2>Вход</h2><p class="sub">Логин и пароль выдаёт преподаватель.</p>
+   <form id="f" autocomplete="on">
+    <div class="field"><label for="l">Логин</label><input id="l" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>
+    <div class="field"><label for="p">Пароль</label><input id="p" type="password" name="password" autocomplete="current-password" required></div>
+    <button class="btn wide" id="go">Войти</button><div id="m" hidden></div>
+   </form><p class="hint">Забыли пароль? Напишите преподавателю — он выдаст новый.</p></div>`;
+  const f=document.getElementById("f"),m=document.getElementById("m"),go=document.getElementById("go");
+  document.getElementById("l").focus();
+  f.onsubmit=async e=>{e.preventDefault();msg(m,"");setBusy(go,true,"Входим…");
+    try{const j=await api("login",{login:f.l.value,password:f.p.value});ME=j.user;clearLocalIfOther();const n=nextUrl();if(n){location.href=n;return}route()}
+    catch(err){msg(m,err.message);setBusy(go,false)}};
+}
+function clearLocalIfOther(){
+  // На общем компьютере не смешиваем прогресс разных учеников: чужой локальный прогресс убираем.
+  try{Object.keys(localStorage).filter(k=>k.indexOf("course-")===0).forEach(k=>{const x=JSON.parse(localStorage.getItem(k)||"null");if(x&&x.uid&&x.uid!==ME.id)localStorage.removeItem(k)})}catch(e){}
+}
+function viewSetup(){
+  app.innerHTML=`<div class="card narrow"><h2>Первая настройка</h2><p class="sub">Создайте учётную запись учителя. Это можно сделать один раз; потом форма исчезнет.</p>
+   <form id="f">
+    <div class="field"><label for="c">Код настройки</label><input id="c" type="password" autocomplete="off" required><p class="note">Это пароль базы данных, который вы сохранили в секрете DB_PASSWORD на GitHub.</p></div>
+    <div class="field"><label for="n">Имя</label><input id="n" value="Артём Свинченко" required></div>
+    <div class="field"><label for="l">Логин учителя</label><input id="l" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="например, artem" required></div>
+    <div class="field"><label for="p">Пароль (не короче 8 символов)</label><input id="p" type="password" autocomplete="new-password" minlength="8" required></div>
+    <div class="field"><label for="p2">Пароль ещё раз</label><input id="p2" type="password" autocomplete="new-password" required></div>
+    <button class="btn wide" id="go">Создать и войти</button><div id="m" hidden></div>
+   </form></div>`;
+  const f=document.getElementById("f"),m=document.getElementById("m"),go=document.getElementById("go");
+  f.onsubmit=async e=>{e.preventDefault();msg(m,"");
+    if(f.p.value!==f.p2.value){msg(m,"Пароли не совпадают");return}
+    setBusy(go,true,"Создаём…");
+    try{const j=await api("setup",{code:f.c.value,name:f.n.value,login:f.l.value,password:f.p.value});ME=j.user;route()}
+    catch(err){msg(m,err.message);setBusy(go,false)}};
+}
+
+/* ---------- прогресс: подсчёт ---------- */
+function stats(course,data){
+  const st=(data&&data.st)||{};let done=0,total=0;
+  const lessons=course.lessons.map(l=>{let d=0,t=0;const cells=[];
+    l.steps.forEach((s,i)=>{if(s!=="task")return;t++;const x=st[l.num+"/"+(i+1)]||{};if(x.ok)d++;cells.push({n:i+1,x})});
+    done+=d;total+=t;return{num:l.num,title:l.title,done:d,total:t,cells}});
+  return{done,total,lessons,touched:Object.keys(st).length>0};
+}
+const pct=(a,b)=>b?Math.round(100*a/b):0;
+function ago(ts){
+  if(!ts)return"ещё не входил";
+  const d=new Date(ts*1000),now=new Date(),t=d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+  const days=Math.floor((new Date(now.toDateString())-new Date(d.toDateString()))/864e5);
+  if(days===0)return"сегодня, "+t;if(days===1)return"вчера, "+t;
+  return d.toLocaleDateString("ru-RU",{day:"numeric",month:"short"})+(d.getFullYear()!==now.getFullYear()?" "+d.getFullYear():"");
+}
+
+/* ---------- ученик ---------- */
+async function viewStudent(){
+  const [cat,p]=await Promise.all([catalog(),api("my_progress")]);
+  app.innerHTML=`<div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
+    return `<article class="course"><h3>${esc(c.title)}</h3>
+      <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
+      <div class="cnum">${s.done} из ${s.total} задач решено</div>
+      ${s.lessons.filter(l=>l.total).map(l=>`<div class="lrow"><span>${esc(l.num+" "+l.title)}</span><div class="meter"><i style="width:${pct(l.done,l.total)}%"></i></div><b>${l.done}/${l.total}</b></div>`).join("")}
+      <a class="btn" href="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
+    ${pwCard()}`;
+  bindPw();
+}
+function pwCard(){return `<div class="card" style="margin-top:16px"><details class="pw"><summary>Сменить пароль</summary>
+  <form id="pwf"><div class="row"><div class="field"><label for="po">Старый пароль</label><input id="po" type="password" autocomplete="current-password" required></div>
+  <div class="field"><label for="pn">Новый пароль</label><input id="pn" type="password" autocomplete="new-password" minlength="6" required></div>
+  <button class="btn" id="pwb">Сохранить</button></div><div id="pwm" hidden></div></form></details></div>`}
+function bindPw(){
+  const f=document.getElementById("pwf"),m=document.getElementById("pwm"),b=document.getElementById("pwb");
+  f.onsubmit=async e=>{e.preventDefault();setBusy(b,true);
+    try{await api("password",{old:f.po.value,new:f.pn.value});f.reset();msg(m,"Пароль изменён",true)}catch(err){msg(m,err.message)}setBusy(b,false)};
+}
+
+/* ---------- учитель ---------- */
+let TAB="students",STUDENTS=[],COURSE_I=0,OPEN=null;
+try{TAB=sessionStorage.getItem("kab-tab")||TAB;COURSE_I=+(sessionStorage.getItem("kab-course")||0)}catch(e){}
+async function viewTeacher(){
+  app.innerHTML=`<nav class="tabs" role="tablist">
+     <button class="tab" role="tab" data-t="students">Ученики</button>
+     <button class="tab" role="tab" data-t="progress">Прогресс</button></nav><div id="pane"><div class="loading">Загрузка…</div></div>`;
+  app.querySelectorAll(".tab").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;try{sessionStorage.setItem("kab-tab",TAB)}catch(e){}viewTeacher()}});
+  try{STUDENTS=(await api("students")).students}catch(e){document.getElementById("pane").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
+  TAB==="students"?paneStudents():paneProgress();
+}
+function credText(login,pass){return "Сайт: "+SITE+"\nЛогин: "+login+"\nПароль: "+pass}
+function credBox(name,login,pass){
+  return `<div class="cred"><p>Данные для входа <b>${esc(name)}</b> — пароль показывается один раз, отправьте его ученику сейчас:</p>
+   <pre id="ct">${esc(credText(login,pass))}</pre><button class="btn small" id="cp" type="button">Скопировать</button></div>`;
+}
+function bindCopy(){const b=document.getElementById("cp");if(!b)return;b.onclick=async()=>{const t=document.getElementById("ct").textContent;
+  try{await navigator.clipboard.writeText(t);b.textContent="Скопировано"}catch(e){const r=document.createRange();r.selectNodeContents(document.getElementById("ct"));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Выделено — нажмите Копировать"}
+  setTimeout(()=>b.textContent="Скопировать",2000)}}
+function paneStudents(cred){
+  const pane=document.getElementById("pane");
+  pane.innerHTML=`<div class="card"><h2>Добавить ученика</h2><p class="sub">Логин придумается сам из имени, пароль — случайный.</p>
+    <form id="af"><div class="row">
+      <div class="field" style="flex-basis:240px"><label for="an">Имя и фамилия</label><input id="an" required placeholder="Иван Петров"></div>
+      <div class="field"><label for="al">Логин <span class="muted">(необязательно)</span></label><input id="al" autocapitalize="none" spellcheck="false" placeholder="ivan.petrov"></div>
+      <div class="field"><label for="ao">Заметка <span class="muted">(класс, группа)</span></label><input id="ao" placeholder="11 класс"></div>
+      <button class="btn" id="ab">Добавить</button></div><div id="am" hidden></div></form>
+    <div id="credslot">${cred||""}</div></div>
+   <div class="card"><h2>Ученики · ${STUDENTS.length}</h2>
+    <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Заметка</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
+    ${STUDENTS.length?STUDENTS.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc(s.note)}</td><td class="hide-sm muted">${ago(s.last_seen)}</td>
+       <td class="acts"><button class="btn ghost small" data-reset="${s.id}">Новый пароль</button><button class="btn danger small" data-del="${s.id}">Удалить</button></td></tr>`).join("")
+     :`<tr><td colspan="5" class="empty">Пока никого. Добавьте первого ученика выше.</td></tr>`}
+    </tbody></table></div></div>`;
+  bindCopy();
+  const f=document.getElementById("af"),m=document.getElementById("am"),b=document.getElementById("ab");
+  f.onsubmit=async e=>{e.preventDefault();msg(m,"");setBusy(b,true,"Добавляем…");
+    try{const j=await api("student_create",{name:f.an.value,login:f.al.value,note:f.ao.value});
+      STUDENTS=(await api("students")).students;paneStudents(credBox(j.student.name,j.student.login,j.password));document.getElementById("an").focus()}
+    catch(err){msg(m,err.message);setBusy(b,false)}};
+  pane.querySelectorAll("[data-reset]").forEach(btn=>btn.onclick=async()=>{
+    const s=STUDENTS.find(x=>x.id===+btn.dataset.reset);
+    if(!btn.classList.contains("sure")){btn.classList.add("sure");btn.textContent="Точно сбросить?";setTimeout(()=>{btn.classList.remove("sure");btn.textContent="Новый пароль"},4000);return}
+    try{const j=await api("student_reset",{id:s.id});paneStudents(credBox(s.name,j.login,j.password));document.getElementById("credslot").scrollIntoView({behavior:"smooth",block:"center"})}catch(err){alertBox(err.message)}});
+  pane.querySelectorAll("[data-del]").forEach(btn=>btn.onclick=async()=>{
+    const s=STUDENTS.find(x=>x.id===+btn.dataset.del);
+    if(!btn.classList.contains("sure")){btn.classList.add("sure");btn.textContent="Удалить вместе с прогрессом?";setTimeout(()=>{btn.classList.remove("sure");btn.textContent="Удалить"},4000);return}
+    try{await api("student_delete",{id:s.id});STUDENTS=STUDENTS.filter(x=>x.id!==s.id);paneStudents()}catch(err){alertBox(err.message)}});
+}
+function alertBox(t){const m=document.getElementById("am");if(m)msg(m,t)}
+async function paneProgress(){
+  const pane=document.getElementById("pane"),cat=await catalog();
+  if(COURSE_I>=cat.length)COURSE_I=0;
+  const c=cat[COURSE_I];
+  pane.innerHTML=`<div class="seg">${cat.map((x,i)=>`<button class="tab" data-c="${i}" aria-selected="${i===COURSE_I}">${esc(x.title)}</button>`).join("")}</div><div class="card"><div class="loading">Загрузка…</div></div>`;
+  pane.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{COURSE_I=+b.dataset.c;OPEN=null;try{sessionStorage.setItem("kab-course",COURSE_I)}catch(e){}paneProgress()});
+  let P;try{P=(await api("class_progress",null,{key:c.key})).progress}catch(e){pane.querySelector(".card").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
+  const L=c.lessons.filter(l=>l.steps.includes("task"));
+  const rows=STUDENTS.map(s=>{const p=P[s.id]||{};return{s,p,k:stats(c,p.data)}});
+  const cellH=(d,t)=>`<span class="cell ${d===t&&t?"full":d?"":"zero"}"><b>${d}/${t}</b><span class="meter"><i style="width:${pct(d,t)}%"></i></span></span>`;
+  pane.querySelector(".card").innerHTML=!STUDENTS.length?`<div class="empty">Сначала добавьте учеников на вкладке «Ученики».</div>`:
+   `<div class="tbl-wrap"><table class="pt"><thead><tr><th>Ученик</th>${L.map(l=>`<th title="${esc(l.title)}">${esc(l.num)}</th>`).join("")}<th>Всего</th><th class="hide-sm">Последнее</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr class="srow" data-u="${r.s.id}" aria-expanded="${OPEN===r.s.id}"><td>${esc(r.s.name)}</td>${r.k.lessons.filter(l=>l.total).map(l=>`<td>${cellH(l.done,l.total)}</td>`).join("")}<td>${cellH(r.k.done,r.k.total)}</td><td class="hide-sm muted">${r.p.updated?ago(r.p.updated):"—"}</td></tr>
+      ${OPEN===r.s.id?`<tr class="detail"><td colspan="${L.length+3}">${detail(r)}</td></tr>`:""}`).join("")}
+   </tbody></table></div>
+   <div class="legend"><span><i class="sq ok"></i>решено</span><span><i class="sq bad"></i>пытался, не решил</span><span><i class="sq"></i>не начинал</span><span><i class="sq rev"></i>смотрел ответ</span><span>Нажмите на ученика, чтобы увидеть каждую задачу</span></div>`;
+  pane.querySelectorAll(".srow").forEach(tr=>tr.onclick=()=>{const u=+tr.dataset.u;OPEN=OPEN===u?null:u;paneProgress()});
+}
+function ansText(v){if(v==null)return"";if(Array.isArray(v))return v.map(r=>Array.isArray(r)?r.filter(Boolean).join(" "):r).filter(Boolean).join(" | ");return String(v)}
+function detail(r){
+  const res=r.p.resets?`<p class="note">Нажимал «Начать заново»: ${r.p.resets} раз(а)</p>`:"";
+  return `<div class="dl">${r.k.lessons.filter(l=>l.total).map(l=>`<div><h4>${esc(l.num+" "+l.title)} · ${l.done}/${l.total}</h4><div class="sqs">
+    ${l.cells.map(c=>{const x=c.x,cls=x.ok?"ok":(x.att?"bad":""),a=ansText(x.v);
+      const tip="Шаг "+c.n+(x.ok?" — решено":x.att?" — не решено":" — не начинал")+(x.att?", попыток: "+x.att:"")+(x.rev?", смотрел ответ":"")+(a?"\nОтвет: "+a:"");
+      return `<span class="sq ${cls}${x.rev?" rev":""}" title="${esc(tip)}">${c.n}</span>`}).join("")}</div></div>`).join("")}${res}</div>`;
+}
+
+/* ---------- маршрут ---------- */
+async function route(){
+  header();
+  try{
+    if(!ME){const h=await api("health");viewLogin(h.teacher);return}
+    ME.role==="teacher"?await viewTeacher():await viewStudent();
+  }catch(e){app.innerHTML=`<div class="card narrow"><div class="msg">${esc(e.message)}</div><p class="hint"><a href="">Обновить страницу</a></p></div>`}
+}
+document.getElementById("logout").onclick=async()=>{try{await api("logout",{})}catch(e){}ME=null;clearLocal();route()};
+
+/* тема */
+(function(){const b=document.getElementById("theme"),root=document.documentElement;
+  const sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>';
+  const moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>';
+  const isDark=()=>root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  const paint=()=>{b.innerHTML=isDark()?sun:moon};paint();
+  b.onclick=()=>{const t=isDark()?"light":"dark";root.dataset.theme=t;try{localStorage.setItem("theme",t)}catch(e){}paint()};
+})();
+
+(async()=>{try{ME=(await api("me")).user;if(ME&&nextUrl()){location.replace(nextUrl());return}}catch(e){app.innerHTML=`<div class="card narrow"><div class="msg">${esc(e.message)}</div></div>`;return}route()})();
+})();
+</script>
+</body>
+</html>

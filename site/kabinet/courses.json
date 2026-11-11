@@ -1,0 +1,164 @@
+{
+ "courses": [
+  {
+   "key": "course-ege-inf-s40",
+   "title": "№ 19–21 · Решение в Python",
+   "url": "../ege-19-21/",
+   "lessons": [
+    {
+     "num": "40.1",
+     "title": "Как решать № 19-21???",
+     "steps": [
+      "text",
+      "text"
+     ]
+    },
+    {
+     "num": "40.2",
+     "title": "Одна куча",
+     "steps": [
+      "text",
+      "video",
+      "task",
+      "task",
+      "task",
+      "video",
+      "text",
+      "task",
+      "video",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "40.3",
+     "title": "Две кучи",
+     "steps": [
+      "text",
+      "video",
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "40.4",
+     "title": "Убирание камней",
+     "steps": [
+      "text",
+      "task",
+      "video",
+      "text",
+      "task",
+      "task",
+      "text",
+      "task",
+      "task",
+      "task",
+      "text",
+      "task",
+      "task",
+      "task",
+      "text",
+      "task"
+     ]
+    },
+    {
+     "num": "40.5",
+     "title": "Тренировка",
+     "steps": [
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "40.6",
+     "title": "Условия на ходы",
+     "steps": [
+      "text",
+      "task",
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "course-ege-inf-s36",
+   "title": "№ 18 · Динамика в электронных таблицах",
+   "url": "../ege-18/",
+   "lessons": [
+    {
+     "num": "36.1",
+     "title": "Базовый уровень Ⅰ",
+     "steps": [
+      "task",
+      "video",
+      "task",
+      "task",
+      "task",
+      "task",
+      "text",
+      "video",
+      "video",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "36.2",
+     "title": "Базовый уровень ⅠⅠ",
+     "steps": [
+      "task",
+      "video",
+      "task",
+      "task",
+      "task",
+      "video",
+      "task",
+      "video",
+      "task",
+      "task",
+      "task",
+      "task",
+      "video",
+      "task"
+     ]
+    },
+    {
+     "num": "36.3",
+     "title": "Тренировка",
+     "steps": [
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    }
+   ]
+  }
+ ]
+}

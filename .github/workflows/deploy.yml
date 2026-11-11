@@ -17,6 +17,17 @@ jobs:
       - name: Получить файлы сайта
         uses: actions/checkout@v4
 
+      - name: Настройки базы данных (config.php из секретов, в репозиторий не попадает)
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASSWORD" ]; then echo "::error::Нет секретов DB_NAME / DB_USER / DB_PASSWORD"; exit 1; fi
+          php -r '$c=["dsn"=>"mysql:host=localhost;dbname=".getenv("DB_NAME").";charset=utf8mb4","user"=>getenv("DB_USER"),"pass"=>getenv("DB_PASSWORD"),"setup_code"=>getenv("DB_PASSWORD")];
+                  file_put_contents("site/api/config.php","<?php\n// создано автоматически при загрузке\nreturn ".var_export($c,true).";\n");'
+          php -l site/api/config.php
+
       - name: Загрузить изменённые файлы по FTP (папка inf на хостинге)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

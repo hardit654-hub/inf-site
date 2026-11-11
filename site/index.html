@@ -54,6 +54,11 @@ a{color:inherit}
 .brand span{font:600 14px var(--f-body);color:var(--hero-muted)}
 .theme{width:40px;height:40px;border-radius:10px;border:1px solid #ffffff22;background:var(--hero-2);color:var(--hero-ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
 .theme svg{width:19px;height:19px}
+.topr{display:flex;align-items:center;gap:10px}
+.login{height:40px;border-radius:10px;border:1px solid #ffffff22;background:var(--hero-2);color:var(--hero-ink);display:flex;align-items:center;gap:8px;padding:0 14px 0 11px;text-decoration:none;font:500 14.5px var(--f-body);white-space:nowrap;max-width:200px}
+.login:hover{border-color:#ffffff55}
+.login svg{width:18px;height:18px;flex:none}
+.login span{overflow:hidden;text-overflow:ellipsis}
 .hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:24px 40px;align-items:end}
 .hero-text{display:flex;flex-direction:column;gap:18px;padding-block:34px 64px;min-width:0}
 .photo{margin:0;align-self:end;position:relative}
@@ -113,7 +118,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
 <header class="hero">
   <div class="wrap top">
     <a class="brand" href="./"><span class="mark">AS</span><span>informatika · ЕГЭ / ОГЭ</span></a>
-    <button class="theme" id="theme" type="button" aria-label="Переключить тему"></button>
+    <div class="topr"><a class="login" id="login" href="kabinet/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>Войти</span></a>
+    <button class="theme" id="theme" type="button" aria-label="Переключить тему"></button></div>
   </div>
   <div class="wrap hero-in">
    <div class="hero-text">
@@ -190,6 +196,12 @@ window.addEventListener("hashchange",fromHash);fromHash();
   b.onclick=()=>{const t=isDark()?"light":"dark";root.dataset.theme=t;try{localStorage.setItem("theme",t)}catch(e){}paint()};
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change",paint);paint();
 })();
+</script>
+<script>
+/* Кнопка «Войти»: если ученик уже вошёл — показываем имя и ведём в кабинет */
+fetch("api/index.php?action=me",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).then(j=>{
+  if(j&&j.user){const s=document.querySelector("#login span");s.textContent=j.user.name.split(" ")[0];document.getElementById("login").title="Личный кабинет"}
+}).catch(()=>{});
 </script>
 </body>
 </html>

@@ -16,3 +16,15 @@ for c in COURSES:
     h=eng.replace('{{TITLE}}',c['title']).replace('{{OG_TITLE}}',c['og_title']).replace('{{DESC}}',c['desc']).replace('{{URL}}',c['url']).replace('{{IMAGE}}',c['image']).replace('{{COURSE_DATA}}','<script>\n'+data+'\n</script>')
     os.makedirs(os.path.dirname(c['out']),exist_ok=True)
     open(c['out'],'w').write(h); print('built',c['out'])
+
+# Структура курсов для кабинета (без ответов): уроки и какие шаги — задачи
+import re
+cat=[]
+for c in COURSES:
+    if not os.path.exists(c['src']): continue
+    t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=d['section']
+    cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../'+c['out'].split('/')[1]+'/',
+        lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice') else st['type']) for st in l['steps']]) for l in s['lessons']]))
+os.makedirs('site/kabinet',exist_ok=True)
+json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
+print('built site/kabinet/courses.json')

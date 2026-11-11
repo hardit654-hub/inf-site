@@ -77,6 +77,14 @@ button{font:inherit}
 .iconbtn{width:38px;height:38px;border-radius:9px;border:1px solid var(--bar-line);background:var(--bar-2);color:var(--bar-ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;text-decoration:none}
 .iconbtn svg{width:19px;height:19px}
 .iconbtn:hover{border-color:var(--bar-muted)}
+.acct{height:38px;border-radius:9px;border:1px solid var(--bar-line);background:var(--bar-2);color:var(--bar-ink);display:flex;align-items:center;gap:7px;padding:0 12px 0 9px;text-decoration:none;font:500 14px var(--f-body);white-space:nowrap;max-width:190px}
+.acct:hover{border-color:var(--bar-muted)}
+.acct svg{width:18px;height:18px;flex:none}
+.acct span{overflow:hidden;text-overflow:ellipsis}
+.acct i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;display:none}
+.acct.in i{display:block}
+.acct.err i{background:var(--bad)}
+@media (max-width:640px){.acct span{display:none}.acct{padding:0;width:38px;justify-content:center;position:relative}.acct.in i{position:absolute;top:5px;right:5px}}
 
 /* table of contents */
 .toc{position:fixed;top:calc(var(--head-h) + env(safe-area-inset-top,0px));bottom:0;left:0;width:var(--toc-w);background:var(--bar-2);color:var(--bar-ink);z-index:20;display:flex;flex-direction:column;transition:transform .25s ease;border-right:1px solid var(--bar-line)}
@@ -231,6 +239,7 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
   <nav class="strip" id="strip" aria-label="Шаги урока"></nav>
   <div class="hright">
     <span class="pts" id="pts"></span>
+    <a class="acct" id="acct" href="../kabinet/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>Войти</span><i></i></a>
     <button class="iconbtn" id="theme" type="button" aria-label="Переключить тему"></button>
   </div>
 </header>
@@ -1211,7 +1220,68 @@ window.COURSE = {
 const C=window.COURSE, SEC=C.section, KEY="course-"+C.id+"-s"+SEC.num;
 let S={pos:null,st:{}};
 try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&x.st)S=x}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+/* Синхронизация с личным кабинетом: если ученик вошёл, прогресс уходит на сервер (../api). Без входа всё работает как раньше — только на этом устройстве. */
+const API="../api/index.php";
+let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(ME){dirty=true;clearTimeout(syncT);syncT=setTimeout(push,1200)}};
+function mergeRec(a,b){
+  if(!a)return b;if(!b)return a;
+  const src=(a.ok&&!b.ok)?a:b,oth=src===a?b:a,r={};
+  if("v" in src)r.v=src.v;else if("v" in oth)r.v=oth.v;
+  if("last" in src)r.last=src.last;else if("last" in oth)r.last=oth.last;
+  const att=Math.max(a.att||0,b.att||0);if(att)r.att=att;
+  ["ok","rev","seen"].forEach(k=>{if(a[k]||b[k])r[k]=true});
+  return r;
+}
+function mergeState(server,local){
+  const r={pos:local.pos||(server&&server.pos)||null,last:Object.assign({},server&&server.last,local.last),st:{}};
+  const a=(server&&server.st)||{},b=local.st||{};
+  new Set([...Object.keys(a),...Object.keys(b)]).forEach(k=>{r.st[k]=mergeRec(a[k],b[k])});
+  return r;
+}
+async function api(action,body,keepalive){
+  const opt=body?{method:"POST",headers:{"Content-Type":"application/json","X-Inf":"1"},body:JSON.stringify(body),credentials:"same-origin",keepalive:!!keepalive}:{credentials:"same-origin",cache:"no-store"};
+  const r=await fetch(API+"?action="+action,opt);const j=await r.json();
+  if(!j.ok){const e=new Error(j.error||"error");e.status=r.status;throw e}
+  return j;
+}
+async function push(keepalive){
+  if(!ME||!dirty)return;
+  if(syncing){clearTimeout(syncT);syncT=setTimeout(push,800);return}
+  syncing=true;dirty=false;
+  const reset=!!S._reset,data=Object.assign({},S);delete data._reset;delete data.uid;
+  try{await api("progress_put",{key:KEY,data,reset},keepalive);delete S._reset;syncErr=false}
+  catch(e){dirty=true;syncErr=true;if(e.status===401){ME=null}}
+  finally{syncing=false;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}paintAcct();if(dirty&&ME){clearTimeout(syncT);syncT=setTimeout(push,15000)}}
+}
+function paintAcct(){
+  const a=$("acct");if(!a)return;a.hidden=false;
+  a.classList.toggle("in",!!ME);a.classList.toggle("err",!!ME&&syncErr);
+  a.querySelector("span").textContent=ME?ME.name.split(" ")[0]:"Войти";
+  const href=()=>"../kabinet/"+(ME?"":"?next="+encodeURIComponent("../"+location.pathname.split("/").slice(-2,-1)[0]+"/"+location.hash));
+  a.href=href();a.onclick=()=>{a.href=href()};
+  a.title=ME?(syncErr?"Нет связи с сервером — ответы сохранены на этом устройстве и отправятся позже":"Личный кабинет · прогресс сохраняется"):"Войти, чтобы прогресс сохранялся на любом устройстве";
+}
+async function pull(first){
+  let g;try{g=await api("progress_get&key="+KEY)}catch(e){if(e.status===401){ME=null;paintAcct()}return}
+  const hadLocal=Object.keys(S.st||{}).length>0;
+  const m=mergeState(g.data,S);m.uid=ME.id;if(S._reset)m._reset=true;
+  const changed=JSON.stringify(m.st)!==JSON.stringify((g.data&&g.data.st)||{});
+  const localChanged=JSON.stringify(m.st)!==JSON.stringify(S.st||{});
+  S=m;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  if(changed){dirty=true;push()}
+  if(first&&!hadLocal&&!location.hash&&S.pos&&lessons[S.pos.li]&&lessons[S.pos.li].steps)go(S.pos.li,S.pos.si);
+  else if(localChanged){const a=document.activeElement;if(!(a&&a.matches&&a.matches(".frow input")))render()}
+}
+async function initSync(){
+  try{ME=(await api("me")).user}catch(e){return}  // нет сервера (например, страница открыта с диска) — работаем локально
+  if(ME&&S.uid&&S.uid!==ME.id)S={pos:null,st:{}};  // на этом устройстве остался чужой прогресс
+  if(!ME&&S.uid){/* вышли из кабинета: локальный прогресс оставляем, при входе он сольётся */}
+  paintAcct();
+  if(ME){await pull(true);render()}
+}
+document.addEventListener("visibilitychange",()=>{if(!ME)return;if(document.visibilityState==="hidden")push(true);else if(!dirty&&!syncing)pull(false)});
+window.addEventListener("pagehide",()=>{if(ME&&dirty)push(true)});
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -1334,7 +1404,7 @@ function render(){
   $("step").innerHTML=h;
   const prev=prevPos(), next=nextPos();
   $("foot").innerHTML=`${prev?`<button class="btn ghost" id="prev">${ICON.prev}Назад</button>`:"<span></span>"}${next?`<button class="btn" id="next">${next.li!==cur.li?"Следующий урок":"Следующий шаг"}${ICON.next}</button>`:`<span class="soon">Это последний шаг раздела</span>`}
-    <div class="note"><span>Ответы сохраняются на этом устройстве.</span><button class="btn ghost" id="rst">Сбросить прогресс</button><span id="rstc" hidden>Точно стереть все ответы? <button class="btn ghost" id="rsty" style="color:var(--bad)">Да, стереть</button> <button class="btn ghost" id="rstn">Нет</button></span></div>`;
+    <div class="note"><span>${ME?"Ответы сохраняются в личном кабинете — их видно с любого устройства.":'Ответы сохраняются на этом устройстве. <a href="../kabinet/">Войдите</a>, чтобы они были на любом.'}</span><button class="btn ghost" id="rst">Сбросить прогресс</button><span id="rstc" hidden>Точно стереть все ответы? <button class="btn ghost" id="rsty" style="color:var(--bad)">Да, стереть</button> <button class="btn ghost" id="rstn">Нет</button></span></div>`;
   wire(s,x);
   renderToc();
 }
@@ -1401,7 +1471,7 @@ function wire(s,x){
   if(n)n.onclick=()=>{const q=nextPos();if(q)go(q.li,q.si)};
   $("rst").onclick=()=>{$("rstc").hidden=false;$("rst").hidden=true};
   $("rstn").onclick=()=>{$("rstc").hidden=true;$("rst").hidden=false};
-  $("rsty").onclick=()=>{S={pos:null,st:{}};save();go(0,0)};
+  $("rsty").onclick=()=>{S={pos:null,st:{}};if(ME){S.uid=ME.id;S._reset=true}save();go(0,0)};
   if(!isTask(s))return;
   if(s.type==="choice"){
     document.querySelectorAll('input[name="opt"]').forEach(r=>r.onchange=()=>{x.v=+r.value;x.last=null;save();render()});
@@ -1484,6 +1554,7 @@ document.addEventListener("click",async e=>{
 });
 window.addEventListener("hashchange",fromHash);
 fromHash();
+initSync();
 })();
 </script>
 </body>
