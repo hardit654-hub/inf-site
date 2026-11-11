@@ -17,11 +17,11 @@ jobs:
       - name: Получить файлы сайта
         uses: actions/checkout@v4
 
-      - name: Загрузить изменённые файлы по FTP в www/gsvv.ru/inf/
+      - name: Загрузить изменённые файлы по FTP (папка inf на хостинге)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./site/
-          server-dir: www/gsvv.ru/inf/
+          server-dir: ./

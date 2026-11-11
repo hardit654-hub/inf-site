@@ -16,7 +16,7 @@
 | Имя | Что вписать |
 |---|---|
 | `FTP_SERVER` | адрес FTP-сервера из панели хостинга |
-| `FTP_USERNAME` | логин FTP |
+| `FTP_USERNAME` | логин FTP (`u3640031_deploy`, его домашняя папка — `www/gsvv.ru/inf`) |
 | `FTP_PASSWORD` | пароль FTP |
 
 Проверить загрузку вручную: вкладка **Actions → Загрузка сайта на хостинг → Run workflow**.
