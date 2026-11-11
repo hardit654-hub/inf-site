@@ -259,7 +259,7 @@ async function viewStudent(){
 }
 function pwCard(){return `<div class="card" style="margin-top:16px"><details class="pw"><summary>Сменить пароль</summary>
   <form id="pwf"><div class="row"><div class="field"><label for="po">Старый пароль</label><input id="po" type="password" autocomplete="current-password" required></div>
-  <div class="field"><label for="pn">Новый пароль</label><input id="pn" type="password" autocomplete="new-password" minlength="6" required></div>
+  <div class="field"><label for="pn">Новый пароль</label><input id="pn" type="password" autocomplete="new-password" minlength="4" required></div>
   <button class="btn" id="pwb">Сохранить</button></div><div id="pwm" hidden></div></form></details></div>`}
 function bindPw(){
   const f=document.getElementById("pwf"),m=document.getElementById("pwm"),b=document.getElementById("pwb");

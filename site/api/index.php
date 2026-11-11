@@ -155,8 +155,9 @@ function make_login(string $name): string {
 function make_password(): string {
     $abc = 'abcdefghjkmnpqrstuvwxyz23456789';
     $p = '';
-    for ($i = 0; $i < 8; $i++) $p .= $abc[random_int(0, strlen($abc) - 1)];
-    return substr($p, 0, 4) . '-' . substr($p, 4);
+    // 4 символа без похожих (0/o, 1/l): около 900 тысяч вариантов; подбор упирается в лимит 10 попыток за 15 минут
+    for ($i = 0; $i < 4; $i++) $p .= $abc[random_int(0, strlen($abc) - 1)];
+    return $p;
 }
 function clean_name($s): string {
     $s = trim(preg_replace('/\s+/u', ' ', (string)$s));
@@ -255,7 +256,8 @@ case 'password':
     throttle('pw' . $u['id']);
     if (!password_verify((string)arg('old'), $row['pass_hash'])) { attempt_failed('pw' . $u['id']); fail('Старый пароль неверный', 403); }
     $new = (string)arg('new');
-    if (strlen($new) < 6) fail('Новый пароль — не короче 6 символов');
+    $min = $u['role'] === 'teacher' ? 8 : 4;
+    if (strlen($new) < $min) fail('Новый пароль — не короче ' . $min . ' символов');
     q('UPDATE inf_users SET pass_hash = ? WHERE id = ?', [password_hash($new, PASSWORD_DEFAULT), $u['id']]);
     out(['ok' => true]);
 
