@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>№ 19–21 · Решение в Python</title>
+<title>{{TITLE}}</title>
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
@@ -12,14 +12,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Лучший репетитор по информатике">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:title" content="№ 19–21. Решение в Python — курс">
-<meta property="og:description" content="Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.">
-<meta property="og:url" content="https://gsvv.ru/inf/ege-19-21/">
-<meta property="og:image" content="https://gsvv.ru/inf/og-course.jpg">
+<meta property="og:title" content="{{OG_TITLE}}">
+<meta property="og:description" content="{{DESC}}">
+<meta property="og:url" content="{{URL}}">
+<meta property="og:image" content="{{IMAGE}}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="description" content="Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.">
+<meta name="description" content="{{DESC}}">
 <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("toc")==="closed")document.documentElement.classList.add("toc-closed")}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -151,6 +151,18 @@ details.box>div{display:flex;flex-direction:column;gap:10px;padding-bottom:14px}
 .video .pl{width:72px;height:72px;border-radius:50%;background:#ffffff1a;display:flex;align-items:center;justify-content:center}
 .video .pl svg{width:30px;height:30px;color:var(--green)}
 .video b{color:#fff;font-weight:500}
+.filebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 14px;border:1px dashed var(--line-strong);border-radius:6px;font-size:15px}
+.flbl{font-style:italic;font-weight:500}
+.file{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:6px;background:var(--green-soft);color:var(--green-ink);text-decoration:none;font:600 14px var(--f-mono)}
+.file:hover{text-decoration:underline}
+.file svg{width:15px;height:15px;flex:none}
+.file .sz{font:400 12px var(--f-body);opacity:.8}
+.vlinks{font-size:14px;color:var(--muted)}
+.gridwrap{overflow-x:auto;max-width:100%}
+table.g18{border-collapse:collapse;border:3px solid var(--ink);font-variant-numeric:tabular-nums}
+table.g18 td{width:46px;height:38px;text-align:center;border:1px solid var(--line-strong);font-size:16px}
+table.g18 td.wr{border-right:3px solid var(--ink)}
+table.g18 td.wb{border-bottom:3px solid var(--ink)}
 .treewrap{overflow-x:auto;max-width:100%;border:1px solid var(--line);border-radius:6px;padding:10px;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:20px 20px;background-color:var(--bg)}
 svg.tree{max-width:100%;height:auto;display:block}
 svg.tree line{stroke:var(--ink);stroke-width:1.6}
@@ -240,7 +252,7 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
   <footer class="foot"><div class="foot-in" id="foot"></div></footer>
 </div>
 
-<script src="course.js"></script>
+{{COURSE_DATA}}
 <script>
 (function(){
 const C=window.COURSE, SEC=C.section, KEY="course-"+C.id+"-s"+SEC.num;
@@ -259,6 +271,7 @@ const ICON={
   cross:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
   next:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
   prev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  dl:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M4.5 6.8 8 10.3l3.5-3.5M2.5 13.5h11"/></svg>',
   lock:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>'
 };
 const isTask=s=>s.type==="choice"||s.type==="fill";
@@ -300,14 +313,17 @@ function tree(spec,labels){
   return s+"</svg>";
 }
 /* hints and solutions inside task steps open step by step */
-function need(title){const m=/Подсказка\s*(\d+)/.exec(title);if(m)return +m[1];if(/Подсказк/.test(title))return 1;if(/Решени/.test(title))return 3;return 0}
-function lockText(n,title){const w=n===1?"1-й":n===2?"2-й":"3-й";return /Решени/.test(title)?`Откроется после ${w} неверной попытки или когда задача будет решена`:`Откроется после ${w} неверной попытки`}
+function need(title){const m=/Подсказка\s*(\d+)/.exec(title);if(m)return +m[1];if(/Подсказк/.test(title))return 1;if(/Решени|Видеоразбор/.test(title))return 3;return 0}
+function lockText(n,title){const w=n===1?"1-й":n===2?"2-й":"3-й";return /Решени|Видеоразбор/.test(title)?`Откроется после ${w} неверной попытки или когда задача будет решена`:`Откроется после ${w} неверной попытки`}
 function blocks(list,x){
   return list.map(b=>{
     if(b.t==="details"&&x){const n=need(b.title);if(n&&!x.ok&&!x.rev&&(x.att||0)<n)return `<div class="locked">${ICON.lock}<span><b>${esc(b.title)}</b><small>${lockText(n,b.title)}</small></span></div>`}
     if(b.t==="html") return `<div class="html">${b.v}</div>`;
     if(b.t==="code") return `<div class="codebox"><pre><code>${hl(b.v)}</code></pre><button class="copy" type="button">Копировать</button></div>`;
     if(b.t==="tree") return `<div class="treewrap">${tree(b.v,b.labels)}</div>`;
+    if(b.t==="file") return `<div class="filebar"><span class="flbl">Задание выполняется с использованием прилагаемого файла.</span>${b.files.map(f=>`<a class="file" href="${esc(f.href)}" download>${ICON.dl}${esc(f.name)}<span class="sz">${esc(f.size||"")}</span></a>`).join("")}</div>`;
+    if(b.t==="embed") return `<div class="vwrap"><iframe src="${esc(b.src)}" title="${esc(b.title||"Видео")}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`+(b.alt?`<p class="vlinks">Не открывается? ${b.alt.map(a=>`<a href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.name)}</a>`).join(" · ")}</p>`:"");
+    if(b.t==="grid") return `<div class="gridwrap"><table class="g18">${b.v.map((row,i)=>`<tr>${row.map((v,j)=>`<td class="${(b.r||[])[i]&&b.r[i][j]?"wr ":""}${(b.d||[])[i]&&b.d[i][j]?"wb":""}">${v}</td>`).join("")}</tr>`).join("")}</table></div>`;
     if(b.t==="details") return `<details class="box"><summary>${esc(b.title)}</summary><div>${blocks(b.v)}</div></details>`;
     return "";
   }).join("");
