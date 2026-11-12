@@ -147,6 +147,19 @@ details.pw .row{margin-top:12px}
 .wallet span{display:block;font-size:14px;opacity:.8;margin-top:4px}
 :root[data-theme="dark"] .wallet{background:linear-gradient(135deg,#3a2f12,#2a220e);color:#f6d77a;border-color:#5c4a17}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wallet{background:linear-gradient(135deg,#3a2f12,#2a220e);color:#f6d77a;border-color:#5c4a17}}
+.lb{padding:0;overflow:hidden}
+.lb h2{display:flex;align-items:center;gap:8px;padding:20px 22px 4px}
+.lb .sub{padding:0 22px;margin-bottom:10px}
+.lbrow{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 22px;border-top:1px solid var(--line)}
+.lbrow .pl{font:700 18px var(--f-display);text-align:center;color:var(--muted)}
+.lbrow .pl.m{font-size:24px}
+.lbrow .nm{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbrow .nm small{color:var(--muted);font-weight:400;margin-left:6px}
+.lbrow .cs{display:inline-flex;align-items:center;gap:6px;font:700 16px var(--f-mono)}
+.lbrow .cs .coin{width:18px;height:18px}
+.lbrow.me{background:var(--green-soft)}
+.lbrow.gap{padding:4px 22px;color:var(--muted);font-size:13px;display:block;text-align:center;border-top:1px dashed var(--line)}
+.lb .empty{border-top:1px solid var(--line)}
 .ccell{display:inline-flex;align-items:center;gap:5px;font:600 14px var(--f-mono)}
 .cnum .coin{width:15px;height:15px;margin-left:8px}
 @media (max-width:560px){.card{padding:18px}.tbl-wrap{margin:0 -18px;padding:0 18px}.hide-sm{display:none}.brand span:not(.mark){display:none}td.acts{white-space:normal;width:1%}td.acts .btn{display:flex;width:100%;margin:0 0 6px}td.acts .btn:last-child{margin:0}}
@@ -259,7 +272,7 @@ function ago(ts){
 async function viewStudent(){
   const [cat,p]=await Promise.all([catalog(),api("my_progress")]);
   const by=p.coins_by||{};
-  app.innerHTML=`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
+  app.innerHTML=`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div id="lbslot" style="margin-bottom:16px"></div><div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
     return `<article class="course"><h3>${esc(c.title)}</h3>
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
       <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
@@ -267,6 +280,17 @@ async function viewStudent(){
       <a class="btn" href="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
     ${pwCard()}`;
   bindPw();
+  lbCard(false).then(h=>{const s=document.getElementById("lbslot");if(s)s.innerHTML=h});
+}
+async function lbCard(teacher){
+  let d;try{d=await api("leaderboard")}catch(e){return ""}
+  const medal=["🥇","🥈","🥉"];
+  const row=r=>`<div class="lbrow${r.me?" me":""}"><span class="pl${r.place<=3?" m":""}">${r.place&&r.place<=3?medal[r.place-1]:(r.place||"—")}</span><span class="nm">${esc(r.name)}${r.me?"<small>это ты</small>":""}</span><span class="cs">${COIN}${r.coins}</span></div>`;
+  let h=`<section class="card lb"><h2>🏆 Топ‑5 по монеткам</h2><p class="sub">${teacher?"Ученики видят имя и первую букву фамилии.":"Решай задачи без ошибок — так монеток больше всего."}</p>`;
+  if(!d.top.length) h+=`<div class="empty">Пока ни у кого нет монеток. ${teacher?"":"Стань первым!"}</div>`;
+  h+=d.top.map(row).join("");
+  if(d.me&&!d.top.some(r=>r.me)) h+=`<div class="lbrow gap">…</div>`+row(d.me);
+  return h+`</section>`;
 }
 function coinWord(n){const a=n%10,b=n%100;return (a===1&&b!==11?"монетка":a>=2&&a<=4&&(b<12||b>14)?"монетки":"монеток")}
 function pwCard(){return `<div class="card" style="margin-top:16px"><details class="pw"><summary>Сменить пароль</summary>
@@ -285,9 +309,11 @@ try{TAB=sessionStorage.getItem("kab-tab")||TAB;COURSE_I=+(sessionStorage.getItem
 async function viewTeacher(){
   app.innerHTML=`<nav class="tabs" role="tablist">
      <button class="tab" role="tab" data-t="students">Ученики</button>
-     <button class="tab" role="tab" data-t="progress">Прогресс</button></nav><div id="pane"><div class="loading">Загрузка…</div></div>`;
+     <button class="tab" role="tab" data-t="progress">Прогресс</button>
+     <button class="tab" role="tab" data-t="rating">Рейтинг</button></nav><div id="pane"><div class="loading">Загрузка…</div></div>`;
   app.querySelectorAll(".tab").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;try{sessionStorage.setItem("kab-tab",TAB)}catch(e){}viewTeacher()}});
   try{STUDENTS=(await api("students")).students}catch(e){document.getElementById("pane").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
+  if(TAB==="rating"){document.getElementById("pane").innerHTML=await lbCard(true);return}
   TAB==="students"?paneStudents():paneProgress();
 }
 function credText(login,pass){return "Сайт: "+SITE+"\nЛогин: "+login+"\nПароль: "+pass}
