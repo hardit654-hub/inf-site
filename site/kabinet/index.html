@@ -167,6 +167,14 @@ details.pw .row{margin-top:12px}
 .done{display:inline-flex;align-items:center;gap:6px;color:var(--green-ink);font-weight:600}
 .fbar{margin-bottom:16px}.fbar .seg{margin-bottom:10px}.fbar .seg.sub2{margin-bottom:0;padding-top:10px;border-top:1px solid var(--line)}
 .tab .cnt{opacity:.6;font-size:.88em;margin-left:2px}.tab.sm{height:32px;font-size:13.5px;padding:0 12px}
+.bulk{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;margin:0 0 12px;border:1px dashed var(--line);border-radius:12px;font-size:14px;color:var(--muted)}
+.bulk.on{border-style:solid;border-color:var(--green);background:var(--green-soft);color:var(--ink)}
+.bacts,.bgrp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.bgrp input{width:130px;height:34px;padding:0 10px}
+th.ck,td.ck{width:28px;padding-right:0}td.ck input,th.ck input{width:18px;height:18px;cursor:pointer}
+.mv{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;white-space:nowrap}
+.mv button{border:0;background:var(--card);color:var(--muted);font:500 12.5px var(--f-body);padding:5px 10px;cursor:pointer}
+.mv button+button{border-left:1px solid var(--line)}.mv button[aria-pressed=true]{background:var(--ink);color:var(--bg);cursor:default}
+.mv button:not([aria-pressed=true]):hover{color:var(--ink);background:var(--green-soft)}.mvg{font-size:13px;margin-top:4px}
 .fhw{margin-top:14px;gap:12px;align-items:center}.fhw .note{margin:0;flex:1 1 260px}
 .glist{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:12px;padding:6px 10px;max-height:320px;overflow:auto}
 .gs{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;flex-wrap:wrap}.gs input{width:18px;height:18px;flex:0 0 auto}
@@ -455,6 +463,15 @@ function paneStudents(cred){
   const pane=document.getElementById("pane");
   const V=visible();
   pane.innerHTML=`<datalist id="grplist">${groups().map(([g])=>`<option value="${esc(g)}">`).join("")}</datalist>${filterBar(true)}<div id="editslot"></div>
+   <div class="card"><h2>Ученики · ${esc(fLabel())} · ${V.length}</h2>
+    ${V.length?`<div class="bulk" id="bulk"><span class="bn" id="bn">Отметьте учеников галочками, чтобы перенести сразу нескольких</span>
+     <span class="bacts"><button class="btn small" type="button" data-bcat="Школа" disabled>→ Школа</button><button class="btn small" type="button" data-bcat="Репетиторство" disabled>→ Репетиторство</button>
+     <span class="bgrp"><input id="bg" list="grplist" placeholder="10 класс" aria-label="Класс для выбранных"><button class="btn ghost small" type="button" id="bgb" disabled>Поставить класс</button></span></span></div>`:""}
+    <div class="tbl-wrap"><table><thead><tr><th class="ck">${V.length?'<input type="checkbox" id="ckall" aria-label="Отметить всех">':""}</th><th>Имя</th><th class="hide-sm">Логин</th><th>Категория и класс</th><th>Монетки</th><th>Занятия и ДЗ</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
+    ${V.length?V.map(s=>`<tr><td class="ck"><input type="checkbox" class="ck1" value="${s.id}" aria-label="Отметить: ${esc(s.name)}"></td><td>${esc(s.name)}</td><td class="mono hide-sm">${esc(s.login)}</td><td><span class="mv">${CATS.map(c=>`<button type="button" data-mv="${s.id}" data-cat="${c}" aria-pressed="${catOf(s)===c}">${c}</button>`).join("")}</span>${grpOf(s)?`<div class="muted mvg">${esc(grpOf(s))}</div>`:""}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="sum">${s.info&&s.info.schedule.length?s.info.schedule.map(x=>DS[x.day]+" "+x.time).join(", "):'<span class="muted">без расписания</span>'}<br>ДЗ: ${hwChip(s.info)}</td><td class="hide-sm muted">${ago(s.last_seen)}</td>
+       <td class="acts"><button class="btn small" data-info="${s.id}">Занятия и ДЗ</button><button class="btn ghost small" data-reset="${s.id}">Новый пароль</button><button class="btn danger small" data-del="${s.id}">Удалить</button></td></tr>`).join("")
+     :`<tr><td colspan="8" class="empty">${STUDENTS.length?"В этой группе пока никого.":"Пока никого. Добавьте первого ученика выше."}</td></tr>`}
+    </tbody></table></div></div>
    <div class="card"><h2>Добавить ученика</h2><p class="sub">Логин придумается сам из имени, пароль — случайный.</p>
     <form id="af"><div class="row">
       <div class="field" style="flex-basis:240px"><label for="an">Имя и фамилия</label><input id="an" required placeholder="Иван Петров"></div>
@@ -467,14 +484,8 @@ function paneStudents(cred){
     <form id="cf"><div class="row">
       <div class="field" style="flex-basis:240px"><label for="cs">Ученик</label><select id="cs" class="sel">${V.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.coins||0}</option>`).join("")}</select></div>
       <div class="field" style="flex:0 1 140px"><label for="ca">Монеток</label><input id="ca" type="number" value="5" step="1" min="-1000" max="1000" required></div>
-      <button class="btn" id="cb">Начислить</button></div><div id="cm" hidden></div></form></div>`:""}
-   <div class="card"><h2>Ученики · ${esc(fLabel())} · ${V.length}</h2>
-    <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Группа</th><th>Монетки</th><th>Занятия и ДЗ</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
-    ${V.length?V.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc([catOf(s),grpOf(s)].filter(Boolean).join(" · "))}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="sum">${s.info&&s.info.schedule.length?s.info.schedule.map(x=>DS[x.day]+" "+x.time).join(", "):'<span class="muted">без расписания</span>'}<br>ДЗ: ${hwChip(s.info)}</td><td class="hide-sm muted">${ago(s.last_seen)}</td>
-       <td class="acts"><button class="btn small" data-info="${s.id}">Занятия и ДЗ</button><button class="btn ghost small" data-reset="${s.id}">Новый пароль</button><button class="btn danger small" data-del="${s.id}">Удалить</button></td></tr>`).join("")
-     :`<tr><td colspan="7" class="empty">${STUDENTS.length?"В этой группе пока никого.":"Пока никого. Добавьте первого ученика выше."}</td></tr>`}
-    </tbody></table></div></div>`;
-  bindCopy();bindFilter(()=>paneStudents());
+      <button class="btn" id="cb">Начислить</button></div><div id="cm" hidden></div></form></div>`:""}`;
+  bindCopy();bindFilter(()=>paneStudents());bindMove();
   const f=document.getElementById("af"),m=document.getElementById("am"),b=document.getElementById("ab");
   f.onsubmit=async e=>{e.preventDefault();msg(m,"");setBusy(b,true,"Добавляем…");
     try{const j=await api("student_create",{name:f.an.value,login:f.al.value,note:f.ao.value,cat:f.aca.value});
@@ -518,11 +529,31 @@ function filterBar(withHw){
   return `<div class="card fbar"><div class="seg" role="tablist" aria-label="Категория">${t("","Все",STUDENTS.length)}${CATS.map(x=>t(x,x,STUDENTS.filter(s=>catOf(s)===x).length)).join("")}${noCat?t("-","Без категории",noCat):""}</div>
    <div class="seg sub2" aria-label="Группа">${c("","Все классы",inC.length)}${G.map(([g,n])=>c(g,g,n)).join("")}${noGrp&&G.length?c("-","Без группы",noGrp):""}</div>
    ${withHw?`<div class="row fhw"><button class="btn" type="button" id="ghw" ${vis?"":"disabled"}>📝 Задать домашку: ${esc(fLabel())} (${vis})</button>
-   ${noCat===STUDENTS.length&&STUDENTS.length?`<p class="note">Чтобы разделить учеников на «Школу» и «Репетиторство», откройте у ученика «Занятия и ДЗ» и выберите категорию и класс.</p>`:""}</div>`:""}</div>`;
+   ${noCat===STUDENTS.length&&STUDENTS.length?`<p class="note">Разделите учеников: в таблице ниже нажмите «Школа» или «Репетиторство» у ученика или отметьте нескольких галочками.</p>`:""}</div>`:""}</div>`;
 }
 function bindFilter(rerender){
   document.querySelectorAll("[data-fc]").forEach(b=>b.onclick=()=>{FCAT=b.dataset.fc;FGRP="";saveF();rerender()});
   document.querySelectorAll("[data-fg]").forEach(b=>b.onclick=()=>{FGRP=b.dataset.fg;saveF();rerender()});
+}
+/* перенос учеников между категориями и классами */
+async function moveStudents(ids,patch,what){
+  try{const j=await api("students_move",Object.assign({ids},patch));STUDENTS=(await api("students")).students;paneStudents();
+    document.getElementById("editslot").innerHTML=`<div class="card"><div class="msg good" role="status">${esc(what)}: ${j.count} ${plural(j.count,"ученик","ученика","учеников")}.</div></div>`}
+  catch(err){alertBox(err.message)}
+}
+function bindMove(){
+  document.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{if(b.getAttribute("aria-pressed")==="true")return;
+    const s=STUDENTS.find(x=>x.id===+b.dataset.mv);moveStudents([s.id],{cat:b.dataset.cat},s.name+" → «"+b.dataset.cat+"»")});
+  const all=document.getElementById("ckall");if(!all)return;
+  const boxes=[...document.querySelectorAll(".ck1")];
+  const sel=()=>boxes.filter(c=>c.checked).map(c=>+c.value);
+  const upd=()=>{const n=sel().length;document.getElementById("bn").innerHTML=n?`Выбрано <b>${n}</b>:`:"Отметьте учеников галочками, чтобы перенести сразу нескольких";
+    document.querySelectorAll("#bulk button").forEach(b=>b.disabled=!n);document.getElementById("bulk").classList.toggle("on",n>0);
+    all.checked=n===boxes.length;all.indeterminate=n>0&&n<boxes.length};
+  boxes.forEach(c=>c.onchange=upd);all.onchange=()=>{boxes.forEach(c=>c.checked=all.checked);upd()};
+  document.querySelectorAll("[data-bcat]").forEach(b=>b.onclick=()=>moveStudents(sel(),{cat:b.dataset.bcat},"Перенесено в «"+b.dataset.bcat+"»"));
+  document.getElementById("bgb").onclick=()=>{const g=document.getElementById("bg").value.trim();if(!g){document.getElementById("bg").focus();return}
+    moveStudents(sel(),{note:g},"Класс «"+g+"» поставлен")};
 }
 function saveF(){try{localStorage.setItem("kab-fcat",FCAT);localStorage.setItem("kab-fgrp",FGRP)}catch(e){}}
 const catSel=(id,v)=>`<select id="${id}" class="sel"><option value="">— не указана —</option>${CATS.map(x=>`<option ${x===v?"selected":""}>${x}</option>`).join("")}${v&&!CATS.includes(v)?`<option selected>${esc(v)}</option>`:""}</select>`;

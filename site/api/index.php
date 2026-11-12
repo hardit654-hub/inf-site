@@ -524,6 +524,26 @@ case 'student_update':
     if (array_key_exists('cat', $IN)) q('UPDATE inf_users SET cat = ? WHERE id = ?', [clean_cat(arg('cat')), $id]);
     out(['ok' => true]);
 
+case 'students_move':
+    // Перенос учеников в категорию и/или класс. Меняет только эти два поля.
+    need_post();
+    need_teacher();
+    global $IN;
+    $ids = arg('ids', []);
+    if (!is_array($ids) || !$ids) fail('Не выбраны ученики');
+    $ids = array_slice(array_values(array_unique(array_map('intval', $ids))), 0, 300);
+    $setCat = array_key_exists('cat', $IN); $setGrp = array_key_exists('note', $IN);
+    if (!$setCat && !$setGrp) fail('Нечего менять');
+    $cat = clean_cat(arg('cat')); $grp = mb_substr(trim((string)arg('note')), 0, 200, 'UTF-8');
+    $n = 0;
+    foreach ($ids as $id) {
+        if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) continue;
+        if ($setCat) q('UPDATE inf_users SET cat = ? WHERE id = ?', [$cat, $id]);
+        if ($setGrp) q('UPDATE inf_users SET note = ? WHERE id = ?', [$grp, $id]);
+        $n++;
+    }
+    out(['ok' => true, 'count' => $n]);
+
 case 'student_reset':
     need_post();
     need_teacher();
