@@ -254,7 +254,7 @@ function clean_tasks($a): array {
     if (!is_array($a)) return $out;
     foreach ($a as $x) {
         $x = (string)$x;
-        if (preg_match('/^[a-z0-9-]{1,64}\|[0-9.]{1,12}\/\d{1,3}$/', $x) && !in_array($x, $out, true)) $out[] = $x;
+        if (preg_match('/^[a-z0-9-]{1,64}\|[0-9.]{1,12}\/[a-z0-9]{1,8}$/', $x) && !in_array($x, $out, true)) $out[] = $x;
         if (count($out) >= 200) break;
     }
     return $out;
@@ -270,6 +270,25 @@ function hw_progress(int $uid, array $tasks): array {
         foreach ($sids as $sid) if (!empty($st[$sid]['ok'])) $solved++;
     }
     return ['total' => count($tasks), 'solved' => $solved];
+}
+function clean_hw_input(): array {
+    $hw = trim(str_replace("\r", '', (string)arg('homework')));
+    if (mb_strlen($hw, 'UTF-8') > 5000) fail('Домашнее задание слишком длинное (до 5000 символов)');
+    $due = (string)arg('hw_due');
+    if ($due !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $due)) fail('Неверная дата');
+    return [$hw, clean_tasks(arg('hw_tasks', [])), $due];
+}
+function save_info(int $id, string $hw, array $tasks, string $due, ?array $sched): void {
+    // $sched === null — расписание не трогаем. Прогресс и ответы ученика здесь не меняются никогда.
+    $old = info_of($id);
+    $changed = $hw !== $old['homework'] || $due !== $old['hw_due'] || $tasks !== $old['hw_tasks'];
+    $hwSet = $changed ? (($hw === '' && !$tasks) ? 0 : time()) : $old['hw_set'];
+    $hwDone = $changed ? 0 : $old['hw_done'];
+    $j = json_encode($sched ?? $old['schedule'], JSON_UNESCAPED_UNICODE);
+    if (one('SELECT user_id FROM inf_student_info WHERE user_id = ?', [$id]))
+        q('UPDATE inf_student_info SET schedule = ?, homework = ?, hw_tasks = ?, hw_due = ?, hw_set = ?, hw_done = ?, updated = ? WHERE user_id = ?', [$j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time(), $id]);
+    else
+        q('INSERT INTO inf_student_info (user_id, schedule, homework, hw_tasks, hw_due, hw_set, hw_done, updated) VALUES (?,?,?,?,?,?,?,?)', [$id, $j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time()]);
 }
 function clean_schedule($s): array {
     $out = [];
@@ -404,22 +423,36 @@ case 'info_set':
     need_teacher();
     $id = (int)arg('id');
     if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) fail('Ученик не найден', 404);
-    $old = info_of($id);
-    $sched = clean_schedule(arg('schedule', []));
-    $hw = trim(str_replace("\r", '', (string)arg('homework')));
-    if (mb_strlen($hw, 'UTF-8') > 5000) fail('Домашнее задание слишком длинное (до 5000 символов)');
-    $due = (string)arg('hw_due');
-    if ($due !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $due)) fail('Неверная дата');
-    $tasks = clean_tasks(arg('hw_tasks', []));
-    $changed = $hw !== $old['homework'] || $due !== $old['hw_due'] || $tasks !== $old['hw_tasks'];
-    $hwSet = $changed ? (($hw === '' && !$tasks) ? 0 : time()) : $old['hw_set'];
-    $hwDone = $changed ? 0 : $old['hw_done'];
-    $j = json_encode($sched, JSON_UNESCAPED_UNICODE);
-    if (one('SELECT user_id FROM inf_student_info WHERE user_id = ?', [$id]))
-        q('UPDATE inf_student_info SET schedule = ?, homework = ?, hw_tasks = ?, hw_due = ?, hw_set = ?, hw_done = ?, updated = ? WHERE user_id = ?', [$j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time(), $id]);
-    else
-        q('INSERT INTO inf_student_info (user_id, schedule, homework, hw_tasks, hw_due, hw_set, hw_done, updated) VALUES (?,?,?,?,?,?,?,?)', [$id, $j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time()]);
+    [$hw, $tasks, $due] = clean_hw_input();
+    save_info($id, $hw, $tasks, $due, clean_schedule(arg('schedule', [])));
     out(['ok' => true] + info_of($id));
+
+case 'hw_assign':
+    // Учитель выдаёт одну домашку сразу нескольким ученикам (группе). Расписание и ответы учеников не трогаются.
+    need_post();
+    need_teacher();
+    $ids = arg('ids', []);
+    if (!is_array($ids)) fail('Не выбраны ученики');
+    $ids = array_values(array_unique(array_map('intval', $ids)));
+    if (!$ids) fail('Выберите хотя бы одного ученика');
+    if (count($ids) > 300) fail('Слишком много учеников за раз');
+    [$hw, $tasks, $due] = clean_hw_input();
+    $add = arg('mode') === 'add';
+    if (!$add && $hw === '' && !$tasks) fail('Выберите задачи или напишите задание словами');
+    $done = 0;
+    foreach ($ids as $id) {
+        if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) continue;
+        if ($add) {
+            // добавить к текущей домашке: задачи объединяются, текст дописывается с новой строки
+            $o = info_of($id);
+            $t = clean_tasks(array_merge($o['hw_tasks'], $tasks));
+            $x = $o['homework'] === '' ? $hw : ($hw === '' || strpos($o['homework'], $hw) !== false ? $o['homework'] : $o['homework'] . "\n\n" . $hw);
+            if (mb_strlen($x, 'UTF-8') > 5000) $x = mb_substr($x, 0, 5000, 'UTF-8');
+            save_info($id, $x, $t, $due !== '' ? $due : $o['hw_due'], null);
+        } else save_info($id, $hw, $tasks, $due, null);
+        $done++;
+    }
+    out(['ok' => true, 'count' => $done]);
 
 case 'leaderboard':
     // Топ-5 учеников по монеткам. Ученикам — имя и первая буква фамилии, учителю — полностью.
