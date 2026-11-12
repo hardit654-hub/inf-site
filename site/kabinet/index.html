@@ -167,6 +167,8 @@ details.pw .row{margin-top:12px}
 .done{display:inline-flex;align-items:center;gap:6px;color:var(--green-ink);font-weight:600}
 .fbar{margin-bottom:16px}.fbar .seg{margin-bottom:10px}.fbar .seg.sub2{margin-bottom:0;padding-top:10px;border-top:1px solid var(--line)}
 .tab .cnt{opacity:.6;font-size:.88em;margin-left:2px}.tab.sm{height:32px;font-size:13.5px;padding:0 12px}
+.vlist{display:flex;flex-direction:column;gap:10px}.vrow{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 14px;border:1px solid var(--line);border-radius:12px}
+.vrow b{display:block}.vrow .muted{font-size:13.5px}.vrow .acts{display:flex;gap:6px}
 .bulk{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;margin:0 0 12px;border:1px dashed var(--line);border-radius:12px;font-size:14px;color:var(--muted)}
 .bulk.on{border-style:solid;border-color:var(--green);background:var(--green-soft);color:var(--ink)}
 .bacts,.bgrp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.bgrp input{width:130px;height:34px;padding:0 10px}
@@ -211,6 +213,7 @@ textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc
 .hwl h4{margin:10px 0 2px;font:600 14px var(--f-body);color:var(--muted)}
 .hwi{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:var(--card)}
 .hwi:hover{border-color:var(--green)}
+.hwd summary{cursor:pointer;color:var(--muted);font-size:14px;padding:6px 2px}.hwd[open] summary{margin-bottom:6px}.hwd .hwi{margin-bottom:6px}
 .hwi .ic2{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
 .hwi.ok .ic2{background:var(--green);border-color:var(--green);color:#0f2a12}
 .hwi.ok{background:var(--green-soft);border-color:transparent}
@@ -296,7 +299,9 @@ async function api(action,body,params){
   return j;
 }
 async function catalog(){
-  if(!CAT){const r=await fetch("courses.json",{cache:"no-store"});CAT=(await r.json()).courses}
+  if(!CAT){const r=await fetch("courses.json",{cache:"no-store"});CAT=(await r.json()).courses;
+    // закрытые варианты (СтатГрад и т. п.) — только для вошедших
+    if(ME){try{CAT=CAT.concat((await api("materials")).materials||[])}catch(e){}}}
   return CAT;
 }
 function header(){
@@ -308,7 +313,7 @@ function header(){
 }
 function setBusy(btn,on,text){if(on){btn.dataset.t=btn.textContent;btn.textContent=text||"Подождите…";btn.disabled=true}else{btn.textContent=btn.dataset.t||btn.textContent;btn.disabled=false}}
 function msg(el,text,good){el.hidden=!text;el.textContent=text||"";el.className="msg"+(good?" good":"")}
-const nextUrl=()=>{const n=new URLSearchParams(location.search).get("next")||"";return /^\.\.\/[\w\-\/]*\/?(#[\w.\-]*)?$/.test(n)?n:""};
+const nextUrl=()=>{const n=new URLSearchParams(location.search).get("next")||"";return /^\.\.\/[\w\-\/]*\/?(\?m=[\w\-]+)?(#[\w.\-]*)?$/.test(n)?n:""};
 function clearLocal(){try{Object.keys(localStorage).filter(k=>k.indexOf("course-")===0).forEach(k=>localStorage.removeItem(k))}catch(e){}}
 
 /* ---------- вход ---------- */
@@ -323,7 +328,7 @@ function viewLogin(teacherExists){
   const f=document.getElementById("f"),m=document.getElementById("m"),go=document.getElementById("go");
   document.getElementById("l").focus();
   f.onsubmit=async e=>{e.preventDefault();msg(m,"");setBusy(go,true,"Входим…");
-    try{const j=await api("login",{login:f.l.value,password:f.p.value});ME=j.user;clearLocalIfOther();const n=nextUrl();if(n){location.href=n;return}route()}
+    try{const j=await api("login",{login:f.l.value,password:f.p.value});ME=j.user;CAT=null;clearLocalIfOther();const n=nextUrl();if(n){location.href=n;return}route()}
     catch(err){msg(m,err.message);setBusy(go,false)}};
 }
 function clearLocalIfOther(){
@@ -378,7 +383,7 @@ async function viewStudent(){
     return `<article class="course"><h3>${esc(c.title)}</h3>
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
       <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
-      ${s.lessons.filter(l=>l.total).map(l=>`<div class="lrow"><span>${esc(l.num+" "+l.title)}</span><div class="meter"><i style="width:${pct(l.done,l.total)}%"></i></div><b>${l.done}/${l.total}</b></div>`).join("")}
+      ${s.lessons.filter(l=>l.total).map(l=>`<div class="lrow"><span>${c.kind==="variant"?`<a href="${esc(c.url)}#${esc(l.num)}-1">${esc(l.title)}</a>`:esc(l.num+" "+l.title)}</span><div class="meter"><i style="width:${pct(l.done,l.total)}%"></i></div><b>${l.done}/${l.total}</b></div>`).join("")}
       <a class="btn" href="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
     ${pwCard()}`;
   bindPw();
@@ -392,10 +397,17 @@ function hwTasksHTML(tasks){
   tasks.forEach(tk=>{const [key,sid]=tk.split("|");const c=HWCTX.cat.find(x=>x.key===key);if(!c)return;
     const [ln,sk]=sid.split("/");const L=c.lessons.find(l=>l.num===ln);if(!L)return;const sn=P(L,sk);if(!sn)return;
     const st=((HWCTX.prog[key]||{}).data||{}).st||{};const ok=!!(st[sid]&&st[sid].ok);if(ok)solved++;
-    let g=groups.find(x=>x.k===key+ln);if(!g){g={k:key+ln,title:c.title.replace(/ ·.*/,"")+" · "+ln+" "+L.title,items:[]};groups.push(g)}
-    g.items.push(`<a class="hwi${ok?" ok":""}" href="${esc(c.url)}#${ln}-${sn}"><span class="ic2">${ok?"✓":""}</span><b>Шаг ${sn}</b><span>${esc(L.labels?L.labels[sn-1]||"":"")}</span></a>`)});
+    const vr=c.kind==="variant";
+    let g=groups.find(x=>x.k===key+ln);if(!g){g={k:key+ln,vr,url:c.url+"#"+ln+"-1",title:vr?c.title+" · "+L.title:c.title.replace(/ ·.*/,"")+" · "+ln+" "+L.title,
+      all:L.steps.filter(x=>x==="task").length,ok:0,items:[]};groups.push(g)}
+    if(ok)g.ok++;
+    const lab=(L.labels?L.labels[sn-1]||"":"");
+    g.items.push(`<a class="hwi${ok?" ok":""}" href="${esc(c.url)}#${ln}-${sn}"><span class="ic2">${ok?"✓":""}</span><b>${vr?"№ "+sn:"Шаг "+sn}</b><span>${esc(vr?lab.replace(/^№ \d+\.\s*/,""):lab)}</span></a>`)});
   const n=groups.reduce((a,g)=>a+g.items.length,0);
-  return `<div class="hwbar">${solved>=n?"<b>✓ Все задачи решены</b>":`Решено <b>${solved} из ${n}</b>`}<div class="meter"><i style="width:${pct(solved,n)}%"></i></div></div><div class="hwl">${groups.map(g=>`<h4>${esc(g.title)}</h4>${g.items.join("")}`).join("")}</div>`;
+  // вариант, заданный целиком, — одной строкой, список задач раскрывается
+  const gh=g=>g.vr&&g.items.length===g.all?`<h4>${esc(g.title)}</h4><a class="hwi hwv${g.ok>=g.all?" ok":""}" href="${esc(g.url)}"><span class="ic2">${g.ok>=g.all?"✓":""}</span><b>Весь вариант</b><span>решено ${g.ok} из ${g.all}</span></a><details class="hwd"><summary>Задачи варианта</summary>${g.items.join("")}</details>`
+    :`<h4>${esc(g.title)}</h4>${g.items.join("")}`;
+  return `<div class="hwbar">${solved>=n?"<b>✓ Все задачи решены</b>":`Решено <b>${solved} из ${n}</b>`}<div class="meter"><i style="width:${pct(solved,n)}%"></i></div></div><div class="hwl">${groups.map(gh).join("")}</div>`;
 }
 function infoCards(i){
   const nb=nextLesson(i.schedule);
@@ -445,10 +457,12 @@ async function viewTeacher(){
   app.innerHTML=`<nav class="tabs" role="tablist">
      <button class="tab" role="tab" data-t="students">Ученики</button>
      <button class="tab" role="tab" data-t="progress">Прогресс</button>
+     <button class="tab" role="tab" data-t="variants">Варианты</button>
      <button class="tab" role="tab" data-t="rating">Рейтинг</button></nav><div id="pane"><div class="loading">Загрузка…</div></div>`;
   app.querySelectorAll(".tab").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;try{sessionStorage.setItem("kab-tab",TAB)}catch(e){}viewTeacher()}});
   try{STUDENTS=(await api("students")).students}catch(e){document.getElementById("pane").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
   if(TAB==="rating"){document.getElementById("pane").innerHTML=await lbCard(true);return}
+  if(TAB==="variants"){paneVariants();return}
   TAB==="students"?paneStudents():paneProgress();
 }
 function credText(login,pass){return "Сайт: "+SITE+"\nЛогин: "+login+"\nПароль: "+pass}
@@ -637,6 +651,46 @@ function syncPicker(){
       const a=l.querySelector(".lall");a.checked=k===t.length;a.indeterminate=k>0&&k<t.length;l.querySelector("[data-lc]").textContent=k?k+" из "+t.length:t.length+" задач"});
     const pc=p.querySelector("[data-pc]");pc.textContent=n?"выбрано: "+n:"";pc.classList.toggle("on",n>0);all+=n});
   const el=document.getElementById("pkall");if(el)el.textContent=all?"— выбрано "+all:"";
+}
+/* ---------- варианты (закрытые материалы) ---------- */
+async function paneVariants(note){
+  const pane=document.getElementById("pane");
+  let list=[];try{list=(await api("materials")).materials||[]}catch(e){pane.innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
+  pane.innerHTML=`${note||""}<div class="card"><h2>Варианты · ${list.length}</h2><p class="sub">Видны только вошедшим ученикам. Задать вариант домашкой: «Ученики» → «Задать домашку» или «Занятия и ДЗ» → отметьте вариант целиком.</p>
+   ${list.length?`<div class="vlist">${list.map(c=>{const t=c.lessons.reduce((a,l)=>a+l.steps.filter(x=>x==="task").length,0);
+     return `<div class="vrow"><div><b>${esc(c.title)}</b><span class="muted">${c.lessons.map(l=>esc(l.title)).join(", ")} · ${t} задач с проверкой</span></div>
+      <div class="acts"><a class="btn small" href="${esc(c.url)}" target="_blank" rel="noopener">Открыть</a><button class="btn danger small" type="button" data-vdel="${esc(c.mid)}">Удалить</button></div></div>`}).join("")}</div>`:'<p class="empty">Пока нет ни одного варианта.</p>'}</div>
+   <div class="card"><h2>Загрузить вариант</h2><p class="sub">Выберите папку варианта, которую подготовил Claude (в ней лежит файл manifest.json и папки img и files). Если такой вариант уже есть, он обновится — ответы учеников сохранятся.</p>
+    <div class="row"><input type="file" id="vdir" webkitdirectory directory multiple hidden><button class="btn" type="button" id="vpick">Выбрать папку…</button><span class="muted" id="vname"></span></div>
+    <div id="vprog" hidden><div class="meter" style="margin-top:12px"><i id="vbar" style="width:0%"></i></div><p class="note" id="vstat"></p></div><div id="vmsg" hidden></div></div>`;
+  pane.querySelectorAll("[data-vdel]").forEach(b=>b.onclick=async()=>{
+    if(!b.classList.contains("sure")){b.classList.add("sure");b.textContent="Точно удалить вариант?";setTimeout(()=>{b.classList.remove("sure");b.textContent="Удалить"},4000);return}
+    try{await api("material_delete",{mid:b.dataset.vdel});CAT=null;paneVariants()}catch(e){alert(e.message)}});
+  const inp=document.getElementById("vdir");
+  document.getElementById("vpick").onclick=()=>inp.click();
+  inp.onchange=()=>uploadVariant([...inp.files]);
+}
+async function uploadVariant(files){
+  const m=document.getElementById("vmsg"),prog=document.getElementById("vprog"),bar=document.getElementById("vbar"),stat=document.getElementById("vstat");
+  const rel=f=>(f.webkitRelativePath||f.name).split("/").slice(1).join("/")||f.name;
+  const man=files.find(f=>rel(f)==="manifest.json");
+  if(!man){msg(m,"В папке нет файла manifest.json — выберите папку варианта целиком.");return}
+  let mf;try{mf=JSON.parse(await man.text())}catch(e){msg(m,"Не получилось прочитать manifest.json");return}
+  const rest=files.filter(f=>/^(img|files)\//.test(rel(f))&&!/\/\./.test(rel(f)));
+  const CH=512*1024;const total=rest.reduce((a,f)=>a+Math.max(1,Math.ceil(f.size/CH)),0)+1;let done=0;
+  msg(m,"");prog.hidden=false;document.getElementById("vpick").disabled=true;
+  const step=t=>{done++;bar.style.width=Math.round(done/total*100)+"%";stat.textContent=t};
+  try{
+    await api("material_put",{mid:mf.mid,title:mf.title,course:mf.course,catalog:mf.catalog});step("Задания загружены");
+    for(const f of rest){const parts=Math.max(1,Math.ceil(f.size/CH));
+      for(let i=0;i<parts;i++){
+        const body=f.slice(i*CH,(i+1)*CH);
+        const r=await fetch(API+"?action=mfile_put&m="+encodeURIComponent(mf.mid)+"&f="+encodeURIComponent(rel(f))+"&part="+i,{method:"POST",headers:{"X-Inf":"1","Content-Type":"application/octet-stream"},body,credentials:"same-origin"});
+        let j=null;try{j=await r.json()}catch(e){}
+        if(!r.ok||!j||!j.ok)throw new Error((j&&j.error)||("Ошибка загрузки "+rel(f)+" ("+r.status+")"));
+        step("Файл "+rel(f)+(parts>1?" — часть "+(i+1)+" из "+parts:""))}}
+    CAT=null;paneVariants(`<div class="card"><div class="msg good" role="status">Вариант «${esc(mf.title)}» загружен. Его уже можно задавать домашкой.</div></div>`);
+  }catch(e){msg(m,e.message+". Попробуйте ещё раз — уже загруженное просто перезапишется.");document.getElementById("vpick").disabled=false}
 }
 function alertBox(t){const m=document.getElementById("am");if(m)msg(m,t)}
 async function paneProgress(){

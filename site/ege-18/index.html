@@ -271,6 +271,10 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
   .step h2{font-size:22px}
 }
 @media (prefers-reduced-motion:reduce){.toc,.tocbtn,.main,.tocbtn svg{transition:none}}
+/* задания вариантов, перенесённые из PDF */
+.step p.c{text-align:center}.step p.fig{text-align:center;margin:14px 0}.step p.fig img{max-width:100%;height:auto;border-radius:4px;background:#fff}
+.step table.plain{border:0;margin:6px 0 12px}.step table.plain td{border:0;padding:1px 22px 1px 0;background:none}
+.step .vnote{padding:10px 14px;border-radius:10px;background:var(--warn-soft);border:1px solid var(--warn);margin-bottom:14px}
 </style>
 </head>
 <body>
@@ -1257,7 +1261,8 @@ window.COURSE = {
 
 </script>
 <script>
-(function(){
+/* Курс запускается сразу, если данные встроены в страницу; закрытые варианты подгружаются с сервера и запускают его сами (window.__course). */
+function __course(){
 const C=window.COURSE, SEC=C.section, KEY="course-"+C.id+"-s"+SEC.num;
 let S={pos:null,st:{}};
 try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&x.st)S=x}catch(e){}
@@ -1303,7 +1308,7 @@ function paintAcct(){
   const a=$("acct");if(!a)return;a.hidden=false;
   a.classList.toggle("in",!!ME);a.classList.toggle("err",!!ME&&syncErr);
   a.querySelector("span").textContent=ME?ME.name.split(" ")[0]:"Войти";
-  const href=()=>"../kabinet/"+(ME?"":"?next="+encodeURIComponent("../"+location.pathname.split("/").slice(-2,-1)[0]+"/"+location.hash));
+  const href=()=>"../kabinet/"+(ME?"":"?next="+encodeURIComponent("../"+location.pathname.split("/").slice(-2,-1)[0]+"/"+location.search+location.hash));
   a.href=href();a.onclick=()=>{a.href=href()};
   a.title=ME?(syncErr?"Нет связи с сервером — ответы сохранены на этом устройстве и отправятся позже":"Личный кабинет · прогресс сохраняется"):"Войти, чтобы прогресс сохранялся на любом устройстве";
 }
@@ -1525,7 +1530,7 @@ function fillHTML(s,x){
       const val=(v[fi]||[])[k]||"";
       let cls="";if(x.last!=null&&val!=="")cls=norm(val)===norm(s.answer[fi][k])?"ok":"bad";
       if(x.ok)cls="ok";
-      h+=`<input id="f${fi}_${k}" data-f="${fi}" data-k="${k}" inputmode="numeric" autocomplete="off" value="${esc(val)}" class="${cls}" ${x.ok?"readonly":""} aria-label="${esc(f.label)}${f.n>1?", значение "+(k+1):""}">`;
+      h+=`<input id="f${fi}_${k}" data-f="${fi}" data-k="${k}" inputmode="${f.txt?"text":"numeric"}" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(val)}" class="${cls}" ${x.ok?"readonly":""} aria-label="${esc(f.label)}${f.n>1?", значение "+(k+1):""}">`;
     }
     h+=`</div>`;
   });
@@ -1659,7 +1664,8 @@ document.addEventListener("click",async e=>{
 window.addEventListener("hashchange",fromHash);
 fromHash();
 initSync();
-})();
+}
+if(window.COURSE)__course();else window.__course=__course;
 </script>
 </body>
 </html>
