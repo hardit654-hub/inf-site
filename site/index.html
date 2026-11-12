@@ -148,16 +148,14 @@ const SITE = {
   courses: {
     title: "Курсы", lead: "Пошаговые уроки с теорией, шаблонами решений и задачами с автопроверкой.",
     items: [
-      { title: "№ 4. Кодирование. Условие Фано", tag: "ЕГЭ · неравномерный код", text: "Прямое и обратное условие Фано, кратчайший код, минимальная длина слова. Устное решение и шаблон на Python.", meta: ["7 уроков", "84 шага", "60 задач"], href: "ege-4/", icon: "course" },
-      { title: "№ 12. Машина Тьюринга", tag: "ЕГЭ · исполнитель МТ", text: "Как читать таблицу программы, устное решение и проверка в Python. Задачи демоверсии 2026 и сборника Крылова.", meta: ["9 уроков", "120 шагов", "92 задачи"], href: "ege-12/", icon: "course" },
-      { title: "№ 18. Динамика в электронных таблицах", tag: "ЕГЭ · электронные таблицы", text: "Робот собирает монеты: максимум и минимум, стены, угловые клетки. Решение в Excel и LibreOffice, задачи с файлами.", meta: ["3 урока", "31 шаг", "23 задачи"], href: "ege-18/", icon: "course" },
-      { title: "№ 19–21. Решение в Python", tag: "ЕГЭ · теория игр", text: "Одна куча, две кучи, убирание камней, условия на ходы. Шаблон рекурсивного решения и 37 задач.", meta: ["6 уроков", "61 шаг", "37 задач"], href: "ege-19-21/", icon: "course" },
+      { title: "ЕГЭ", tag: "ЕГЭ · информатика", text: "Все задания в одном курсе: № 4 — условие Фано, № 12 — машина Тьюринга, № 18 — динамика в электронных таблицах, № 19–21 — теория игр в Python. Теория, шаблоны решений и задачи с автопроверкой.", meta: ["4 раздела", "25 уроков", "219 задач"], href: "ege/", icon: "course" },
     ]
   },
   variants: {
     title: "Варианты", lead: "Полные варианты в формате экзамена: с файлами к заданиям и проверкой ответов.",
     items: [
       { title: "Демоверсия ЕГЭ‑2027", tag: "ЕГЭ · ФИПИ", text: "Все 27 заданий демоверсии с файлами. Ответ подсвечивается сразу, после трёх попыток можно открыть правильный.", meta: ["27 заданий", "файлы к заданиям"], href: "ege-demo-site/", icon: "variant" },
+      { title: "СтатГрад — тренировочные работы", tag: "ЕГЭ · только для учеников", text: "Тренировочные варианты СтатГрада с файлами и проверкой ответов. Открываются после входа в личный кабинет.", meta: ["нужен вход"], href: "kabinet/", icon: "variant", locked: true },
     ]
   },
   tests: {
@@ -206,6 +204,13 @@ window.addEventListener("hashchange",fromHash);fromHash();
 <script>
 /* Кнопка «Войти»: если ученик уже вошёл — показываем имя и ведём в кабинет */
 fetch("api/index.php?action=me",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).then(j=>{
+  if(j&&j.user)fetch("api/index.php?action=materials",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).then(m=>{
+    if(!m||!m.ok)return;
+    const items=SITE.variants.items.filter(x=>!x.locked);
+    (m.materials||[]).forEach(c=>{const t=c.lessons.reduce((a,l)=>a+l.steps.filter(x=>x==="task").length,0);
+      items.push({title:c.title.replace(/^СтатГрад · /,""),tag:"СтатГрад · для учеников",text:c.lessons.map(l=>l.title).join(", ")+". Файлы к заданиям и проверка ответов.",meta:[c.lessons.length+" вар.",t+" задач"],href:c.url.replace(/^\.\.\//,""),icon:"variant"})});
+    SITE.variants.items=items;fromHash();
+  }).catch(()=>{});
   if(j&&j.user){const s=document.querySelector("#login span");s.textContent=j.user.name.split(" ")[0];const l=document.getElementById("login");l.title="Личный кабинет · монеток: "+(j.coins||0);
     if(j.user.role==="student"){const c=document.createElement("b");c.className="lcoin";c.innerHTML='<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/></svg>'+(j.coins||0);l.appendChild(c)}}
 }).catch(()=>{});

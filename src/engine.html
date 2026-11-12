@@ -118,6 +118,11 @@ button{font:inherit}
 .toc-list{flex:1;overflow-y:auto;padding:8px 0 24px}
 .mod{display:flex;gap:8px;align-items:baseline;padding:14px 18px 8px;font:700 15px/1.3 var(--f-body)}
 .mod .n{color:var(--bar-muted)}
+.mod.sec{width:100%;border:0;background:none;color:var(--bar-ink);cursor:pointer;text-align:left;align-items:center;padding:13px 18px 13px 14px;border-top:1px solid var(--bar-line)}
+.mod.sec:hover{background:#ffffff0d}.mod.sec .st{flex:1;min-width:0}.mod.sec .c{font:500 12px var(--f-mono);color:var(--bar-muted)}
+.mod.sec .chev{display:inline-block;width:14px;color:var(--bar-muted);transition:transform .15s;font-size:18px;line-height:1}.mod.sec.open .chev{transform:rotate(90deg)}
+.mod.sec.cur .st{color:#fff}
+.lbar .lsec{color:var(--muted);font-weight:600}
 .les{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;color:var(--bar-ink);padding:10px 22px 10px 30px;cursor:pointer;position:relative;font-size:15px;line-height:1.3}
 .les::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:#4a4c52}
 .les.part::before{background:linear-gradient(var(--green) var(--p,0%),#4a4c52 var(--p,0%))}
@@ -310,9 +315,15 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
 <script>
 /* Курс запускается сразу, если данные встроены в страницу; закрытые варианты подгружаются с сервера и запускают его сами (window.__course). */
 function __course(){
-const C=window.COURSE, SEC=C.section, KEY="course-"+C.id+"-s"+SEC.num;
-let S={pos:null,st:{}};
-try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&x.st)S=x}catch(e){}
+const C=window.COURSE;
+/* Курс может состоять из нескольких разделов (ЕГЭ: № 4, № 12, …). Прогресс каждого раздела хранится под своим ключом,
+   как раньше на отдельных страницах, поэтому ответы, монетки и домашка учеников не теряются. */
+const SECS=(C.sections||[C.section]).map(s=>Object.assign(s,{key:s.key||("course-"+C.id+"-s"+s.num)}));
+const MULTI=SECS.length>1;
+const POSKEY="pos-"+C.id+(MULTI?"-all":"-s"+SECS[0].num);
+const SS={};
+SECS.forEach(s=>{let x={pos:null,st:{}};try{const y=JSON.parse(localStorage.getItem(s.key)||"null");if(y&&y.st)x=y}catch(e){}SS[s.key]=x});
+const DIRTY=new Set();
 /* Синхронизация с личным кабинетом: если ученик вошёл, прогресс уходит на сервер (../api). Без входа всё работает как раньше — только на этом устройстве. */
 const API="../api/index.php";
 let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false,COINS=null,HW=new Set();
@@ -320,7 +331,8 @@ const COIN_SVG='<svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle
 /* Монетки: 3 за задачу минус 1 за каждую неверную попытку; если смотрели ответ — 0.
    С кабинетом считает сервер (каждая задача оплачивается один раз навсегда), без кабинета — по ответам на этом устройстве. */
 const coinFor=x=>x&&x.ok&&!x.rev?Math.max(0,3-(x.att||0)):0;
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(ME){dirty=true;clearTimeout(syncT);syncT=setTimeout(push,1200)}};
+const saveKey=k=>{try{localStorage.setItem(k,JSON.stringify(SS[k]))}catch(e){}};
+const save=(k)=>{k=k||lessons[cur.li].ckey;saveKey(k);DIRTY.add(k);if(ME){dirty=true;clearTimeout(syncT);syncT=setTimeout(push,1200)}};
 function mergeRec(a,b){
   if(!a)return b;if(!b)return a;
   const src=(a.ok&&!b.ok)?a:b,oth=src===a?b:a,r={};
@@ -346,10 +358,15 @@ async function push(keepalive){
   if(!ME||!dirty)return;
   if(syncing){clearTimeout(syncT);syncT=setTimeout(push,800);return}
   syncing=true;dirty=false;
-  const reset=!!S._reset,data=Object.assign({},S);delete data._reset;delete data.uid;
-  try{const j=await api("progress_put",{key:KEY,data,reset},keepalive);delete S._reset;syncErr=false;if(typeof j.coins==="number"){COINS=j.coins;paintCoins(j.gained||0)}}
-  catch(e){dirty=true;syncErr=true;if(e.status===401){ME=null}}
-  finally{syncing=false;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}paintAcct();if(dirty&&ME){clearTimeout(syncT);syncT=setTimeout(push,15000)}}
+  const keys=[...DIRTY];DIRTY.clear();
+  try{
+    for(const k of keys){
+      const S=SS[k],reset=!!S._reset,data=Object.assign({},S);delete data._reset;delete data.uid;
+      try{const j=await api("progress_put",{key:k,data,reset},keepalive);delete S._reset;syncErr=false;if(typeof j.coins==="number"){COINS=j.coins;paintCoins(j.gained||0)}}
+      catch(e){dirty=true;DIRTY.add(k);syncErr=true;if(e.status===401){ME=null;break}}
+      saveKey(k);
+    }
+  }finally{syncing=false;paintAcct();if(dirty&&ME){clearTimeout(syncT);syncT=setTimeout(push,15000)}}
 }
 function paintAcct(){
   const a=$("acct");if(!a)return;a.hidden=false;
@@ -360,26 +377,35 @@ function paintAcct(){
   a.title=ME?(syncErr?"Нет связи с сервером — ответы сохранены на этом устройстве и отправятся позже":"Личный кабинет · прогресс сохраняется"):"Войти, чтобы прогресс сохранялся на любом устройстве";
 }
 async function pull(first){
-  let g;try{g=await api("progress_get&key="+KEY)}catch(e){if(e.status===401){ME=null;paintAcct()}return}
-  if(typeof g.coins==="number"){COINS=g.coins;paintCoins(0)}
-  const hadLocal=Object.keys(S.st||{}).length>0;
-  const m=mergeState(g.data,S);m.uid=ME.id;if(S._reset)m._reset=true;
-  const changed=JSON.stringify(m.st)!==JSON.stringify((g.data&&g.data.st)||{});
-  const localChanged=JSON.stringify(m.st)!==JSON.stringify(S.st||{});
-  S=m;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
-  if(changed){dirty=true;push()}
-  if(first&&!hadLocal&&!location.hash&&S.pos&&lessons[S.pos.li]&&lessons[S.pos.li].steps)go(S.pos.li,S.pos.si);
-  else if(localChanged){const a=document.activeElement;if(!(a&&a.matches&&a.matches(".frow input")))render()}
+  let anyLocal=false,needPush=false;
+  for(const sec of SECS){
+    const k=sec.key;let g;
+    try{g=await api("progress_get&key="+k)}catch(e){if(e.status===401){ME=null;paintAcct()}return}
+    if(typeof g.coins==="number"){COINS=g.coins;paintCoins(0)}
+    const S=SS[k];
+    const m=mergeState(g.data,S);m.uid=ME.id;if(S._reset)m._reset=true;
+    const changed=JSON.stringify(m.st)!==JSON.stringify((g.data&&g.data.st)||{});
+    if(JSON.stringify(m.st)!==JSON.stringify(S.st||{}))anyLocal=true;
+    // меняем содержимое на месте: открытый шаг держит ссылки на раздел и на запись задачи —
+    // так ответ, введённый, пока шла загрузка, не потеряется
+    const old=S.st||{};
+    Object.keys(m.st).forEach(x=>{const o=old[x];if(o&&o!==m.st[x]){Object.keys(o).forEach(y=>delete o[y]);Object.assign(o,m.st[x]);m.st[x]=o}});
+    Object.keys(S).forEach(x=>delete S[x]);Object.assign(S,m);
+    saveKey(k);
+    if(changed){DIRTY.add(k);needPush=true}
+  }
+  if(needPush){dirty=true;push()}
+  if(first&&!location.hash&&!new URLSearchParams(location.search).get("s")){const p=savedPos();if(p&&(p.li!==cur.li||p.si!==cur.si)){go(p.li,p.si);return}}
+  if(anyLocal){const a=document.activeElement;if(!(a&&a.matches&&a.matches(".frow input")))render()}
 }
 async function initSync(){
   try{const j=await api("me");ME=j.user;if(ME){COINS=j.coins||0}}catch(e){paintCoins(0);return}  // нет сервера (например, страница открыта с диска) — работаем локально
-  if(ME&&S.uid&&S.uid!==ME.id)S={pos:null,st:{}};  // на этом устройстве остался чужой прогресс
-  if(!ME&&S.uid){/* вышли из кабинета: локальный прогресс оставляем, при входе он сольётся */}
+  SECS.forEach(sec=>{const S=SS[sec.key];if(ME&&S.uid&&S.uid!==ME.id){SS[sec.key]={pos:null,st:{}};saveKey(sec.key)}});  // на этом устройстве остался чужой прогресс
   paintAcct();paintCoins(0);
-  if(ME){try{const i=await api("info_get");(i.hw_tasks||[]).forEach(x=>{const [k,s]=x.split("|");if(k===KEY)HW.add(s)})}catch(e){}
+  if(ME){try{const i=await api("info_get");(i.hw_tasks||[]).forEach(x=>HW.add(x))}catch(e){}
     await pull(true);render()}
 }
-function localCoins(){let s=0;lessons.forEach((L,li)=>(L.steps||[]).forEach((st,si)=>{if(isTask(st))s+=coinFor(S.st[sid(li,si)])}));return s}
+function localCoins(){let s=0;lessons.forEach((L,li)=>(L.steps||[]).forEach((st,si)=>{if(isTask(st))s+=coinFor(rec(li,si))}));return s}
 function paintCoins(gained){
   const el=$("coins");if(!el)return;
   const n=ME&&COINS!=null?COINS:localCoins();
@@ -413,13 +439,23 @@ const ICON={
   lock:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>'
 };
 const isTask=s=>s.type==="choice"||s.type==="fill"||s.type==="match";
-const lessons=SEC.lessons;
+const lessons=[];
+SECS.forEach((sec,i)=>{sec.idx=i;sec.off=lessons.length;sec.lessons.forEach(L=>{L.sec=sec;L.ckey=sec.key;lessons.push(L)})});
 /* стабильные ключи шагов: вставленные шаги имеют свой key, остальные нумеруются по порядку без них,
    поэтому прогресс и монеты старых шагов не сдвигаются */
 lessons.forEach(L=>{let n=0;L.keys=(L.steps||[]).map(s=>s.key||String(++n))});
 const sid=(li,si)=>lessons[li].num+"/"+lessons[li].keys[si];
-const st=(li,si)=>S.st[sid(li,si)]||(S.st[sid(li,si)]={});
-const passed=(li,si)=>{const s=lessons[li].steps[si],x=S.st[sid(li,si)]||{};return isTask(s)?!!x.ok:!!x.seen};
+const hwId=(li,si)=>lessons[li].ckey+"|"+sid(li,si);
+const SL=li=>SS[lessons[li].ckey];
+const rec=(li,si)=>SL(li).st[sid(li,si)];
+const st=(li,si)=>{const T=SL(li).st;return T[sid(li,si)]||(T[sid(li,si)]={})};
+const passed=(li,si)=>{const s=lessons[li].steps[si],x=rec(li,si)||{};return isTask(s)?!!x.ok:!!x.seen};
+function savedPos(){
+  try{const p=JSON.parse(localStorage.getItem(POSKEY)||"null");if(p){const sec=SECS.find(s=>s.key===p.k);if(sec&&sec.lessons[p.li]&&sec.lessons[p.li].steps)return{li:sec.off+p.li,si:p.si}}}catch(e){}
+  const sec=SECS[0],q=SS[sec.key].pos;  // как раньше: позиция внутри раздела
+  if(!MULTI&&q&&sec.lessons[q.li]&&sec.lessons[q.li].steps)return{li:q.li,si:q.si};
+  return null;
+}
 
 /* python highlighting */
 function hl(src){
@@ -477,29 +513,38 @@ function lessonStat(li){
   L.steps.forEach((s,i)=>{if(passed(li,i))done++;if(isTask(s)){tasks++;if(passed(li,i))ok++}});
   return {done,total:L.steps.length,ok,tasks};
 }
+const OPEN=new Set();  // раскрытые разделы в оглавлении
 function renderToc(){
-  $("ctitle").textContent=C.title+". "+SEC.title;
-  let allDone=0,all=0;
-  let h=`<div class="mod"><span class="n">${SEC.num}</span><span>✅ ${esc(SEC.title)}</span></div>`;
-  lessons.forEach((L,li)=>{
-    if(!L.steps){h+=`<button class="les" disabled><span class="n">${L.num}</span><span class="t">${esc(L.title)}</span><span class="c">скоро</span></button>`;return}
-    const p=lessonStat(li);allDone+=p.done;all+=p.total;
-    const cls=p.done===p.total?" done":p.done?" part":"";
-    const hwn=L.steps.reduce((a,_,si)=>a+(HW.has(sid(li,si))&&!passed(li,si)?1:0),0);
-    h+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.num}</span><span class="t">${esc(L.title)}${hwn?` <span class="hwt" title="Задач из домашки: ${hwn}">ДЗ ${hwn}</span>`:""}</span><span class="c">${p.done}/${p.total}</span></button>`;
+  $("ctitle").textContent=MULTI?C.title:C.title+". "+SECS[0].title;
+  let allDone=0,all=0,h="";
+  const csec=lessons[cur.li].sec;if(!OPEN.size)OPEN.add(csec.idx);
+  SECS.forEach(sec=>{
+    let sd=0,sa=0,hwS=0,rows="";
+    sec.lessons.forEach((L,j)=>{const li=sec.off+j;
+      if(!L.steps){rows+=`<button class="les" disabled><span class="n">${L.num}</span><span class="t">${esc(L.title)}</span><span class="c">скоро</span></button>`;return}
+      const p=lessonStat(li);sd+=p.done;sa+=p.total;
+      const cls=p.done===p.total?" done":p.done?" part":"";
+      const hwn=L.steps.reduce((a,_,si)=>a+(HW.has(hwId(li,si))&&!passed(li,si)?1:0),0);hwS+=hwn;
+      rows+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.num}</span><span class="t">${esc(L.title)}${hwn?` <span class="hwt" title="Задач из домашки: ${hwn}">ДЗ ${hwn}</span>`:""}</span><span class="c">${p.done}/${p.total}</span></button>`;
+    });
+    allDone+=sd;all+=sa;
+    if(!MULTI){h+=`<div class="mod"><span class="n">${sec.num}</span><span>✅ ${esc(sec.title)}</span></div>`+rows;return}
+    const open=OPEN.has(sec.idx);
+    h+=`<button class="mod sec${open?" open":""}${sec===csec?" cur":""}" data-sec="${sec.idx}" aria-expanded="${open}"><span class="chev">›</span><span class="st">${esc(sec.title)}${hwS?` <span class="hwt">ДЗ ${hwS}</span>`:""}</span><span class="c">${sd}/${sa}</span></button>`+(open?rows:"");
   });
   $("toclist").innerHTML=h;
   $("toclist").querySelectorAll(".les[data-li]").forEach(b=>b.onclick=()=>{go(+b.dataset.li,null);if(matchMedia("(max-width:900px)").matches)setToc(false)});
+  $("toclist").querySelectorAll("[data-sec]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sec;OPEN.has(i)?OPEN.delete(i):OPEN.add(i);renderToc()});
   $("pnum").textContent=allDone+"/"+all;
   $("pfill").style.width=(all?allDone/all*100:0)+"%";
 }
 function sqHTML(li,i){
-  const s=lessons[li].steps[i],x=S.st[sid(li,i)]||{};
+  const s=lessons[li].steps[i],x=rec(li,i)||{};
   let c="sq",icon=s.type==="video"?ICON.video:isTask(s)?ICON.task:ICON.text;
   if(isTask(s)){if(x.ok){c+=x.rev?" rev":" ok";icon=ICON.check}else if(x.att){c+=" bad";icon=ICON.cross}}
   else if(x.seen)c+=" seen";
   if(i===cur.si)c+=" on";
-  const hw=HW.has(sid(li,i));if(hw)c+=" hw";
+  const hw=HW.has(hwId(li,i));if(hw)c+=" hw";
   return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}${hw?", домашнее задание":""}" title="Шаг ${i+1}${hw?" · домашнее задание":""}">${icon}</button>`;
 }
 function render(){
@@ -509,10 +554,10 @@ function render(){
   $("strip").innerHTML=L.steps.map((_,i)=>sqHTML(cur.li,i)).join("");
   const on=$("strip").querySelector(".sq.on");if(on)on.scrollIntoView({inline:"center",block:"nearest"});
   const p=lessonStat(cur.li);
-  $("lbar").innerHTML=`<b>${L.num} ${esc(L.title)}</b><span>${p.done} из ${p.total} шагов пройдено</span><span>${p.ok} из ${p.tasks} баллов получено</span>`;
+  $("lbar").innerHTML=`${MULTI?`<span class="lsec">${esc(L.sec.title)}</span>`:""}<b>${L.num} ${esc(L.title)}</b><span>${p.done} из ${p.total} шагов пройдено</span><span>${p.ok} из ${p.tasks} баллов получено</span>`;
   $("pts").innerHTML=`Шаг <b>${cur.si+1}</b> из ${L.steps.length}`;
   let h="";
-  if(HW.has(sid(cur.li,cur.si))) h+=`<div class="hwnote">📝 Эта задача — из домашнего задания${x.ok?" · решена ✓":""}</div>`;
+  if(HW.has(hwId(cur.li,cur.si))) h+=`<div class="hwnote">📝 Эта задача — из домашнего задания${x.ok?" · решена ✓":""}</div>`;
   if(s.title&&s.type!=="video") h+=`<h2 class="left">${esc(s.title)}</h2>`;
   if(s.type==="video"){
     if(s.embed) h+=`<div class="vwrap"><iframe src="${esc(s.embed)}" title="${esc(s.title||"Видео")}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock" allowfullscreen loading="lazy"></iframe></div>`;
@@ -526,7 +571,7 @@ function render(){
   $("step").innerHTML=h;
   const prev=prevPos(), next=nextPos();
   $("foot").innerHTML=`${prev?`<button class="btn ghost" id="prev">${ICON.prev}Назад</button>`:"<span></span>"}${next?`<button class="btn" id="next">${next.li!==cur.li?"Следующий урок":"Следующий шаг"}${ICON.next}</button>`:`<span class="soon">Это последний шаг раздела</span>`}
-    <div class="note"><span>${ME?"Ответы сохраняются в личном кабинете — их видно с любого устройства.":'Ответы сохраняются на этом устройстве. <a href="../kabinet/">Войдите</a>, чтобы они были на любом.'}</span><button class="btn ghost" id="rst">Сбросить прогресс</button><span id="rstc" hidden>Точно стереть все ответы? <button class="btn ghost" id="rsty" style="color:var(--bad)">Да, стереть</button> <button class="btn ghost" id="rstn">Нет</button></span></div>`;
+    <div class="note"><span>${ME?"Ответы сохраняются в личном кабинете — их видно с любого устройства.":'Ответы сохраняются на этом устройстве. <a href="../kabinet/">Войдите</a>, чтобы они были на любом.'}</span><button class="btn ghost" id="rst">Сбросить прогресс</button><span id="rstc" hidden>Точно стереть все ответы${MULTI?" в разделе «"+esc(L.sec.title)+"»":""}? <button class="btn ghost" id="rsty" style="color:var(--bad)">Да, стереть</button> <button class="btn ghost" id="rstn">Нет</button></span></div>`;
   wire(s,x);
   renderToc();
   renderTex();
@@ -618,7 +663,7 @@ function wire(s,x){
   if(n)n.onclick=()=>{const q=nextPos();if(q)go(q.li,q.si)};
   $("rst").onclick=()=>{$("rstc").hidden=false;$("rst").hidden=true};
   $("rstn").onclick=()=>{$("rstc").hidden=true;$("rst").hidden=false};
-  $("rsty").onclick=()=>{S={pos:null,st:{}};if(ME){S.uid=ME.id;S._reset=true}save();go(0,0)};
+  $("rsty").onclick=()=>{const sec=lessons[cur.li].sec,k=sec.key;SS[k]={pos:null,st:{}};if(ME){SS[k].uid=ME.id;SS[k]._reset=true}save(k);go(sec.off,0)};
   if(!isTask(s))return;
   if(s.type==="choice"){
     document.querySelectorAll('input[name="opt"]').forEach(r=>r.onchange=()=>{x.v=+r.value;x.last=null;save();render()});
@@ -659,15 +704,21 @@ function submit(s,x){
 function flash(t){const a=document.querySelector(".qact");if(!a)return;let m=a.querySelector(".att.tmp");if(!m){m=document.createElement("span");m.className="att tmp";a.appendChild(m)}m.textContent=t}
 function go(li,si){
   if(!lessons[li]||!lessons[li].steps)return;
-  if(si==null){const p=S.last&&S.last[li];si=p!=null?p:0}
-  cur={li,si};S.pos=cur;S.last=S.last||{};S.last[li]=si;save();
-  history.replaceState(null,"","#"+lessons[li].num+"-"+(si+1));
+  const L=lessons[li],S=SL(li),j=li-L.sec.off;  // позиция и последние шаги хранятся внутри раздела, как раньше
+  if(si==null){const p=S.last&&S.last[j];si=p!=null?p:0}
+  if(MULTI&&L.sec!==lessons[cur.li].sec)OPEN.add(L.sec.idx);
+  cur={li,si};S.pos={li:j,si};S.last=S.last||{};S.last[j]=si;save(L.ckey);
+  try{localStorage.setItem(POSKEY,JSON.stringify({k:L.ckey,li:j,si}))}catch(e){}
+  history.replaceState(null,"",location.pathname+location.search.replace(/[?&]s=[^&]*/,"").replace(/^&/,"?")+"#"+L.num+"-"+(si+1));
   render();window.scrollTo({top:0});
 }
 function fromHash(){
   const m=location.hash.match(/^#([\d.]+)-(\d+)$/);
   if(m){const li=lessons.findIndex(L=>L.num===m[1]);if(li>=0&&lessons[li].steps){go(li,Math.max(0,Math.min(+m[2]-1,lessons[li].steps.length-1)));return}}
-  if(S.pos&&lessons[S.pos.li]&&lessons[S.pos.li].steps)go(S.pos.li,S.pos.si);else go(0,0);
+  // ?s=42 — открыть раздел (переход со старой страницы курса) там, где ученик остановился
+  const sn=new URLSearchParams(location.search).get("s"),sec=sn&&SECS.find(s=>String(s.num)===sn);
+  if(sec){const q=SS[sec.key].pos;if(q&&sec.lessons[q.li]&&sec.lessons[q.li].steps){go(sec.off+q.li,q.si);return}go(sec.off,null);return}
+  const p=savedPos();if(p)go(p.li,p.si);else go(0,0);
 }
 
 /* table of contents toggle */

@@ -379,7 +379,7 @@ async function viewStudent(){
   const by=p.coins_by||{};
   let info={schedule:[],homework:""};try{info=await api("info_get")}catch(e){}
   HWCTX={cat,prog:p.progress};
-  app.innerHTML=infoCards(info)+`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div id="lbslot" style="margin-bottom:16px"></div><div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
+  app.innerHTML=infoCards(info)+`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div id="lbslot" style="margin-bottom:16px"></div><div class="courses">${groupCat(cat).map(c=>{if(c.parts)return egeCard(c,p,by);const s=stats(c,(p.progress[c.key]||{}).data);
     return `<article class="course"><h3>${esc(c.title)}</h3>
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
       <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
@@ -391,6 +391,22 @@ async function viewStudent(){
   lbCard(false).then(h=>{const s=document.getElementById("lbslot");if(s)s.innerHTML=h});
 }
 let HWCTX={cat:[],prog:{}};
+/* разделы одного курса (ЕГЭ: № 4, № 12, …) — одной карточкой */
+function groupCat(cat){
+  const out=[],g={};
+  cat.forEach(c=>{if(!c.group){out.push(c);return}
+    if(!g[c.group]){g[c.group]={title:c.group,url:c.url,parts:[]};out.push(g[c.group])}g[c.group].parts.push(c)});
+  return out;
+}
+function egeCard(G,p,by){
+  let done=0,total=0,coins=0,touched=false;
+  const rows=G.parts.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);done+=s.done;total+=s.total;coins+=by[c.key]||0;touched=touched||s.touched;
+    return `<div class="lrow"><span>${esc(c.title)}</span><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div><b>${s.done}/${s.total}</b></div>`}).join("");
+  return `<article class="course"><h3>${esc(G.title)}</h3>
+    <div><div class="meter"><i style="width:${pct(done,total)}%"></i></div></div>
+    <div class="cnum">${done} из ${total} задач решено${coins?` · ${COIN} ${coins}`:""}</div>${rows}
+    <a class="btn" href="${esc(G.url)}">${touched?"Продолжить":"Начать"}</a></article>`;
+}
 function hwTasksHTML(tasks){
   if(!tasks||!tasks.length)return"";
   const groups=[];let solved=0;

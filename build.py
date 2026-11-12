@@ -7,21 +7,48 @@ COURSES=[
   dict(src='src/12/course.js', out='site/ege-12/index.html', title='№ 12 · Машина Тьюринга',
        og_title='№ 12. Машина Тьюринга — курс', url='https://gsvv.ru/inf/ege-12/', image='https://gsvv.ru/inf/og-12.jpg',
        desc='Исполнитель МТ для ЕГЭ по информатике: таблица программы, устное решение, Python. 9 уроков, 92 задачи с автопроверкой.'),
-  dict(src='src/19-21/course.js', out='site/ege-19-21/index.html', title='№ 19–21 · Решение в Python',
-       og_title='№ 19–21. Решение в Python — курс', url='https://gsvv.ru/inf/ege-19-21/', image='https://gsvv.ru/inf/og-course.jpg',
-       desc='Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.'),
   dict(src='src/18/course.js', out='site/ege-18/index.html', title='№ 18 · Динамика в электронных таблицах',
        og_title='№ 18. Динамика в электронных таблицах — курс', url='https://gsvv.ru/inf/ege-18/', image='https://gsvv.ru/inf/og-18.jpg',
        desc='Робот собирает монеты: максимум и минимум, стены, угловые клетки. 3 урока, задачи с файлами и автопроверкой.'),
+  dict(src='src/19-21/course.js', out='site/ege-19-21/index.html', title='№ 19–21 · Решение в Python',
+       og_title='№ 19–21. Решение в Python — курс', url='https://gsvv.ru/inf/ege-19-21/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.'),
 ]
 eng=open('src/engine.html').read()
-import os
-for c in COURSES:
-    if not os.path.exists(c['src']): continue
-    data=open(c['src']).read().replace('</script>','<\\/script>')
-    h=eng.replace('{{TITLE}}',c['title']).replace('{{OG_TITLE}}',c['og_title']).replace('{{DESC}}',c['desc']).replace('{{URL}}',c['url']).replace('{{IMAGE}}',c['image']).replace('{{COURSE_DATA}}','<script>\n'+data+'\n</script>')
-    os.makedirs(os.path.dirname(c['out']),exist_ok=True)
-    open(c['out'],'w').write(h); print('built',c['out'])
+import os, re as _re
+def load_course(path):
+    t=open(path).read(); return json.loads(t[t.index('{'):t.rindex('}')+1])
+def rebase(o, folder):
+    """Относительные ссылки на картинки и файлы раздела -> ../<папка раздела>/… (страница курса теперь /ege/)."""
+    rel=lambda u: u if _re.match(r'(https?:|//|/|\.\./|#|data:|mailto:)', u) else '../'+folder+'/'+u
+    if isinstance(o, dict): return {k: (rel(v) if k in ('href','src') and isinstance(v,str) else rebase(v, folder)) for k,v in o.items()}
+    if isinstance(o, list): return [rebase(x, folder) for x in o]
+    if isinstance(o, str): return _re.sub(r'((?:src|href)=")([^"]+)"', lambda m: m.group(1)+rel(m.group(2))+'"', o)
+    return o
+# Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
+# Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
+ORDER=['src/4/course.js','src/12/course.js','src/18/course.js','src/19-21/course.js']
+secs=[]
+for src in ORDER:
+    c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
+    folder=c['out'].split('/')[1]
+    secs.append(dict(num=s['num'], title=c['title'], key='course-%s-s%s'%(d['id'],s['num']), lessons=rebase(s['lessons'], folder)))
+ege=dict(id='ege-inf', title='ЕГЭ', sections=secs)
+data='window.COURSE = '+json.dumps(ege, ensure_ascii=False)+';'
+ntask=sum(1 for s in secs for l in s['lessons'] for st in l['steps'] if st['type'] in ('fill','choice','match'))
+desc='Курс ЕГЭ по информатике: '+', '.join(c['title'].split(' · ')[0] for c in COURSES)+'. Теория, шаблоны решений и %d задач с автопроверкой.'%ntask
+h=eng.replace('{{TITLE}}','ЕГЭ по информатике').replace('{{OG_TITLE}}','ЕГЭ по информатике — курс').replace('{{DESC}}',desc).replace('{{URL}}','https://gsvv.ru/inf/ege/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}','<script>\n'+data.replace('</script>','<\\/script>')+'\n</script>')
+os.makedirs('site/ege',exist_ok=True); open('site/ege/index.html','w').write(h); print('built site/ege/index.html', len(secs), 'разделов', ntask, 'задач')
+# Старые адреса разделов ведут в общий курс, в тот же раздел (ссылки из домашки и закладки продолжают работать)
+for src in ORDER:
+    c=next(x for x in COURSES if x['src']==src); num=load_course(src)['section']['num']
+    open(c['out'],'w').write(f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>{c['title']}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<link rel="canonical" href="https://gsvv.ru/inf/ege/">
+<script>location.replace("../ege/"+(location.hash?location.hash:"?s={num}"));</script>
+<meta http-equiv="refresh" content="0;url=../ege/?s={num}"></head>
+<body><p><a href="../ege/?s={num}">Курс переехал — открыть «ЕГЭ по информатике»</a></p></body></html>''')
+    print('redirect',c['out'])
 
 # Закрытые варианты (СтатГрад и т. п.): страница-оболочка, сам вариант приходит с сервера только после входа
 LOADER = """<script>
@@ -82,7 +109,7 @@ cat=[]
 for c in COURSES:
     if not os.path.exists(c['src']): continue
     t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=d['section']
-    cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../'+c['out'].split('/')[1]+'/',
+    cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../ege/', group='ЕГЭ',
         lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
                       labels=[task_label(st) for st in l['steps']], **keys(l)) for l in s['lessons']]))
 os.makedirs('site/kabinet',exist_ok=True)
