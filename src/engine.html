@@ -403,8 +403,8 @@ function tree(spec,labels){
   return s+"</svg>";
 }
 /* hints and solutions inside task steps open step by step */
-function need(title){const m=/Подсказка\s*(\d+)/.exec(title);if(m)return +m[1];if(/Подсказк/.test(title))return 1;if(/Решени|Видеоразбор/.test(title))return 3;return 0}
-function lockText(n,title){const w=n===1?"1-й":n===2?"2-й":"3-й";return /Решени|Видеоразбор/.test(title)?`Откроется после ${w} неверной попытки или когда задача будет решена`:`Откроется после ${w} неверной попытки`}
+function need(title){const m=/Подсказка\s*(\d+)/.exec(title);if(m)return +m[1];if(/Подсказк/.test(title))return 1;if(/решени|видеоразбор/i.test(title))return 3;return 0}
+function lockText(n,title){const w=n===1?"1-й":n===2?"2-й":"3-й";return /решени|видеоразбор/i.test(title)?`Откроется после ${w} неверной попытки или когда задача будет решена`:`Откроется после ${w} неверной попытки`}
 function blocks(list,x){
   return list.map(b=>{
     if(b.t==="details"&&x){const n=need(b.title);if(n&&!x.ok&&!x.rev&&(x.att||0)<n)return `<div class="locked">${ICON.lock}<span><b>${esc(b.title)}</b><small>${lockText(n,b.title)}</small></span></div>`}
