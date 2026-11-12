@@ -79,6 +79,21 @@ button{font:inherit}
 .iconbtn:hover{border-color:var(--bar-muted)}
 .acct{height:38px;border-radius:9px;border:1px solid var(--bar-line);background:var(--bar-2);color:var(--bar-ink);display:flex;align-items:center;gap:7px;padding:0 12px 0 9px;text-decoration:none;font:500 14px var(--f-body);white-space:nowrap;max-width:190px}
 .acct:hover{border-color:var(--bar-muted)}
+.coins{height:38px;border-radius:9px;border:1px solid var(--bar-line);background:var(--bar-2);color:var(--bar-ink);display:flex;align-items:center;gap:6px;padding:0 11px 0 9px;font:700 15px var(--f-mono);white-space:nowrap;position:relative;text-decoration:none}
+.coins:hover{border-color:var(--bar-muted)}
+.coin{width:19px;height:19px;flex:none;display:block}
+.coins.bump{animation:cbump .5s ease}
+@keyframes cbump{30%{transform:scale(1.18)}}
+.cfly{position:fixed;z-index:60;pointer-events:none;display:flex;align-items:center;gap:4px;font:800 18px var(--f-mono);color:#e0a100;text-shadow:0 1px 0 #0003;animation:cfly 1.1s cubic-bezier(.2,.7,.3,1) forwards}
+.cfly .coin{width:22px;height:22px}
+@keyframes cfly{0%{opacity:0;transform:translate(0,10px) scale(.8)}15%{opacity:1;transform:translate(0,0) scale(1.1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.6)}}
+.cprize{display:inline-flex;align-items:center;gap:5px;font:600 13.5px var(--f-body);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px 4px 7px;background:var(--bg)}
+.cprize .coin{width:16px;height:16px}
+.cprize.zero{opacity:.7}
+.cgain{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-weight:700;color:#c98a12}
+.cgain .coin{width:16px;height:16px}
+@media (max-width:640px){.coins{padding:0 8px;font-size:14px}}
+@media (prefers-reduced-motion:reduce){.cfly,.coins.bump{animation:none}.cfly{display:none}}
 .acct svg{width:18px;height:18px;flex:none}
 .acct span{overflow:hidden;text-overflow:ellipsis}
 .acct i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;display:none}
@@ -259,6 +274,7 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
   <nav class="strip" id="strip" aria-label="Шаги урока"></nav>
   <div class="hright">
     <span class="pts" id="pts"></span>
+    <a class="coins" id="coins" href="../kabinet/" hidden title="Монетки"><svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg><span id="coinn">0</span></a>
     <a class="acct" id="acct" href="../kabinet/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>Войти</span><i></i></a>
     <button class="iconbtn" id="theme" type="button" aria-label="Переключить тему"></button>
   </div>
@@ -1242,7 +1258,11 @@ let S={pos:null,st:{}};
 try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&x.st)S=x}catch(e){}
 /* Синхронизация с личным кабинетом: если ученик вошёл, прогресс уходит на сервер (../api). Без входа всё работает как раньше — только на этом устройстве. */
 const API="../api/index.php";
-let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false;
+let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false,COINS=null;
+const COIN_SVG='<svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>';
+/* Монетки: 3 за задачу минус 1 за каждую неверную попытку; если смотрели ответ — 0.
+   С кабинетом считает сервер (каждая задача оплачивается один раз навсегда), без кабинета — по ответам на этом устройстве. */
+const coinFor=x=>x&&x.ok&&!x.rev?Math.max(0,3-(x.att||0)):0;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(ME){dirty=true;clearTimeout(syncT);syncT=setTimeout(push,1200)}};
 function mergeRec(a,b){
   if(!a)return b;if(!b)return a;
@@ -1270,7 +1290,7 @@ async function push(keepalive){
   if(syncing){clearTimeout(syncT);syncT=setTimeout(push,800);return}
   syncing=true;dirty=false;
   const reset=!!S._reset,data=Object.assign({},S);delete data._reset;delete data.uid;
-  try{await api("progress_put",{key:KEY,data,reset},keepalive);delete S._reset;syncErr=false}
+  try{const j=await api("progress_put",{key:KEY,data,reset},keepalive);delete S._reset;syncErr=false;if(typeof j.coins==="number"){COINS=j.coins;paintCoins(j.gained||0)}}
   catch(e){dirty=true;syncErr=true;if(e.status===401){ME=null}}
   finally{syncing=false;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}paintAcct();if(dirty&&ME){clearTimeout(syncT);syncT=setTimeout(push,15000)}}
 }
@@ -1284,6 +1304,7 @@ function paintAcct(){
 }
 async function pull(first){
   let g;try{g=await api("progress_get&key="+KEY)}catch(e){if(e.status===401){ME=null;paintAcct()}return}
+  if(typeof g.coins==="number"){COINS=g.coins;paintCoins(0)}
   const hadLocal=Object.keys(S.st||{}).length>0;
   const m=mergeState(g.data,S);m.uid=ME.id;if(S._reset)m._reset=true;
   const changed=JSON.stringify(m.st)!==JSON.stringify((g.data&&g.data.st)||{});
@@ -1294,11 +1315,27 @@ async function pull(first){
   else if(localChanged){const a=document.activeElement;if(!(a&&a.matches&&a.matches(".frow input")))render()}
 }
 async function initSync(){
-  try{ME=(await api("me")).user}catch(e){return}  // нет сервера (например, страница открыта с диска) — работаем локально
+  try{const j=await api("me");ME=j.user;if(ME){COINS=j.coins||0}}catch(e){paintCoins(0);return}  // нет сервера (например, страница открыта с диска) — работаем локально
   if(ME&&S.uid&&S.uid!==ME.id)S={pos:null,st:{}};  // на этом устройстве остался чужой прогресс
   if(!ME&&S.uid){/* вышли из кабинета: локальный прогресс оставляем, при входе он сольётся */}
-  paintAcct();
+  paintAcct();paintCoins(0);
   if(ME){await pull(true);render()}
+}
+function localCoins(){let s=0;lessons.forEach((L,li)=>(L.steps||[]).forEach((st,si)=>{if(isTask(st))s+=coinFor(S.st[sid(li,si)])}));return s}
+function paintCoins(gained){
+  const el=$("coins");if(!el)return;
+  const n=ME&&COINS!=null?COINS:localCoins();
+  el.hidden=false;$("coinn").textContent=n;
+  el.title=ME?"Монетки в кабинете: "+n:"Монетки за решённые задачи на этом устройстве. Войдите, чтобы они копились в кабинете";
+  if(gained>0)flyCoins(gained);
+}
+function flyCoins(n){
+  const el=$("coins"),q=document.querySelector("#quiz .verdict.ok")||document.querySelector("#quiz");if(!el)return;
+  const a=(q||el).getBoundingClientRect(),b=el.getBoundingClientRect();
+  const f=document.createElement("div");f.className="cfly";f.innerHTML="+"+n+COIN_SVG;
+  const x=a.left+Math.min(a.width-80,160),y=a.top+6;
+  f.style.left=x+"px";f.style.top=y+"px";f.style.setProperty("--dx",(b.left-x)+"px");f.style.setProperty("--dy",(b.top-y)+"px");
+  document.body.appendChild(f);setTimeout(()=>{f.remove();el.classList.remove("bump");void el.offsetWidth;el.classList.add("bump")},1000);
 }
 document.addEventListener("visibilitychange",()=>{if(!ME)return;if(document.visibilityState==="hidden")push(true);else if(!dirty&&!syncing)pull(false)});
 window.addEventListener("pagehide",()=>{if(ME&&dirty)push(true)});
@@ -1429,6 +1466,7 @@ function render(){
   wire(s,x);
   renderToc();
   renderTex();
+  if(!ME)paintCoins(0);
 }
 let katexP=null;
 function renderTex(){
@@ -1450,7 +1488,10 @@ function prevPos(){
   return null;
 }
 function verdict(x,okText,badText){
-  if(x.ok) return `<div class="verdict ok">${ICON.check}${okText}</div>`;
+  if(x.ok){
+    const c=!ME&&x.paid!=null?(x.paid>0?`<span class="cgain">+${x.paid}${COIN_SVG}</span>`:` <span style="font-weight:400">— без монеток${x.rev?": ответ был показан":""}</span>`):"";
+    return `<div class="verdict ok">${ICON.check}${okText}${c}</div>`;
+  }
   if(x.att&&x.last===false) return `<div class="verdict bad">${ICON.cross}${badText}</div>`;
   return "";
 }
@@ -1492,6 +1533,7 @@ function actions(s,x){
   let h=`<div class="qact">`;
   h+=x.ok?`<button class="btn ghost" id="again">Решить снова</button>`:`<button class="btn" id="send">Отправить</button>`;
   if(x.att) h+=`<span class="att">Неверных попыток: ${x.att}</span>`;
+  if(!x.ok){const c=x.rev?0:Math.max(0,3-(x.att||0));h+=`<span class="cprize${c?"":" zero"}" title="3 монетки за решение, −1 за каждую неверную попытку">${COIN_SVG}${c?"За решение: "+c:x.rev?"Ответ показан — без монеток":"Монеток уже не будет"}</span>`}
   if(!x.ok&&x.att>=3&&!x.rev) h+=`<button class="btn warn" id="showans">Показать ответ</button>`;
   h+=`</div>`;
   if(x.rev){
@@ -1543,8 +1585,11 @@ function submit(s,x){
     if(empty){flash("Впишите ответ");return}
     good=s.fields.every((f,fi)=>[...Array(f.n)].every((_,k)=>norm((v[fi]||[])[k])===norm(s.answer[fi][k])));
   }
+  const first=good&&!x.ok&&x.paid==null;
   x.last=good;if(good)x.ok=true;else x.att=(x.att||0)+1;
+  if(first)x.paid=coinFor(x);
   save();render();
+  if(first){if(ME){clearTimeout(syncT);push()}else paintCoins(x.paid)}
   const q=$("quiz");if(q)q.scrollIntoView({block:"nearest",behavior:"smooth"});
 }
 function flash(t){const a=document.querySelector(".qact");if(!a)return;let m=a.querySelector(".att.tmp");if(!m){m=document.createElement("span");m.className="att tmp";a.appendChild(m)}m.textContent=t}

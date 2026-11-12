@@ -49,6 +49,9 @@ function schema(PDO $pdo, bool $mysql) {
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_progress (
         user_id INT NOT NULL, ckey VARCHAR(64) NOT NULL, data $text NOT NULL, updated INT NOT NULL,
         resets INT NOT NULL DEFAULT 0, PRIMARY KEY (user_id, ckey))$tail");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS inf_coins (
+        user_id INT NOT NULL, ckey VARCHAR(64) NOT NULL, sid VARCHAR(32) NOT NULL, amount INT NOT NULL, created INT NOT NULL,
+        PRIMARY KEY (user_id, ckey, sid))$tail");
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_attempts (
         id $ai, k VARCHAR(128) NOT NULL, ts INT NOT NULL)$tail");
 }
@@ -198,6 +201,36 @@ function valid_key($k): string {
     return $k;
 }
 
+/* ---------- монетки ----------
+ * За каждую решённую задачу — 3 монетки минус по одной за каждую неверную попытку (не меньше 0).
+ * Если перед решением смотрели ответ — 0. Каждая задача оплачивается один раз навсегда:
+ * «Начать заново» и повторное решение монеток не добавляют.
+ */
+const COINS_MAX = 3;
+function coin_amount($rec) {
+    if (!empty($rec['rev'])) return 0;
+    return max(0, COINS_MAX - (int)($rec['att'] ?? 0));
+}
+function award_coins(int $uid, string $ckey, $state): int {
+    global $MYSQL;
+    if (!is_array($state) || !isset($state['st']) || !is_array($state['st'])) return 0;
+    $have = [];
+    foreach (q('SELECT sid FROM inf_coins WHERE user_id = ? AND ckey = ?', [$uid, $ckey])->fetchAll() as $r) $have[$r['sid']] = true;
+    $gained = 0;
+    $ins = ($MYSQL ? 'INSERT IGNORE' : 'INSERT OR IGNORE') . ' INTO inf_coins (user_id, ckey, sid, amount, created) VALUES (?,?,?,?,?)';
+    foreach ($state['st'] as $sid => $rec) {
+        $sid = (string)$sid;
+        if (isset($have[$sid]) || !is_array($rec) || empty($rec['ok']) || strlen($sid) > 32) continue;
+        $a = coin_amount($rec);
+        if (q($ins, [$uid, $ckey, $sid, $a, time()])->rowCount() > 0) $gained += $a;
+    }
+    return $gained;
+}
+function coins_total(int $uid): int {
+    $r = one('SELECT COALESCE(SUM(amount), 0) AS s FROM inf_coins WHERE user_id = ?', [$uid]);
+    return (int)$r['s'];
+}
+
 /* ---------- действия ---------- */
 switch ($action) {
 
@@ -206,7 +239,8 @@ case 'health':
     out(['ok' => true, 'php' => PHP_VERSION, 'db' => $MYSQL ? 'mysql' : 'sqlite', 'teacher' => (int)$t['n'] > 0, 'time' => time()]);
 
 case 'me':
-    out(['ok' => true, 'user' => public_user(current_user())]);
+    $u = current_user();
+    out(['ok' => true, 'user' => public_user($u), 'coins' => $u ? coins_total((int)$u['id']) : 0]);
 
 case 'setup':
     // Первый вход учителя. Работает, только пока в базе нет ни одного учителя.
@@ -265,7 +299,8 @@ case 'progress_get':
     $u = need_user();
     $k = valid_key($_GET['key'] ?? '');
     $r = one('SELECT data, updated FROM inf_progress WHERE user_id = ? AND ckey = ?', [$u['id'], $k]);
-    out(['ok' => true, 'data' => $r ? json_decode($r['data']) : null, 'updated' => $r ? (int)$r['updated'] : 0]);
+    if ($r) award_coins((int)$u['id'], $k, json_decode($r['data'], true));
+    out(['ok' => true, 'data' => $r ? json_decode($r['data']) : null, 'updated' => $r ? (int)$r['updated'] : 0, 'coins' => coins_total((int)$u['id'])]);
 
 case 'progress_put':
     need_post();
@@ -282,21 +317,29 @@ case 'progress_put':
     if (strlen($json) > MAX_DATA) { $pdo->rollBack(); fail('Слишком много данных', 413); }
     if ($r) q('UPDATE inf_progress SET data = ?, updated = ?, resets = resets + ? WHERE user_id = ? AND ckey = ?', [$json, time(), $reset ? 1 : 0, $u['id'], $k]);
     else q('INSERT INTO inf_progress (user_id, ckey, data, updated, resets) VALUES (?,?,?,?,?)', [$u['id'], $k, $json, time(), $reset ? 1 : 0]);
+    $gained = award_coins((int)$u['id'], $k, json_decode($json, true));
     $pdo->commit();
-    out(['ok' => true, 'data' => json_decode($json), 'updated' => time()]);
+    out(['ok' => true, 'data' => json_decode($json), 'updated' => time(), 'gained' => $gained, 'coins' => coins_total((int)$u['id'])]);
 
 case 'my_progress':
     $u = need_user();
     $rows = q('SELECT ckey, data, updated FROM inf_progress WHERE user_id = ?', [$u['id']])->fetchAll();
     $res = [];
-    foreach ($rows as $r) $res[$r['ckey']] = ['data' => json_decode($r['data']), 'updated' => (int)$r['updated']];
-    out(['ok' => true, 'progress' => (object)$res]);
+    foreach ($rows as $r) {
+        award_coins((int)$u['id'], $r['ckey'], json_decode($r['data'], true));  // прогресс, решённый до появления монеток
+        $res[$r['ckey']] = ['data' => json_decode($r['data']), 'updated' => (int)$r['updated']];
+    }
+    $by = [];
+    foreach (q('SELECT ckey, SUM(amount) AS s FROM inf_coins WHERE user_id = ? GROUP BY ckey', [$u['id']])->fetchAll() as $r) $by[$r['ckey']] = (int)$r['s'];
+    out(['ok' => true, 'progress' => (object)$res, 'coins' => coins_total((int)$u['id']), 'coins_by' => (object)$by]);
 
 /* ----- кабинет учителя ----- */
 case 'students':
     need_teacher();
-    $rows = q("SELECT id, login, name, note, created_at, last_seen FROM inf_users WHERE role = 'student' ORDER BY name")->fetchAll();
-    foreach ($rows as &$r) { $r['id'] = (int)$r['id']; $r['created_at'] = (int)$r['created_at']; $r['last_seen'] = (int)$r['last_seen']; }
+    $rows = q("SELECT u.id, u.login, u.name, u.note, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
+               LEFT JOIN (SELECT user_id, SUM(amount) AS s FROM inf_coins GROUP BY user_id) c ON c.user_id = u.id
+               WHERE u.role = 'student' ORDER BY u.name")->fetchAll();
+    foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; }
     out(['ok' => true, 'students' => $rows]);
 
 case 'student_create':
@@ -338,6 +381,7 @@ case 'student_delete':
     $id = (int)arg('id');
     if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) fail('Ученик не найден', 404);
     q('DELETE FROM inf_progress WHERE user_id = ?', [$id]);
+    q('DELETE FROM inf_coins WHERE user_id = ?', [$id]);
     q('DELETE FROM inf_sessions WHERE user_id = ?', [$id]);
     q('DELETE FROM inf_users WHERE id = ?', [$id]);
     out(['ok' => true]);

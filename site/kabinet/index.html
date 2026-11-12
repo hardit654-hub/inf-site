@@ -140,6 +140,15 @@ details.pw{margin-top:16px}
 details.pw summary{cursor:pointer;color:var(--muted);font-size:14px}
 details.pw .row{margin-top:12px}
 .loading{color:var(--muted);text-align:center;padding:60px 0}
+.coin{width:18px;height:18px;flex:none;display:inline-block;vertical-align:-3px}
+.wallet{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#fff6d6,#fde7a6);color:#5a3d00;border:1px solid #f0cf6a;border-radius:14px;padding:18px 22px;margin-bottom:16px}
+.wallet .coin{width:46px;height:46px}
+.wallet b{font:700 30px/1 var(--f-display)}
+.wallet span{display:block;font-size:14px;opacity:.8;margin-top:4px}
+:root[data-theme="dark"] .wallet{background:linear-gradient(135deg,#3a2f12,#2a220e);color:#f6d77a;border-color:#5c4a17}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wallet{background:linear-gradient(135deg,#3a2f12,#2a220e);color:#f6d77a;border-color:#5c4a17}}
+.ccell{display:inline-flex;align-items:center;gap:5px;font:600 14px var(--f-mono)}
+.cnum .coin{width:15px;height:15px;margin-left:8px}
 @media (max-width:560px){.card{padding:18px}.tbl-wrap{margin:0 -18px;padding:0 18px}.hide-sm{display:none}.brand span:not(.mark){display:none}td.acts{white-space:normal;width:1%}td.acts .btn{display:flex;width:100%;margin:0 0 6px}td.acts .btn:last-child{margin:0}}
 </style>
 </head>
@@ -162,6 +171,7 @@ details.pw .row{margin-top:12px}
 const API="../api/index.php";
 const app=document.getElementById("app");
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const COIN='<svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>';
 const SITE=location.origin+location.pathname.replace(/kabinet\/.*$/,"kabinet/");
 let ME=null,CAT=null;
 
@@ -248,15 +258,17 @@ function ago(ts){
 /* ---------- ученик ---------- */
 async function viewStudent(){
   const [cat,p]=await Promise.all([catalog(),api("my_progress")]);
-  app.innerHTML=`<div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
+  const by=p.coins_by||{};
+  app.innerHTML=`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
     return `<article class="course"><h3>${esc(c.title)}</h3>
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
-      <div class="cnum">${s.done} из ${s.total} задач решено</div>
+      <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
       ${s.lessons.filter(l=>l.total).map(l=>`<div class="lrow"><span>${esc(l.num+" "+l.title)}</span><div class="meter"><i style="width:${pct(l.done,l.total)}%"></i></div><b>${l.done}/${l.total}</b></div>`).join("")}
       <a class="btn" href="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
     ${pwCard()}`;
   bindPw();
 }
+function coinWord(n){const a=n%10,b=n%100;return (a===1&&b!==11?"монетка":a>=2&&a<=4&&(b<12||b>14)?"монетки":"монеток")}
 function pwCard(){return `<div class="card" style="margin-top:16px"><details class="pw"><summary>Сменить пароль</summary>
   <form id="pwf"><div class="row"><div class="field"><label for="po">Старый пароль</label><input id="po" type="password" autocomplete="current-password" required></div>
   <div class="field"><label for="pn">Новый пароль</label><input id="pn" type="password" autocomplete="new-password" minlength="4" required></div>
@@ -296,10 +308,10 @@ function paneStudents(cred){
       <button class="btn" id="ab">Добавить</button></div><div id="am" hidden></div></form>
     <div id="credslot">${cred||""}</div></div>
    <div class="card"><h2>Ученики · ${STUDENTS.length}</h2>
-    <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Заметка</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
-    ${STUDENTS.length?STUDENTS.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc(s.note)}</td><td class="hide-sm muted">${ago(s.last_seen)}</td>
+    <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Заметка</th><th>Монетки</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
+    ${STUDENTS.length?STUDENTS.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc(s.note)}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="hide-sm muted">${ago(s.last_seen)}</td>
        <td class="acts"><button class="btn ghost small" data-reset="${s.id}">Новый пароль</button><button class="btn danger small" data-del="${s.id}">Удалить</button></td></tr>`).join("")
-     :`<tr><td colspan="5" class="empty">Пока никого. Добавьте первого ученика выше.</td></tr>`}
+     :`<tr><td colspan="6" class="empty">Пока никого. Добавьте первого ученика выше.</td></tr>`}
     </tbody></table></div></div>`;
   bindCopy();
   const f=document.getElementById("af"),m=document.getElementById("am"),b=document.getElementById("ab");

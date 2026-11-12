@@ -59,6 +59,8 @@ a{color:inherit}
 .login:hover{border-color:#ffffff55}
 .login svg{width:18px;height:18px;flex:none}
 .login span{overflow:hidden;text-overflow:ellipsis}
+.lcoin{display:inline-flex;align-items:center;gap:4px;font:700 14px var(--f-mono);border-left:1px solid #ffffff22;padding-left:8px;margin-left:2px}
+.lcoin svg{width:16px;height:16px}
 .hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:24px 40px;align-items:end}
 .hero-text{display:flex;flex-direction:column;gap:18px;padding-block:34px 64px;min-width:0}
 .photo{margin:0;align-self:end;position:relative}
@@ -203,7 +205,8 @@ window.addEventListener("hashchange",fromHash);fromHash();
 <script>
 /* Кнопка «Войти»: если ученик уже вошёл — показываем имя и ведём в кабинет */
 fetch("api/index.php?action=me",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).then(j=>{
-  if(j&&j.user){const s=document.querySelector("#login span");s.textContent=j.user.name.split(" ")[0];document.getElementById("login").title="Личный кабинет"}
+  if(j&&j.user){const s=document.querySelector("#login span");s.textContent=j.user.name.split(" ")[0];const l=document.getElementById("login");l.title="Личный кабинет · монеток: "+(j.coins||0);
+    if(j.user.role==="student"){const c=document.createElement("b");c.className="lcoin";c.innerHTML='<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/></svg>'+(j.coins||0);l.appendChild(c)}}
 }).catch(()=>{});
 </script>
 <script src="egg.js" defer></script>
