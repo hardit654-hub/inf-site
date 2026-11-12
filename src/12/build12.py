@@ -107,6 +107,10 @@ def build():
                 steps.append({'type':'match','blocks':to_blocks(h),'items':[k for k,_ in m['pairs']],'options':m['options'],'answer':[m['options'].index(v) for _,v in m['pairs']]}); continue
             a=ANS[tid]
             steps.append({'type':'fill','blocks':to_blocks(h),'fields':[{'label':'Ответ','n':1}],'answer':[[str(a)]]})
+        if n==1:  # разбор демоверсии 2027 — сразу после видео с теорией
+            import demo27
+            i=next(i for i,s in enumerate(steps) if s.get('title')==VIDEO_TITLES['42.1.2']['title'])
+            steps[i+1:i+1]=demo27.steps(to_blocks)
         # задачи из КЕГЭ
         for after,kid in KOMPEGE_PLACE.get(n,[]):
             k=KOMPEGE[kid]

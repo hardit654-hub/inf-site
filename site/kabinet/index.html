@@ -333,11 +333,14 @@ function viewSetup(){
     catch(err){msg(m,err.message);setBusy(go,false)}};
 }
 
+/* ключ шага (i — позиция с 0) и позиция шага по ключу */
+const K=(l,i)=>l.keys?l.keys[i]:String(i+1);
+const P=(l,k)=>l.keys?l.keys.indexOf(String(k))+1:+k;
 /* ---------- прогресс: подсчёт ---------- */
 function stats(course,data){
   const st=(data&&data.st)||{};let done=0,total=0;
   const lessons=course.lessons.map(l=>{let d=0,t=0;const cells=[];
-    l.steps.forEach((s,i)=>{if(s!=="task")return;t++;const x=st[l.num+"/"+(i+1)]||{};if(x.ok)d++;cells.push({n:i+1,x})});
+    l.steps.forEach((s,i)=>{if(s!=="task")return;t++;const x=st[l.num+"/"+K(l,i)]||{};if(x.ok)d++;cells.push({n:i+1,x})});
     done+=d;total+=t;return{num:l.num,title:l.title,done:d,total:t,cells}});
   return{done,total,lessons,touched:Object.keys(st).length>0};
 }
@@ -372,7 +375,7 @@ function hwTasksHTML(tasks){
   if(!tasks||!tasks.length)return"";
   const groups=[];let solved=0;
   tasks.forEach(tk=>{const [key,sid]=tk.split("|");const c=HWCTX.cat.find(x=>x.key===key);if(!c)return;
-    const [ln,sn]=sid.split("/");const L=c.lessons.find(l=>l.num===ln);if(!L)return;
+    const [ln,sk]=sid.split("/");const L=c.lessons.find(l=>l.num===ln);if(!L)return;const sn=P(L,sk);if(!sn)return;
     const st=((HWCTX.prog[key]||{}).data||{}).st||{};const ok=!!(st[sid]&&st[sid].ok);if(ok)solved++;
     let g=groups.find(x=>x.k===key+ln);if(!g){g={k:key+ln,title:c.title.replace(/ ·.*/,"")+" · "+ln+" "+L.title,items:[]};groups.push(g)}
     g.items.push(`<a class="hwi${ok?" ok":""}" href="${esc(c.url)}#${ln}-${sn}"><span class="ic2">${ok?"✓":""}</span><b>Шаг ${sn}</b><span>${esc(L.labels?L.labels[sn-1]||"":"")}</span></a>`)});
@@ -508,11 +511,11 @@ function editInfo(s){
 async function buildPicker(sel){
   const cat=await catalog();const box=document.getElementById("picker");if(!box)return;
   box.innerHTML=cat.map(c=>{
-    const any=c.lessons.some(l=>l.steps.some((s,k)=>s==="task"&&sel.has(c.key+"|"+l.num+"/"+(k+1))));
+    const any=c.lessons.some(l=>l.steps.some((s,k)=>s==="task"&&sel.has(c.key+"|"+l.num+"/"+K(l,k))));
     return `<details class="pick" ${any?"open":""}><summary>${esc(c.title)}<span class="pc" data-pc></span></summary><div class="lessons">${c.lessons.map(l=>{
       const tk=l.steps.map((s,k)=>s==="task"?k+1:0).filter(Boolean);if(!tk.length)return"";
-      const lany=tk.some(n=>sel.has(c.key+"|"+l.num+"/"+n));
-      return `<details class="pl" ${lany?"open":""}><summary><input type="checkbox" class="lall" aria-label="Все задачи урока ${esc(l.num)}"><span>${esc(l.num+" "+l.title)}</span><small data-lc></small></summary><div class="tasks">${tk.map(n=>{const v=c.key+"|"+l.num+"/"+n;
+      const lany=tk.some(n=>sel.has(c.key+"|"+l.num+"/"+K(l,n-1)));
+      return `<details class="pl" ${lany?"open":""}><summary><input type="checkbox" class="lall" aria-label="Все задачи урока ${esc(l.num)}"><span>${esc(l.num+" "+l.title)}</span><small data-lc></small></summary><div class="tasks">${tk.map(n=>{const v=c.key+"|"+l.num+"/"+K(l,n-1);
         return `<label class="pt"><input type="checkbox" class="tk" value="${esc(v)}" ${sel.has(v)?"checked":""}><b>Шаг ${n}</b><span>${esc((l.labels||[])[n-1]||"")}</span><a href="${esc(c.url)}#${esc(l.num)}-${n}" target="_blank" rel="noopener">открыть</a></label>`}).join("")}</div></details>`}).join("")}</div></details>`}).join("");
   box.querySelectorAll(".lall").forEach(cb=>{cb.onclick=e=>e.stopPropagation();cb.onchange=()=>{cb.closest(".pl").querySelectorAll(".tk").forEach(t=>t.checked=cb.checked);syncPicker()}});
   box.querySelectorAll(".tk").forEach(cb=>cb.onchange=syncPicker);

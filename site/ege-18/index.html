@@ -1362,7 +1362,10 @@ const ICON={
 };
 const isTask=s=>s.type==="choice"||s.type==="fill"||s.type==="match";
 const lessons=SEC.lessons;
-const sid=(li,si)=>lessons[li].num+"/"+(si+1);
+/* стабильные ключи шагов: вставленные шаги имеют свой key, остальные нумеруются по порядку без них,
+   поэтому прогресс и монеты старых шагов не сдвигаются */
+lessons.forEach(L=>{let n=0;L.keys=(L.steps||[]).map(s=>s.key||String(++n))});
+const sid=(li,si)=>lessons[li].num+"/"+lessons[li].keys[si];
 const st=(li,si)=>S.st[sid(li,si)]||(S.st[sid(li,si)]={});
 const passed=(li,si)=>{const s=lessons[li].steps[si],x=S.st[sid(li,si)]||{};return isTask(s)?!!x.ok:!!x.seen};
 

@@ -48,13 +48,21 @@ def task_label(st):
         q=q.replace(x,y)
     s=(('('+src.group(1)+') ') if src else '')+((m.group(1)+': ') if m else '')+q
     return s if len(s)<=120 else s[:117].rstrip()+'…'
+def keys(l):
+    # ключи шагов как в движке: у вставленных шагов свой key, остальные — по порядку без них
+    if not any(st.get('key') for st in l['steps']): return {}
+    n=0; out=[]
+    for st in l['steps']:
+        if st.get('key'): out.append(st['key'])
+        else: n+=1; out.append(str(n))
+    return {'keys':out}
 cat=[]
 for c in COURSES:
     if not os.path.exists(c['src']): continue
     t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=d['section']
     cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../'+c['out'].split('/')[1]+'/',
         lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
-                      labels=[task_label(st) for st in l['steps']]) for l in s['lessons']]))
+                      labels=[task_label(st) for st in l['steps']], **keys(l)) for l in s['lessons']]))
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')
