@@ -376,6 +376,18 @@ case 'student_create':
         [$login, $name, 'student', password_hash($pass, PASSWORD_DEFAULT), $note, time()]);
     out(['ok' => true, 'student' => ['id' => (int)$pdo->lastInsertId(), 'login' => $login, 'name' => $name, 'note' => $note], 'password' => $pass]);
 
+case 'coins_add':
+    // Учитель вручную начисляет (или списывает) монетки ученику
+    need_post();
+    need_teacher();
+    $id = (int)arg('id');
+    $amount = (int)arg('amount');
+    if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) fail('Ученик не найден', 404);
+    if ($amount === 0 || abs($amount) > 1000) fail('Укажите число от −1000 до 1000, кроме нуля');
+    $sid = 'b' . time() . bin2hex(random_bytes(4));
+    q('INSERT INTO inf_coins (user_id, ckey, sid, amount, created) VALUES (?,?,?,?,?)', [$id, 'bonus', $sid, $amount, time()]);
+    out(['ok' => true, 'coins' => coins_total($id)]);
+
 case 'student_update':
     need_post();
     need_teacher();

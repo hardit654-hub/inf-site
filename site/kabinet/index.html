@@ -62,7 +62,7 @@ main{padding-block:24px 60px}
 .narrow{max-width:440px;margin:0 auto}
 label{display:block;font-size:14px;font-weight:500;margin:0 0 6px}
 .field{margin-bottom:14px}
-input[type=text],input[type=password],input:not([type]){width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:16px var(--f-body);padding:0 12px}
+input[type=text],input[type=password],input[type=number],select.sel,input:not([type]){width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:16px var(--f-body);padding:0 12px}
 input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc6633}
 .btn{height:44px;border-radius:10px;border:0;background:var(--green);color:#0f2a12;font:600 15px var(--f-body);padding:0 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;white-space:nowrap}
 .btn:hover{background:var(--green-d)}
@@ -333,6 +333,11 @@ function paneStudents(cred){
       <div class="field"><label for="ao">Заметка <span class="muted">(класс, группа)</span></label><input id="ao" placeholder="11 класс"></div>
       <button class="btn" id="ab">Добавить</button></div><div id="am" hidden></div></form>
     <div id="credslot">${cred||""}</div></div>
+   ${STUDENTS.length?`<div class="card"><h2>Начислить монетки</h2><p class="sub">Бонус за работу на уроке, олимпиаду или просто так. Отрицательное число — списать.</p>
+    <form id="cf"><div class="row">
+      <div class="field" style="flex-basis:240px"><label for="cs">Ученик</label><select id="cs" class="sel">${STUDENTS.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.coins||0}</option>`).join("")}</select></div>
+      <div class="field" style="flex:0 1 140px"><label for="ca">Монеток</label><input id="ca" type="number" value="5" step="1" min="-1000" max="1000" required></div>
+      <button class="btn" id="cb">Начислить</button></div><div id="cm" hidden></div></form></div>`:""}
    <div class="card"><h2>Ученики · ${STUDENTS.length}</h2>
     <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Заметка</th><th>Монетки</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
     ${STUDENTS.length?STUDENTS.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc(s.note)}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="hide-sm muted">${ago(s.last_seen)}</td>
@@ -344,6 +349,11 @@ function paneStudents(cred){
   f.onsubmit=async e=>{e.preventDefault();msg(m,"");setBusy(b,true,"Добавляем…");
     try{const j=await api("student_create",{name:f.an.value,login:f.al.value,note:f.ao.value});
       STUDENTS=(await api("students")).students;paneStudents(credBox(j.student.name,j.student.login,j.password));document.getElementById("an").focus()}
+    catch(err){msg(m,err.message);setBusy(b,false)}};
+  const cf=document.getElementById("cf");
+  if(cf)cf.onsubmit=async e=>{e.preventDefault();const m=document.getElementById("cm"),b=document.getElementById("cb"),id=+cf.cs.value,n=parseInt(cf.ca.value,10);
+    setBusy(b,true);try{const j=await api("coins_add",{id,amount:n});STUDENTS=(await api("students")).students;const s=STUDENTS.find(x=>x.id===id);paneStudents();
+      const m2=document.getElementById("cm");document.getElementById("cs").value=id;msg(m2,(n>0?"Начислено ":"Списано ")+Math.abs(n)+" "+coinWord(Math.abs(n))+": "+s.name+" — теперь "+j.coins,true)}
     catch(err){msg(m,err.message);setBusy(b,false)}};
   pane.querySelectorAll("[data-reset]").forEach(btn=>btn.onclick=async()=>{
     const s=STUDENTS.find(x=>x.id===+btn.dataset.reset);
