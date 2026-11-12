@@ -165,7 +165,9 @@ details.pw .row{margin-top:12px}
 .due{font-weight:600;color:var(--ink)}
 .due.late{color:var(--red)}
 .done{display:inline-flex;align-items:center;gap:6px;color:var(--green-ink);font-weight:600}
-.gbtns{gap:8px}.gbtns .btn{flex:0 0 auto}
+.fbar{margin-bottom:16px}.fbar .seg{margin-bottom:10px}.fbar .seg.sub2{margin-bottom:0;padding-top:10px;border-top:1px solid var(--line)}
+.tab .cnt{opacity:.6;font-size:.88em;margin-left:2px}.tab.sm{height:32px;font-size:13.5px;padding:0 12px}
+.fhw{margin-top:14px;gap:12px;align-items:center}.fhw .note{margin:0;flex:1 1 260px}
 .glist{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:12px;padding:6px 10px;max-height:320px;overflow:auto}
 .gs{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;flex-wrap:wrap}.gs input{width:18px;height:18px;flex:0 0 auto}
 .gs .gcur{margin-left:auto;font-size:13px;color:var(--muted)}
@@ -426,6 +428,10 @@ function bindPw(){
 
 /* ---------- учитель ---------- */
 let TAB="students",STUDENTS=[],COURSE_I=0,OPEN=null;
+/* фильтр учеников: категория (Школа / Репетиторство) и группа (класс). "" — все, "-" — не указано */
+const CATS=["Школа","Репетиторство"];
+let FCAT="",FGRP="";
+try{FCAT=localStorage.getItem("kab-fcat")||"";FGRP=localStorage.getItem("kab-fgrp")||""}catch(e){}
 try{TAB=sessionStorage.getItem("kab-tab")||TAB;COURSE_I=+(sessionStorage.getItem("kab-course")||0)}catch(e){}
 async function viewTeacher(){
   app.innerHTML=`<nav class="tabs" role="tablist">
@@ -447,37 +453,35 @@ function bindCopy(){const b=document.getElementById("cp");if(!b)return;b.onclick
   setTimeout(()=>b.textContent="Скопировать",2000)}}
 function paneStudents(cred){
   const pane=document.getElementById("pane");
-  const G=groups();
-  pane.innerHTML=`<datalist id="grplist">${G.map(([g])=>`<option value="${esc(g)}">`).join("")}</datalist><div id="editslot"></div>
-   ${STUDENTS.length?`<div class="card"><h2>Домашка группе</h2><p class="sub">Одна домашка сразу всем ученикам группы. Расписание и ответы учеников не меняются.</p>
-    <div class="row gbtns">${G.map(([g,n])=>`<button class="btn ghost" type="button" data-grp="${esc(g)}">${esc(g)} <span class="muted">· ${n}</span></button>`).join("")}<button class="btn ghost" type="button" data-grp="">Все ученики <span class="muted">· ${STUDENTS.length}</span></button></div>
-    ${G.length?"":`<p class="note" style="margin-top:10px">Чтобы появились кнопки групп, укажите ученикам группу: «Занятия и ДЗ» → поле «Группа».</p>`}</div>`:""}
+  const V=visible();
+  pane.innerHTML=`<datalist id="grplist">${groups().map(([g])=>`<option value="${esc(g)}">`).join("")}</datalist>${filterBar(true)}<div id="editslot"></div>
    <div class="card"><h2>Добавить ученика</h2><p class="sub">Логин придумается сам из имени, пароль — случайный.</p>
     <form id="af"><div class="row">
       <div class="field" style="flex-basis:240px"><label for="an">Имя и фамилия</label><input id="an" required placeholder="Иван Петров"></div>
       <div class="field"><label for="al">Логин <span class="muted">(необязательно)</span></label><input id="al" autocapitalize="none" spellcheck="false" placeholder="ivan.petrov"></div>
-      <div class="field"><label for="ao">Группа <span class="muted">(класс)</span></label><input id="ao" list="grplist" placeholder="10 класс"></div>
+      <div class="field" style="flex:0 1 190px"><label for="aca">Категория</label>${catSel("aca",CATS.includes(FCAT)?FCAT:"")}</div>
+      <div class="field" style="flex:0 1 160px"><label for="ao">Класс / группа</label><input id="ao" list="grplist" placeholder="10 класс" value="${FGRP&&FGRP!=="-"?esc(FGRP):""}"></div>
       <button class="btn" id="ab">Добавить</button></div><div id="am" hidden></div></form>
     <div id="credslot">${cred||""}</div></div>
-   ${STUDENTS.length?`<div class="card"><h2>Начислить монетки</h2><p class="sub">Бонус за работу на уроке, олимпиаду или просто так. Отрицательное число — списать.</p>
+   ${V.length?`<div class="card"><h2>Начислить монетки</h2><p class="sub">Бонус за работу на уроке, олимпиаду или просто так. Отрицательное число — списать.</p>
     <form id="cf"><div class="row">
-      <div class="field" style="flex-basis:240px"><label for="cs">Ученик</label><select id="cs" class="sel">${STUDENTS.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.coins||0}</option>`).join("")}</select></div>
+      <div class="field" style="flex-basis:240px"><label for="cs">Ученик</label><select id="cs" class="sel">${V.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.coins||0}</option>`).join("")}</select></div>
       <div class="field" style="flex:0 1 140px"><label for="ca">Монеток</label><input id="ca" type="number" value="5" step="1" min="-1000" max="1000" required></div>
       <button class="btn" id="cb">Начислить</button></div><div id="cm" hidden></div></form></div>`:""}
-   <div class="card"><h2>Ученики · ${STUDENTS.length}</h2>
+   <div class="card"><h2>Ученики · ${esc(fLabel())} · ${V.length}</h2>
     <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Группа</th><th>Монетки</th><th>Занятия и ДЗ</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
-    ${STUDENTS.length?STUDENTS.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc(s.note)}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="sum">${s.info&&s.info.schedule.length?s.info.schedule.map(x=>DS[x.day]+" "+x.time).join(", "):'<span class="muted">без расписания</span>'}<br>ДЗ: ${hwChip(s.info)}</td><td class="hide-sm muted">${ago(s.last_seen)}</td>
+    ${V.length?V.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc([catOf(s),grpOf(s)].filter(Boolean).join(" · "))}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="sum">${s.info&&s.info.schedule.length?s.info.schedule.map(x=>DS[x.day]+" "+x.time).join(", "):'<span class="muted">без расписания</span>'}<br>ДЗ: ${hwChip(s.info)}</td><td class="hide-sm muted">${ago(s.last_seen)}</td>
        <td class="acts"><button class="btn small" data-info="${s.id}">Занятия и ДЗ</button><button class="btn ghost small" data-reset="${s.id}">Новый пароль</button><button class="btn danger small" data-del="${s.id}">Удалить</button></td></tr>`).join("")
-     :`<tr><td colspan="7" class="empty">Пока никого. Добавьте первого ученика выше.</td></tr>`}
+     :`<tr><td colspan="7" class="empty">${STUDENTS.length?"В этой группе пока никого.":"Пока никого. Добавьте первого ученика выше."}</td></tr>`}
     </tbody></table></div></div>`;
-  bindCopy();
+  bindCopy();bindFilter(()=>paneStudents());
   const f=document.getElementById("af"),m=document.getElementById("am"),b=document.getElementById("ab");
   f.onsubmit=async e=>{e.preventDefault();msg(m,"");setBusy(b,true,"Добавляем…");
-    try{const j=await api("student_create",{name:f.an.value,login:f.al.value,note:f.ao.value});
+    try{const j=await api("student_create",{name:f.an.value,login:f.al.value,note:f.ao.value,cat:f.aca.value});
       STUDENTS=(await api("students")).students;paneStudents(credBox(j.student.name,j.student.login,j.password));document.getElementById("an").focus()}
     catch(err){msg(m,err.message);setBusy(b,false)}};
   pane.querySelectorAll("[data-info]").forEach(btn=>btn.onclick=()=>editInfo(STUDENTS.find(x=>x.id===+btn.dataset.info)));
-  pane.querySelectorAll("[data-grp]").forEach(btn=>btn.onclick=()=>editGroupHw(btn.dataset.grp));
+  const gb=document.getElementById("ghw");if(gb)gb.onclick=()=>editGroupHw();
   const cf=document.getElementById("cf");
   if(cf)cf.onsubmit=async e=>{e.preventDefault();const m=document.getElementById("cm"),b=document.getElementById("cb"),id=+cf.cs.value,n=parseInt(cf.ca.value,10);
     setBusy(b,true);try{const j=await api("coins_add",{id,amount:n});STUDENTS=(await api("students")).students;const s=STUDENTS.find(x=>x.id===id);paneStudents();
@@ -492,17 +496,41 @@ function paneStudents(cred){
     if(!btn.classList.contains("sure")){btn.classList.add("sure");btn.textContent="Удалить вместе с прогрессом?";setTimeout(()=>{btn.classList.remove("sure");btn.textContent="Удалить"},4000);return}
     try{await api("student_delete",{id:s.id});STUDENTS=STUDENTS.filter(x=>x.id!==s.id);paneStudents()}catch(err){alertBox(err.message)}});
 }
-function groups(){
-  const m=new Map();STUDENTS.forEach(s=>{const g=(s.note||"").trim();if(g)m.set(g,(m.get(g)||0)+1)});
+const catOf=s=>(s.cat||"").trim(),grpOf=s=>(s.note||"").trim();
+const inCat=s=>FCAT===""||(FCAT==="-"?!catOf(s):catOf(s)===FCAT);
+const inGrp=s=>FGRP===""||(FGRP==="-"?!grpOf(s):grpOf(s)===FGRP);
+const visible=()=>STUDENTS.filter(s=>inCat(s)&&inGrp(s));
+function groups(list){
+  const m=new Map();(list||STUDENTS).forEach(s=>{const g=grpOf(s);if(g)m.set(g,(m.get(g)||0)+1)});
   return[...m].sort((a,b)=>a[0].localeCompare(b[0],"ru",{numeric:true}));
 }
-function editGroupHw(g){
+function fLabel(){
+  const a=[];if(FCAT)a.push(FCAT==="-"?"без категории":FCAT);if(FGRP)a.push(FGRP==="-"?"без группы":FGRP);
+  return a.length?a.join(" · "):"все ученики";
+}
+function filterBar(withHw){
+  const inC=STUDENTS.filter(inCat);const G=groups(inC);
+  if(FGRP&&FGRP!=="-"&&!G.some(([g])=>g===FGRP))FGRP="";
+  const noCat=STUDENTS.filter(s=>!catOf(s)).length,noGrp=inC.filter(s=>!grpOf(s)).length;
+  const t=(v,label,n)=>`<button class="tab" type="button" data-fc="${esc(v)}" aria-selected="${FCAT===v}">${esc(label)} <span class="cnt">${n}</span></button>`;
+  const c=(v,label,n)=>`<button class="tab sm" type="button" data-fg="${esc(v)}" aria-selected="${FGRP===v}">${esc(label)} <span class="cnt">${n}</span></button>`;
+  const vis=visible().length;
+  return `<div class="card fbar"><div class="seg" role="tablist" aria-label="Категория">${t("","Все",STUDENTS.length)}${CATS.map(x=>t(x,x,STUDENTS.filter(s=>catOf(s)===x).length)).join("")}${noCat?t("-","Без категории",noCat):""}</div>
+   <div class="seg sub2" aria-label="Группа">${c("","Все классы",inC.length)}${G.map(([g,n])=>c(g,g,n)).join("")}${noGrp&&G.length?c("-","Без группы",noGrp):""}</div>
+   ${withHw?`<div class="row fhw"><button class="btn" type="button" id="ghw" ${vis?"":"disabled"}>📝 Задать домашку: ${esc(fLabel())} (${vis})</button>
+   ${noCat===STUDENTS.length&&STUDENTS.length?`<p class="note">Чтобы разделить учеников на «Школу» и «Репетиторство», откройте у ученика «Занятия и ДЗ» и выберите категорию и класс.</p>`:""}</div>`:""}</div>`;
+}
+function bindFilter(rerender){
+  document.querySelectorAll("[data-fc]").forEach(b=>b.onclick=()=>{FCAT=b.dataset.fc;FGRP="";saveF();rerender()});
+  document.querySelectorAll("[data-fg]").forEach(b=>b.onclick=()=>{FGRP=b.dataset.fg;saveF();rerender()});
+}
+function saveF(){try{localStorage.setItem("kab-fcat",FCAT);localStorage.setItem("kab-fgrp",FGRP)}catch(e){}}
+const catSel=(id,v)=>`<select id="${id}" class="sel"><option value="">— не указана —</option>${CATS.map(x=>`<option ${x===v?"selected":""}>${x}</option>`).join("")}${v&&!CATS.includes(v)?`<option selected>${esc(v)}</option>`:""}</select>`;
+function editGroupHw(){
   const slot=document.getElementById("editslot");
-  const inG=s=>g===""||(s.note||"").trim()===g;
-  const opts=groups().map(([x,n])=>`<option value="${esc(x)}" ${x===g?"selected":""}>${esc(x)} · ${n}</option>`).join("")+`<option value="" ${g===""?"selected":""}>Все ученики · ${STUDENTS.length}</option>`;
-  const list=STUDENTS.filter(inG);
-  slot.innerHTML=`<div class="card edit"><h2>Домашка группе</h2><p class="sub">Домашка появится в кабинете у каждого отмеченного ученика. Расписание, решённые задачи и монетки не меняются.</p>
-   <form id="gf"><div class="row" style="margin-bottom:10px"><div class="field" style="flex:0 1 300px"><label for="gsel">Группа</label><select id="gsel" class="sel">${opts}</select></div></div>
+  const list=visible(),label=fLabel();
+  slot.innerHTML=`<div class="card edit"><h2>Домашка: ${esc(label)}</h2><p class="sub">Домашка появится в кабинете у каждого отмеченного ученика. Расписание, решённые задачи и монетки не меняются. Другую группу выберите кнопками выше.</p>
+   <form id="gf">
     <div class="field"><label>Кому <span class="muted" id="gcnt"></span></label><div class="glist">${list.length?list.map(s=>`<label class="gs"><input type="checkbox" class="gu" value="${s.id}" checked><span>${esc(s.name)}</span><span class="gcur">сейчас: ${hwChip(s.info)}</span></label>`).join(""):'<p class="muted">В этой группе пока никого.</p>'}</div></div>
     <div class="field"><label>Если у ученика уже есть домашка</label><div class="gmode"><label><input type="radio" name="gm" value="replace" checked> Заменить новой</label><label><input type="radio" name="gm" value="add"> Добавить к текущей</label></div></div>
     <div class="field" style="margin-top:6px"><label>Задачи из курсов <span class="muted" id="pkall"></span></label><div id="picker"><div class="loading" style="padding:14px">Загрузка курсов…</div></div></div>
@@ -512,7 +540,6 @@ function editGroupHw(g){
   buildPicker(new Set());
   const cnt=()=>{const n=slot.querySelectorAll(".gu:checked").length;document.getElementById("gcnt").textContent="— выбрано "+n+" из "+list.length;document.getElementById("gs").textContent=n?"Выдать домашку ("+n+")":"Выдать домашку"};
   slot.querySelectorAll(".gu").forEach(c=>c.onchange=cnt);cnt();
-  document.getElementById("gsel").onchange=e=>editGroupHw(e.target.value);
   document.getElementById("gc").onclick=()=>{slot.innerHTML=""};
   slot.scrollIntoView({behavior:"smooth",block:"start"});
   document.getElementById("gf").onsubmit=async e=>{e.preventDefault();const b=document.getElementById("gs"),m=document.getElementById("gmsg");
@@ -524,7 +551,7 @@ function editGroupHw(g){
     setBusy(b,true,"Выдаём…");
     try{const j=await api("hw_assign",{ids,homework,hw_tasks,hw_due:document.getElementById("hwd").value,mode});
       STUDENTS=(await api("students")).students;paneStudents();
-      document.getElementById("editslot").innerHTML=`<div class="card"><div class="msg good" role="status">Домашка выдана: ${j.count} ${plural(j.count,"ученику","ученикам","ученикам")}${g?" группы «"+esc(g)+"»":""}. Ученики уже видят её в кабинете.</div></div>`}
+      document.getElementById("editslot").innerHTML=`<div class="card"><div class="msg good" role="status">Домашка выдана: ${j.count} ${plural(j.count,"ученику","ученикам","ученикам")}${FCAT||FGRP?" ("+esc(label)+")":""}. Ученики уже видят её в кабинете.</div></div>`}
     catch(err){msg(m,err.message);setBusy(b,false)}};
 }
 function plural(n,a,b,c){const m=n%10,h=n%100;return m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c}
@@ -533,7 +560,8 @@ function editInfo(s){
   const slot=document.getElementById("editslot");
   const row=x=>`<div class="srow"><select class="sd">${DAYS.slice(1).map((d,k)=>`<option value="${k+1}" ${x.day===k+1?"selected":""}>${d}</option>`).join("")}</select><input type="time" class="st" value="${x.time||"17:00"}" required><input type="number" class="dur" min="15" max="240" step="15" value="${x.dur||60}" title="Длительность, мин"><span class="muted">мин</span><button class="btn danger small rm" type="button">Убрать</button></div>`;
   slot.innerHTML=`<div class="card edit"><h2>${esc(s.name)}: занятия и домашка</h2><p class="sub">Ученик увидит это у себя в кабинете сразу после сохранения.</p>
-   <form id="ef"><div class="field" style="max-width:320px"><label for="egr">Группа <span class="muted">(класс)</span></label><input id="egr" list="grplist" value="${esc(s.note||"")}" placeholder="10 класс"></div>
+   <form id="ef"><div class="row"><div class="field" style="flex:0 1 220px"><label for="eca">Категория</label>${catSel("eca",catOf(s))}</div>
+    <div class="field" style="flex:0 1 200px"><label for="egr">Класс / группа</label><input id="egr" list="grplist" value="${esc(s.note||"")}" placeholder="10 класс"></div></div>
     <label>Расписание</label><div id="rows">${(i.schedule.length?i.schedule:[]).map(row).join("")}</div>
     <button class="btn ghost small" type="button" id="addrow">+ Добавить день</button>
     <div class="field" style="margin-top:18px"><label>Домашнее задание: задачи из курсов <span class="muted" id="pkall"></span></label><div id="picker"><div class="loading" style="padding:14px">Загрузка курсов…</div></div></div>
@@ -552,7 +580,8 @@ function editInfo(s){
     const schedule=[...rows.querySelectorAll(".srow")].map(r=>({day:+r.querySelector(".sd").value,time:r.querySelector(".st").value,dur:+r.querySelector(".dur").value||60}));
     setBusy(b,true,"Сохраняем…");
     const hw_tasks=[...document.querySelectorAll("#picker .tk:checked")].map(c=>c.value);
-    try{const ng=document.getElementById("egr").value.trim();if(ng!==(s.note||"").trim())await api("student_update",{id:s.id,name:s.name,note:ng});
+    try{const ng=document.getElementById("egr").value.trim(),nc=document.getElementById("eca").value;
+      if(ng!==grpOf(s)||nc!==catOf(s))await api("student_update",{id:s.id,name:s.name,note:ng,cat:nc});
       await api("info_set",{id:s.id,schedule,homework:document.getElementById("hwt").value,hw_tasks,hw_due:document.getElementById("hwd").value});
       STUDENTS=(await api("students")).students;paneStudents();const ns=STUDENTS.find(x=>x.id===s.id);editInfo(ns);msg(document.getElementById("em"),"Сохранено — ученик уже видит это в кабинете",true)}
     catch(err){msg(m,err.message);setBusy(b,false)}};
@@ -583,13 +612,14 @@ async function paneProgress(){
   const pane=document.getElementById("pane"),cat=await catalog();
   if(COURSE_I>=cat.length)COURSE_I=0;
   const c=cat[COURSE_I];
-  pane.innerHTML=`<div class="seg">${cat.map((x,i)=>`<button class="tab" data-c="${i}" aria-selected="${i===COURSE_I}">${esc(x.title)}</button>`).join("")}</div><div class="card"><div class="loading">Загрузка…</div></div>`;
+  pane.innerHTML=filterBar(false)+`<div class="seg">${cat.map((x,i)=>`<button class="tab" data-c="${i}" aria-selected="${i===COURSE_I}">${esc(x.title)}</button>`).join("")}</div><div class="card"><div class="loading">Загрузка…</div></div>`;
+  bindFilter(()=>{OPEN=null;paneProgress()});
   pane.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{COURSE_I=+b.dataset.c;OPEN=null;try{sessionStorage.setItem("kab-course",COURSE_I)}catch(e){}paneProgress()});
-  let P;try{P=(await api("class_progress",null,{key:c.key})).progress}catch(e){pane.querySelector(".card").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
+  let P;try{P=(await api("class_progress",null,{key:c.key})).progress}catch(e){pane.querySelector(".card:not(.fbar)").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
   const L=c.lessons.filter(l=>l.steps.includes("task"));
-  const rows=STUDENTS.map(s=>{const p=P[s.id]||{};return{s,p,k:stats(c,p.data)}});
+  const V=visible();const rows=V.map(s=>{const p=P[s.id]||{};return{s,p,k:stats(c,p.data)}});
   const cellH=(d,t)=>`<span class="cell ${d===t&&t?"full":d?"":"zero"}"><b>${d}/${t}</b><span class="meter"><i style="width:${pct(d,t)}%"></i></span></span>`;
-  pane.querySelector(".card").innerHTML=!STUDENTS.length?`<div class="empty">Сначала добавьте учеников на вкладке «Ученики».</div>`:
+  pane.querySelector(".card:not(.fbar)").innerHTML=!STUDENTS.length?`<div class="empty">Сначала добавьте учеников на вкладке «Ученики».</div>`:!V.length?`<div class="empty">В этой группе пока никого.</div>`:
    `<div class="tbl-wrap"><table class="pt"><thead><tr><th>Ученик</th>${L.map(l=>`<th title="${esc(l.title)}">${esc(l.num)}</th>`).join("")}<th>Всего</th><th class="hide-sm">Последнее</th></tr></thead><tbody>
     ${rows.map(r=>`<tr class="srow" data-u="${r.s.id}" aria-expanded="${OPEN===r.s.id}"><td>${esc(r.s.name)}</td>${r.k.lessons.filter(l=>l.total).map(l=>`<td>${cellH(l.done,l.total)}</td>`).join("")}<td>${cellH(r.k.done,r.k.total)}</td><td class="hide-sm muted">${r.p.updated?ago(r.p.updated):"—"}</td></tr>
       ${OPEN===r.s.id?`<tr class="detail"><td colspan="${L.length+3}">${detail(r)}</td></tr>`:""}`).join("")}

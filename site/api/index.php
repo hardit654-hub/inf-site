@@ -57,6 +57,9 @@ function schema(PDO $pdo, bool $mysql) {
         hw_set INT NOT NULL DEFAULT 0, hw_done INT NOT NULL DEFAULT 0, updated INT NOT NULL DEFAULT 0)$tail");
     try { $pdo->query('SELECT hw_tasks FROM inf_student_info LIMIT 0'); }
     catch (Exception $e) { $pdo->exec('ALTER TABLE inf_student_info ADD COLUMN hw_tasks TEXT'); }
+    // категория ученика: «Школа» / «Репетиторство» (новая колонка, по умолчанию пустая)
+    try { $pdo->query('SELECT cat FROM inf_users LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec("ALTER TABLE inf_users ADD COLUMN cat VARCHAR(32) NOT NULL DEFAULT ''"); }
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_attempts (
         id $ai, k VARCHAR(128) NOT NULL, ts INT NOT NULL)$tail");
 }
@@ -271,6 +274,7 @@ function hw_progress(int $uid, array $tasks): array {
     }
     return ['total' => count($tasks), 'solved' => $solved];
 }
+function clean_cat($c): string { return mb_substr(trim((string)$c), 0, 32, 'UTF-8'); }
 function clean_hw_input(): array {
     $hw = trim(str_replace("\r", '', (string)arg('homework')));
     if (mb_strlen($hw, 'UTF-8') > 5000) fail('Домашнее задание слишком длинное (до 5000 символов)');
@@ -477,7 +481,7 @@ case 'leaderboard':
 /* ----- кабинет учителя ----- */
 case 'students':
     need_teacher();
-    $rows = q("SELECT u.id, u.login, u.name, u.note, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
+    $rows = q("SELECT u.id, u.login, u.name, u.note, u.cat, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
                LEFT JOIN (SELECT user_id, SUM(amount) AS s FROM inf_coins GROUP BY user_id) c ON c.user_id = u.id
                WHERE u.role = 'student' ORDER BY u.name")->fetchAll();
     foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['info'] = info_of($r['id']); $r['info']['hw_prog'] = hw_progress($r['id'], $r['info']['hw_tasks']); }
@@ -492,10 +496,11 @@ case 'student_create':
     elseif (!valid_login($login)) fail('Логин: латиница, цифры, точка, дефис; от 2 до 32 символов');
     elseif (one('SELECT id FROM inf_users WHERE login = ?', [$login])) fail('Такой логин уже занят');
     $note = mb_substr(trim((string)arg('note')), 0, 200, 'UTF-8');
+    $cat = clean_cat(arg('cat'));
     $pass = make_password();
-    q('INSERT INTO inf_users (login, name, role, pass_hash, note, created_at) VALUES (?,?,?,?,?,?)',
-        [$login, $name, 'student', password_hash($pass, PASSWORD_DEFAULT), $note, time()]);
-    out(['ok' => true, 'student' => ['id' => (int)$pdo->lastInsertId(), 'login' => $login, 'name' => $name, 'note' => $note], 'password' => $pass]);
+    q('INSERT INTO inf_users (login, name, role, pass_hash, note, cat, created_at) VALUES (?,?,?,?,?,?,?)',
+        [$login, $name, 'student', password_hash($pass, PASSWORD_DEFAULT), $note, $cat, time()]);
+    out(['ok' => true, 'student' => ['id' => (int)$pdo->lastInsertId(), 'login' => $login, 'name' => $name, 'note' => $note, 'cat' => $cat], 'password' => $pass]);
 
 case 'coins_add':
     // Учитель вручную начисляет (или списывает) монетки ученику
@@ -515,6 +520,8 @@ case 'student_update':
     $id = (int)arg('id');
     if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) fail('Ученик не найден', 404);
     q('UPDATE inf_users SET name = ?, note = ? WHERE id = ?', [clean_name(arg('name')), mb_substr(trim((string)arg('note')), 0, 200, 'UTF-8'), $id]);
+    global $IN;
+    if (array_key_exists('cat', $IN)) q('UPDATE inf_users SET cat = ? WHERE id = ?', [clean_cat(arg('cat')), $id]);
     out(['ok' => true]);
 
 case 'student_reset':
