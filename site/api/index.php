@@ -55,6 +55,8 @@ function schema(PDO $pdo, bool $mysql) {
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_student_info (
         user_id INT NOT NULL PRIMARY KEY, schedule TEXT, homework TEXT, hw_due VARCHAR(10) NOT NULL DEFAULT '',
         hw_set INT NOT NULL DEFAULT 0, hw_done INT NOT NULL DEFAULT 0, updated INT NOT NULL DEFAULT 0)$tail");
+    try { $pdo->query('SELECT hw_tasks FROM inf_student_info LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec('ALTER TABLE inf_student_info ADD COLUMN hw_tasks TEXT'); }
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_attempts (
         id $ai, k VARCHAR(128) NOT NULL, ts INT NOT NULL)$tail");
 }
@@ -236,14 +238,38 @@ function coins_total(int $uid): int {
 
 /* ---------- расписание и домашка ---------- */
 function info_of(int $uid): array {
-    $r = one('SELECT schedule, homework, hw_due, hw_set, hw_done, updated FROM inf_student_info WHERE user_id = ?', [$uid]);
+    $r = one('SELECT schedule, homework, hw_tasks, hw_due, hw_set, hw_done, updated FROM inf_student_info WHERE user_id = ?', [$uid]);
     return [
+        'hw_tasks' => $r && $r['hw_tasks'] ? json_decode($r['hw_tasks'], true) : [],
         'schedule' => $r && $r['schedule'] ? json_decode($r['schedule'], true) : [],
         'homework' => $r ? (string)$r['homework'] : '',
         'hw_due' => $r ? (string)$r['hw_due'] : '',
         'hw_set' => $r ? (int)$r['hw_set'] : 0,
         'hw_done' => $r ? (int)$r['hw_done'] : 0,
     ];
+}
+function clean_tasks($a): array {
+    // задачи домашки: ["course-ege-inf-s42|42.4/6", ...]
+    $out = [];
+    if (!is_array($a)) return $out;
+    foreach ($a as $x) {
+        $x = (string)$x;
+        if (preg_match('/^[a-z0-9-]{1,64}\|[0-9.]{1,12}\/\d{1,3}$/', $x) && !in_array($x, $out, true)) $out[] = $x;
+        if (count($out) >= 200) break;
+    }
+    return $out;
+}
+function hw_progress(int $uid, array $tasks): array {
+    // сколько задач из домашки ученик уже решил
+    $byKey = [];
+    foreach ($tasks as $t) { [$k, $sid] = explode('|', $t, 2); $byKey[$k][] = $sid; }
+    $solved = 0;
+    foreach ($byKey as $k => $sids) {
+        $r = one('SELECT data FROM inf_progress WHERE user_id = ? AND ckey = ?', [$uid, $k]);
+        $st = $r ? (json_decode($r['data'], true)['st'] ?? []) : [];
+        foreach ($sids as $sid) if (!empty($st[$sid]['ok'])) $solved++;
+    }
+    return ['total' => count($tasks), 'solved' => $solved];
 }
 function clean_schedule($s): array {
     $out = [];
@@ -368,7 +394,7 @@ case 'hw_done':
     need_post();
     $u = need_user();
     $i = info_of((int)$u['id']);
-    if ($i['homework'] === '') fail('Домашнее задание не задано');
+    if ($i['homework'] === '' && !$i['hw_tasks']) fail('Домашнее задание не задано');
     q('UPDATE inf_student_info SET hw_done = ? WHERE user_id = ?', [arg('done', false) ? time() : 0, $u['id']]);
     out(['ok' => true] + info_of((int)$u['id']));
 
@@ -384,14 +410,15 @@ case 'info_set':
     if (mb_strlen($hw, 'UTF-8') > 5000) fail('Домашнее задание слишком длинное (до 5000 символов)');
     $due = (string)arg('hw_due');
     if ($due !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $due)) fail('Неверная дата');
-    $changed = $hw !== $old['homework'] || $due !== $old['hw_due'];
-    $hwSet = $changed ? ($hw === '' ? 0 : time()) : $old['hw_set'];
+    $tasks = clean_tasks(arg('hw_tasks', []));
+    $changed = $hw !== $old['homework'] || $due !== $old['hw_due'] || $tasks !== $old['hw_tasks'];
+    $hwSet = $changed ? (($hw === '' && !$tasks) ? 0 : time()) : $old['hw_set'];
     $hwDone = $changed ? 0 : $old['hw_done'];
     $j = json_encode($sched, JSON_UNESCAPED_UNICODE);
     if (one('SELECT user_id FROM inf_student_info WHERE user_id = ?', [$id]))
-        q('UPDATE inf_student_info SET schedule = ?, homework = ?, hw_due = ?, hw_set = ?, hw_done = ?, updated = ? WHERE user_id = ?', [$j, $hw, $due, $hwSet, $hwDone, time(), $id]);
+        q('UPDATE inf_student_info SET schedule = ?, homework = ?, hw_tasks = ?, hw_due = ?, hw_set = ?, hw_done = ?, updated = ? WHERE user_id = ?', [$j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time(), $id]);
     else
-        q('INSERT INTO inf_student_info (user_id, schedule, homework, hw_due, hw_set, hw_done, updated) VALUES (?,?,?,?,?,?,?)', [$id, $j, $hw, $due, $hwSet, $hwDone, time()]);
+        q('INSERT INTO inf_student_info (user_id, schedule, homework, hw_tasks, hw_due, hw_set, hw_done, updated) VALUES (?,?,?,?,?,?,?,?)', [$id, $j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time()]);
     out(['ok' => true] + info_of($id));
 
 case 'leaderboard':
@@ -420,7 +447,7 @@ case 'students':
     $rows = q("SELECT u.id, u.login, u.name, u.note, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
                LEFT JOIN (SELECT user_id, SUM(amount) AS s FROM inf_coins GROUP BY user_id) c ON c.user_id = u.id
                WHERE u.role = 'student' ORDER BY u.name")->fetchAll();
-    foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['info'] = info_of($r['id']); }
+    foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['info'] = info_of($r['id']); $r['info']['hw_prog'] = hw_progress($r['id'], $r['info']['hw_tasks']); }
     out(['ok' => true, 'students' => $rows]);
 
 case 'student_create':

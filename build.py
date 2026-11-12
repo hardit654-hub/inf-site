@@ -22,12 +22,36 @@ for c in COURSES:
 
 # Структура курсов для кабинета (без ответов): уроки и какие шаги — задачи
 import re
+import html as _H
+def task_label(st):
+    """Короткая подпись задачи для выбора домашки: источник, ключевые числа и вопрос."""
+    if st['type'] not in ('fill','choice','match'): return ''
+    h=' '.join(b['v'] for b in st.get('blocks',[]) if b.get('t')=='html')
+    h=re.sub(r'<table.*?</table>|<details.*?</details>','',h,flags=re.S)
+    txt=lambda x:re.sub(r'\s+',' ',_H.unescape(re.sub(r'<[^>]+>',' ',x))).replace('\xa0',' ').strip()
+    paras=[txt(x) for x in re.findall(r'<p[^>]*>(.*?)</p>',h,flags=re.S)] or [txt(h)]
+    paras=[x for x in paras if x]
+    if not paras: return ''
+    qs=[x for x in paras if re.search(r'(Определите|Найдите|Укажите|Сколько|Какую|Какое|Какая|Каково|Выберите|Сопоставьте)',x)]
+    q=qs[-1] if qs else paras[-1]
+    first=paras[0]
+    src=re.match(r'^\(([^)]{2,40})\)',first)
+    m=re.search(r'(числа \d+|из \d+ (?:символ\w*|нул\w*|единиц\w*)|\d+ нул\w+ и \d+ единиц\w*)',first)
+    for x,y in [('После выполнения программы на ленте осталось ровно','Осталось ровно'),('После выполнения программы на ленте оказалась','Получилась'),
+                ('Определите максимально возможное','Найдите макс.'),('Определите минимально возможное','Найдите мин.'),('Определите наибольшее возможное','Найдите наиб.'),
+                ('Определите наименьшее возможное','Найдите наим.'),(' в исходной последовательности',' в исходной строке'),
+                (', которые будут находится на ленте после выполнения программы',' после работы'),(' на ленте после выполнения программы',' после работы'),
+                (' , ',', '),(' .','.'),('  ',' ')]:
+        q=q.replace(x,y)
+    s=(('('+src.group(1)+') ') if src else '')+((m.group(1)+': ') if m else '')+q
+    return s if len(s)<=120 else s[:117].rstrip()+'…'
 cat=[]
 for c in COURSES:
     if not os.path.exists(c['src']): continue
     t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=d['section']
     cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../'+c['out'].split('/')[1]+'/',
-        lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']]) for l in s['lessons']]))
+        lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
+                      labels=[task_label(st) for st in l['steps']]) for l in s['lessons']]))
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')

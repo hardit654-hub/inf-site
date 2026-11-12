@@ -70,6 +70,11 @@ button{font:inherit}
 .sq.bad{background:var(--bad);color:#fff}
 .sq.rev{background:var(--warn);color:#2a1a00}
 .sq.on{outline:2px solid #fff;outline-offset:1px}
+.hwt{display:inline-block;font:700 11px var(--f-mono);color:#2a1a00;background:#ff9f1a;border-radius:99px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.sq.hw::before{content:"";position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:#ff9f1a;border:2px solid var(--bar)}
+.hwnote{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#b86b00;background:#fff3e0;border:1px solid #ffd59a;border-radius:6px;padding:8px 12px}
+:root[data-theme="dark"] .hwnote{background:#3a2a10;color:#ffc46b;border-color:#5c4214}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hwnote{background:#3a2a10;color:#ffc46b;border-color:#5c4214}}
 .sq.on::after{content:"";position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);border:6px solid transparent;border-bottom-color:var(--bg)}
 .hright{display:flex;align-items:center;gap:10px;flex:none}
 .pts{font:500 13px var(--f-body);color:var(--bar-muted);white-space:nowrap}
@@ -3329,7 +3334,7 @@ let S={pos:null,st:{}};
 try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&x.st)S=x}catch(e){}
 /* Синхронизация с личным кабинетом: если ученик вошёл, прогресс уходит на сервер (../api). Без входа всё работает как раньше — только на этом устройстве. */
 const API="../api/index.php";
-let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false,COINS=null;
+let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false,COINS=null,HW=new Set();
 const COIN_SVG='<svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>';
 /* Монетки: 3 за задачу минус 1 за каждую неверную попытку; если смотрели ответ — 0.
    С кабинетом считает сервер (каждая задача оплачивается один раз навсегда), без кабинета — по ответам на этом устройстве. */
@@ -3390,7 +3395,8 @@ async function initSync(){
   if(ME&&S.uid&&S.uid!==ME.id)S={pos:null,st:{}};  // на этом устройстве остался чужой прогресс
   if(!ME&&S.uid){/* вышли из кабинета: локальный прогресс оставляем, при входе он сольётся */}
   paintAcct();paintCoins(0);
-  if(ME){await pull(true);render()}
+  if(ME){try{const i=await api("info_get");(i.hw_tasks||[]).forEach(x=>{const [k,s]=x.split("|");if(k===KEY)HW.add(s)})}catch(e){}
+    await pull(true);render()}
 }
 function localCoins(){let s=0;lessons.forEach((L,li)=>(L.steps||[]).forEach((st,si)=>{if(isTask(st))s+=coinFor(S.st[sid(li,si)])}));return s}
 function paintCoins(gained){
@@ -3495,7 +3501,8 @@ function renderToc(){
     if(!L.steps){h+=`<button class="les" disabled><span class="n">${L.num}</span><span class="t">${esc(L.title)}</span><span class="c">скоро</span></button>`;return}
     const p=lessonStat(li);allDone+=p.done;all+=p.total;
     const cls=p.done===p.total?" done":p.done?" part":"";
-    h+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.num}</span><span class="t">${esc(L.title)}</span><span class="c">${p.done}/${p.total}</span></button>`;
+    const hwn=L.steps.reduce((a,_,si)=>a+(HW.has(sid(li,si))&&!passed(li,si)?1:0),0);
+    h+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.num}</span><span class="t">${esc(L.title)}${hwn?` <span class="hwt" title="Задач из домашки: ${hwn}">ДЗ ${hwn}</span>`:""}</span><span class="c">${p.done}/${p.total}</span></button>`;
   });
   $("toclist").innerHTML=h;
   $("toclist").querySelectorAll(".les[data-li]").forEach(b=>b.onclick=()=>{go(+b.dataset.li,null);if(matchMedia("(max-width:900px)").matches)setToc(false)});
@@ -3508,7 +3515,8 @@ function sqHTML(li,i){
   if(isTask(s)){if(x.ok){c+=x.rev?" rev":" ok";icon=ICON.check}else if(x.att){c+=" bad";icon=ICON.cross}}
   else if(x.seen)c+=" seen";
   if(i===cur.si)c+=" on";
-  return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}" title="Шаг ${i+1}">${icon}</button>`;
+  const hw=HW.has(sid(li,i));if(hw)c+=" hw";
+  return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}${hw?", домашнее задание":""}" title="Шаг ${i+1}${hw?" · домашнее задание":""}">${icon}</button>`;
 }
 function render(){
   const L=lessons[cur.li], s=L.steps[cur.si], x=st(cur.li,cur.si);
@@ -3520,6 +3528,7 @@ function render(){
   $("lbar").innerHTML=`<b>${L.num} ${esc(L.title)}</b><span>${p.done} из ${p.total} шагов пройдено</span><span>${p.ok} из ${p.tasks} баллов получено</span>`;
   $("pts").innerHTML=`Шаг <b>${cur.si+1}</b> из ${L.steps.length}`;
   let h="";
+  if(HW.has(sid(cur.li,cur.si))) h+=`<div class="hwnote">📝 Эта задача — из домашнего задания${x.ok?" · решена ✓":""}</div>`;
   if(s.title&&s.type!=="video") h+=`<h2 class="left">${esc(s.title)}</h2>`;
   if(s.type==="video"){
     if(s.embed) h+=`<div class="vwrap"><iframe src="${esc(s.embed)}" title="${esc(s.title||"Видео")}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock" allowfullscreen loading="lazy"></iframe></div>`;
