@@ -1,6 +1,187 @@
 {
  "courses": [
   {
+   "key": "course-ege-inf-s42",
+   "title": "№ 12 · Машина Тьюринга",
+   "url": "../ege-12/",
+   "lessons": [
+    {
+     "num": "42.1",
+     "title": "Теория",
+     "steps": [
+      "text",
+      "video",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "video",
+      "task",
+      "task",
+      "video",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "42.2",
+     "title": "Простые задачки",
+     "steps": [
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "42.3",
+     "title": "Простые задачки",
+     "steps": [
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "video",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "42.4",
+     "title": "Демоверсия 2026",
+     "steps": [
+      "text",
+      "task",
+      "video",
+      "text",
+      "video",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "42.5",
+     "title": "Решение в Python",
+     "steps": [
+      "text",
+      "text",
+      "text",
+      "video",
+      "text",
+      "video",
+      "text",
+      "video",
+      "video",
+      "task",
+      "video"
+     ]
+    },
+    {
+     "num": "42.6",
+     "title": "Задачи на числа",
+     "steps": [
+      "text",
+      "text",
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "42.7",
+     "title": "Тренировка",
+     "steps": [
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    },
+    {
+     "num": "42.8",
+     "title": "На основе старых задач № 12",
+     "steps": [
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "video"
+     ]
+    },
+    {
+     "num": "42.9",
+     "title": "Разные задачки",
+     "steps": [
+      "text",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task",
+      "task"
+     ]
+    }
+   ]
+  },
+  {
    "key": "course-ege-inf-s40",
    "title": "№ 19–21 · Решение в Python",
    "url": "../ege-19-21/",

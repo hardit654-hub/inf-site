@@ -1,6 +1,9 @@
 """Собирает страницы курсов: src/engine.html + src/<курс>/course.js -> site/<папка>/index.html"""
 import json
 COURSES=[
+  dict(src='src/12/course.js', out='site/ege-12/index.html', title='№ 12 · Машина Тьюринга',
+       og_title='№ 12. Машина Тьюринга — курс', url='https://gsvv.ru/inf/ege-12/', image='https://gsvv.ru/inf/og-12.jpg',
+       desc='Исполнитель МТ для ЕГЭ по информатике: таблица программы, устное решение, Python. 9 уроков, 92 задачи с автопроверкой.'),
   dict(src='src/19-21/course.js', out='site/ege-19-21/index.html', title='№ 19–21 · Решение в Python',
        og_title='№ 19–21. Решение в Python — курс', url='https://gsvv.ru/inf/ege-19-21/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.'),
@@ -24,7 +27,7 @@ for c in COURSES:
     if not os.path.exists(c['src']): continue
     t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=d['section']
     cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../'+c['out'].split('/')[1]+'/',
-        lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice') else st['type']) for st in l['steps']]) for l in s['lessons']]))
+        lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']]) for l in s['lessons']]))
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')

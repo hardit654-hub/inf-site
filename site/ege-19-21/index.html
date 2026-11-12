@@ -166,6 +166,26 @@ details.box>div{display:flex;flex-direction:column;gap:10px;padding-bottom:14px}
 .file svg{width:15px;height:15px;flex:none}
 .file .sz{font:400 12px var(--f-body);opacity:.8}
 .vlinks{font-size:14px;color:var(--muted)}
+.tw{overflow-x:auto;max-width:100%}
+.html table:not(.g18){border-collapse:collapse;font-variant-numeric:tabular-nums}
+.html table:not(.g18) td,.html table:not(.g18) th{border:1px solid var(--line-strong);padding:7px 14px;text-align:center;vertical-align:middle}
+.html table:not(.g18) thead td,.html table:not(.g18) thead th{background:var(--code-bg);font-weight:600}
+.html table:not(.g18) tbody td:first-child{background:var(--code-bg)}
+.html table.note-t td{text-align:left;background:none!important;border-color:var(--line)}
+.html img{max-width:100%;height:auto;border-radius:6px}
+.html blockquote{margin:0;padding:6px 14px;border-left:3px solid var(--accent);background:var(--code-bg);border-radius:0 6px 6px 0}
+.html blockquote p{margin:0}
+.html ul,.html ol{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:4px}
+.html pre{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow-x:auto;font:14px/1.5 var(--f-mono);white-space:pre}
+.html h4{margin:6px 0 0;font-size:17px}
+.tex{display:inline-block;max-width:100%;overflow-x:auto;vertical-align:middle;padding:2px 0}
+.tex.raw{font:14px var(--f-mono);color:var(--muted)}
+.mlist{display:flex;flex-direction:column;gap:8px}
+.mrow{display:grid;grid-template-columns:minmax(64px,auto) minmax(0,1fr);gap:12px;align-items:center}
+.mk{font:600 16px var(--f-mono);text-align:center;border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--code-bg)}
+.mrow select{font:15px var(--f-body);padding:8px 10px;border:1px solid var(--line-strong);border-radius:6px;background:var(--bg);color:var(--ink);min-width:0;width:100%}
+.mrow select.ok{border-color:var(--green);background:var(--green-soft)}
+.mrow select.bad{border-color:var(--bad)}
 .gridwrap{overflow-x:auto;max-width:100%}
 table.g18{border-collapse:collapse;border:3px solid var(--ink);font-variant-numeric:tabular-nums}
 table.g18 td{width:46px;height:38px;text-align:center;border:1px solid var(--line-strong);font-size:16px}
@@ -2842,7 +2862,7 @@ const ICON={
   dl:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M4.5 6.8 8 10.3l3.5-3.5M2.5 13.5h11"/></svg>',
   lock:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>'
 };
-const isTask=s=>s.type==="choice"||s.type==="fill";
+const isTask=s=>s.type==="choice"||s.type==="fill"||s.type==="match";
 const lessons=SEC.lessons;
 const sid=(li,si)=>lessons[li].num+"/"+(si+1);
 const st=(li,si)=>S.st[sid(li,si)]||(S.st[sid(li,si)]={});
@@ -2946,12 +2966,23 @@ function render(){
   if(s.blocks) h+=blocks(s.blocks,isTask(s)?x:null);
   if(s.type==="choice") h+=choiceHTML(s,x);
   if(s.type==="fill") h+=fillHTML(s,x);
+  if(s.type==="match") h+=matchHTML(s,x);
   $("step").innerHTML=h;
   const prev=prevPos(), next=nextPos();
   $("foot").innerHTML=`${prev?`<button class="btn ghost" id="prev">${ICON.prev}Назад</button>`:"<span></span>"}${next?`<button class="btn" id="next">${next.li!==cur.li?"Следующий урок":"Следующий шаг"}${ICON.next}</button>`:`<span class="soon">Это последний шаг раздела</span>`}
     <div class="note"><span>${ME?"Ответы сохраняются в личном кабинете — их видно с любого устройства.":'Ответы сохраняются на этом устройстве. <a href="../kabinet/">Войдите</a>, чтобы они были на любом.'}</span><button class="btn ghost" id="rst">Сбросить прогресс</button><span id="rstc" hidden>Точно стереть все ответы? <button class="btn ghost" id="rsty" style="color:var(--bad)">Да, стереть</button> <button class="btn ghost" id="rstn">Нет</button></span></div>`;
   wire(s,x);
   renderToc();
+  renderTex();
+}
+let katexP=null;
+function renderTex(){
+  const els=[...document.querySelectorAll("#step .tex:not([data-done])")];if(!els.length)return;
+  if(!katexP)katexP=new Promise((res,rej)=>{
+    const l=document.createElement("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css";document.head.appendChild(l);
+    const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js";sc.onload=()=>res(window.katex);sc.onerror=rej;document.head.appendChild(sc);
+  });
+  katexP.then(k=>{els.forEach(e=>{if(e.dataset.done)return;try{k.render(e.textContent,e,{throwOnError:false,output:"html"});e.dataset.done="1"}catch(err){e.classList.add("raw")}})}).catch(()=>els.forEach(e=>e.classList.add("raw")));
 }
 function nextPos(){
   if(cur.si<lessons[cur.li].steps.length-1) return {li:cur.li,si:cur.si+1};
@@ -2992,6 +3023,16 @@ function fillHTML(s,x){
   });
   return h+`</div>`+actions(s,x)+`</div>`;
 }
+function matchHTML(s,x){
+  const v=x.v||[];
+  let h=`<div class="quiz${x.ok?" ok":x.att&&x.last===false?" bad":""}" id="quiz"><span class="qt">Сопоставьте значения из двух списков</span>`+verdict(x,"Верно!","Есть ошибки — неверные пары подсвечены красным.")+`<div class="mlist">`;
+  s.items.forEach((it,i)=>{
+    const sel=v[i]!=null?+v[i]:-1;
+    let cls="";if(x.last!=null&&sel>=0)cls=sel===s.answer[i]?"ok":"bad";if(x.ok)cls="ok";
+    h+=`<label class="mrow"><span class="mk">${it}</span><select data-i="${i}" class="${cls}" ${x.ok?"disabled":""}><option value="">— выберите —</option>${s.options.map((o,j)=>`<option value="${j}" ${j===sel?"selected":""}>${esc(o)}</option>`).join("")}</select></label>`;
+  });
+  return h+`</div>`+actions(s,x)+`</div>`;
+}
 function actions(s,x){
   let h=`<div class="qact">`;
   h+=x.ok?`<button class="btn ghost" id="again">Решить снова</button>`:`<button class="btn" id="send">Отправить</button>`;
@@ -2999,7 +3040,7 @@ function actions(s,x){
   if(!x.ok&&x.att>=3&&!x.rev) h+=`<button class="btn warn" id="showans">Показать ответ</button>`;
   h+=`</div>`;
   if(x.rev){
-    const a=s.type==="choice"?esc(s.options[s.answer]):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
+    const a=s.type==="choice"?esc(s.options[s.answer]):s.type==="match"?s.items.map((it,i)=>it+" — "+esc(s.options[s.answer[i]])).join("<br>"):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
     h+=`<div class="reveal">Правильный ответ:<br>${a}</div>`;
   }
   return h;
@@ -3020,6 +3061,8 @@ function wire(s,x){
   if(!isTask(s))return;
   if(s.type==="choice"){
     document.querySelectorAll('input[name="opt"]').forEach(r=>r.onchange=()=>{x.v=+r.value;x.last=null;save();render()});
+  }else if(s.type==="match"){
+    document.querySelectorAll(".mrow select").forEach(sl=>sl.onchange=()=>{x.v=x.v||[];x.v[sl.dataset.i]=sl.value===""?null:+sl.value;sl.classList.remove("ok","bad");x.last=null;save()});
   }else{
     document.querySelectorAll(".frow input").forEach(inp=>{
       inp.oninput=()=>{x.v=x.v||[];(x.v[inp.dataset.f]=x.v[inp.dataset.f]||[])[inp.dataset.k]=inp.value;inp.classList.remove("ok","bad");save()};
@@ -3035,6 +3078,10 @@ function submit(s,x){
   if(s.type==="choice"){
     if(x.v==null){flash("Выберите вариант ответа");return}
     good=x.v===s.answer;
+  }else if(s.type==="match"){
+    const v=x.v||[];
+    if(s.items.some((_,i)=>v[i]==null)){flash("Выберите пару для каждой строки");return}
+    good=s.items.every((_,i)=>+v[i]===s.answer[i]);
   }else{
     const v=x.v||[];
     const empty=s.fields.every((f,fi)=>[...Array(f.n)].every((_,k)=>!((v[fi]||[])[k]||"").trim()));
