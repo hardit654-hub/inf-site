@@ -52,6 +52,9 @@ function schema(PDO $pdo, bool $mysql) {
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_coins (
         user_id INT NOT NULL, ckey VARCHAR(64) NOT NULL, sid VARCHAR(32) NOT NULL, amount INT NOT NULL, created INT NOT NULL,
         PRIMARY KEY (user_id, ckey, sid))$tail");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS inf_student_info (
+        user_id INT NOT NULL PRIMARY KEY, schedule TEXT, homework TEXT, hw_due VARCHAR(10) NOT NULL DEFAULT '',
+        hw_set INT NOT NULL DEFAULT 0, hw_done INT NOT NULL DEFAULT 0, updated INT NOT NULL DEFAULT 0)$tail");
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_attempts (
         id $ai, k VARCHAR(128) NOT NULL, ts INT NOT NULL)$tail");
 }
@@ -231,6 +234,30 @@ function coins_total(int $uid): int {
     return (int)$r['s'];
 }
 
+/* ---------- расписание и домашка ---------- */
+function info_of(int $uid): array {
+    $r = one('SELECT schedule, homework, hw_due, hw_set, hw_done, updated FROM inf_student_info WHERE user_id = ?', [$uid]);
+    return [
+        'schedule' => $r && $r['schedule'] ? json_decode($r['schedule'], true) : [],
+        'homework' => $r ? (string)$r['homework'] : '',
+        'hw_due' => $r ? (string)$r['hw_due'] : '',
+        'hw_set' => $r ? (int)$r['hw_set'] : 0,
+        'hw_done' => $r ? (int)$r['hw_done'] : 0,
+    ];
+}
+function clean_schedule($s): array {
+    $out = [];
+    if (!is_array($s)) return $out;
+    foreach (array_slice($s, 0, 14) as $x) {
+        $d = (int)($x['day'] ?? 0); $tm = (string)($x['time'] ?? '');
+        $dur = (int)($x['dur'] ?? 60);
+        if ($d < 1 || $d > 7 || !preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $tm)) continue;
+        $out[] = ['day' => $d, 'time' => $tm, 'dur' => max(15, min(240, $dur))];
+    }
+    usort($out, function ($a, $b) { return [$a['day'], $a['time']] <=> [$b['day'], $b['time']]; });
+    return $out;
+}
+
 /* ---------- действия ---------- */
 switch ($action) {
 
@@ -333,6 +360,40 @@ case 'my_progress':
     foreach (q('SELECT ckey, SUM(amount) AS s FROM inf_coins WHERE user_id = ? GROUP BY ckey', [$u['id']])->fetchAll() as $r) $by[$r['ckey']] = (int)$r['s'];
     out(['ok' => true, 'progress' => (object)$res, 'coins' => coins_total((int)$u['id']), 'coins_by' => (object)$by]);
 
+case 'info_get':
+    $u = need_user();
+    out(['ok' => true] + info_of((int)$u['id']));
+
+case 'hw_done':
+    need_post();
+    $u = need_user();
+    $i = info_of((int)$u['id']);
+    if ($i['homework'] === '') fail('Домашнее задание не задано');
+    q('UPDATE inf_student_info SET hw_done = ? WHERE user_id = ?', [arg('done', false) ? time() : 0, $u['id']]);
+    out(['ok' => true] + info_of((int)$u['id']));
+
+case 'info_set':
+    // Учитель задаёт расписание и домашку ученику
+    need_post();
+    need_teacher();
+    $id = (int)arg('id');
+    if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) fail('Ученик не найден', 404);
+    $old = info_of($id);
+    $sched = clean_schedule(arg('schedule', []));
+    $hw = trim(str_replace("\r", '', (string)arg('homework')));
+    if (mb_strlen($hw, 'UTF-8') > 5000) fail('Домашнее задание слишком длинное (до 5000 символов)');
+    $due = (string)arg('hw_due');
+    if ($due !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $due)) fail('Неверная дата');
+    $changed = $hw !== $old['homework'] || $due !== $old['hw_due'];
+    $hwSet = $changed ? ($hw === '' ? 0 : time()) : $old['hw_set'];
+    $hwDone = $changed ? 0 : $old['hw_done'];
+    $j = json_encode($sched, JSON_UNESCAPED_UNICODE);
+    if (one('SELECT user_id FROM inf_student_info WHERE user_id = ?', [$id]))
+        q('UPDATE inf_student_info SET schedule = ?, homework = ?, hw_due = ?, hw_set = ?, hw_done = ?, updated = ? WHERE user_id = ?', [$j, $hw, $due, $hwSet, $hwDone, time(), $id]);
+    else
+        q('INSERT INTO inf_student_info (user_id, schedule, homework, hw_due, hw_set, hw_done, updated) VALUES (?,?,?,?,?,?,?)', [$id, $j, $hw, $due, $hwSet, $hwDone, time()]);
+    out(['ok' => true] + info_of($id));
+
 case 'leaderboard':
     // Топ-5 учеников по монеткам. Ученикам — имя и первая буква фамилии, учителю — полностью.
     $u = need_user();
@@ -359,7 +420,7 @@ case 'students':
     $rows = q("SELECT u.id, u.login, u.name, u.note, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
                LEFT JOIN (SELECT user_id, SUM(amount) AS s FROM inf_coins GROUP BY user_id) c ON c.user_id = u.id
                WHERE u.role = 'student' ORDER BY u.name")->fetchAll();
-    foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; }
+    foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['info'] = info_of($r['id']); }
     out(['ok' => true, 'students' => $rows]);
 
 case 'student_create':
@@ -414,6 +475,7 @@ case 'student_delete':
     if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) fail('Ученик не найден', 404);
     q('DELETE FROM inf_progress WHERE user_id = ?', [$id]);
     q('DELETE FROM inf_coins WHERE user_id = ?', [$id]);
+    q('DELETE FROM inf_student_info WHERE user_id = ?', [$id]);
     q('DELETE FROM inf_sessions WHERE user_id = ?', [$id]);
     q('DELETE FROM inf_users WHERE id = ?', [$id]);
     out(['ok' => true]);

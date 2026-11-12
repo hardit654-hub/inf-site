@@ -62,7 +62,7 @@ main{padding-block:24px 60px}
 .narrow{max-width:440px;margin:0 auto}
 label{display:block;font-size:14px;font-weight:500;margin:0 0 6px}
 .field{margin-bottom:14px}
-input[type=text],input[type=password],input[type=number],select.sel,input:not([type]){width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:16px var(--f-body);padding:0 12px}
+input[type=text],input[type=password],input[type=number],input[type=date],select.sel,input:not([type]){width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:16px var(--f-body);padding:0 12px}
 input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc6633}
 .btn{height:44px;border-radius:10px;border:0;background:var(--green);color:#0f2a12;font:600 15px var(--f-body);padding:0 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;white-space:nowrap}
 .btn:hover{background:var(--green-d)}
@@ -148,6 +148,35 @@ details.pw .row{margin-top:12px}
 :root[data-theme="dark"] .wallet{background:linear-gradient(135deg,#3a2f12,#2a220e);color:#f6d77a;border-color:#5c4a17}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wallet{background:linear-gradient(135deg,#3a2f12,#2a220e);color:#f6d77a;border-color:#5c4a17}}
 .lb{padding:0;overflow:hidden}
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:16px;margin-bottom:16px}
+.duo .card{margin:0}
+.ic{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.ic h2{margin:0}
+.ic .em{font-size:22px}
+.days{display:flex;flex-direction:column;gap:8px}
+.day{display:flex;align-items:center;gap:12px;font-size:15.5px}
+.day b{min-width:110px;font-weight:600}
+.day span{font:600 15px var(--f-mono);color:var(--green-ink);background:var(--green-soft);border-radius:8px;padding:3px 10px}
+.next{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:14.5px}
+.next b{display:block;font-size:16px;margin-top:2px}
+.hw{white-space:pre-wrap;word-break:break-word;font-size:15.5px;line-height:1.6;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.hw a{color:var(--green-ink)}
+.hwmeta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;font-size:14px;color:var(--muted)}
+.due{font-weight:600;color:var(--ink)}
+.due.late{color:var(--red)}
+.done{display:inline-flex;align-items:center;gap:6px;color:var(--green-ink);font-weight:600}
+.chip2{display:inline-block;font-size:12.5px;border-radius:99px;padding:2px 9px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip2.ok{color:var(--green-ink);border-color:var(--green);background:var(--green-soft)}
+.chip2.wait{color:var(--amber);border-color:var(--amber);background:var(--amber-soft)}
+.chip2.late{color:var(--red);border-color:var(--red);background:var(--red-soft)}
+.sum{font-size:13.5px;line-height:1.5}
+textarea{width:100%;min-height:130px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding:10px 12px;resize:vertical}
+textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc6633}
+.srow{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.srow select,.srow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:15px var(--f-body);padding:0 10px}
+.srow input[type=time]{width:120px}
+.srow .dur{width:90px}
+.edit{border:2px solid var(--green)}
 .lb h2{display:flex;align-items:center;gap:8px;padding:20px 22px 4px}
 .lb .sub{padding:0 22px;margin-bottom:10px}
 .lbrow{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 22px;border-top:1px solid var(--line)}
@@ -185,6 +214,30 @@ const API="../api/index.php";
 const app=document.getElementById("app");
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const COIN='<svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>';
+const DAYS=["","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота","Воскресенье"],DS=["","Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+function linkify(s){return esc(s).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»"])/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')}
+function nextLesson(sch){
+  if(!sch||!sch.length)return null;const now=new Date();let best=null;
+  for(let add=0;add<8;add++){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()+add);const wd=(d.getDay()+6)%7+1;
+    sch.filter(x=>x.day===wd).forEach(x=>{const [h,m]=x.time.split(":").map(Number);const st=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h,m);const end=new Date(st.getTime()+(x.dur||60)*6e4);
+      if(end>now&&(!best||st<best.st))best={st,end,x,now:st<=now}})
+    if(best)break}
+  return best;
+}
+function fmtNext(b){
+  if(!b)return"";if(b.now)return"Идёт прямо сейчас — до "+b.end.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+  const days=Math.round((new Date(b.st.toDateString())-new Date(new Date().toDateString()))/864e5);
+  const d=days===0?"сегодня":days===1?"завтра":b.st.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
+  return d+", "+b.x.time;
+}
+function fmtDue(due){if(!due)return"";const d=new Date(due+"T23:59:59");return d.toLocaleDateString("ru-RU",{weekday:"short",day:"numeric",month:"long"})}
+const isLate=due=>due&&new Date(due+"T23:59:59")<new Date();
+function hwChip(i){
+  if(!i||!i.homework)return'<span class="chip2">нет</span>';
+  if(i.hw_done)return'<span class="chip2 ok">✓ сделано</span>';
+  if(isLate(i.hw_due))return'<span class="chip2 late">просрочено</span>';
+  return'<span class="chip2 wait">задано'+(i.hw_due?" до "+new Date(i.hw_due).toLocaleDateString("ru-RU",{day:"numeric",month:"numeric"}):"")+'</span>';
+}
 const SITE=location.origin+location.pathname.replace(/kabinet\/.*$/,"kabinet/");
 let ME=null,CAT=null;
 
@@ -272,7 +325,8 @@ function ago(ts){
 async function viewStudent(){
   const [cat,p]=await Promise.all([catalog(),api("my_progress")]);
   const by=p.coins_by||{};
-  app.innerHTML=`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div id="lbslot" style="margin-bottom:16px"></div><div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
+  let info={schedule:[],homework:""};try{info=await api("info_get")}catch(e){}
+  app.innerHTML=infoCards(info)+`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div id="lbslot" style="margin-bottom:16px"></div><div class="courses">${cat.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);
     return `<article class="course"><h3>${esc(c.title)}</h3>
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
       <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
@@ -280,7 +334,23 @@ async function viewStudent(){
       <a class="btn" href="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
     ${pwCard()}`;
   bindPw();
+  bindHw();
   lbCard(false).then(h=>{const s=document.getElementById("lbslot");if(s)s.innerHTML=h});
+}
+function infoCards(i){
+  const nb=nextLesson(i.schedule);
+  const sch=i.schedule&&i.schedule.length?`<div class="days">${i.schedule.map(x=>`<div class="day"><b>${DAYS[x.day]}</b><span>${x.time}</span><small class="muted">${x.dur||60} мин</small></div>`).join("")}</div>${nb?`<div class="next">Следующее занятие<b>${fmtNext(nb)}</b></div>`:""}`
+    :`<p class="muted" style="margin:0">Расписание пока не назначено.</p>`;
+  const hw=i.homework?`<div class="hw">${linkify(i.homework)}</div><div class="hwmeta">${i.hw_due?`<span>Сделать до <span class="due${isLate(i.hw_due)&&!i.hw_done?" late":""}">${fmtDue(i.hw_due)}</span></span>`:""}
+      ${i.hw_done?`<span class="done">✓ Отмечено как сделанное</span><button class="btn ghost small" id="hwundo" type="button">Отменить</button>`:`<button class="btn small" id="hwdone" type="button">Я сделал(а)</button>`}</div>`
+    :`<p class="muted" style="margin:0">Сейчас домашнего задания нет.</p>`;
+  return `<div class="duo"><section class="card"><div class="ic"><span class="em">📅</span><h2>Расписание занятий</h2></div>${sch}</section>
+    <section class="card" id="hwcard"><div class="ic"><span class="em">📝</span><h2>Домашнее задание</h2></div>${hw}</section></div>`;
+}
+function bindHw(){
+  const d=document.getElementById("hwdone"),u=document.getElementById("hwundo");
+  const go=async done=>{try{const i=await api("hw_done",{done});const c=document.createElement("div");c.innerHTML=infoCards(i);document.getElementById("hwcard").replaceWith(c.querySelector("#hwcard"));bindHw()}catch(e){}};
+  if(d)d.onclick=()=>go(true);if(u)u.onclick=()=>go(false);
 }
 async function lbCard(teacher){
   let d;try{d=await api("leaderboard")}catch(e){return ""}
@@ -326,7 +396,7 @@ function bindCopy(){const b=document.getElementById("cp");if(!b)return;b.onclick
   setTimeout(()=>b.textContent="Скопировать",2000)}}
 function paneStudents(cred){
   const pane=document.getElementById("pane");
-  pane.innerHTML=`<div class="card"><h2>Добавить ученика</h2><p class="sub">Логин придумается сам из имени, пароль — случайный.</p>
+  pane.innerHTML=`<div id="editslot"></div><div class="card"><h2>Добавить ученика</h2><p class="sub">Логин придумается сам из имени, пароль — случайный.</p>
     <form id="af"><div class="row">
       <div class="field" style="flex-basis:240px"><label for="an">Имя и фамилия</label><input id="an" required placeholder="Иван Петров"></div>
       <div class="field"><label for="al">Логин <span class="muted">(необязательно)</span></label><input id="al" autocapitalize="none" spellcheck="false" placeholder="ivan.petrov"></div>
@@ -339,10 +409,10 @@ function paneStudents(cred){
       <div class="field" style="flex:0 1 140px"><label for="ca">Монеток</label><input id="ca" type="number" value="5" step="1" min="-1000" max="1000" required></div>
       <button class="btn" id="cb">Начислить</button></div><div id="cm" hidden></div></form></div>`:""}
    <div class="card"><h2>Ученики · ${STUDENTS.length}</h2>
-    <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Заметка</th><th>Монетки</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
-    ${STUDENTS.length?STUDENTS.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc(s.note)}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="hide-sm muted">${ago(s.last_seen)}</td>
-       <td class="acts"><button class="btn ghost small" data-reset="${s.id}">Новый пароль</button><button class="btn danger small" data-del="${s.id}">Удалить</button></td></tr>`).join("")
-     :`<tr><td colspan="6" class="empty">Пока никого. Добавьте первого ученика выше.</td></tr>`}
+    <div class="tbl-wrap"><table><thead><tr><th>Имя</th><th>Логин</th><th class="hide-sm">Заметка</th><th>Монетки</th><th>Занятия и ДЗ</th><th class="hide-sm">Был на сайте</th><th></th></tr></thead><tbody>
+    ${STUDENTS.length?STUDENTS.map(s=>`<tr><td>${esc(s.name)}</td><td class="mono">${esc(s.login)}</td><td class="hide-sm muted">${esc(s.note)}</td><td><span class="ccell">${COIN}${s.coins||0}</span></td><td class="sum">${s.info&&s.info.schedule.length?s.info.schedule.map(x=>DS[x.day]+" "+x.time).join(", "):'<span class="muted">без расписания</span>'}<br>ДЗ: ${hwChip(s.info)}</td><td class="hide-sm muted">${ago(s.last_seen)}</td>
+       <td class="acts"><button class="btn small" data-info="${s.id}">Занятия и ДЗ</button><button class="btn ghost small" data-reset="${s.id}">Новый пароль</button><button class="btn danger small" data-del="${s.id}">Удалить</button></td></tr>`).join("")
+     :`<tr><td colspan="7" class="empty">Пока никого. Добавьте первого ученика выше.</td></tr>`}
     </tbody></table></div></div>`;
   bindCopy();
   const f=document.getElementById("af"),m=document.getElementById("am"),b=document.getElementById("ab");
@@ -350,6 +420,7 @@ function paneStudents(cred){
     try{const j=await api("student_create",{name:f.an.value,login:f.al.value,note:f.ao.value});
       STUDENTS=(await api("students")).students;paneStudents(credBox(j.student.name,j.student.login,j.password));document.getElementById("an").focus()}
     catch(err){msg(m,err.message);setBusy(b,false)}};
+  pane.querySelectorAll("[data-info]").forEach(btn=>btn.onclick=()=>editInfo(STUDENTS.find(x=>x.id===+btn.dataset.info)));
   const cf=document.getElementById("cf");
   if(cf)cf.onsubmit=async e=>{e.preventDefault();const m=document.getElementById("cm"),b=document.getElementById("cb"),id=+cf.cs.value,n=parseInt(cf.ca.value,10);
     setBusy(b,true);try{const j=await api("coins_add",{id,amount:n});STUDENTS=(await api("students")).students;const s=STUDENTS.find(x=>x.id===id);paneStudents();
@@ -363,6 +434,30 @@ function paneStudents(cred){
     const s=STUDENTS.find(x=>x.id===+btn.dataset.del);
     if(!btn.classList.contains("sure")){btn.classList.add("sure");btn.textContent="Удалить вместе с прогрессом?";setTimeout(()=>{btn.classList.remove("sure");btn.textContent="Удалить"},4000);return}
     try{await api("student_delete",{id:s.id});STUDENTS=STUDENTS.filter(x=>x.id!==s.id);paneStudents()}catch(err){alertBox(err.message)}});
+}
+function editInfo(s){
+  const i=s.info||{schedule:[],homework:"",hw_due:""};
+  const slot=document.getElementById("editslot");
+  const row=x=>`<div class="srow"><select class="sd">${DAYS.slice(1).map((d,k)=>`<option value="${k+1}" ${x.day===k+1?"selected":""}>${d}</option>`).join("")}</select><input type="time" class="st" value="${x.time||"17:00"}" required><input type="number" class="dur" min="15" max="240" step="15" value="${x.dur||60}" title="Длительность, мин"><span class="muted">мин</span><button class="btn danger small rm" type="button">Убрать</button></div>`;
+  slot.innerHTML=`<div class="card edit"><h2>${esc(s.name)}: занятия и домашка</h2><p class="sub">Ученик увидит это у себя в кабинете сразу после сохранения.</p>
+   <form id="ef"><label>Расписание</label><div id="rows">${(i.schedule.length?i.schedule:[]).map(row).join("")}</div>
+    <button class="btn ghost small" type="button" id="addrow">+ Добавить день</button>
+    <div class="field" style="margin-top:18px"><label for="hwt">Домашнее задание</label><textarea id="hwt" placeholder="Например: решить шаги 6–10 в уроке 42.4. Ссылки можно вставлять прямо в текст.">${esc(i.homework||"")}</textarea></div>
+    <div class="row"><div class="field" style="flex:0 1 200px"><label for="hwd">Сделать до</label><input type="date" id="hwd" value="${esc(i.hw_due||"")}"></div>
+     <div class="field" style="flex:1 1 200px"><label>&nbsp;</label>${i.homework?(i.hw_done?'<span class="chip2 ok">✓ ученик отметил «сделано» '+new Date(i.hw_done*1000).toLocaleDateString("ru-RU")+'</span>':'<span class="chip2 wait">ещё не отмечено как сделанное</span>'):""}</div></div>
+    <div class="row" style="margin-top:14px"><button class="btn" id="es">Сохранить</button><button class="btn ghost" type="button" id="ec">Закрыть</button><button class="btn ghost" type="button" id="eclr">Очистить домашку</button></div><div id="em" hidden></div></form></div>`;
+  const rows=document.getElementById("rows");
+  const bindRm=()=>rows.querySelectorAll(".rm").forEach(b=>b.onclick=()=>b.parentElement.remove());bindRm();
+  document.getElementById("addrow").onclick=()=>{rows.insertAdjacentHTML("beforeend",row({day:1,time:"17:00",dur:60}));bindRm()};
+  document.getElementById("ec").onclick=()=>{slot.innerHTML=""};
+  document.getElementById("eclr").onclick=()=>{document.getElementById("hwt").value="";document.getElementById("hwd").value=""};
+  slot.scrollIntoView({behavior:"smooth",block:"start"});
+  document.getElementById("ef").onsubmit=async e=>{e.preventDefault();const b=document.getElementById("es"),m=document.getElementById("em");
+    const schedule=[...rows.querySelectorAll(".srow")].map(r=>({day:+r.querySelector(".sd").value,time:r.querySelector(".st").value,dur:+r.querySelector(".dur").value||60}));
+    setBusy(b,true,"Сохраняем…");
+    try{await api("info_set",{id:s.id,schedule,homework:document.getElementById("hwt").value,hw_due:document.getElementById("hwd").value});
+      STUDENTS=(await api("students")).students;paneStudents();const ns=STUDENTS.find(x=>x.id===s.id);editInfo(ns);msg(document.getElementById("em"),"Сохранено — ученик уже видит это в кабинете",true)}
+    catch(err){msg(m,err.message);setBusy(b,false)}};
 }
 function alertBox(t){const m=document.getElementById("am");if(m)msg(m,t)}
 async function paneProgress(){
