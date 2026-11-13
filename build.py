@@ -13,6 +13,9 @@ COURSES=[
   dict(src='src/19-21/course.js', out='site/ege-19-21/index.html', title='№ 19–21 · Решение в Python',
        og_title='№ 19–21. Решение в Python — курс', url='https://gsvv.ru/inf/ege-19-21/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='Теория игр для ЕГЭ по информатике: одна куча, две кучи, убирание камней. 6 уроков, 37 задач с автопроверкой.'),
+  dict(src='src/22/course.js', out='site/ege-22/index.html', title='№ 22 · Параллельные процессы',
+       og_title='№ 22. Параллельные процессы — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Параллельные процессы в электронных таблицах: без движения процессов, сдвиг процессов, ВПР.'),
 ]
 eng=open('src/engine.html').read()
 import os, re as _re
@@ -27,7 +30,7 @@ def rebase(o, folder):
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
-ORDER=['src/4/course.js','src/12/course.js','src/18/course.js','src/19-21/course.js']
+ORDER=['src/4/course.js','src/12/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
