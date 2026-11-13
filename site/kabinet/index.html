@@ -182,6 +182,12 @@ th.ck,td.ck{width:28px;padding-right:0}td.ck input,th.ck input{width:18px;height
 .gs{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;flex-wrap:wrap}.gs input{width:18px;height:18px;flex:0 0 auto}
 .gs .gcur{margin-left:auto;font-size:13px;color:var(--muted)}
 .gmode{display:flex;gap:18px;flex-wrap:wrap}.gmode label{display:flex;gap:7px;align-items:center;cursor:pointer;font-weight:400}
+.dl{margin-top:16px;padding:14px 16px;border-radius:12px;border:1px solid var(--line);border-left:5px solid var(--amber);background:var(--amber-soft);display:flex;flex-direction:column;gap:2px}
+.dl .dll{font-size:14px;color:var(--muted)}.dl .dld{font-size:24px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
+.dl .dlc{font-size:15px;font-weight:600;color:var(--amber);margin-top:2px}
+.dl.hot{border-left-color:var(--red);background:var(--red-soft)}.dl.hot .dlc{color:var(--red)}
+.dl.late{border-left-color:var(--red);background:var(--red-soft)}.dl.late .dlc{color:var(--red)}
+.dl.ok{border-left-color:var(--green);background:var(--green-soft)}.dl.ok .dlc{color:var(--green-ink)}
 .chip2{display:inline-block;font-size:12.5px;border-radius:99px;padding:2px 9px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .chip2.ok{color:var(--green-ink);border-color:var(--green);background:var(--green-soft)}
 .chip2.wait{color:var(--amber);border-color:var(--amber);background:var(--amber-soft)}
@@ -418,13 +424,31 @@ function hwTasksHTML(tasks){
       all:L.steps.filter(x=>x==="task").length,ok:0,items:[]};groups.push(g)}
     if(ok)g.ok++;
     const lab=(L.labels?L.labels[sn-1]||"":"");
-    g.items.push(`<a class="hwi${ok?" ok":""}" href="${esc(c.url)}#${ln}-${sn}"><span class="ic2">${ok?"✓":""}</span><b>${vr?"№ "+sn:"Шаг "+sn}</b><span>${esc(vr?lab.replace(/^№ \d+\.\s*/,""):lab)}</span></a>`)});
+    g.items.push(`<a class="hwi${ok?" ok":""}" href="${esc(c.url)}#${ln}-${sn}">${ok?'<span class="ic2">✓</span>':""}<b>${vr?"№ "+sn:"Шаг "+sn}</b><span>${esc(vr?lab.replace(/^№ \d+\.\s*/,""):lab)}</span></a>`)});
   const n=groups.reduce((a,g)=>a+g.items.length,0);
   // вариант, заданный целиком, — одной строкой, список задач раскрывается
-  const gh=g=>g.vr&&g.items.length===g.all?`<h4>${esc(g.title)}</h4><a class="hwi hwv${g.ok>=g.all?" ok":""}" href="${esc(g.url)}"><span class="ic2">${g.ok>=g.all?"✓":""}</span><b>Весь вариант</b><span>решено ${g.ok} из ${g.all}</span></a><details class="hwd"><summary>Задачи варианта</summary>${g.items.join("")}</details>`
+  const gh=g=>g.vr&&g.items.length===g.all?`<h4>${esc(g.title)}</h4><a class="hwi hwv${g.ok>=g.all?" ok":""}" href="${esc(g.url)}">${g.ok>=g.all?'<span class="ic2">✓</span>':""}<b>Весь вариант</b><span>решено ${g.ok} из ${g.all}</span></a><details class="hwd"><summary>Задачи варианта</summary>${g.items.join("")}</details>`
     :`<h4>${esc(g.title)}</h4>${g.items.join("")}`;
   return `<div class="hwbar">${solved>=n?"<b>✓ Все задачи решены</b>":`Решено <b>${solved} из ${n}</b>`}<div class="meter"><i style="width:${pct(solved,n)}%"></i></div></div><div class="hwl">${groups.map(gh).join("")}</div>`;
 }
+function hwSolved(tasks){
+  let s=0;(tasks||[]).forEach(tk=>{const [key,sid]=tk.split("|");const st=((HWCTX.prog[key]||{}).data||{}).st||{};if(st[sid]&&st[sid].ok)s++});
+  return s;
+}
+function deadlineHTML(i){
+  const tasks=i.hw_tasks||[];if(!i.hw_due||(!i.homework&&!tasks.length))return"";
+  const done=tasks.length?hwSolved(tasks)>=tasks.length&&(!i.homework||i.hw_done):!!i.hw_done;
+  const due=new Date(i.hw_due+"T00:00:00"),today=new Date(new Date().toDateString());
+  const days=Math.round((due-today)/864e5);
+  let cls,left;
+  if(done){cls="ok";left="✓ Домашка сделана"}
+  else if(days<0){cls="late";left="Просрочено на "+(-days)+" "+dayWord(-days)}
+  else if(days===0){cls="hot";left="Сегодня — последний день"}
+  else if(days===1){cls="hot";left="Остался 1 день — до завтра"}
+  else{cls="wait";left="Осталось "+days+" "+dayWord(days)}
+  return `<div class="dl ${cls}"><span class="dll">Сдать домашку до</span><b class="dld">${due.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"})}</b><span class="dlc">${left}</span></div>`;
+}
+function dayWord(n){const m=n%10,h=n%100;return m===1&&h!==11?"день":m>=2&&m<=4&&(h<12||h>14)?"дня":"дней"}
 function infoCards(i){
   const nb=nextLesson(i.schedule);
   const sch=i.schedule&&i.schedule.length?`<div class="days">${i.schedule.map(x=>`<div class="day"><b>${DAYS[x.day]}</b><span>${x.time}</span><small class="muted">${x.dur||60} мин</small></div>`).join("")}</div>${nb?`<div class="next">Следующее занятие<b>${fmtNext(nb)}</b></div>`:""}`
@@ -433,12 +457,12 @@ function infoCards(i){
   const hw=(i.homework||tasks.length)?`${i.homework?`<div class="hw hwnote">${linkify(i.homework)}</div>`:""}${hwTasksHTML(tasks)}<div class="hwmeta">${i.hw_due?`<span>Сделать до <span class="due${isLate(i.hw_due)&&!i.hw_done?" late":""}">${fmtDue(i.hw_due)}</span></span>`:""}
       ${i.homework?(i.hw_done?`<span class="done">✓ Отмечено как сделанное</span><button class="btn ghost small" id="hwundo" type="button">Отменить</button>`:`<button class="btn small" id="hwdone" type="button">Я сделал(а)</button>`):""}</div>`
     :`<p class="muted" style="margin:0">Сейчас домашнего задания нет.</p>`;
-  return `<div class="duo"><section class="card"><div class="ic"><span class="em">📅</span><h2>Расписание занятий</h2></div>${sch}</section>
+  return `<div class="duo"><section class="card" id="schcard"><div class="ic"><span class="em">📅</span><h2>Расписание занятий</h2></div>${sch}${deadlineHTML(i)}</section>
     <section class="card" id="hwcard"><div class="ic"><span class="em">📝</span><h2>Домашнее задание</h2></div>${hw}</section></div>`;
 }
 function bindHw(){
   const d=document.getElementById("hwdone"),u=document.getElementById("hwundo");
-  const go=async done=>{try{const i=await api("hw_done",{done});const c=document.createElement("div");c.innerHTML=infoCards(i);document.getElementById("hwcard").replaceWith(c.querySelector("#hwcard"));bindHw()}catch(e){}};
+  const go=async done=>{try{const i=await api("hw_done",{done});const c=document.createElement("div");c.innerHTML=infoCards(i);document.getElementById("hwcard").replaceWith(c.querySelector("#hwcard"));const sc=document.getElementById("schcard");if(sc)sc.replaceWith(c.querySelector("#schcard"));bindHw()}catch(e){}};
   if(d)d.onclick=()=>go(true);if(u)u.onclick=()=>go(false);
 }
 async function lbCard(teacher){
