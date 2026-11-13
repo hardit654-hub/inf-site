@@ -217,6 +217,12 @@ textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc
 .pt a{font-size:13px;color:var(--green-ink);white-space:nowrap}
 .hwl{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .hwl h4{margin:10px 0 2px;font:600 14px var(--f-body);color:var(--muted)}
+.hwb{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:12px;text-decoration:none;color:var(--ink);background:var(--amber-soft);border:1px solid transparent;border-left:4px solid var(--amber)}
+.hwb:hover{border-color:var(--amber)}
+.hwb .hwbt{flex:1;min-width:0;font-weight:600;font-size:15.5px;line-height:1.3}.hwb .hwbt small{color:var(--muted);font-weight:500;margin-right:8px;font-family:var(--f-mono);font-size:13px}
+.hwb .hwbc{font:700 13.5px var(--f-mono);color:var(--amber);white-space:nowrap}
+.hwb .hwba{font-size:22px;line-height:1;color:var(--muted)}
+.hwb.ok{background:var(--green-soft);border-left-color:var(--green)}.hwb.ok:hover{border-color:var(--green)}.hwb.ok .hwbc{color:var(--green-ink)}
 .hwi{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:var(--card)}
 .hwi:hover{border-color:var(--green)}
 .hwd summary{cursor:pointer;color:var(--muted);font-size:14px;padding:6px 2px}.hwd[open] summary{margin-bottom:6px}.hwd .hwi{margin-bottom:6px}
@@ -414,23 +420,22 @@ function egeCard(G,p,by){
     <a class="btn" href="${esc(G.url)}">${touched?"Продолжить":"Начать"}</a></article>`;
 }
 function hwTasksHTML(tasks){
+  /* домашка блоками: один блок на урок («42.1 Теория — 12 задач»); нажатие открывает курс на первой нерешённой задаче */
   if(!tasks||!tasks.length)return"";
-  const groups=[];let solved=0;
+  const groups=[];let solved=0,n=0;
   tasks.forEach(tk=>{const [key,sid]=tk.split("|");const c=HWCTX.cat.find(x=>x.key===key);if(!c)return;
     const [ln,sk]=sid.split("/");const L=c.lessons.find(l=>l.num===ln);if(!L)return;const sn=P(L,sk);if(!sn)return;
-    const st=((HWCTX.prog[key]||{}).data||{}).st||{};const ok=!!(st[sid]&&st[sid].ok);if(ok)solved++;
-    const vr=c.kind==="variant";
-    let g=groups.find(x=>x.k===key+ln);if(!g){g={k:key+ln,vr,url:c.url+"#"+ln+"-1",title:vr?c.title+" · "+L.title:c.title.replace(/ ·.*/,"")+" · "+ln+" "+L.title,
-      all:L.steps.filter(x=>x==="task").length,ok:0,items:[]};groups.push(g)}
-    if(ok)g.ok++;
-    const lab=(L.labels?L.labels[sn-1]||"":"");
-    g.items.push(`<a class="hwi${ok?" ok":""}" href="${esc(c.url)}#${ln}-${sn}">${ok?'<span class="ic2">✓</span>':""}<b>${vr?"№ "+sn:"Шаг "+sn}</b><span>${esc(vr?lab.replace(/^№ \d+\.\s*/,""):lab)}</span></a>`)});
-  const n=groups.reduce((a,g)=>a+g.items.length,0);
-  // вариант, заданный целиком, — одной строкой, список задач раскрывается
-  const gh=g=>g.vr&&g.items.length===g.all?`<h4>${esc(g.title)}</h4><a class="hwi hwv${g.ok>=g.all?" ok":""}" href="${esc(g.url)}">${g.ok>=g.all?'<span class="ic2">✓</span>':""}<b>Весь вариант</b><span>решено ${g.ok} из ${g.all}</span></a><details class="hwd"><summary>Задачи варианта</summary>${g.items.join("")}</details>`
-    :`<h4>${esc(g.title)}</h4>${g.items.join("")}`;
-  return `<div class="hwbar">${solved>=n?"<b>✓ Все задачи решены</b>":`Решено <b>${solved} из ${n}</b>`}<div class="meter"><i style="width:${pct(solved,n)}%"></i></div></div><div class="hwl">${groups.map(gh).join("")}</div>`;
+    const st=((HWCTX.prog[key]||{}).data||{}).st||{};const ok=!!(st[sid]&&st[sid].ok);n++;if(ok)solved++;
+    let g=groups.find(x=>x.key===key);if(!g){g={key,c,blocks:[]};groups.push(g)}
+    let b=g.blocks.find(x=>x.ln===ln);if(!b){b={ln,L,all:0,ok:0,first:null,min:sn};g.blocks.push(b)}
+    b.all++;if(ok)b.ok++;else if(b.first==null||sn<b.first)b.first=sn;if(sn<b.min)b.min=sn});
+  const block=(g,b)=>{const vr=g.c.kind==="variant",done=b.ok>=b.all,to=done?b.min:b.first;
+    const cnt=done?`✓ ${b.all} из ${b.all}`:b.ok?`${b.ok} из ${b.all}`:`${b.all} ${taskWord(b.all)}`;
+    return `<a class="hwb${done?" ok":""}" href="${esc(g.c.url)}#${esc(b.ln)}-${to}"><span class="hwbt">${vr?"":`<small>${esc(b.ln)}</small>`}${esc(b.L.title)}</span><span class="hwbc">${cnt}</span><span class="hwba" aria-hidden="true">›</span></a>`};
+  return `<div class="hwbar">${solved>=n?"<b>✓ Все задачи решены</b>":`Решено <b>${solved} из ${n}</b>`}<div class="meter"><i style="width:${pct(solved,n)}%"></i></div></div>
+    <div class="hwl">${groups.map(g=>`<h4>${esc(g.c.title)}</h4>${g.blocks.map(b=>block(g,b)).join("")}`).join("")}</div>`;
 }
+function taskWord(n){const m=n%10,h=n%100;return m===1&&h!==11?"задача":m>=2&&m<=4&&(h<12||h>14)?"задачи":"задач"}
 function hwSolved(tasks){
   let s=0;(tasks||[]).forEach(tk=>{const [key,sid]=tk.split("|");const st=((HWCTX.prog[key]||{}).data||{}).st||{};if(st[sid]&&st[sid].ok)s++});
   return s;
