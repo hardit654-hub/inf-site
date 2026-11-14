@@ -21,6 +21,16 @@ eng=open('src/engine.html').read()
 import os, re as _re
 def load_course(path):
     t=open(path).read(); return json.loads(t[t.index('{'):t.rindex('}')+1])
+def scrub(o):
+    """Убираем всё, что выдаёт Stepik: водяной знак, ссылки на stepik.org, отсылки к его вкладкам."""
+    if isinstance(o, dict): return {k: scrub(v) for k,v in o.items()}
+    if isinstance(o, list): return [scrub(x) for x in o]
+    if not isinstance(o, str): return o
+    s=o
+    s=_re.sub(r'<p>(?:(?!</p>).)*?(?:stepik\.org|во вкладке решени)(?:(?!</p>).)*?</p>', '', s, flags=_re.S|_re.I)
+    s=_re.sub(r'<p>(?:\s|<[^>]+>)*PRO100 ЕГЭ информатика ЕГЭ(?:\s|<[^>]+>)*</p>', '', s)
+    s=s.replace('PRO100 ЕГЭ информатика ЕГЭ','')
+    return s
 def rebase(o, folder):
     """Относительные ссылки на картинки и файлы раздела -> ../<папка раздела>/… (страница курса теперь /ege/)."""
     rel=lambda u: u if _re.match(r'(https?:|//|/|\.\./|#|data:|mailto:)', u) else '../'+folder+'/'+u
@@ -35,7 +45,7 @@ secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
     folder=c['out'].split('/')[1]
-    secs.append(dict(num=s['num'], title=c['title'], key='course-%s-s%s'%(d['id'],s['num']), lessons=rebase(s['lessons'], folder)))
+    secs.append(dict(num=s['num'], title=c['title'], key='course-%s-s%s'%(d['id'],s['num']), lessons=rebase(scrub(s['lessons']), folder)))
 ege=dict(id='ege-inf', title='ЕГЭ', sections=secs)
 data='window.COURSE = '+json.dumps(ege, ensure_ascii=False)+';'
 ntask=sum(1 for s in secs for l in s['lessons'] for st in l['steps'] if st['type'] in ('fill','choice','match'))

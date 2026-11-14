@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: Stepik-like learning shell — dark header with the step strip, dark collapsible table of contents on the left, white lesson page with a grey footer band */
+/* Layout: dark header with the step strip, dark collapsible table of contents on the left, white lesson page with a grey footer band */
 :root{
   --bar:#222326; --bar-2:#2d2e32; --bar-ink:#e8e8ea; --bar-muted:#9a9ca3; --bar-line:#3a3b40;
   --green:#66cc66; --green-d:#4fae4f; --green-ink:#2e8b2e; --green-soft:#e8f6e8;
@@ -224,7 +224,7 @@ svg.tree .w{fill:var(--bg)} svg.tree .g{fill:#2fa54a} svg.tree .r{fill:#e5413a}
 svg.tree rect{fill:var(--bg);stroke:var(--ink);stroke-width:1.2}
 svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
 
-/* quiz — like Stepik's framed answer block */
+/* quiz — framed answer block */
 .quiz{border:2px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px;margin-top:6px;box-shadow:0 0 0 6px var(--page)}
 .quiz.ok{border-color:var(--green);box-shadow:0 0 0 6px var(--green-soft)}
 .quiz.bad{border-color:var(--bad);box-shadow:0 0 0 6px var(--bad-soft)}
@@ -605,6 +605,12 @@ function verdict(x,okText,badText){
   return "";
 }
 function choiceHTML(s,x){
+  if(s.multi){  // несколько верных вариантов: ответ — набор отмеченных
+    const v=Array.isArray(x.v)?x.v:[];
+    let h=`<div class="quiz${x.ok?" ok":x.att&&x.last===false?" bad":""}" id="quiz"><span class="qt">Выберите все подходящие ответы</span>`+verdict(x,"Верно!","Неверно. Попробуйте ещё раз.");
+    s.options.forEach((o,i)=>{h+=`<label class="opt${x.ok&&v.includes(i)?" ok":""}"><input type="checkbox" name="optm" value="${i}" ${v.includes(i)?"checked":""} ${x.ok?"disabled":""}><span>${esc(o)}</span></label>`});
+    return h+actions(s,x)+`</div>`;
+  }
   const sel=x.v!=null?x.v:-1;
   let h=`<div class="quiz${x.ok?" ok":x.att&&x.last===false?" bad":""}" id="quiz"><span class="qt">Выберите один вариант из списка</span>`+verdict(x,"Верно!","Неверно. Попробуйте ещё раз.");
   s.options.forEach((o,i)=>{
@@ -646,7 +652,7 @@ function actions(s,x){
   if(!x.ok&&x.att>=3&&!x.rev) h+=`<button class="btn warn" id="showans">Показать ответ</button>`;
   h+=`</div>`;
   if(x.rev){
-    const a=s.type==="choice"?esc(s.options[s.answer]):s.type==="match"?s.items.map((it,i)=>it+" — "+esc(s.options[s.answer[i]])).join("<br>"):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
+    const a=s.type==="choice"?(s.multi?s.answer.map(i=>esc(s.options[i])).join("<br>"):esc(s.options[s.answer])):s.type==="match"?s.items.map((it,i)=>it+" — "+esc(s.options[s.answer[i]])).join("<br>"):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
     h+=`<div class="reveal">Правильный ответ:<br>${a}</div>`;
   }
   return h;
@@ -667,6 +673,7 @@ function wire(s,x){
   if(!isTask(s))return;
   if(s.type==="choice"){
     document.querySelectorAll('input[name="opt"]').forEach(r=>r.onchange=()=>{x.v=+r.value;x.last=null;save();render()});
+    document.querySelectorAll('input[name="optm"]').forEach(r=>r.onchange=()=>{x.v=[...document.querySelectorAll('input[name="optm"]:checked')].map(c=>+c.value);x.last=null;save()});
   }else if(s.type==="match"){
     document.querySelectorAll(".mrow select").forEach(sl=>sl.onchange=()=>{x.v=x.v||[];x.v[sl.dataset.i]=sl.value===""?null:+sl.value;sl.classList.remove("ok","bad");x.last=null;save()});
   }else{
@@ -682,8 +689,10 @@ function wire(s,x){
 function submit(s,x){
   let good;
   if(s.type==="choice"){
-    if(x.v==null){flash("Выберите вариант ответа");return}
-    good=x.v===s.answer;
+    if(s.multi){const v=Array.isArray(x.v)?x.v:[];if(!v.length){flash("Отметьте хотя бы один вариант");return}
+      good=v.length===s.answer.length&&s.answer.every(i=>v.includes(i))}
+    else{if(x.v==null){flash("Выберите вариант ответа");return}
+    good=x.v===s.answer}
   }else if(s.type==="match"){
     const v=x.v||[];
     if(s.items.some((_,i)=>v[i]==null)){flash("Выберите пару для каждой строки");return}
