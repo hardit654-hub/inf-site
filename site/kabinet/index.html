@@ -826,20 +826,36 @@ async function paneProgress(){
   const pane=document.getElementById("pane"),cat=await catalog();
   if(COURSE_I>=cat.length)COURSE_I=0;
   const c=cat[COURSE_I];
-  pane.innerHTML=filterBar(false)+`<div class="seg">${cat.map((x,i)=>`<button class="tab" data-c="${i}" aria-selected="${i===COURSE_I}">${esc(x.title)}</button>`).join("")}</div><div class="card"><div class="loading">Загрузка…</div></div>`;
+  pane.innerHTML=filterBar(false)+`<div id="fireslot"></div><div class="seg">${cat.map((x,i)=>`<button class="tab" data-c="${i}" aria-selected="${i===COURSE_I}">${esc(x.title)}</button>`).join("")}</div><div class="card" id="pcard"><div class="loading">Загрузка…</div></div>`;
   bindFilter(()=>{OPEN=null;paneProgress()});
+  fireCard(cat).then(h=>{const el=document.getElementById("fireslot");if(el)el.innerHTML=h});
   pane.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{COURSE_I=+b.dataset.c;OPEN=null;try{sessionStorage.setItem("kab-course",COURSE_I)}catch(e){}paneProgress()});
-  let P;try{P=(await api("class_progress",null,{key:c.key})).progress}catch(e){pane.querySelector(".card:not(.fbar)").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
+  let P;try{P=(await api("class_progress",null,{key:c.key})).progress}catch(e){document.getElementById("pcard").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
   const L=c.lessons.filter(l=>l.steps.includes("task"));
   const V=visible();const rows=V.map(s=>{const p=P[s.id]||{};return{s,p,k:stats(c,p.data)}});
   const cellH=(d,t)=>`<span class="cell ${d===t&&t?"full":d?"":"zero"}"><b>${d}/${t}</b><span class="meter"><i style="width:${pct(d,t)}%"></i></span></span>`;
-  pane.querySelector(".card:not(.fbar)").innerHTML=!STUDENTS.length?`<div class="empty">Сначала добавьте учеников на вкладке «Ученики».</div>`:!V.length?`<div class="empty">В этой группе пока никого.</div>`:
+  document.getElementById("pcard").innerHTML=!STUDENTS.length?`<div class="empty">Сначала добавьте учеников на вкладке «Ученики».</div>`:!V.length?`<div class="empty">В этой группе пока никого.</div>`:
    `<div class="tbl-wrap"><table class="pt"><thead><tr><th>Ученик</th>${L.map(l=>`<th title="${esc(l.title)}">${esc(LN(l))}</th>`).join("")}<th>Всего</th><th class="hide-sm">Последнее</th></tr></thead><tbody>
     ${rows.map(r=>`<tr class="srow" data-u="${r.s.id}" aria-expanded="${OPEN===r.s.id}"><td>${esc(r.s.name)}</td>${r.k.lessons.filter(l=>l.total).map(l=>{const ex=exRes(r.p,l.num);return `<td>${ex?`<span class="cell full" title="Первичный балл: ${ex.prim}"><b>${ex.test} б.</b></span>`:cellH(l.done,l.total)}</td>`}).join("")}<td>${cellH(r.k.done,r.k.total)}</td><td class="hide-sm muted">${r.p.updated?ago(r.p.updated):"—"}</td></tr>
       ${OPEN===r.s.id?`<tr class="detail"><td colspan="${L.length+3}">${detail(r)}</td></tr>`:""}`).join("")}
    </tbody></table></div>
    <div class="legend"><span><i class="sq ok"></i>решено</span><span><i class="sq bad"></i>пытался, не решил</span><span><i class="sq"></i>не начинал</span><span><i class="sq rev"></i>смотрел ответ</span><span>Нажмите на ученика, чтобы увидеть каждую задачу</span></div>`;
   pane.querySelectorAll(".srow").forEach(tr=>tr.onclick=()=>{const u=+tr.dataset.u;OPEN=OPEN===u?null:u;paneProgress()});
+}
+/* огоньки: какие задачи ученики отметили как сложные */
+function taskRef(cat,ckey,sid){
+  const c=cat.find(x=>x.key===ckey);if(!c)return null;const [ln,k]=sid.split("/");const l=c.lessons.find(x=>x.num===ln);if(!l)return null;
+  const pos=P(l,k);return{where:c.kind==="variant"?c.title.replace(/^СтатГрад · /,"")+" · "+l.title:c.title+" · "+LN(l)+" "+l.title,label:(l.labels||[])[pos-1]||("Шаг "+pos),url:c.url+"#"+ln+"-"+pos};
+}
+async function fireCard(cat){
+  let F=[];try{F=(await api("fires_top")).fires||[]}catch(e){return""}
+  const V=new Map(visible().map(x=>[x.id,x]));
+  const rows=F.map(f=>Object.assign({},f,{users:f.users.filter(u=>V.has(u))})).filter(f=>f.users.length).sort((a,b)=>b.users.length-a.users.length||b.last-a.last);
+  const name=u=>{const n=V.get(u).name.split(" ");return n[0]+(n[1]?" "+n[1][0]+".":"")};
+  return `<div class="card"><h2>🔥 Сложные задачи · ${esc(fLabel())}</h2><p class="sub">Ученики ставят огонёк у задачи, которая далась тяжело. Огоньки видят все, а здесь — кто именно отметил.</p>
+    ${rows.length?`<div class="tbl-wrap"><table><thead><tr><th>🔥</th><th>Задача</th><th class="hide-sm">Кто отметил</th></tr></thead><tbody>${rows.slice(0,30).map(f=>{const r=taskRef(cat,f.ckey,f.sid);
+      return `<tr><td class="mono"><b>${f.users.length}</b></td><td>${r?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label)}</a><div class="muted" style="font-size:13px">${esc(r.where)}</div>`:`<span class="muted">${esc(f.ckey+" · "+f.sid)}</span>`}</td><td class="hide-sm muted">${f.users.map(name).map(esc).join(", ")}</td></tr>`}).join("")}</tbody></table></div>`
+      :`<p class="empty" style="margin:0">Пока никто из ${FCAT||FGRP?"этой группы":"учеников"} не отметил задачу огоньком.</p>`}</div>`;
 }
 function ansText(v){if(v==null)return"";if(Array.isArray(v))return v.map(r=>Array.isArray(r)?r.filter(Boolean).join(" "):r).filter(Boolean).join(" | ");return String(v)}
 function detail(r){

@@ -280,6 +280,21 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
 .step p.c{text-align:center}.step p.fig{text-align:center;margin:14px 0}.step p.fig img{max-width:100%;height:auto;border-radius:4px;background:#fff}
 .step table.plain{border:0;margin:6px 0 12px}.step table.plain td{border:0;padding:1px 22px 1px 0;background:none}
 .step .vnote{padding:10px 14px;border-radius:10px;background:var(--warn-soft);border:1px solid var(--warn);margin-bottom:14px}
+
+/* огонёк: ученики отмечают сложные задачи, видят все */
+.firebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}
+.fire{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px 0 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:500 14px var(--f-body);cursor:pointer;text-decoration:none}
+.fire:hover{border-color:#ff8a1f}
+.fire .fl{font-size:16px;line-height:1;filter:grayscale(1);opacity:.55;transition:filter .15s,opacity .15s,transform .15s}
+.fire.on{background:#fff1e3;border-color:#ff8a1f;color:#a24b00;font-weight:600}
+.fire.on .fl,.fire.has .fl{filter:none;opacity:1}
+.fire.on .fl{transform:scale(1.15)}
+.fire b{font:700 13px var(--f-mono);background:#ff8a1f;color:#fff;border-radius:999px;padding:1px 7px}
+.fire[disabled]{cursor:default}
+.fhint{font-size:13px;color:var(--muted)}
+:root[data-theme="dark"] .fire.on{background:#3a2412;color:#ffb36b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .fire.on{background:#3a2412;color:#ffb36b}}
+.sq .fdot{position:absolute;right:-5px;bottom:-5px;font-size:11px;line-height:1;pointer-events:none}
 </style>
 </head>
 <body>
@@ -551,8 +566,41 @@ function sqHTML(li,i){
   else if(x.seen)c+=" seen";
   if(i===cur.si)c+=" on";
   const hw=HW.has(hwId(li,i));if(hw)c+=" hw";
-  return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}${hw?", домашнее задание":""}" title="Шаг ${i+1}${hw?" · домашнее задание":""}">${icon}</button>`;
+  const fn=isTask(s)?fireN(li,i):0;
+  return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}${hw?", домашнее задание":""}${fn?", сложная: "+fn:""}" title="Шаг ${i+1}${hw?" · домашнее задание":""}${fn?" · 🔥 сложная ("+fn+")":""}">${icon}${fn?'<span class="fdot">🔥</span>':""}</button>`;
 }
+/* ---------- огоньки ---------- */
+let FIRE={},MYF=new Set();
+const fireN=(li,si)=>((FIRE[lessons[li].ckey]||{})[sid(li,si)])||0;
+const fireMine=(li,si)=>MYF.has(lessons[li].ckey+"|"+sid(li,si));
+const pplWord=n=>{const a=n%100,b=n%10;return a>10&&a<20?"учеников":b===1?"ученик":b>=2&&b<=4?"ученика":"учеников"};
+function fireHTML(li,si){
+  const n=fireN(li,si),m=fireMine(li,si),cnt=n?`<b>${n}</b>`:"";
+  let btn,hint;
+  if(ME&&ME.role==="student"){btn=`<button class="fire${m?" on":""}${n?" has":""}" id="firebtn" type="button" aria-pressed="${m}"><span class="fl">🔥</span><span>${m?"Отмечено как сложная":"Сложная задача"}</span>${cnt}</button>`;
+    hint=m?"Нажмите ещё раз, чтобы снять огонёк":n?`Уже отметили ${n} ${pplWord(n)}`:"Отметьте, если задача далась тяжело — учитель увидит"}
+  else if(ME){btn=`<span class="fire${n?" has":""}" aria-label="Сложная задача: ${n}"><span class="fl">🔥</span><span>Сложная</span>${cnt}</span>`;hint=n?`Отметили ${n} ${pplWord(n)}`:"Пока никто не отметил"}
+  else{btn=`<a class="fire${n?" has":""}" href="../kabinet/?next=${encodeURIComponent("../"+location.pathname.split("/").slice(-2,-1)[0]+"/"+location.search+location.hash)}"><span class="fl">🔥</span><span>Сложная задача</span>${cnt}</a>`;hint=n?`Отметили ${n} ${pplWord(n)} · войдите, чтобы отметить`:"Войдите, чтобы отметить задачу как сложную"}
+  return `<div class="firebar" id="firebar">${btn}<span class="fhint">${hint}</span></div>`;
+}
+function paintFire(){
+  const L=lessons[cur.li];if(!L||!L.steps)return;
+  const fb=$("firebar");if(fb){const d=document.createElement("div");d.innerHTML=fireHTML(cur.li,cur.si);fb.replaceWith(d.firstChild)}
+  $("strip").innerHTML=L.steps.map((_,i)=>sqHTML(cur.li,i)).join("");
+}
+async function loadFires(){
+  try{const j=await api("fires&keys="+SECS.map(x=>x.key).join(","));FIRE=j.counts||{};MYF=new Set();
+    Object.entries(j.mine||{}).forEach(([k,a])=>a.forEach(x=>MYF.add(k+"|"+x)));paintFire()}catch(e){}
+}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("#firebtn");if(!b||b.dataset.busy)return;
+  const li=cur.li,si=cur.si,k=lessons[li].ckey,id=sid(li,si),on=!fireMine(li,si);
+  b.dataset.busy="1";
+  on?MYF.add(k+"|"+id):MYF.delete(k+"|"+id);FIRE[k]=FIRE[k]||{};FIRE[k][id]=Math.max(0,(FIRE[k][id]||0)+(on?1:-1));paintFire();
+  try{const j=await api("fire_set",{key:k,sid:id,on});FIRE[k][id]=j.n}
+  catch(err){on?MYF.delete(k+"|"+id):MYF.add(k+"|"+id);FIRE[k][id]=Math.max(0,(FIRE[k][id]||0)+(on?-1:1))}
+  paintFire();
+});
 function render(){
   const L=lessons[cur.li], s=L.steps[cur.si], x=st(cur.li,cur.si);
   if(!isTask(s)&&!x.seen){x.seen=true;save()}
@@ -564,6 +612,7 @@ function render(){
   $("pts").innerHTML=`Шаг <b>${cur.si+1}</b> из ${L.steps.length}`;
   let h="";
   if(HW.has(hwId(cur.li,cur.si))) h+=`<div class="hwnote">📝 Эта задача — из домашнего задания${x.ok?" · решена ✓":""}</div>`;
+  if(isTask(s)) h+=fireHTML(cur.li,cur.si);
   if(s.title&&s.type!=="video") h+=`<h2 class="left">${esc(s.title)}</h2>`;
   if(s.type==="video"){
     if(s.embed) h+=`<div class="vwrap"><iframe src="${esc(s.embed)}" title="${esc(s.title||"Видео")}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock" allowfullscreen loading="lazy"></iframe></div>`;
@@ -776,7 +825,7 @@ document.addEventListener("click",async e=>{
 });
 window.addEventListener("hashchange",fromHash);
 fromHash();
-initSync();
+initSync().then(loadFires);
 }
 if(window.COURSE)__course();else window.__course=__course;
 </script>

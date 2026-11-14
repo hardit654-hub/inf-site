@@ -71,6 +71,10 @@ function schema(PDO $pdo, bool $mysql) {
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_mfiles (
         mid VARCHAR(40) NOT NULL, name VARCHAR(190) NOT NULL, part INT NOT NULL, data $blob NOT NULL,
         PRIMARY KEY (mid, name, part))$tail");
+    // «огоньки»: ученик отмечает задачу как сложную, видят все
+    $pdo->exec("CREATE TABLE IF NOT EXISTS inf_fires (
+        user_id INT NOT NULL, ckey VARCHAR(64) NOT NULL, sid VARCHAR(32) NOT NULL, created INT NOT NULL,
+        PRIMARY KEY (user_id, ckey, sid))$tail");
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_attempts (
         id $ai, k VARCHAR(128) NOT NULL, ts INT NOT NULL)$tail");
 }
@@ -468,6 +472,45 @@ case 'skills_set':
     else q('INSERT INTO inf_student_info (user_id, skills, updated) VALUES (?,?,?)', [$id, $j, time()]);
     $pdo->commit();
     out(['ok' => true, 'skills' => (object)$sk]);
+
+case 'fires':
+    // сколько учеников отметили задачи огоньком (видно всем) и какие отметил сам вошедший
+    $keys = array_values(array_unique(array_filter(explode(',', (string)($_GET['keys'] ?? '')))));
+    if (!$keys || count($keys) > 30) fail('Неверные ключи');
+    foreach ($keys as $k) valid_key($k);
+    $in = implode(',', array_fill(0, count($keys), '?'));
+    $counts = [];
+    foreach (q("SELECT f.ckey, f.sid, COUNT(*) AS n FROM inf_fires f JOIN inf_users u ON u.id = f.user_id AND u.role = 'student'
+                WHERE f.ckey IN ($in) GROUP BY f.ckey, f.sid", $keys)->fetchAll() as $r) $counts[$r['ckey']][$r['sid']] = (int)$r['n'];
+    $mine = [];
+    $u = current_user();
+    if ($u) foreach (q("SELECT ckey, sid FROM inf_fires WHERE user_id = ? AND ckey IN ($in)", array_merge([$u['id']], $keys))->fetchAll() as $r) $mine[$r['ckey']][] = $r['sid'];
+    foreach ($counts as $ck => $a) $counts[$ck] = (object)$a;
+    out(['ok' => true, 'counts' => (object)$counts, 'mine' => (object)$mine]);
+
+case 'fire_set':
+    need_post();
+    $u = need_user();
+    if ($u['role'] !== 'student') fail('Огоньки ставят ученики', 403);
+    $k = valid_key(arg('key'));
+    $sid = (string)arg('sid');
+    if (!preg_match('/^[0-9a-z.]{1,16}\/[a-z0-9]{1,8}$/', $sid)) fail('Неверная задача');
+    if (arg('on', false)) q(($MYSQL ? 'INSERT IGNORE' : 'INSERT OR IGNORE') . ' INTO inf_fires (user_id, ckey, sid, created) VALUES (?,?,?,?)', [$u['id'], $k, $sid, time()]);
+    else q('DELETE FROM inf_fires WHERE user_id = ? AND ckey = ? AND sid = ?', [$u['id'], $k, $sid]);
+    $n = one("SELECT COUNT(*) AS n FROM inf_fires f JOIN inf_users u ON u.id = f.user_id AND u.role = 'student' WHERE f.ckey = ? AND f.sid = ?", [$k, $sid]);
+    out(['ok' => true, 'n' => (int)$n['n'], 'on' => (bool)arg('on', false)]);
+
+case 'fires_top':
+    // учителю: какие задачи ученики отметили сложными и кто именно
+    need_teacher();
+    $rows = q("SELECT f.ckey, f.sid, f.user_id, f.created FROM inf_fires f JOIN inf_users u ON u.id = f.user_id AND u.role = 'student' ORDER BY f.created DESC")->fetchAll();
+    $agg = [];
+    foreach ($rows as $r) {
+        $id = $r['ckey'] . '|' . $r['sid'];
+        if (!isset($agg[$id])) $agg[$id] = ['ckey' => $r['ckey'], 'sid' => $r['sid'], 'users' => [], 'last' => (int)$r['created']];
+        $agg[$id]['users'][] = (int)$r['user_id'];
+    }
+    out(['ok' => true, 'fires' => array_values($agg)]);
 
 case 'hw_assign':
     // Учитель выдаёт одну домашку сразу нескольким ученикам (группе). Расписание и ответы учеников не трогаются.
