@@ -211,6 +211,16 @@ function merge_rec($a, $b) {
     if (isset($a['okAt']) || isset($b['okAt'])) $r['okAt'] = min((int)($a['okAt'] ?? PHP_INT_MAX), (int)($b['okAt'] ?? PHP_INT_MAX));
     return $r;
 }
+/* PHP превращает пустой объект {} в массив [] — а в браузере у массива теряются поля ok/v/att.
+   Поэтому каждую запись задачи отдаём и храним как объект. */
+function obj_state($m) {
+    if (is_object($m)) $m = (array)$m;
+    if (!is_array($m) || !isset($m['st'])) return $m;
+    $o = new stdClass();
+    foreach ((array)$m['st'] as $k => $v) $o->{$k} = is_array($v) ? (object)$v : $v;
+    $m['st'] = $o;
+    return $m;
+}
 function merge_state($old, $new) {
     if (!is_array($old) || !isset($old['st']) || !is_array($old['st'])) return $new;
     $r = $new;
@@ -399,7 +409,7 @@ case 'progress_get':
     $k = valid_key($_GET['key'] ?? '');
     $r = one('SELECT data, updated FROM inf_progress WHERE user_id = ? AND ckey = ?', [$u['id'], $k]);
     if ($r) award_coins((int)$u['id'], $k, json_decode($r['data'], true));
-    out(['ok' => true, 'data' => $r ? json_decode($r['data']) : null, 'updated' => $r ? (int)$r['updated'] : 0, 'coins' => coins_total((int)$u['id'])]);
+    out(['ok' => true, 'data' => $r ? obj_state(json_decode($r['data'], true)) : null, 'updated' => $r ? (int)$r['updated'] : 0, 'coins' => coins_total((int)$u['id'])]);
 
 case 'progress_put':
     need_post();
@@ -412,7 +422,7 @@ case 'progress_put':
     $r = one('SELECT data, resets FROM inf_progress WHERE user_id = ? AND ckey = ?' . ($MYSQL ? ' FOR UPDATE' : ''), [$u['id'], $k]);
     $merged = ($r && !$reset) ? merge_state(json_decode($r['data'], true), $data) : $data;
     if (isset($merged['st']) && is_array($merged['st']) && !$merged['st']) $merged['st'] = new stdClass();
-    $json = json_encode($merged, JSON_UNESCAPED_UNICODE);
+    $json = json_encode(obj_state($merged), JSON_UNESCAPED_UNICODE);
     if (strlen($json) > MAX_DATA) { $pdo->rollBack(); fail('Слишком много данных', 413); }
     if ($r) q('UPDATE inf_progress SET data = ?, updated = ?, resets = resets + ? WHERE user_id = ? AND ckey = ?', [$json, time(), $reset ? 1 : 0, $u['id'], $k]);
     else q('INSERT INTO inf_progress (user_id, ckey, data, updated, resets) VALUES (?,?,?,?,?)', [$u['id'], $k, $json, time(), $reset ? 1 : 0]);

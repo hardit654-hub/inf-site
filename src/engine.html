@@ -348,7 +348,9 @@ const COIN_SVG='<svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle
 const coinFor=x=>x&&x.ok&&!x.rev?Math.max(0,3-(x.att||0)):0;
 const saveKey=k=>{try{localStorage.setItem(k,JSON.stringify(SS[k]))}catch(e){}};
 const save=(k)=>{k=k||lessons[cur.li].ckey;saveKey(k);DIRTY.add(k);if(ME){dirty=true;clearTimeout(syncT);syncT=setTimeout(push,1200)}};
+const asRec=r=>Array.isArray(r)?Object.assign({},r):r;  // сервер мог прислать пустую запись как [] — у массива поля ok/v теряются при сохранении
 function mergeRec(a,b){
+  a=asRec(a);b=asRec(b);
   if(!a)return b;if(!b)return a;
   const src=(a.ok&&!b.ok)?a:b,oth=src===a?b:a,r={};
   if("v" in src)r.v=src.v;else if("v" in oth)r.v=oth.v;
@@ -405,7 +407,7 @@ async function pull(first){
     // меняем содержимое на месте: открытый шаг держит ссылки на раздел и на запись задачи —
     // так ответ, введённый, пока шла загрузка, не потеряется
     const old=S.st||{};
-    Object.keys(m.st).forEach(x=>{const o=old[x];if(o&&o!==m.st[x]){Object.keys(o).forEach(y=>delete o[y]);Object.assign(o,m.st[x]);m.st[x]=o}});
+    Object.keys(m.st).forEach(x=>{const o=old[x];if(o&&!Array.isArray(o)&&o!==m.st[x]){Object.keys(o).forEach(y=>delete o[y]);Object.assign(o,m.st[x]);m.st[x]=o}});
     Object.keys(S).forEach(x=>delete S[x]);Object.assign(S,m);
     saveKey(k);
     if(changed){DIRTY.add(k);needPush=true}
@@ -465,8 +467,8 @@ lessons.forEach(L=>{let n=0;L.keys=(L.steps||[]).map(s=>s.key||String(++n))});
 const sid=(li,si)=>lessons[li].num+"/"+lessons[li].keys[si];
 const hwId=(li,si)=>lessons[li].ckey+"|"+sid(li,si);
 const SL=li=>SS[lessons[li].ckey];
-const rec=(li,si)=>SL(li).st[sid(li,si)];
-const st=(li,si)=>{const T=SL(li).st;return T[sid(li,si)]||(T[sid(li,si)]={})};
+const rec=(li,si)=>{const T=SL(li).st,k=sid(li,si);if(Array.isArray(T[k]))T[k]=asRec(T[k]);return T[k]};
+const st=(li,si)=>{const T=SL(li).st,k=sid(li,si);if(Array.isArray(T[k]))T[k]=asRec(T[k]);return T[k]||(T[k]={})};
 const passed=(li,si)=>{const s=lessons[li].steps[si],x=rec(li,si)||{};return isTask(s)?!!x.ok:!!x.seen};
 function savedPos(){
   try{const p=JSON.parse(localStorage.getItem(POSKEY)||"null");if(p){const sec=SECS.find(s=>s.key===p.k);if(sec&&sec.lessons[p.li]&&sec.lessons[p.li].steps)return{li:sec.off+p.li,si:p.si}}}catch(e){}

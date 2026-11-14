@@ -303,7 +303,9 @@ async function api(action,body,keepalive){
   if(!j||!j.ok){const e=new Error((j&&j.error)||("Ошибка "+r.status));e.status=r.status;throw e}
   return j;
 }
+const asRec=r=>Array.isArray(r)?Object.assign({},r):r;  // пустая запись с сервера могла прийти как []
 function mergeRec(a,b){
+  a=asRec(a);b=asRec(b);
   if(!a)return b;if(!b)return a;
   const src=(a.ok&&!b.ok)?a:b,oth=src===a?b:a,r={};
   if("v" in src)r.v=src.v;else if("v" in oth)r.v=oth.v;
@@ -367,8 +369,8 @@ function paintAcct(){
 
 /* ---------- данные варианта ---------- */
 const sid=(l,st)=>l.num+"/"+st.key;
-const rec=(l,st)=>S.st[sid(l,st)];
-const recW=(l,st)=>S.st[sid(l,st)]||(S.st[sid(l,st)]={});
+const rec=(l,st)=>{const k=sid(l,st);if(Array.isArray(S.st[k]))S.st[k]=asRec(S.st[k]);return S.st[k]};
+const recW=(l,st)=>{const k=sid(l,st);if(Array.isArray(S.st[k]))S.st[k]=asRec(S.st[k]);return S.st[k]||(S.st[k]={})};
 const isTask=st=>st.type==="fill"&&st.answer&&st.fields;
 const filled=v=>!!v&&v.some(r=>(r||[]).some(c=>nm(c)!==""));
 const maxOf=l=>l.steps.reduce((a,st)=>a+(isTask(st)?st.pts:0),0);
