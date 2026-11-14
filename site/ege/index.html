@@ -587,6 +587,7 @@ function paintFire(){
   const L=lessons[cur.li];if(!L||!L.steps)return;
   const fb=$("firebar");if(fb){const d=document.createElement("div");d.innerHTML=fireHTML(cur.li,cur.si);fb.replaceWith(d.firstChild)}
   $("strip").innerHTML=L.steps.map((_,i)=>sqHTML(cur.li,i)).join("");
+  $("strip").querySelectorAll(".sq").forEach(b=>b.onclick=()=>go(cur.li,+b.dataset.si));  // полоса перерисована — снова вешаем переходы
 }
 async function loadFires(){
   try{const j=await api("fires&keys="+SECS.map(x=>x.key).join(","));FIRE=j.counts||{};MYF=new Set();
