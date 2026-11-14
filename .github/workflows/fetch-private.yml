@@ -1,0 +1,27 @@
+name: Скачать закрытые материалы (во временный архив, не в репозиторий)
+
+on:
+  workflow_dispatch:
+    inputs:
+      list:
+        description: "Файл со списком «имя ссылка» в sources/"
+        required: true
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Скачать
+        run: |
+          mkdir -p out
+          while read -r name url; do
+            [ -z "${name:-}" ] && continue
+            mkdir -p "out/$(dirname "$name")"
+            if curl -fsSL --retry 3 -A "Mozilla/5.0" -o "out/$name" "$url"; then echo "OK   $name $(stat -c %s "out/$name")"; else echo "FAIL $name $url"; fi
+          done < "sources/${{ inputs.list }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: private
+          path: out
+          retention-days: 1
