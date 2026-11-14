@@ -1,6 +1,9 @@
 """Собирает страницы курсов: src/engine.html + src/<курс>/course.js -> site/<папка>/index.html"""
 import json
 COURSES=[
+  dict(src='src/17/course.js', out='site/ege-17/index.html', title='Системы счисления',
+       og_title='Системы счисления — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Системы счисления для ЕГЭ: перевод чисел, шестнадцатеричная система, сложение и вычитание, полезные свойства.'),
   dict(src='src/4/course.js', out='site/ege-4/index.html', title='№ 4 · Условие Фано',
        og_title='№ 4. Кодирование, условие Фано — курс', url='https://gsvv.ru/inf/ege-4/', image='https://gsvv.ru/inf/og-4.jpg',
        desc='Неравномерный двоичный код для ЕГЭ по информатике: условие Фано, суммарная длина, решение в Python. 7 уроков, 60 задач.'),
@@ -40,12 +43,14 @@ def rebase(o, folder):
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
-ORDER=['src/4/course.js','src/12/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
+ORDER=['src/17/course.js','src/4/course.js','src/12/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
     folder=c['out'].split('/')[1]
-    secs.append(dict(num=s['num'], title=c['title'], key='course-%s-s%s'%(d['id'],s['num']), lessons=rebase(scrub(s['lessons']), folder)))
+    les=rebase(scrub(s['lessons']), folder)
+    for i,l in enumerate(les,1): l['label']=str(i)   # показываем «1, 2, 3…» внутри номера; num остаётся ключом прогресса
+    secs.append(dict(num=s['num'], title=c['title'], key='course-%s-s%s'%(d['id'],s['num']), lessons=les))
 ege=dict(id='ege-inf', title='ЕГЭ', sections=secs)
 data='window.COURSE = '+json.dumps(ege, ensure_ascii=False)+';'
 ntask=sum(1 for s in secs for l in s['lessons'] for st in l['steps'] if st['type'] in ('fill','choice','match'))
@@ -123,8 +128,8 @@ for c in COURSES:
     if not os.path.exists(c['src']): continue
     t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=d['section']
     cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../ege/', group='ЕГЭ',
-        lessons=[dict(num=l['num'], title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
-                      labels=[task_label(st) for st in l['steps']], **keys(l)) for l in s['lessons']]))
+        lessons=[dict(num=l['num'], label=str(li), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
+                      labels=[task_label(st) for st in l['steps']], **keys(l)) for li,l in enumerate(s['lessons'],1)]))
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')

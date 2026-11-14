@@ -365,6 +365,8 @@ function viewSetup(){
     catch(err){msg(m,err.message);setBusy(go,false)}};
 }
 
+/* номер урока для показа (внутренний номер остаётся ключом прогресса) */
+const LN=l=>l.label||l.num;
 /* ключ шага (i — позиция с 0) и позиция шага по ключу */
 const K=(l,i)=>l.keys?l.keys[i]:String(i+1);
 const P=(l,k)=>l.keys?l.keys.indexOf(String(k))+1:+k;
@@ -373,7 +375,7 @@ function stats(course,data){
   const st=(data&&data.st)||{};let done=0,total=0;
   const lessons=course.lessons.map(l=>{let d=0,t=0;const cells=[];
     l.steps.forEach((s,i)=>{if(s!=="task")return;t++;const x=st[l.num+"/"+K(l,i)]||{};if(x.ok)d++;cells.push({n:i+1,x})});
-    done+=d;total+=t;return{num:l.num,title:l.title,done:d,total:t,cells}});
+    done+=d;total+=t;return{num:l.num,label:l.label,title:l.title,done:d,total:t,cells}});
   return{done,total,lessons,touched:Object.keys(st).length>0};
 }
 const pct=(a,b)=>b?Math.round(100*a/b):0;
@@ -395,7 +397,7 @@ async function viewStudent(){
     return `<article class="course"><h3>${esc(c.title)}</h3>
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
       <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
-      ${s.lessons.filter(l=>l.total).map(l=>`<div class="lrow"><span>${c.kind==="variant"?`<a href="${esc(c.url)}#${esc(l.num)}-1">${esc(l.title)}</a>`:esc(l.num+" "+l.title)}</span><div class="meter"><i style="width:${pct(l.done,l.total)}%"></i></div><b>${l.done}/${l.total}</b></div>`).join("")}
+      ${s.lessons.filter(l=>l.total).map(l=>`<div class="lrow"><span>${c.kind==="variant"?`<a href="${esc(c.url)}#${esc(l.num)}-1">${esc(l.title)}</a>`:esc(LN(l)+" "+l.title)}</span><div class="meter"><i style="width:${pct(l.done,l.total)}%"></i></div><b>${l.done}/${l.total}</b></div>`).join("")}
       <a class="btn" href="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
     ${pwCard()}`;
   bindPw();
@@ -431,7 +433,7 @@ function hwTasksHTML(tasks){
     b.all++;if(ok)b.ok++;else if(b.first==null||sn<b.first)b.first=sn;if(sn<b.min)b.min=sn});
   const block=(g,b)=>{const vr=g.c.kind==="variant",done=b.ok>=b.all,to=done?b.min:b.first;
     const cnt=done?`✓ ${b.all} из ${b.all}`:b.ok?`${b.ok} из ${b.all}`:`${b.all} ${taskWord(b.all)}`;
-    return `<a class="hwb${done?" ok":""}" href="${esc(g.c.url)}#${esc(b.ln)}-${to}"><span class="hwbt">${vr?"":`<small>${esc(b.ln)}</small>`}${esc(b.L.title)}</span><span class="hwbc">${cnt}</span><span class="hwba" aria-hidden="true">›</span></a>`};
+    return `<a class="hwb${done?" ok":""}" href="${esc(g.c.url)}#${esc(b.ln)}-${to}"><span class="hwbt">${vr?"":`<small>${esc(LN(b.L))}</small>`}${esc(b.L.title)}</span><span class="hwbc">${cnt}</span><span class="hwba" aria-hidden="true">›</span></a>`};
   return `<div class="hwbar">${solved>=n?"<b>✓ Все задачи решены</b>":`Решено <b>${solved} из ${n}</b>`}<div class="meter"><i style="width:${pct(solved,n)}%"></i></div></div>
     <div class="hwl">${groups.map(g=>`<h4>${esc(g.c.title)}</h4>${g.blocks.map(b=>block(g,b)).join("")}`).join("")}</div>`;
 }
@@ -683,7 +685,7 @@ async function buildPicker(sel){
     return `<details class="pick" ${any?"open":""}><summary>${esc(c.title)}<span class="pc" data-pc></span></summary><div class="lessons">${c.lessons.map(l=>{
       const tk=l.steps.map((s,k)=>s==="task"?k+1:0).filter(Boolean);if(!tk.length)return"";
       const lany=tk.some(n=>sel.has(c.key+"|"+l.num+"/"+K(l,n-1)));
-      return `<details class="pl" ${lany?"open":""}><summary><input type="checkbox" class="lall" aria-label="Все задачи урока ${esc(l.num)}"><span>${esc(l.num+" "+l.title)}</span><small data-lc></small></summary><div class="tasks">${tk.map(n=>{const v=c.key+"|"+l.num+"/"+K(l,n-1);
+      return `<details class="pl" ${lany?"open":""}><summary><input type="checkbox" class="lall" aria-label="Все задачи урока ${esc(l.num)}"><span>${esc(LN(l)+" "+l.title)}</span><small data-lc></small></summary><div class="tasks">${tk.map(n=>{const v=c.key+"|"+l.num+"/"+K(l,n-1);
         return `<label class="pt"><input type="checkbox" class="tk" value="${esc(v)}" ${sel.has(v)?"checked":""}><b>Шаг ${n}</b><span>${esc((l.labels||[])[n-1]||"")}</span><a href="${esc(c.url)}#${esc(l.num)}-${n}" target="_blank" rel="noopener">открыть</a></label>`}).join("")}</div></details>`}).join("")}</div></details>`}).join("");
   box.querySelectorAll(".lall").forEach(cb=>{cb.onclick=e=>e.stopPropagation();cb.onchange=()=>{cb.closest(".pl").querySelectorAll(".tk").forEach(t=>t.checked=cb.checked);syncPicker()}});
   box.querySelectorAll(".tk").forEach(cb=>cb.onchange=syncPicker);
@@ -750,7 +752,7 @@ async function paneProgress(){
   const V=visible();const rows=V.map(s=>{const p=P[s.id]||{};return{s,p,k:stats(c,p.data)}});
   const cellH=(d,t)=>`<span class="cell ${d===t&&t?"full":d?"":"zero"}"><b>${d}/${t}</b><span class="meter"><i style="width:${pct(d,t)}%"></i></span></span>`;
   pane.querySelector(".card:not(.fbar)").innerHTML=!STUDENTS.length?`<div class="empty">Сначала добавьте учеников на вкладке «Ученики».</div>`:!V.length?`<div class="empty">В этой группе пока никого.</div>`:
-   `<div class="tbl-wrap"><table class="pt"><thead><tr><th>Ученик</th>${L.map(l=>`<th title="${esc(l.title)}">${esc(l.num)}</th>`).join("")}<th>Всего</th><th class="hide-sm">Последнее</th></tr></thead><tbody>
+   `<div class="tbl-wrap"><table class="pt"><thead><tr><th>Ученик</th>${L.map(l=>`<th title="${esc(l.title)}">${esc(LN(l))}</th>`).join("")}<th>Всего</th><th class="hide-sm">Последнее</th></tr></thead><tbody>
     ${rows.map(r=>`<tr class="srow" data-u="${r.s.id}" aria-expanded="${OPEN===r.s.id}"><td>${esc(r.s.name)}</td>${r.k.lessons.filter(l=>l.total).map(l=>`<td>${cellH(l.done,l.total)}</td>`).join("")}<td>${cellH(r.k.done,r.k.total)}</td><td class="hide-sm muted">${r.p.updated?ago(r.p.updated):"—"}</td></tr>
       ${OPEN===r.s.id?`<tr class="detail"><td colspan="${L.length+3}">${detail(r)}</td></tr>`:""}`).join("")}
    </tbody></table></div>
@@ -760,7 +762,7 @@ async function paneProgress(){
 function ansText(v){if(v==null)return"";if(Array.isArray(v))return v.map(r=>Array.isArray(r)?r.filter(Boolean).join(" "):r).filter(Boolean).join(" | ");return String(v)}
 function detail(r){
   const res=r.p.resets?`<p class="note">Нажимал «Начать заново»: ${r.p.resets} раз(а)</p>`:"";
-  return `<div class="dl">${r.k.lessons.filter(l=>l.total).map(l=>`<div><h4>${esc(l.num+" "+l.title)} · ${l.done}/${l.total}</h4><div class="sqs">
+  return `<div class="dl">${r.k.lessons.filter(l=>l.total).map(l=>`<div><h4>${esc(LN(l)+" "+l.title)} · ${l.done}/${l.total}</h4><div class="sqs">
     ${l.cells.map(c=>{const x=c.x,cls=x.ok?"ok":(x.att?"bad":""),a=ansText(x.v);
       const tip="Шаг "+c.n+(x.ok?" — решено":x.att?" — не решено":" — не начинал")+(x.att?", попыток: "+x.att:"")+(x.rev?", смотрел ответ":"")+(a?"\nОтвет: "+a:"");
       return `<span class="sq ${cls}${x.rev?" rev":""}" title="${esc(tip)}">${c.n}</span>`}).join("")}</div></div>`).join("")}${res}</div>`;

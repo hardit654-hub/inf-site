@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: Stepik-like learning shell — dark header with the step strip, dark collapsible table of contents on the left, white lesson page with a grey footer band */
+/* Layout: dark header with the step strip, dark collapsible table of contents on the left, white lesson page with a grey footer band */
 :root{
   --bar:#222326; --bar-2:#2d2e32; --bar-ink:#e8e8ea; --bar-muted:#9a9ca3; --bar-line:#3a3b40;
   --green:#66cc66; --green-d:#4fae4f; --green-ink:#2e8b2e; --green-soft:#e8f6e8;
@@ -225,7 +225,7 @@ svg.tree .w{fill:var(--bg)} svg.tree .g{fill:#2fa54a} svg.tree .r{fill:#e5413a}
 svg.tree rect{fill:var(--bg);stroke:var(--ink);stroke-width:1.2}
 svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
 
-/* quiz — like Stepik's framed answer block */
+/* quiz — framed answer block */
 .quiz{border:2px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px;margin-top:6px;box-shadow:0 0 0 6px var(--page)}
 .quiz.ok{border-color:var(--green);box-shadow:0 0 0 6px var(--green-soft)}
 .quiz.bad{border-color:var(--bad);box-shadow:0 0 0 6px var(--bad-soft)}
@@ -394,12 +394,13 @@ function paintAcct(){
   a.title=ME?(syncErr?"Нет связи с сервером — ответы сохранены на этом устройстве и отправятся позже":"Личный кабинет · прогресс сохраняется"):"Войти, чтобы прогресс сохранялся на любом устройстве";
 }
 async function pull(first){
-  let anyLocal=false,needPush=false;
+  let anyLocal=false,needPush=false,serverPos=null;
   for(const sec of SECS){
     const k=sec.key;let g;
     try{g=await api("progress_get&key="+k)}catch(e){if(e.status===401){ME=null;paintAcct()}return}
     if(typeof g.coins==="number"){COINS=g.coins;paintCoins(0)}
     const S=SS[k];
+    if(FROM_S&&sec===FROM_S)serverPos=g.data&&g.data.pos;
     const m=mergeState(g.data,S);m.uid=ME.id;if(S._reset)m._reset=true;
     const changed=JSON.stringify(m.st)!==JSON.stringify((g.data&&g.data.st)||{});
     if(JSON.stringify(m.st)!==JSON.stringify(S.st||{}))anyLocal=true;
@@ -412,6 +413,8 @@ async function pull(first){
     if(changed){DIRTY.add(k);needPush=true}
   }
   if(needPush){dirty=true;push()}
+  if(first&&FROM_S){const sec=FROM_S,q=serverPos;FROM_S=null;
+    if(q&&cur.li===sec.off&&cur.si===0&&sec.lessons[q.li]&&sec.lessons[q.li].steps&&(q.li||q.si)){go(sec.off+q.li,q.si);return}}
   if(first&&!location.hash&&!new URLSearchParams(location.search).get("s")){const p=savedPos();if(p&&(p.li!==cur.li||p.si!==cur.si)){go(p.li,p.si);return}}
   if(anyLocal){const a=document.activeElement;if(!(a&&a.matches&&a.matches(".frow input")))render()}
 }
@@ -531,6 +534,7 @@ function lessonStat(li){
   return {done,total:L.steps.length,ok,tasks};
 }
 const OPEN=new Set();  // раскрытые разделы в оглавлении
+let FROM_S=null;  // открыли раздел по старой ссылке, а позиции на устройстве ещё нет — возьмём её с сервера
 function renderToc(){
   $("ctitle").textContent=MULTI?C.title:C.title+". "+SECS[0].title;
   let allDone=0,all=0,h="";
@@ -538,11 +542,11 @@ function renderToc(){
   SECS.forEach(sec=>{
     let sd=0,sa=0,hwS=0,rows="";
     sec.lessons.forEach((L,j)=>{const li=sec.off+j;
-      if(!L.steps){rows+=`<button class="les" disabled><span class="n">${L.num}</span><span class="t">${esc(L.title)}</span><span class="c">скоро</span></button>`;return}
+      if(!L.steps){rows+=`<button class="les" disabled><span class="n">${L.label||L.num}</span><span class="t">${esc(L.title)}</span><span class="c">скоро</span></button>`;return}
       const p=lessonStat(li);sd+=p.done;sa+=p.total;
       const cls=p.done===p.total?" done":p.done?" part":"";
       const hwn=L.steps.reduce((a,_,si)=>a+(HW.has(hwId(li,si))&&!passed(li,si)?1:0),0);hwS+=hwn;
-      rows+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.num}</span><span class="t">${esc(L.title)}${hwn?` <span class="hwt" title="Задач из домашки: ${hwn}">ДЗ ${hwn}</span>`:""}</span><span class="c">${p.done}/${p.total}</span></button>`;
+      rows+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.label||L.num}</span><span class="t">${esc(L.title)}${hwn?` <span class="hwt" title="Задач из домашки: ${hwn}">ДЗ ${hwn}</span>`:""}</span><span class="c">${p.done}/${p.total}</span></button>`;
     });
     allDone+=sd;all+=sa;
     if(!MULTI){h+=`<div class="mod"><span class="n">${sec.num}</span><span>✅ ${esc(sec.title)}</span></div>`+rows;return}
@@ -567,11 +571,11 @@ function sqHTML(li,i){
 function render(){
   const L=lessons[cur.li], s=L.steps[cur.si], x=st(cur.li,cur.si);
   if(!isTask(s)&&!x.seen){x.seen=true;save()}
-  document.title=L.num+" "+L.title+" · шаг "+(cur.si+1);
+  document.title=(L.label?L.sec.title+" · "+L.title:L.num+" "+L.title)+" · шаг "+(cur.si+1);
   $("strip").innerHTML=L.steps.map((_,i)=>sqHTML(cur.li,i)).join("");
   const on=$("strip").querySelector(".sq.on");if(on)on.scrollIntoView({inline:"center",block:"nearest"});
   const p=lessonStat(cur.li);
-  $("lbar").innerHTML=`${MULTI?`<span class="lsec">${esc(L.sec.title)}</span>`:""}<b>${L.num} ${esc(L.title)}</b><span>${p.done} из ${p.total} шагов пройдено</span><span>${p.ok} из ${p.tasks} баллов получено</span>`;
+  $("lbar").innerHTML=`${MULTI?`<span class="lsec">${esc(L.sec.title)}</span>`:""}<b>${L.label||L.num} ${esc(L.title)}</b><span>${p.done} из ${p.total} шагов пройдено</span><span>${p.ok} из ${p.tasks} баллов получено</span>`;
   $("pts").innerHTML=`Шаг <b>${cur.si+1}</b> из ${L.steps.length}`;
   let h="";
   if(HW.has(hwId(cur.li,cur.si))) h+=`<div class="hwnote">📝 Эта задача — из домашнего задания${x.ok?" · решена ✓":""}</div>`;
@@ -622,6 +626,12 @@ function verdict(x,okText,badText){
   return "";
 }
 function choiceHTML(s,x){
+  if(s.multi){  // несколько верных вариантов: ответ — набор отмеченных
+    const v=Array.isArray(x.v)?x.v:[];
+    let h=`<div class="quiz${x.ok?" ok":x.att&&x.last===false?" bad":""}" id="quiz"><span class="qt">Выберите все подходящие ответы</span>`+verdict(x,"Верно!","Неверно. Попробуйте ещё раз.");
+    s.options.forEach((o,i)=>{h+=`<label class="opt${x.ok&&v.includes(i)?" ok":""}"><input type="checkbox" name="optm" value="${i}" ${v.includes(i)?"checked":""} ${x.ok?"disabled":""}><span>${esc(o)}</span></label>`});
+    return h+actions(s,x)+`</div>`;
+  }
   const sel=x.v!=null?x.v:-1;
   let h=`<div class="quiz${x.ok?" ok":x.att&&x.last===false?" bad":""}" id="quiz"><span class="qt">Выберите один вариант из списка</span>`+verdict(x,"Верно!","Неверно. Попробуйте ещё раз.");
   s.options.forEach((o,i)=>{
@@ -663,7 +673,7 @@ function actions(s,x){
   if(!x.ok&&x.att>=3&&!x.rev) h+=`<button class="btn warn" id="showans">Показать ответ</button>`;
   h+=`</div>`;
   if(x.rev){
-    const a=s.type==="choice"?esc(s.options[s.answer]):s.type==="match"?s.items.map((it,i)=>it+" — "+esc(s.options[s.answer[i]])).join("<br>"):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
+    const a=s.type==="choice"?(s.multi?s.answer.map(i=>esc(s.options[i])).join("<br>"):esc(s.options[s.answer])):s.type==="match"?s.items.map((it,i)=>it+" — "+esc(s.options[s.answer[i]])).join("<br>"):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
     h+=`<div class="reveal">Правильный ответ:<br>${a}</div>`;
   }
   return h;
@@ -684,6 +694,7 @@ function wire(s,x){
   if(!isTask(s))return;
   if(s.type==="choice"){
     document.querySelectorAll('input[name="opt"]').forEach(r=>r.onchange=()=>{x.v=+r.value;x.last=null;save();render()});
+    document.querySelectorAll('input[name="optm"]').forEach(r=>r.onchange=()=>{x.v=[...document.querySelectorAll('input[name="optm"]:checked')].map(c=>+c.value);x.last=null;save()});
   }else if(s.type==="match"){
     document.querySelectorAll(".mrow select").forEach(sl=>sl.onchange=()=>{x.v=x.v||[];x.v[sl.dataset.i]=sl.value===""?null:+sl.value;sl.classList.remove("ok","bad");x.last=null;save()});
   }else{
@@ -699,8 +710,10 @@ function wire(s,x){
 function submit(s,x){
   let good;
   if(s.type==="choice"){
-    if(x.v==null){flash("Выберите вариант ответа");return}
-    good=x.v===s.answer;
+    if(s.multi){const v=Array.isArray(x.v)?x.v:[];if(!v.length){flash("Отметьте хотя бы один вариант");return}
+      good=v.length===s.answer.length&&s.answer.every(i=>v.includes(i))}
+    else{if(x.v==null){flash("Выберите вариант ответа");return}
+    good=x.v===s.answer}
   }else if(s.type==="match"){
     const v=x.v||[];
     if(s.items.some((_,i)=>v[i]==null)){flash("Выберите пару для каждой строки");return}
@@ -734,7 +747,7 @@ function fromHash(){
   if(m){const li=lessons.findIndex(L=>L.num===m[1]);if(li>=0&&lessons[li].steps){go(li,Math.max(0,Math.min(+m[2]-1,lessons[li].steps.length-1)));return}}
   // ?s=42 — открыть раздел (переход со старой страницы курса) там, где ученик остановился
   const sn=new URLSearchParams(location.search).get("s"),sec=sn&&SECS.find(s=>String(s.num)===sn);
-  if(sec){const q=SS[sec.key].pos;if(q&&sec.lessons[q.li]&&sec.lessons[q.li].steps){go(sec.off+q.li,q.si);return}go(sec.off,null);return}
+  if(sec){const q=SS[sec.key].pos;if(q&&sec.lessons[q.li]&&sec.lessons[q.li].steps){go(sec.off+q.li,q.si);return}FROM_S=sec;go(sec.off,null);return}
   const p=savedPos();if(p)go(p.li,p.si);else go(0,0);
 }
 
