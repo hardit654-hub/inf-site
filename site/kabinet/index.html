@@ -249,6 +249,38 @@ textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc
 .ccell{display:inline-flex;align-items:center;gap:5px;font:600 14px var(--f-mono)}
 .cnum .coin{width:15px;height:15px;margin-left:8px}
 @media (max-width:560px){.card{padding:18px}.tbl-wrap{margin:0 -18px;padding:0 18px}.hide-sm{display:none}.brand span:not(.mark){display:none}td.acts{white-space:normal;width:1%}td.acts .btn{display:flex;width:100%;margin:0 0 6px}td.acts .btn:last-child{margin:0}}
+
+/* задания ЕГЭ 1–27: отметки учителя */
+.sk-sum{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.sk-sum span{display:inline-flex;align-items:center;gap:6px;font:500 13.5px var(--f-body);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 11px}
+.sk-sum b{font-family:var(--f-mono);color:var(--ink)}
+.sk-dot{width:10px;height:10px;border-radius:50%;background:var(--chip);border:1px solid var(--line);flex:none}
+.sk-dot.g{background:var(--green);border-color:var(--green)}.sk-dot.y{background:#f2c230;border-color:#f2c230}.sk-dot.r{background:var(--red);border-color:var(--red)}
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.sk-t{display:flex;flex-direction:column;gap:2px;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);text-decoration:none;min-height:66px}
+.sk-t b{font:700 18px/1.1 var(--f-mono)}
+.sk-t small{font-size:12px;line-height:1.3;color:var(--muted)}
+.sk-t.g{background:var(--green-soft);border-color:var(--green)}.sk-t.g b{color:var(--green-ink)}
+.sk-t.y{background:var(--amber-soft);border-color:#f2c230}.sk-t.y b{color:var(--amber)}
+.sk-t.r{background:var(--red-soft);border-color:var(--red)}.sk-t.r b{color:var(--red)}
+a.sk-t:hover{border-color:var(--ink)}
+.sk-t .lk{font-size:11.5px;color:var(--green-ink);margin-top:auto}
+.skm{border-collapse:separate;border-spacing:3px;font-size:14px;width:auto!important}
+.skm td,.skm th{padding:0 !important;border:0 !important;background:none}
+.skm th{font:600 12.5px var(--f-mono);color:var(--muted);text-align:center;padding:2px 0;min-width:30px}
+.skm th.nm,.skm td.nm{text-align:left;position:sticky;left:0;background:var(--card)!important;z-index:1;padding-right:12px!important;white-space:nowrap;font:500 14px var(--f-body);color:var(--ink);max-width:170px;overflow:hidden;text-overflow:ellipsis}
+.skc{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);background:var(--bg);cursor:pointer;padding:0;display:block;font:600 11px var(--f-mono);color:var(--muted)}
+.skc:hover{border-color:var(--ink)}
+.skc.g{background:var(--green);border-color:var(--green);color:#10331a}.skc.y{background:#f2c230;border-color:#f2c230;color:#3a2a00}.skc.r{background:var(--red);border-color:var(--red);color:#fff}
+.skc.busy{opacity:.5}
+.skm tr.tot td{font:600 11px/1.2 var(--f-mono);text-align:center;color:var(--muted);padding-top:6px}
+.skm tr.tot td i{display:block;font-style:normal}
+.skm tr.tot .r{color:var(--red)}.skm tr.tot .y{color:var(--amber)}
+.skpop{position:absolute;z-index:50;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px #0003;padding:8px;display:flex;flex-direction:column;gap:4px;min-width:190px}
+.skpop .h{font:600 13px var(--f-body);color:var(--muted);padding:2px 6px 4px}
+.skpop button{display:flex;align-items:center;gap:8px;border:0;background:none;color:var(--ink);font:500 14.5px var(--f-body);padding:7px 8px;border-radius:8px;cursor:pointer;text-align:left}
+.skpop button:hover,.skpop button:focus-visible{background:var(--bg)}
+.skpop button[aria-pressed="true"]{background:var(--chip);font-weight:700}
 </style>
 </head>
 <body>
@@ -389,13 +421,28 @@ function ago(ts){
   return d.toLocaleDateString("ru-RU",{day:"numeric",month:"short"})+(d.getFullYear()!==now.getFullYear()?" "+d.getFullYear():"");
 }
 
+/* ---------- задания ЕГЭ 1–27: учитель отмечает, как даётся каждое ---------- */
+const EGE=["Графы и таблицы","Таблицы истинности","Базы данных","Кодирование, условие Фано","Анализ алгоритмов","Черепаха","Графика и звук","Комбинаторика","Электронные таблицы","Поиск в тексте","Объём информации","Машина Тьюринга","IP-адреса и маски","Системы счисления","Логические выражения","Рекурсия","Последовательности","Динамика в таблицах","Теория игр: 1 ход","Теория игр: 2 хода","Теория игр: стратегия","Параллельные процессы","Количество программ","Обработка строк","Делители и маски","Сортировка данных","Анализ данных"];
+const SKW={g:"Хорошо получается",y:"Так себе",r:"Не пройдено"};
+/* раздел курса для номера задания (ссылка с плитки) */
+function skLinks(cat){const m={};(cat||[]).forEach(c=>{if(c.group!=="ЕГЭ")return;const num=(c.key.match(/-s(\d+)$/)||[])[1];if(!num)return;const u=c.url+"?s="+num;
+  const t=c.title.match(/№\s*(\d+)(?:[–-](\d+))?/);if(t){for(let k=+t[1];k<=+(t[2]||t[1]);k++)m[k]=u}else if(/Системы счисления/.test(c.title))m[14]=u});return m}
+function skCounts(sk){const n={g:0,y:0,r:0,e:0};for(let k=1;k<=27;k++)n[sk[k]||"e"]++;return n}
+function skillsCard(sk,cat){
+  sk=sk||{};const n=skCounts(sk),L=skLinks(cat);
+  return `<section class="card" id="skcard"><h2>Задания ЕГЭ</h2><p class="sub">Отметки учителя по занятиям: что уже получается, что стоит повторить и что ещё впереди.</p>
+    <div class="sk-sum"><span><i class="sk-dot g"></i>хорошо <b>${n.g}</b></span><span><i class="sk-dot y"></i>так себе <b>${n.y}</b></span><span><i class="sk-dot r"></i>не пройдено <b>${n.r}</b></span>${n.e?`<span><i class="sk-dot"></i>без отметки <b>${n.e}</b></span>`:""}</div>
+    <div class="sk-grid">${EGE.map((t,i)=>{const k=i+1,v=sk[k]||"",tag=L[k]?"a":"div";
+      return `<${tag} class="sk-t ${v}"${L[k]?` href="${esc(L[k])}"`:""} title="${esc("№ "+k+" · "+t+(v?" — "+SKW[v]:" — пока без отметки"))}"><b>${k}</b><small>${esc(t)}</small>${L[k]?'<span class="lk">раздел курса →</span>':""}</${tag}>`}).join("")}</div></section>`;
+}
+
 /* ---------- ученик ---------- */
 async function viewStudent(){
   const [cat,p]=await Promise.all([catalog(),api("my_progress")]);
   const by=p.coins_by||{};
   let info={schedule:[],homework:""};try{info=await api("info_get")}catch(e){}
   HWCTX={cat,prog:p.progress};
-  app.innerHTML=infoCards(info)+`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div id="lbslot" style="margin-bottom:16px"></div><div class="courses">${groupCat(cat).map(c=>{if(c.parts)return egeCard(c,p,by);const s=stats(c,(p.progress[c.key]||{}).data);
+  app.innerHTML=infoCards(info)+skillsCard(info.skills,cat)+`<div class="wallet">${COIN}<div><b>${p.coins||0}</b><span>${coinWord(p.coins||0)} в копилке. 3 за каждую решённую задачу, −1 за каждую ошибку; если посмотреть ответ — 0.</span></div></div><div id="lbslot" style="margin-bottom:16px"></div><div class="courses">${groupCat(cat).map(c=>{if(c.parts)return egeCard(c,p,by);const s=stats(c,(p.progress[c.key]||{}).data);
     return `<article class="course"><h3>${esc(c.title)}</h3>
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
       <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
@@ -506,12 +553,14 @@ async function viewTeacher(){
   app.innerHTML=`<nav class="tabs" role="tablist">
      <button class="tab" role="tab" data-t="students">Ученики</button>
      <button class="tab" role="tab" data-t="progress">Прогресс</button>
+     <button class="tab" role="tab" data-t="skills">Задания ЕГЭ</button>
      <button class="tab" role="tab" data-t="variants">Варианты</button>
      <button class="tab" role="tab" data-t="rating">Рейтинг</button></nav><div id="pane"><div class="loading">Загрузка…</div></div>`;
   app.querySelectorAll(".tab").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;try{sessionStorage.setItem("kab-tab",TAB)}catch(e){}viewTeacher()}});
   try{STUDENTS=(await api("students")).students}catch(e){document.getElementById("pane").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
   if(TAB==="rating"){document.getElementById("pane").innerHTML=await lbCard(true);return}
   if(TAB==="variants"){paneVariants();return}
+  if(TAB==="skills"){paneSkills();return}
   TAB==="students"?paneStudents():paneProgress();
 }
 function credText(login,pass){return "Сайт: "+SITE+"\nЛогин: "+login+"\nПароль: "+pass}
@@ -740,6 +789,37 @@ async function uploadVariant(files){
         step("Файл "+rel(f)+(parts>1?" — часть "+(i+1)+" из "+parts:""))}}
     CAT=null;paneVariants(`<div class="card"><div class="msg good" role="status">Вариант «${esc(mf.title)}» загружен. Его уже можно задавать домашкой.</div></div>`);
   }catch(e){msg(m,e.message+". Попробуйте ещё раз — уже загруженное просто перезапишется.");document.getElementById("vpick").disabled=false}
+}
+function paneSkills(){
+  const pane=document.getElementById("pane"),V=visible();
+  const sk=s=>(s.info&&s.info.skills)||{};
+  const tot=k=>{let r=0,y=0,g=0;V.forEach(s=>{const v=sk(s)[k];if(v==="r")r++;else if(v==="y")y++;else if(v==="g")g++});return{r,y,g}};
+  pane.innerHTML=filterBar(false)+`<div class="card"><h2>Задания ЕГЭ · ${esc(fLabel())}</h2>
+    <p class="sub">Нажмите на клетку и выберите, как ученику даётся задание. Ученик видит отметки у себя в кабинете. Внизу — сколько в группе «так себе» и «не пройдено».</p>
+    <div class="sk-sum"><span><i class="sk-dot g"></i>${SKW.g}</span><span><i class="sk-dot y"></i>${SKW.y}</span><span><i class="sk-dot r"></i>${SKW.r}</span><span><i class="sk-dot"></i>без отметки</span></div>
+    ${!STUDENTS.length?`<div class="empty">Сначала добавьте учеников на вкладке «Ученики».</div>`:!V.length?`<div class="empty">В этой группе пока никого.</div>`:
+    `<div class="tbl-wrap"><table class="skm"><thead><tr><th class="nm">Ученик</th>${EGE.map((t,i)=>`<th title="${esc("№ "+(i+1)+" · "+t)}">${i+1}</th>`).join("")}</tr></thead><tbody>
+      ${V.map(s=>`<tr><td class="nm" title="${esc(s.name)}">${esc(s.name)}</td>${EGE.map((t,i)=>{const v=sk(s)[i+1]||"";return `<td><button type="button" class="skc ${v}" data-u="${s.id}" data-n="${i+1}" title="${esc(s.name+" · № "+(i+1)+" "+t+(v?" — "+SKW[v]:""))}" aria-label="${esc(s.name+", задание "+(i+1)+(v?": "+SKW[v]:": без отметки"))}">${i+1}</button></td>`}).join("")}</tr>`).join("")}
+      ${V.length>1?`<tr class="tot"><td class="nm">В группе</td>${EGE.map((t,i)=>{const c=tot(i+1);return `<td>${c.r?`<i class="r" title="не пройдено">${c.r}</i>`:""}${c.y?`<i class="y" title="так себе">${c.y}</i>`:""}${!c.r&&!c.y&&c.g===V.length?'<i style="color:var(--green-ink)">✓</i>':""}</td>`}).join("")}</tr>`:""}
+    </tbody></table></div><div id="skm" hidden></div>`}</div>`;
+  bindFilter(()=>paneSkills());
+  let pop=null;const close=()=>{document.querySelectorAll(".skpop").forEach(x=>x.remove());pop=null};
+  if(!window.__skDoc){window.__skDoc=1;document.addEventListener("click",e=>{const p=document.querySelector(".skpop");if(p&&!p.contains(e.target))p.remove()});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".skpop").forEach(x=>x.remove())})}
+  pane.querySelectorAll(".skc").forEach(b=>b.onclick=e=>{
+    e.stopPropagation();const op=document.querySelector(".skpop"),was=op&&op.dataset.k===b.dataset.u+"-"+b.dataset.n;close();if(was)return;
+    const s=STUDENTS.find(x=>x.id===+b.dataset.u),n=+b.dataset.n,cur=sk(s)[n]||"";
+    pop=document.createElement("div");pop.className="skpop";pop.dataset.k=b.dataset.u+"-"+n;pop.setAttribute("role","menu");
+    pop.innerHTML=`<div class="h">${esc(s.name.split(" ")[0])} · № ${n} ${esc(EGE[n-1])}</div>`+[["g",SKW.g],["y",SKW.y],["r",SKW.r],["","Снять отметку"]].map(([v,t])=>`<button type="button" role="menuitem" data-v="${v}" aria-pressed="${cur===v&&v!==""}"><i class="sk-dot ${v}"></i>${t}</button>`).join("");
+    document.body.appendChild(pop);
+    const r=b.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+    let x=r.left+scrollX,y=r.bottom+scrollY+6;if(x+w>scrollX+innerWidth-8)x=scrollX+innerWidth-8-w;if(r.bottom+h+6>innerHeight)y=r.top+scrollY-h-6;
+    pop.style.left=Math.max(8,x)+"px";pop.style.top=y+"px";pop.querySelector("button").focus();
+    pop.onclick=async ev=>{const o=ev.target.closest("button[data-v]");if(!o)return;ev.stopPropagation();const v=o.dataset.v;close();
+      const old=b.className;b.className="skc "+v+" busy";
+      try{const j=await api("skills_set",{id:s.id,n,v});s.info=s.info||{};s.info.skills=j.skills;paneSkills()}
+      catch(err){b.className=old;const m=document.getElementById("skm");if(m)msg(m,err.message)}};
+  });
 }
 function alertBox(t){const m=document.getElementById("am");if(m)msg(m,t)}
 async function paneProgress(){

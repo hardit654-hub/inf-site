@@ -202,6 +202,18 @@ button{font:inherit}
 .mbox h2{margin:0 0 8px;font-size:20px}
 .mbox p{margin:0 0 10px;color:var(--muted)}
 .mbox .tnav{justify-content:flex-end}
+
+.scale{margin:0 0 20px}
+.scale .slbl b{color:var(--ink);font-family:var(--f-mono)}
+.sc{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:4px;margin-top:6px}
+.sc-c{border:1px solid var(--line);border-radius:7px;padding:3px 0 4px;text-align:center;line-height:1.15}
+.sc-c b{display:block;font:500 11px var(--f-mono);color:var(--muted)}
+.sc-c span{font:700 14px var(--f-mono)}
+.z-r{background:var(--bad-soft);border-color:transparent}.z-o{background:var(--warn-soft);border-color:transparent}.z-g{background:var(--green-soft);border-color:transparent}
+.sc-c.me{background:var(--ink);border-color:var(--ink)}.sc-c.me b,.sc-c.me span{color:var(--card)}
+.sc-leg{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:13px;color:var(--muted)}
+.sc-leg span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;border:1px solid var(--line);display:inline-block}
 </style>
 </head>
 <body>
@@ -481,6 +493,13 @@ function sideHTML(l,E){
     <p>Нерешённые задания можно дорешать: за верный ответ — монетки (минус одна за каждую ошибку). Баллы за экзамен не меняются.</p>
     <div style="margin-top:12px"><button class="btn sm danger" type="button" data-restart>Пройти заново</button></div></div>${tkey?`<div>${tkey}</div>`:""}`;
 }
+/* шкала перевода первичных баллов в тестовые с отметкой результата */
+function scaleHTML(prim){
+  const zone=p=>p<=5?" z-r":p<=7?" z-o":p>=21?" z-g":"";
+  return `<div class="scale"><div class="slbl">Перевод в 100-балльную шкалу (ЕГЭ-2026)${prim?` · ваш результат: <b>${prim} → ${toTest(prim)}</b>`:""}</div>
+    <div class="sc">${SCALE.slice(1).map((t,i)=>{const p=i+1;return `<div class="sc-c${zone(p)}${p===prim?" me":""}" title="${p} ${ptsWord(p)} → ${t}"><b>${p}</b><span>${t}</span></div>`}).join("")}</div>
+    <div class="sc-leg"><span><i class="sw z-r"></i>1–5 — ниже порога 40 баллов</span><span><i class="sw z-o"></i>6–7 — порог пройден, но для вуза мало (минимум 44)</span><span><i class="sw"></i>8–20 — хватает для поступления</span><span><i class="sw z-g"></i>21–29 — 80 баллов и выше</span></div></div>`;
+}
 function resultsHTML(l,E){
   const tasks=l.steps.filter(isTask),full=tasks.filter(st=>(E.p||{})[st.no]===st.pts).length;
   const rows=l.steps.map((st,i)=>{
@@ -491,7 +510,7 @@ function resultsHTML(l,E){
       <td>${show?`<code>${esc(keyText(st))}</code>`:`<a href="#${esc(l.num)}-${i+1}">${x.att>1?"ещё попытка":"дорешать"}</a>`}${x.ok&&p!==st.pts?' <span class="pt ok">✓ дорешано</span>':""}</td>
       <td class="pt ${cls}">${p} / ${st.pts}</td></tr>`}).join("");
   return `<article class="card"><div class="thead"><h1>Итоги</h1><span class="badge">${new Date(E.fin).toLocaleDateString("ru-RU",{day:"numeric",month:"long"})}</span></div>
-    <div class="rsum"><div class="rbox main"><b>${E.test}</b><span>тестовых баллов из 100</span></div><div class="rbox"><b>${E.prim}<small style="font-size:16px"> / ${maxOf(l)}</small></b><span>первичных баллов</span></div><div class="rbox"><b>${full}<small style="font-size:16px"> / ${tasks.length}</small></b><span>заданий верно</span></div></div>
+    <div class="rsum"><div class="rbox main"><b>${E.test}</b><span>тестовых баллов из 100</span></div><div class="rbox"><b>${E.prim}<small style="font-size:16px"> / ${maxOf(l)}</small></b><span>первичных баллов</span></div><div class="rbox"><b>${full}<small style="font-size:16px"> / ${tasks.length}</small></b><span>заданий верно</span></div></div>${scaleHTML(E.prim)}
     <div style="overflow-x:auto"><table class="rtab"><thead><tr><th>№</th><th>Ваш ответ</th><th>Правильный ответ</th><th>Баллы</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="muted" style="font-size:14px;margin:14px 0 0">Правильные ответы к нерешённым заданиям скрыты, чтобы их можно было дорешать за монетки. В задании ответ можно открыть, но тогда монеток за него не будет.</p></article>`;
 }

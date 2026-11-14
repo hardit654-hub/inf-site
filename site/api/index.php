@@ -57,6 +57,9 @@ function schema(PDO $pdo, bool $mysql) {
         hw_set INT NOT NULL DEFAULT 0, hw_done INT NOT NULL DEFAULT 0, updated INT NOT NULL DEFAULT 0)$tail");
     try { $pdo->query('SELECT hw_tasks FROM inf_student_info LIMIT 0'); }
     catch (Exception $e) { $pdo->exec('ALTER TABLE inf_student_info ADD COLUMN hw_tasks TEXT'); }
+    // отметки учителя по заданиям ЕГЭ 1–27: {"4":"g","12":"y","22":"r"}
+    try { $pdo->query('SELECT skills FROM inf_student_info LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec('ALTER TABLE inf_student_info ADD COLUMN skills TEXT'); }
     // категория ученика: «Школа» / «Репетиторство» (новая колонка, по умолчанию пустая)
     try { $pdo->query('SELECT cat FROM inf_users LIMIT 0'); }
     catch (Exception $e) { $pdo->exec("ALTER TABLE inf_users ADD COLUMN cat VARCHAR(32) NOT NULL DEFAULT ''"); }
@@ -256,8 +259,9 @@ function coins_total(int $uid): int {
 
 /* ---------- расписание и домашка ---------- */
 function info_of(int $uid): array {
-    $r = one('SELECT schedule, homework, hw_tasks, hw_due, hw_set, hw_done, updated FROM inf_student_info WHERE user_id = ?', [$uid]);
+    $r = one('SELECT schedule, homework, hw_tasks, hw_due, hw_set, hw_done, skills, updated FROM inf_student_info WHERE user_id = ?', [$uid]);
     return [
+        'skills' => (object)($r && $r['skills'] ? (json_decode($r['skills'], true) ?: []) : []),
         'hw_tasks' => $r && $r['hw_tasks'] ? json_decode($r['hw_tasks'], true) : [],
         'schedule' => $r && $r['schedule'] ? json_decode($r['schedule'], true) : [],
         'homework' => $r ? (string)$r['homework'] : '',
@@ -445,6 +449,25 @@ case 'info_set':
     [$hw, $tasks, $due] = clean_hw_input();
     save_info($id, $hw, $tasks, $due, clean_schedule(arg('schedule', [])));
     out(['ok' => true] + info_of($id));
+
+case 'skills_set':
+    // Учитель отмечает, как ученику даётся задание ЕГЭ: g — хорошо, y — так себе, r — не пройдено, '' — снять отметку
+    need_post();
+    need_teacher();
+    $id = (int)arg('id');
+    if (!one("SELECT id FROM inf_users WHERE id = ? AND role = 'student'", [$id])) fail('Ученик не найден', 404);
+    $n = (int)arg('n');
+    $v = (string)arg('v');
+    if ($n < 1 || $n > 27 || !in_array($v, ['', 'g', 'y', 'r'], true)) fail('Неверная отметка');
+    $pdo->beginTransaction();
+    $r = one('SELECT skills FROM inf_student_info WHERE user_id = ?' . ($MYSQL ? ' FOR UPDATE' : ''), [$id]);
+    $sk = $r && $r['skills'] ? (json_decode($r['skills'], true) ?: []) : [];
+    if ($v === '') unset($sk[(string)$n]); else $sk[(string)$n] = $v;
+    $j = json_encode((object)$sk);
+    if ($r) q('UPDATE inf_student_info SET skills = ? WHERE user_id = ?', [$j, $id]);
+    else q('INSERT INTO inf_student_info (user_id, skills, updated) VALUES (?,?,?)', [$id, $j, time()]);
+    $pdo->commit();
+    out(['ok' => true, 'skills' => (object)$sk]);
 
 case 'hw_assign':
     // Учитель выдаёт одну домашку сразу нескольким ученикам (группе). Расписание и ответы учеников не трогаются.
