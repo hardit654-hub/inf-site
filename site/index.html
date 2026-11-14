@@ -109,6 +109,14 @@ main{padding-block:28px 64px}
 .card:hover .go svg{transform:translateX(3px)}
 .empty{border:1px dashed var(--line);border-radius:16px;padding:20px;color:var(--muted);display:flex;align-items:center;gap:12px}
 .soon-card{opacity:.6;pointer-events:none}
+.subtabs{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 18px}
+.stab{display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1px solid var(--line);color:var(--muted);text-decoration:none;font:600 14px var(--f-body)}
+.stab .cnt{font:600 12px var(--f-mono);opacity:.75}
+.stab:hover{color:var(--ink);border-color:var(--muted)}
+.stab[aria-selected="true"]{background:var(--green-soft);border-color:var(--green);color:var(--green-ink)}
+.yr{grid-column:1/-1;margin:4px 0 -4px;font:700 15px var(--f-mono);color:var(--muted)}
+.meta span.res{display:inline-flex;align-items:center;gap:4px;border-color:var(--green);color:var(--green-ink);font-weight:700}
+.meta span.res svg{width:13px;height:13px}
 
 footer{border-top:1px solid var(--line);padding-block:22px 34px;color:var(--muted);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
@@ -154,8 +162,9 @@ const SITE = {
   variants: {
     title: "Варианты", lead: "Полные варианты в формате экзамена: с файлами к заданиям и проверкой ответов.",
     items: [
-      { title: "Демоверсия ЕГЭ‑2027", tag: "ЕГЭ · ФИПИ", text: "Все 27 заданий демоверсии с файлами. Ответ подсвечивается сразу, после трёх попыток можно открыть правильный.", meta: ["27 заданий", "файлы к заданиям"], href: "ege-demo-site/", icon: "variant" },
-      { title: "СтатГрад — тренировочные работы", tag: "ЕГЭ · только для учеников", text: "Тренировочные варианты СтатГрада с файлами и проверкой ответов. Открываются после входа в личный кабинет.", meta: ["нужен вход"], href: "kabinet/", icon: "variant", locked: true },
+      { title: "Реальный ЕГЭ 2026", tag: "Реальный ЕГЭ · только для учеников", text: "Варианты основной волны 18 и 19 июня 2026 в формате экзамена: таймер 3 ч 55 мин, баллы и перевод в тестовые, монетки за верные ответы.", meta: ["2 варианта", "нужен вход"], href: "kabinet/?next=" + encodeURIComponent("../exam/?m=ege2026"), icon: "variant", locked: true, grp: "real", year: 2026 },
+      { title: "СтатГрад — тренировочные работы", tag: "СтатГрад · только для учеников", text: "Тренировочные варианты СтатГрада с файлами в формате экзамена. Открываются после входа в личный кабинет.", meta: ["нужен вход"], href: "kabinet/", icon: "variant", locked: true, grp: "statgrad" },
+      { title: "Демоверсия ЕГЭ‑2027", tag: "ЕГЭ · ФИПИ", text: "Все 27 заданий демоверсии с файлами. Ответ подсвечивается сразу, после трёх попыток можно открыть правильный.", meta: ["27 заданий", "файлы к заданиям"], href: "ege-demo-site/", icon: "variant", grp: "demo" },
     ]
   },
   tests: {
@@ -174,21 +183,33 @@ const ICONS={
 const ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ORDER=["courses","variants","tests"];
-function render(key){
+/* подвкладки «Вариантов»: реальный ЕГЭ (по годам), СтатГрад, демоверсии */
+const VGRP=[["real","Реальный ЕГЭ"],["statgrad","СтатГрад"],["demo","Демоверсии"]];
+function render(key,sub){
   document.getElementById("tabs").innerHTML=ORDER.map(k=>`<a class="tab" role="tab" href="#${k}" aria-selected="${k===key}">${esc(SITE[k].title)}<span class="cnt">${SITE[k].items.length}</span></a>`).join("");
   const sec=SITE[key];
-  let h=`<div class="panel-head"><h2>${esc(sec.title)}</h2><p>${esc(sec.lead)}</p></div><div class="grid">`;
-  if(!sec.items.length) h+=`<div class="empty">Скоро здесь появятся материалы.</div>`;
-  sec.items.forEach(it=>{
+  let h=`<div class="panel-head"><h2>${esc(sec.title)}</h2><p>${esc(sec.lead)}</p></div>`,items=sec.items;
+  if(key==="variants"){
+    const has=VGRP.filter(([g])=>sec.items.some(x=>x.grp===g));
+    if(!has.some(([g])=>g===sub))sub=has.length?has[0][0]:"";
+    h+=`<nav class="subtabs" aria-label="Виды вариантов">${has.map(([g,t])=>`<a class="stab" href="#variants/${g}" aria-selected="${g===sub}">${esc(t)}<span class="cnt">${sec.items.filter(x=>x.grp===g).length}</span></a>`).join("")}</nav>`;
+    items=sec.items.filter(x=>x.grp===sub);
+    if(sub==="real")items=items.slice().sort((a,b)=>(b.year||0)-(a.year||0));
+  }
+  h+=`<div class="grid">`;
+  if(!items.length) h+=`<div class="empty">Скоро здесь появятся материалы.</div>`;
+  let year=null;
+  items.forEach(it=>{
+    if(key==="variants"&&sub==="real"&&it.year&&it.year!==year){year=it.year;h+=`<h3 class="yr">${year}</h3>`}
     h+=`<a class="card${it.soon?" soon-card":""}" href="${esc(it.href||"#")}">
       <div class="row"><span class="ic">${ICONS[it.icon]||ICONS.course}</span><span class="tag">${esc(it.tag||"")}</span></div>
       <h3>${esc(it.title)}</h3><p>${esc(it.text||"")}</p>
-      <div class="meta">${(it.meta||[]).map(m=>`<span>${esc(m)}</span>`).join("")}</div>
+      <div class="meta">${(it.meta||[]).map(m=>`<span>${esc(m)}</span>`).join("")}${(it.res||[]).map(m=>`<span class="res">${m}</span>`).join("")}</div>
       <span class="go">${it.soon?"Скоро":"Открыть"}${ARROW}</span></a>`;
   });
   document.getElementById("main").innerHTML=h+`</div>`;
 }
-function fromHash(){const k=location.hash.slice(1);render(ORDER.includes(k)?k:"courses")}
+function fromHash(){const [k,sub]=location.hash.slice(1).split("/");render(ORDER.includes(k)?k:"courses",sub)}
 window.addEventListener("hashchange",fromHash);fromHash();
 
 (function(){
@@ -204,11 +225,19 @@ window.addEventListener("hashchange",fromHash);fromHash();
 <script>
 /* Кнопка «Войти»: если ученик уже вошёл — показываем имя и ведём в кабинет */
 fetch("api/index.php?action=me",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).then(j=>{
-  if(j&&j.user)fetch("api/index.php?action=materials",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).then(m=>{
+  if(j&&j.user)Promise.all([fetch("api/index.php?action=materials",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()),
+      fetch("api/index.php?action=my_progress",{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).catch(()=>null)]).then(([m,p])=>{
     if(!m||!m.ok)return;
+    const prog=(p&&p.progress)||{},by=(p&&p.coins_by)||{};
+    const COIN='<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/></svg>';
     const items=SITE.variants.items.filter(x=>!x.locked);
     (m.materials||[]).forEach(c=>{const t=c.lessons.reduce((a,l)=>a+l.steps.filter(x=>x==="task").length,0);
-      items.push({title:c.title.replace(/^СтатГрад · /,""),tag:"СтатГрад · для учеников",text:c.lessons.map(l=>l.title).join(", ")+". Файлы к заданиям и проверка ответов.",meta:[c.lessons.length+" вар.",t+" задач"],href:c.url.replace(/^\.\.\//,""),icon:"variant"})});
+      const grp=c.series||(/^СтатГрад/.test(c.title)?"statgrad":"demo"),ex=((prog[c.key]||{}).data||{}).ex||{};
+      const res=c.lessons.map(l=>{const e=ex[l.num];return e&&e.fin&&typeof e.test==="number"?esc((c.lessons.length>1?l.title.replace(/^Основная волна /,"").replace(/^Вариант /,"Вар. ")+": ":"")+e.test+" б."):""}).filter(Boolean);
+      if(by[c.key])res.push(COIN+by[c.key]);
+      items.push({title:c.title.replace(/^СтатГрад · /,""),tag:grp==="real"?"Реальный ЕГЭ · для учеников":grp==="statgrad"?"СтатГрад · для учеников":"Вариант · для учеников",
+        text:c.lessons.map(l=>l.title).join(", ")+". Таймер, баллы и перевод в тестовые, монетки за верные ответы.",meta:[c.lessons.length+" вар.",t+" задач"],res,
+        href:c.url.replace(/^\.\.\//,"").replace(/^sg\//,"exam/"),icon:"variant",grp,year:c.year||null})});
     SITE.variants.items=items;fromHash();
   }).catch(()=>{});
   if(j&&j.user){const s=document.querySelector("#login span");s.textContent=j.user.name.split(" ")[0];const l=document.getElementById("login");l.title="Личный кабинет · монеток: "+(j.coins||0);

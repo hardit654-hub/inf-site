@@ -503,10 +503,12 @@ case 'mfile':
     $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
     $types = ['png' => 'image/png', 'jpg' => 'image/jpeg', 'txt' => 'text/plain; charset=utf-8', 'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
               'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'xls' => 'application/vnd.ms-excel', 'csv' => 'text/csv',
-              'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'pdf' => 'application/pdf'];
+              'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'pdf' => 'application/pdf', 'odt' => 'application/vnd.oasis.opendocument.text'];
     header('Content-Type: ' . ($types[$ext] ?? 'application/octet-stream'));
     header('Cache-Control: private, max-age=86400');
-    if (strpos($f, 'files/') === 0) header("Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode(basename($f)));
+    $dn = (string)($_GET['n'] ?? '');  // имя файла при скачивании (например, 24.txt вместо v1-24.txt)
+    if (!preg_match('/^[\w][\w.\-]{0,60}$/u', $dn) || strtolower(pathinfo($dn, PATHINFO_EXTENSION)) !== $ext) $dn = basename($f);
+    if (strpos($f, 'files/') === 0) header("Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode($dn));
     while (ob_get_level()) ob_end_clean();
     foreach ($parts as $p) { $r = one('SELECT data FROM inf_mfiles WHERE mid = ? AND name = ? AND part = ?', [$m, $f, (int)$p['part']]); echo $r['data']; flush(); }
     exit;

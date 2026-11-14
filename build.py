@@ -27,9 +27,12 @@ def load_course(path):
 def scrub(o):
     """Убираем всё, что выдаёт Stepik: водяной знак, ссылки на stepik.org, отсылки к его вкладкам."""
     if isinstance(o, dict): return {k: scrub(v) for k,v in o.items()}
-    if isinstance(o, list): return [scrub(x) for x in o]
+    if isinstance(o, list):  # блоки, где только ссылка на ролик сообщества PRO100, убираем целиком
+        return [scrub(x) for x in o if not (isinstance(x, dict) and x.get('t')=='details' and 'pro100' in json.dumps(x).lower())]
     if not isinstance(o, str): return o
     s=o
+    s=_re.sub(r'<p>(?:(?!</p>).)*?pro100ege(?:(?!</p>).)*?</p>', '', s, flags=_re.S|_re.I)
+    s=_re.sub(r'\(\s*PRO100 ЕГЭ\s*\)\s*', '', s)
     s=_re.sub(r'<p>(?:(?!</p>).)*?(?:stepik\.org|во вкладке решени)(?:(?!</p>).)*?</p>', '', s, flags=_re.S|_re.I)
     s=_re.sub(r'<p>(?:\s|<[^>]+>)*PRO100 ЕГЭ информатика ЕГЭ(?:\s|<[^>]+>)*</p>', '', s)
     s=s.replace('PRO100 ЕГЭ информатика ЕГЭ','')
@@ -68,27 +71,14 @@ for src in ORDER:
 <body><p><a href="../ege/?s={num}">Курс переехал — открыть «ЕГЭ по информатике»</a></p></body></html>''')
     print('redirect',c['out'])
 
-# Закрытые варианты (СтатГрад и т. п.): страница-оболочка, сам вариант приходит с сервера только после входа
-LOADER = """<script>
-window.COURSE=null;
-document.addEventListener("DOMContentLoaded",async()=>{
-  const m=new URLSearchParams(location.search).get("m")||"",step=document.getElementById("step");
-  const say=h=>{step.innerHTML='<div class="gate">'+h+'</div>'};
-  say("Загружаем вариант…");
-  try{
-    const r=await fetch("../api/index.php?action=material&m="+encodeURIComponent(m),{credentials:"same-origin",cache:"no-store"});
-    let j=null;try{j=await r.json()}catch(e){}
-    if(r.status===401){const next="../sg/"+location.search+location.hash;
-      say('<h2>Варианты — только для учеников</h2><p>Войдите в личный кабинет, и вариант откроется.</p><p><a class="btn" href="../kabinet/?next='+encodeURIComponent(next)+'">Войти</a></p>');return}
-    if(!j||!j.ok)throw new Error(j&&j.error||("Ошибка "+r.status));
-    window.COURSE=j.course;document.title=j.course.title;window.__course();
-  }catch(e){say("<h2>Не удалось открыть вариант</h2><p>"+String(e.message).replace(/[<>&]/g,"")+'</p><p><a href="../kabinet/">В личный кабинет</a></p>')}
-});
-</script>
-<style>.gate{max-width:560px;margin:40px auto;text-align:center;font-size:16px}.gate h2{margin:0 0 10px}.gate .btn{display:inline-block;margin-top:8px;padding:10px 22px;border-radius:10px;background:var(--green,#5ac85a);color:#111;text-decoration:none;font-weight:600}</style>"""
-h=eng.replace('{{TITLE}}','Варианты').replace('{{OG_TITLE}}','Варианты ЕГЭ по информатике').replace('{{DESC}}','Тренировочные варианты для учеников Артёма Свинченко.').replace('{{URL}}','https://gsvv.ru/inf/sg/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}',LOADER)
-h=h.replace('<meta name="description"','<meta name="robots" content="noindex">\n<meta name="description"',1)
-os.makedirs('site/sg',exist_ok=True); open('site/sg/index.html','w').write(h); print('built site/sg/index.html')
+# Закрытые варианты (СтатГрад, реальный ЕГЭ): открываются в режиме экзамена site/exam/ (страница пишется вручную).
+# Старый адрес ../sg/?m=… ведёт туда же — ссылки из домашки и закладки продолжают работать.
+os.makedirs('site/sg',exist_ok=True)
+open('site/sg/index.html','w').write('''<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Варианты</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<script>location.replace("../exam/"+location.search+location.hash);</script></head>
+<body><p><a href="../exam/">Открыть вариант</a></p></body></html>''')
+print('redirect site/sg/index.html')
 
 # Структура курсов для кабинета (без ответов): уроки и какие шаги — задачи
 import re
@@ -126,7 +116,7 @@ def keys(l):
 cat=[]
 for c in COURSES:
     if not os.path.exists(c['src']): continue
-    t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=d['section']
+    t=open(c['src']).read(); d=json.loads(t[t.index('{'):t.rindex('}')+1]); s=scrub(d['section'])
     cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../ege/', group='ЕГЭ',
         lessons=[dict(num=l['num'], label=str(li), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
                       labels=[task_label(st) for st in l['steps']], **keys(l)) for li,l in enumerate(s['lessons'],1)]))
