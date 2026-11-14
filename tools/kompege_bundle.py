@@ -14,15 +14,20 @@ def clean(h):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('kims'); ap.add_argument('out')
+    ap.add_argument('--html', help='модуль с вёрсткой условий: TASKS[(вариант, номер)] = html')
     for a in ('mid', 'cid', 'num', 'title', 'group', 'year'): ap.add_argument('--' + a, required=True)
     a = ap.parse_args()
     kims = json.load(open(a.kims))
+    HT = {}
+    if a.html:
+        import importlib.util
+        sp = importlib.util.spec_from_file_location('ht', a.html); m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); HT = m.TASKS
     url = lambda name: f'../api/index.php?action=mfile&m={a.mid}&f={name}'
     lessons, cat = [], []
     for vi, v in enumerate(kims, 1):
         steps = []
         for pos, t in enumerate(v['tasks'], 1):
-            h = clean(t['text'])
+            h = HT[(vi, pos)] if (vi, pos) in HT else clean(t['text'])
             h = re.sub(r'src="https?://kompege\.ru/images/([^"]+)"', lambda m: f'src="{url("img/" + m.group(1))}"', h)
             blocks = []
             if t['files']:
