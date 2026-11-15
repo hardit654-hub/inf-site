@@ -446,7 +446,9 @@ window.addEventListener("pagehide",()=>{if(ME&&dirty)push(true)});
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const norm=s=>String(s||"").replace(/\s+/g,"").replace(",",".").toLowerCase();
+const norm=s=>String(s||"").replace(/\s+/g,"").replace(",",".").toLowerCase().replace(/ё/g,"е");
+/* в ответе можно указать несколько верных вариантов через «||» */
+const eqA=(v,a)=>String(a==null?"":a).split("||").some(x=>norm(v)===norm(x));
 const ICON={
   text:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 4h10M3 8h10M3 12h6"/></svg>',
   video:'<svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3v10l8-5z"/></svg>',
@@ -682,7 +684,7 @@ function fillHTML(s,x){
     h+=`<div class="frow"><label for="f${fi}_0">${esc(f.label)}</label>`;
     for(let k=0;k<f.n;k++){
       const val=(v[fi]||[])[k]||"";
-      let cls="";if(x.last!=null&&val!=="")cls=norm(val)===norm(s.answer[fi][k])?"ok":"bad";
+      let cls="";if(x.last!=null&&val!=="")cls=eqA(val,s.answer[fi][k])?"ok":"bad";
       if(x.ok)cls="ok";
       h+=`<input id="f${fi}_${k}" data-f="${fi}" data-k="${k}" inputmode="${f.txt?"text":"numeric"}" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(val)}" class="${cls}" ${x.ok?"readonly":""} aria-label="${esc(f.label)}${f.n>1?", значение "+(k+1):""}">`;
     }
@@ -708,7 +710,7 @@ function actions(s,x){
   if(!x.ok&&x.att>=3&&!x.rev) h+=`<button class="btn warn" id="showans">Показать ответ</button>`;
   h+=`</div>`;
   if(x.rev){
-    const a=s.type==="choice"?(s.multi?s.answer.map(i=>esc(s.options[i])).join("<br>"):esc(s.options[s.answer])):s.type==="match"?s.items.map((it,i)=>it+" — "+esc(s.options[s.answer[i]])).join("<br>"):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].join(" ")+"</b>").join("<br>");
+    const a=s.type==="choice"?(s.multi?s.answer.map(i=>esc(s.options[i])).join("<br>"):esc(s.options[s.answer])):s.type==="match"?s.items.map((it,i)=>it+" — "+esc(s.options[s.answer[i]])).join("<br>"):s.fields.map((f,i)=>esc(f.label)+": <b>"+s.answer[i].map(a=>esc(String(a).split("||")[0])).join(" ")+"</b>").join("<br>");
     h+=`<div class="reveal">Правильный ответ:<br>${a}</div>`;
   }
   return h;
@@ -757,7 +759,7 @@ function submit(s,x){
     const v=x.v||[];
     const empty=s.fields.every((f,fi)=>[...Array(f.n)].every((_,k)=>!((v[fi]||[])[k]||"").trim()));
     if(empty){flash("Впишите ответ");return}
-    good=s.fields.every((f,fi)=>[...Array(f.n)].every((_,k)=>norm((v[fi]||[])[k])===norm(s.answer[fi][k])));
+    good=s.fields.every((f,fi)=>[...Array(f.n)].every((_,k)=>eqA((v[fi]||[])[k],s.answer[fi][k])));
   }
   const first=good&&!x.ok&&x.paid==null;
   x.last=good;if(good)x.ok=true;else x.att=(x.att||0)+1;

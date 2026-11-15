@@ -80,6 +80,12 @@ open('site/sg/index.html','w').write('''<!doctype html><html lang="ru"><head><me
 <body><p><a href="../exam/">Открыть вариант</a></p></body></html>''')
 print('redirect site/sg/index.html')
 
+# Курс «7 класс» (рабочая тетрадь Босовой): разделы — параграфы, собирается src/inf7/build7.py
+inf7=load_course('src/inf7/course.js')
+n7=sum(1 for s in inf7['sections'] for l in s['lessons'] for st in l['steps'] if st['type'] in ('fill','choice','match'))
+h=eng.replace('{{TITLE}}','Информатика · 7 класс').replace('{{OG_TITLE}}','Информатика, 7 класс — задачи').replace('{{DESC}}','Задачи по информатике для 7 класса: Всемирная паутина, представление и измерение информации, двоичное кодирование, устройство компьютера, файлы. %d задач с автопроверкой.'%n7).replace('{{URL}}','https://gsvv.ru/inf/inf7/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}','<script>\nwindow.COURSE = '+json.dumps(inf7, ensure_ascii=False).replace('</script>','<\\/script>')+';\n</script>')
+os.makedirs('site/inf7',exist_ok=True); open('site/inf7/index.html','w').write(h); print('built site/inf7/index.html', len(inf7['sections']), 'разделов', n7, 'задач')
+
 # Структура курсов для кабинета (без ответов): уроки и какие шаги — задачи
 import re
 import html as _H
@@ -120,6 +126,10 @@ for c in COURSES:
     cat.append(dict(key='course-%s-s%s'%(d['id'],s['num']), title=c['title'], url='../ege/', group='ЕГЭ',
         lessons=[dict(num=l['num'], label=str(li), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
                       labels=[task_label(st) for st in l['steps']], **keys(l)) for li,l in enumerate(s['lessons'],1)]))
+for s7 in inf7['sections']:
+    cat.append(dict(key='course-%s-s%s'%(inf7['id'],s7['num']), title=s7['title'], url='../inf7/', group='7 класс',
+        lessons=[dict(num=l['num'], label=l.get('label',l['num']), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
+                      labels=[task_label(st) for st in l['steps']]) for l in s7['lessons']]))
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')
