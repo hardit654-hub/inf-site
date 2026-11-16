@@ -545,7 +545,7 @@ let FROM_S=null;  // открыли раздел по старой ссылке,
 function renderToc(){
   $("ctitle").textContent=MULTI?C.title:C.title+". "+SECS[0].title;
   let allDone=0,all=0,h="";
-  const csec=lessons[cur.li].sec;if(!OPEN.size)OPEN.add(csec.idx);
+  const csec=lessons[cur.li].sec;if(!renderToc.init){renderToc.init=true;OPEN.add(csec.idx)}  // при загрузке раскрываем текущий раздел; дальше можно свернуть всё
   SECS.forEach(sec=>{
     let sd=0,sa=0,hwS=0,rows="";
     sec.lessons.forEach((L,j)=>{const li=sec.off+j;
