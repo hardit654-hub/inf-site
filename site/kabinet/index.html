@@ -281,6 +281,8 @@ a.sk-t:hover{border-color:var(--ink)}
 .skpop button{display:flex;align-items:center;gap:8px;border:0;background:none;color:var(--ink);font:500 14.5px var(--f-body);padding:7px 8px;border-radius:8px;cursor:pointer;text-align:left}
 .skpop button:hover,.skpop button:focus-visible{background:var(--bg)}
 .skpop button[aria-pressed="true"]{background:var(--chip);font-weight:700}
+.hbtn.home svg{width:18px;height:18px;flex:none}
+@media (max-width:560px){.hbtn.home span{display:none}.hbtn.home{width:38px;padding:0}}
 </style>
 </head>
 <body>
@@ -288,6 +290,7 @@ a.sk-t:hover{border-color:var(--ink)}
   <div class="wrap bar-in">
     <a class="brand" href="../"><span class="mark">AS</span><span>Артём Свинченко · информатика</span></a>
     <div class="grow"></div>
+    <a class="hbtn home" href="../" title="На главную"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h5v-5.5h3V20h5V9.5"/></svg><span>На главную</span></a>
     <span class="who" id="who" hidden></span>
     <button class="hbtn" id="logout" type="button" hidden>Выйти</button>
     <button class="hbtn sq" id="theme" type="button" aria-label="Переключить тему"></button>

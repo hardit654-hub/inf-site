@@ -255,12 +255,14 @@ span.fire{cursor:default}
 :root[data-theme="dark"] .fire.on{background:#3a2412;color:#ffb36b}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .fire.on{background:#3a2412;color:#ffb36b}}
 .nq .fdot{position:absolute;right:-6px;bottom:-6px;font-size:12px;line-height:1;pointer-events:none}
+@media (max-width:560px){.hbtn.home span{display:none}.hbtn.home{width:38px;padding:0;justify-content:center}}
 </style>
 </head>
 <body>
 <header class="head"><div class="wrap">
   <a class="logo" href="../" title="На главную"><span class="mark">AS</span><span class="lt"><b id="htitle">Варианты ЕГЭ</b><small>← На главную</small></span></a>
   <div class="hright">
+    <a class="hbtn home" href="../" title="На главную"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h5v-5.5h3V20h5V9.5"/></svg><span>Главная</span></a>
     <a class="hbtn coins" id="coins" href="../kabinet/" hidden title="Монетки"><svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg><span id="coinn">0</span></a>
     <a class="hbtn acct" id="acct" href="../kabinet/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>Войти</span></a>
     <button class="hbtn" id="theme" type="button" aria-label="Переключить тему"></button>

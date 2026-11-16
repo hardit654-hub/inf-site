@@ -295,6 +295,8 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
 :root[data-theme="dark"] .fire.on{background:#3a2412;color:#ffb36b}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .fire.on{background:#3a2412;color:#ffb36b}}
 .sq .fdot{position:absolute;right:-5px;bottom:-5px;font-size:11px;line-height:1;pointer-events:none}
+.acct.home svg{width:18px;height:18px;flex:none}
+@media (max-width:640px){.acct.home span{display:none}.acct.home{padding:0;width:38px;justify-content:center}}
 </style>
 </head>
 <body>
@@ -303,6 +305,7 @@ svg.tree text{fill:var(--ink);font:13px var(--f-mono)}
   <nav class="strip" id="strip" aria-label="Шаги урока"></nav>
   <div class="hright">
     <span class="pts" id="pts"></span>
+    <a class="acct home" href="../" title="На главную"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h5v-5.5h3V20h5V9.5"/></svg><span>Главная</span></a>
     <a class="coins" id="coins" href="../kabinet/" hidden title="Монетки"><svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg><span id="coinn">0</span></a>
     <a class="acct" id="acct" href="../kabinet/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>Войти</span><i></i></a>
     <button class="iconbtn" id="theme" type="button" aria-label="Переключить тему"></button>
