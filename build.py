@@ -7,6 +7,9 @@ COURSES=[
   dict(src='src/4/course.js', out='site/ege-4/index.html', title='№ 4 · Условие Фано',
        og_title='№ 4. Кодирование, условие Фано — курс', url='https://gsvv.ru/inf/ege-4/', image='https://gsvv.ru/inf/og-4.jpg',
        desc='Неравномерный двоичный код для ЕГЭ по информатике: условие Фано, суммарная длина, решение в Python. 7 уроков, 60 задач.'),
+  dict(src='src/5/course.js', out='site/ege-5/index.html', title='№ 5 · Анализ алгоритмов',
+       og_title='№ 5. Анализ алгоритмов — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Анализ алгоритмов для ЕГЭ по информатике: двоичная запись числа, приписывание разрядов, решение в Python. 7 уроков, 66 задач с автопроверкой.'),
   dict(src='src/12/course.js', out='site/ege-12/index.html', title='№ 12 · Машина Тьюринга',
        og_title='№ 12. Машина Тьюринга — курс', url='https://gsvv.ru/inf/ege-12/', image='https://gsvv.ru/inf/og-12.jpg',
        desc='Исполнитель МТ для ЕГЭ по информатике: таблица программы, устное решение, Python. 9 уроков, 92 задачи с автопроверкой.'),
@@ -49,7 +52,7 @@ def rebase(o, folder):
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
-ORDER=['src/17/course.js','src/4/course.js','src/12/course.js','src/13/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
+ORDER=['src/17/course.js','src/4/course.js','src/5/course.js','src/12/course.js','src/13/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
