@@ -283,6 +283,41 @@ a.sk-t:hover{border-color:var(--ink)}
 .skpop button[aria-pressed="true"]{background:var(--chip);font-weight:700}
 .hbtn.home svg{width:18px;height:18px;flex:none}
 @media (max-width:560px){.hbtn.home span{display:none}.hbtn.home{width:38px;padding:0}}
+/* календарь «Сделать до»: дни занятий подсвечены зелёным */
+.dp{position:relative}
+.dpb{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:16px var(--f-body);padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;text-align:left}
+.dpb.empty .dpv{color:var(--muted)}
+.dpp{position:absolute;z-index:70;top:calc(100% + 6px);left:0;width:300px;max-width:calc(100vw - 32px);background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 32px #0005;padding:12px}
+.dph{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.dph b{font-weight:600}
+.dpn{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:18px;line-height:1;cursor:pointer}
+.dpg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.dpw span{font-size:12px;color:var(--muted);text-align:center;padding:2px 0}
+.dpg button{height:36px;border-radius:8px;border:1px solid transparent;background:none;color:var(--ink);font:500 14px var(--f-body);cursor:pointer;padding:0}
+.dpg button:hover{border-color:var(--line)}
+.dpg button.past{color:var(--muted);opacity:.6}
+.dpg button.les{background:var(--green-soft);color:var(--green-ink);font-weight:700;border-color:var(--green);opacity:1}
+.dpg button.today{box-shadow:inset 0 0 0 2px var(--amber)}
+.dpg button.sel{background:var(--green);color:#0f2a12;border-color:var(--green)}
+.dpf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;font-size:13px;color:var(--muted)}
+.dpl{display:flex;align-items:center;gap:6px}.dpl i{width:12px;height:12px;border-radius:4px;background:var(--green-soft);border:1px solid var(--green);flex:none}
+.dpc{border:0;background:none;color:var(--muted);text-decoration:underline;cursor:pointer;font:13px var(--f-body);padding:0}
+/* расписание всех учеников по дням недели */
+.sc-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+@media (max-width:900px){.sc-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
+.sc-day{border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--bg);min-height:120px;display:flex;flex-direction:column;gap:6px}
+.sc-day.now{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.sc-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;padding:0 2px 4px}
+.sc-h b{font-weight:600;font-size:14.5px}.sc-h small{color:var(--muted);font-size:12px;margin-left:auto}
+.sc-t{font-size:11px;font-weight:600;color:var(--green-ink);background:var(--green-soft);border-radius:99px;padding:1px 7px}
+.sc-it{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;width:100%;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:9px;background:var(--card);color:var(--ink);padding:6px 8px;cursor:pointer;font:14px var(--f-body)}
+.sc-it:hover{border-color:var(--green)}
+.sc-tm{font:600 13px var(--f-mono);color:var(--green-ink)}
+.sc-nm{font-weight:500;line-height:1.25;overflow-wrap:anywhere}
+.sc-it small{font-size:12px;color:var(--muted)}
+.sc-it.clash{border-left-color:var(--red);background:var(--red-soft)}.sc-it.clash .sc-tm,.sc-it .sc-x,.sc-xw{color:var(--red)}
+.sc-none{margin:14px 0 0;font-size:14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sc-nb{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:3px 10px;cursor:pointer;font:13.5px var(--f-body)}
 </style>
 </head>
 <body>
@@ -555,6 +590,7 @@ try{TAB=sessionStorage.getItem("kab-tab")||TAB;COURSE_I=+(sessionStorage.getItem
 async function viewTeacher(){
   app.innerHTML=`<nav class="tabs" role="tablist">
      <button class="tab" role="tab" data-t="students">Ученики</button>
+     <button class="tab" role="tab" data-t="schedule">Расписание</button>
      <button class="tab" role="tab" data-t="progress">Прогресс</button>
      <button class="tab" role="tab" data-t="skills">Задания ЕГЭ</button>
      <button class="tab" role="tab" data-t="variants">Варианты</button>
@@ -564,6 +600,7 @@ async function viewTeacher(){
   if(TAB==="rating"){document.getElementById("pane").innerHTML=await lbCard(true);return}
   if(TAB==="variants"){paneVariants();return}
   if(TAB==="skills"){paneSkills();return}
+  if(TAB==="schedule"){paneSchedule();return}
   TAB==="students"?paneStudents():paneProgress();
 }
 function credText(login,pass){return "Сайт: "+SITE+"\nЛогин: "+login+"\nПароль: "+pass}
@@ -684,6 +721,7 @@ function editGroupHw(){
     <div class="row"><div class="field" style="flex:0 1 200px"><label for="hwd">Сделать до</label><input type="date" id="hwd"></div></div>
     <div class="row" style="margin-top:14px"><button class="btn" id="gs">Выдать домашку</button><button class="btn ghost" type="button" id="gc">Закрыть</button></div><div id="gmsg" hidden></div></form></div>`;
   buildPicker(new Set());
+  datePicker(document.getElementById("hwd"),()=>schedMap([...slot.querySelectorAll(".gu:checked")].map(c=>{const s=STUDENTS.find(x=>x.id===+c.value);return[s?s.name:"",s&&s.info&&s.info.schedule]})));
   const cnt=()=>{const n=slot.querySelectorAll(".gu:checked").length;document.getElementById("gcnt").textContent="— выбрано "+n+" из "+list.length;document.getElementById("gs").textContent=n?"Выдать домашку ("+n+")":"Выдать домашку"};
   slot.querySelectorAll(".gu").forEach(c=>c.onchange=cnt);cnt();
   document.getElementById("gc").onclick=()=>{slot.innerHTML=""};
@@ -699,6 +737,57 @@ function editGroupHw(){
       STUDENTS=(await api("students")).students;paneStudents();
       document.getElementById("editslot").innerHTML=`<div class="card"><div class="msg good" role="status">Домашка выдана: ${j.count} ${plural(j.count,"ученику","ученикам","ученикам")}${FCAT||FGRP?" ("+esc(label)+")":""}. Ученики уже видят её в кабинете.</div></div>`}
     catch(err){msg(m,err.message);setBusy(b,false)}};
+}
+/* ---------- календарь «Сделать до»: дни занятий подсвечены зелёным ---------- */
+const MONS=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const MONN=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+/* дни занятий: {день недели 1–7: ["Имя 17:00", …]} из списка [имя, расписание] */
+const schedMap=list=>{const L={};list.forEach(([name,sch])=>(sch||[]).forEach(x=>{(L[x.day]=L[x.day]||[]).push((name?name+" ":"")+x.time)}));return L};
+/* inp — поле даты: значение ГГГГ-ММ-ДД остаётся в нём, вместо системного календаря — свой; lessons() — дни занятий */
+function datePicker(inp,lessons){
+  if(!inp||inp.dataset.dp)return;inp.dataset.dp="1";inp.type="hidden";
+  const w=document.createElement("div");w.className="dp";inp.after(w);
+  w.innerHTML=`<button type="button" class="dpb" aria-haspopup="dialog"><span class="dpv"></span><span aria-hidden="true">📅</span></button><div class="dpp" hidden role="dialog" aria-label="Выбор даты"></div>`;
+  const b=w.querySelector(".dpb"),p=w.querySelector(".dpp");let cur=new Date();
+  const label=()=>{const v=inp.value,d=v?new Date(v+"T00:00"):null;w.querySelector(".dpv").textContent=d?DS[d.getDay()||7]+", "+d.getDate()+" "+MONS[d.getMonth()]+" "+d.getFullYear():"Выбрать дату";b.classList.toggle("empty",!v)};
+  const outside=e=>{if(!w.contains(e.target))close()},key=e=>{if(e.key==="Escape"){close();b.focus()}};
+  function close(){p.hidden=true;document.removeEventListener("pointerdown",outside);document.removeEventListener("keydown",key)}
+  function draw(){
+    const L=lessons()||{},today=ymd(new Date()),y=cur.getFullYear(),m=cur.getMonth(),first=(new Date(y,m,1).getDay()||7)-1,n=new Date(y,m+1,0).getDate();
+    let cells="<span></span>".repeat(first);
+    for(let d=1;d<=n;d++){const dt=new Date(y,m,d),v=ymd(dt),who=L[dt.getDay()||7]||[];
+      cells+=`<button type="button" data-v="${v}" class="${who.length?"les":""}${v===today?" today":""}${v===inp.value?" sel":""}${v<today?" past":""}"${who.length?` title="${esc("Занятие: "+who.join(", "))}"`:""}>${d}</button>`}
+    const any=Object.keys(L).some(k=>L[k].length);
+    p.innerHTML=`<div class="dph"><button type="button" class="dpn" data-m="-1" aria-label="Предыдущий месяц">‹</button><b>${MONN[m]} ${y}</b><button type="button" class="dpn" data-m="1" aria-label="Следующий месяц">›</button></div>
+     <div class="dpg dpw">${DS.slice(1).map(x=>`<span>${x}</span>`).join("")}</div><div class="dpg">${cells}</div>
+     <div class="dpf"><span class="dpl">${any?"<i></i> дни занятий":"Расписание не задано"}</span><button type="button" class="dpc">Очистить</button></div>`;
+    p.querySelectorAll(".dpn").forEach(x=>x.onclick=()=>{cur=new Date(y,m+ +x.dataset.m,1);draw()});
+    p.querySelectorAll("[data-v]").forEach(x=>x.onclick=()=>{inp.value=x.dataset.v;label();close();b.focus()});
+    p.querySelector(".dpc").onclick=()=>{inp.value="";label();close();b.focus()};
+  }
+  b.onclick=()=>{if(!p.hidden){close();return}const v=inp.value;cur=v?new Date(v+"T00:00"):new Date();cur=new Date(cur.getFullYear(),cur.getMonth(),1);draw();p.hidden=false;
+    document.addEventListener("pointerdown",outside);document.addEventListener("keydown",key)};
+  inp.addEventListener("change",label);label();
+}
+/* ---------- расписание всех учеников по дням недели ---------- */
+const tmin=t=>{const a=String(t||"0:0").split(":").map(Number);return a[0]*60+(a[1]||0)},hm=n=>String(Math.floor(n/60)%24).padStart(2,"0")+":"+String(n%60).padStart(2,"0");
+function paneSchedule(){
+  const pane=document.getElementById("pane"),V=visible(),today=new Date().getDay()||7,by={};
+  V.forEach(s=>((s.info&&s.info.schedule)||[]).forEach(x=>(by[x.day]=by[x.day]||[]).push({s,from:tmin(x.time),dur:+x.dur||60})));
+  let total=0,mins=0,clash=0;
+  const col=d=>{const L=(by[d]||[]).sort((a,b)=>a.from-b.from||a.s.name.localeCompare(b.s.name,"ru"));total+=L.length;
+    L.forEach((a,i)=>{mins+=a.dur;a.clash=L.some((b,j)=>j!==i&&a.from<b.from+b.dur&&b.from<a.from+a.dur)});clash+=L.filter(a=>a.clash).length;
+    return `<div class="sc-day${d===today?" now":""}"><div class="sc-h"><b>${DAYS[d]}</b>${d===today?'<span class="sc-t">сегодня</span>':""}<small>${L.length?L.length+" "+plural(L.length,"занятие","занятия","занятий"):"—"}</small></div>
+      ${L.map(a=>`<button type="button" class="sc-it${a.clash?" clash":""}" data-sid="${a.s.id}" title="Открыть «Занятия и ДЗ»"><span class="sc-tm">${hm(a.from)}–${hm(a.from+a.dur)}</span><span class="sc-nm">${esc(a.s.name)}</span>${catOf(a.s)||grpOf(a.s)?`<small>${esc([catOf(a.s),grpOf(a.s)].filter(Boolean).join(" · "))}</small>`:""}${a.clash?'<small class="sc-x">пересекается по времени</small>':""}</button>`).join("")}</div>`};
+  const cols=[1,2,3,4,5,6,7].map(col).join(""),none=V.filter(s=>!(s.info&&s.info.schedule&&s.info.schedule.length));
+  pane.innerHTML=`${filterBar(false)}<div class="card"><h2>Расписание · ${esc(fLabel())}</h2>
+   <p class="sub">${total?`${total} ${plural(total,"занятие","занятия","занятий")} в неделю, ${(mins/60).toLocaleString("ru-RU",{maximumFractionDigits:1})} ч.`:"Пока ни у кого нет расписания."} Нажмите на занятие, чтобы изменить время или домашку.${clash?` <b class="sc-xw">Пересекаются по времени: ${clash}</b>`:""}</p>
+   <div class="sc-grid">${cols}</div>
+   ${none.length?`<p class="sc-none"><b>Без расписания (${none.length}):</b> ${none.map(s=>`<button type="button" class="sc-nb" data-sid="${s.id}">${esc(s.name)}</button>`).join("")}</p>`:""}</div>`;
+  bindFilter(()=>paneSchedule());
+  pane.querySelectorAll("[data-sid]").forEach(b=>b.onclick=async()=>{const id=+b.dataset.sid;TAB="students";try{sessionStorage.setItem("kab-tab",TAB)}catch(e){}
+    await viewTeacher();const s=STUDENTS.find(x=>x.id===id);if(s)editInfo(s)});
 }
 function plural(n,a,b,c){const m=n%10,h=n%100;return m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c}
 function editInfo(s){
@@ -717,10 +806,11 @@ function editInfo(s){
     <div class="row" style="margin-top:14px"><button class="btn" id="es">Сохранить</button><button class="btn ghost" type="button" id="ec">Закрыть</button><button class="btn ghost" type="button" id="eclr">Очистить домашку</button></div><div id="em" hidden></div></form></div>`;
   const rows=document.getElementById("rows");
   buildPicker(new Set(i.hw_tasks||[]));
+  datePicker(document.getElementById("hwd"),()=>schedMap([["",[...rows.querySelectorAll(".srow")].map(r=>({day:+r.querySelector(".sd").value,time:r.querySelector(".st").value}))]]));
   const bindRm=()=>rows.querySelectorAll(".rm").forEach(b=>b.onclick=()=>b.parentElement.remove());bindRm();
   document.getElementById("addrow").onclick=()=>{rows.insertAdjacentHTML("beforeend",row({day:1,time:"17:00",dur:60}));bindRm()};
   document.getElementById("ec").onclick=()=>{slot.innerHTML=""};
-  document.getElementById("eclr").onclick=()=>{document.getElementById("hwt").value="";document.getElementById("hwd").value="";document.querySelectorAll("#picker .tk").forEach(c=>c.checked=false);syncPicker()};
+  document.getElementById("eclr").onclick=()=>{document.getElementById("hwt").value="";const hd=document.getElementById("hwd");hd.value="";hd.dispatchEvent(new Event("change"));document.querySelectorAll("#picker .tk").forEach(c=>c.checked=false);syncPicker()};
   slot.scrollIntoView({behavior:"smooth",block:"start"});
   document.getElementById("ef").onsubmit=async e=>{e.preventDefault();const b=document.getElementById("es"),m=document.getElementById("em");
     const schedule=[...rows.querySelectorAll(".srow")].map(r=>({day:+r.querySelector(".sd").value,time:r.querySelector(".st").value,dur:+r.querySelector(".dur").value||60}));
