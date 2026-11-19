@@ -92,6 +92,17 @@ n7=sum(1 for s in inf7['sections'] for l in s['lessons'] for st in l['steps'] if
 h=eng.replace('{{TITLE}}','Информатика · 7 класс').replace('{{OG_TITLE}}','Информатика, 7 класс — задачи').replace('{{DESC}}','Задачи по информатике для 7 класса: Всемирная паутина, представление и измерение информации, двоичное кодирование, устройство компьютера, файлы. %d задач с автопроверкой.'%n7).replace('{{URL}}','https://gsvv.ru/inf/inf7/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}','<script>\nwindow.COURSE = '+json.dumps(inf7, ensure_ascii=False).replace('</script>','<\\/script>')+';\n</script>')
 os.makedirs('site/inf7',exist_ok=True); open('site/inf7/index.html','w').write(h); print('built site/inf7/index.html', len(inf7['sections']), 'разделов', n7, 'задач')
 
+# Курс «ОГЭ» (тестовая часть, № 1–10, с теорией): собирается src/oge/buildoge.py; картинки — из sources/oge
+import shutil
+oge=load_course('src/oge/course.js')
+noge=sum(1 for s in oge['sections'] for l in s['lessons'] for st in l['steps'] if st['type'] in ('fill','choice','match'))
+h=eng.replace('{{TITLE}}','ОГЭ по информатике').replace('{{OG_TITLE}}','ОГЭ по информатике — курс').replace('{{DESC}}','Подготовка к ОГЭ по информатике: задания № 1–10 с теорией — кодирование, системы счисления, логика, графы, адреса в интернете, исполнители. %d задач с автопроверкой.'%noge).replace('{{URL}}','https://gsvv.ru/inf/oge/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}','<script>\nwindow.COURSE = '+json.dumps(oge, ensure_ascii=False).replace('</script>','<\\/script>')+';\n</script>')
+os.makedirs('site/oge/img',exist_ok=True); open('site/oge/index.html','w').write(h)
+for name in sorted(set(_re.findall(r'img/(img[\w.\-]+\.png)', json.dumps(oge, ensure_ascii=False)))):
+    a,b='sources/oge/'+name,'site/oge/img/'+name
+    if not os.path.exists(b) or open(a,'rb').read()!=open(b,'rb').read(): shutil.copyfile(a,b)
+print('built site/oge/index.html', len(oge['sections']), 'разделов', noge, 'задач')
+
 # Структура курсов для кабинета (без ответов): уроки и какие шаги — задачи
 import re
 import html as _H
@@ -136,6 +147,10 @@ for s7 in inf7['sections']:
     cat.append(dict(key='course-%s-s%s'%(inf7['id'],s7['num']), title=s7['title'], url='../inf7/', group='7 класс',
         lessons=[dict(num=l['num'], label=l.get('label',l['num']), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
                       labels=[task_label(st) for st in l['steps']]) for l in s7['lessons']]))
+for so in oge['sections']:
+    cat.append(dict(key='course-%s-s%s'%(oge['id'],so['num']), title=so['title'], url='../oge/', group='ОГЭ',
+        lessons=[dict(num=l['num'], label=l.get('label',l['num']), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
+                      labels=[task_label(st) for st in l['steps']]) for l in so['lessons']]))
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')
