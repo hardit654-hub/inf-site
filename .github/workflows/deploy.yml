@@ -3,8 +3,11 @@ name: Загрузка сайта на хостинг
 on:
   push:
     branches: [main]
-    paths: ["site/**", ".github/workflows/deploy.yml"]
+    paths: ["site/**", "src/**", "build.py", ".github/workflows/deploy.yml"]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 concurrency:
   group: deploy
@@ -16,6 +19,24 @@ jobs:
     steps:
       - name: Получить файлы сайта
         uses: actions/checkout@v4
+
+      # Данные раздела могут прийти сжатыми (src/<раздел>/course.js.xz.b64): распаковываем.
+      # xz проверяет контрольную сумму — если файл повреждён, загрузка останавливается и сайт не меняется.
+      # Потом собираем страницы курсов (build.py) и сохраняем результат в репозиторий.
+      - name: Собрать страницы курсов
+        run: |
+          set -e
+          for f in src/*/course.js.xz.b64; do
+            [ -e "$f" ] || continue
+            base64 -d "$f" | xz -d > "${f%.xz.b64}"
+            git rm -q "$f"
+            echo "распакован ${f%.xz.b64}"
+          done
+          python3 build.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A src site
+          if ! git diff --cached --quiet; then git commit -q -m "Сборка страниц курсов"; git push; fi
 
       - name: Загрузить изменённые файлы по FTP (папка inf на хостинге)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
