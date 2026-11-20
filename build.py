@@ -16,6 +16,9 @@ COURSES=[
   dict(src='src/13/course.js', out='site/ege-13/index.html', title='№ 13 · IP-адреса и маски',
        og_title='№ 13. IP-адреса и маски сети — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='IP-адреса и маски сети для ЕГЭ по информатике: теория, устное решение, Python. 7 уроков, 72 задачи с автопроверкой.'),
+  dict(src='src/14/course.js', out='site/ege-14/index.html', title='№ 14 · Системы счисления в Python',
+       og_title='№ 14. Системы счисления — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Системы счисления для ЕГЭ по информатике (№ 14): неизвестная цифра и кратность, количество и сумма цифр, решение в Python. 6 уроков, 63 задачи с автопроверкой.'),
   dict(src='src/18/course.js', out='site/ege-18/index.html', title='№ 18 · Динамика в электронных таблицах',
        og_title='№ 18. Динамика в электронных таблицах — курс', url='https://gsvv.ru/inf/ege-18/', image='https://gsvv.ru/inf/og-18.jpg',
        desc='Робот собирает монеты: максимум и минимум, стены, угловые клетки. 3 урока, задачи с файлами и автопроверкой.'),
@@ -52,7 +55,7 @@ def rebase(o, folder):
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
-ORDER=['src/17/course.js','src/4/course.js','src/5/course.js','src/12/course.js','src/13/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
+ORDER=['src/17/course.js','src/4/course.js','src/5/course.js','src/12/course.js','src/13/course.js','src/14/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
@@ -65,6 +68,15 @@ data='window.COURSE = '+json.dumps(ege, ensure_ascii=False)+';'
 ntask=sum(1 for s in secs for l in s['lessons'] for st in l['steps'] if st['type'] in ('fill','choice','match'))
 desc='Курс ЕГЭ по информатике: '+', '.join(c['title'].split(' · ')[0] for c in COURSES)+'. Теория, шаблоны решений и %d задач с автопроверкой.'%ntask
 h=eng.replace('{{TITLE}}','ЕГЭ по информатике').replace('{{OG_TITLE}}','ЕГЭ по информатике — курс').replace('{{DESC}}',desc).replace('{{URL}}','https://gsvv.ru/inf/ege/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}','<script>\n'+data.replace('</script>','<\\/script>')+'\n</script>')
+# Картинки разделов: sources/<раздел>/img<раздел>.<урок>.<шаг>-<n>.png (качает fetch.yml) -> site/<папка раздела>/img/ (без «img» в имени)
+for src in ORDER:
+    c=next(x for x in COURSES if x['src']==src); num=load_course(src)['section']['num']; folder=c['out'].split('/')[1]
+    sdir='sources/%s'%num
+    if not os.path.isdir(sdir): continue
+    for name in sorted(os.listdir(sdir)):
+        if not _re.match(r'img%s\.\d+\.\d+-\d+\.png$'%num, name): continue
+        dst='site/%s/img/%s'%(folder,name[3:])
+        if not os.path.exists(dst): os.makedirs(os.path.dirname(dst),exist_ok=True); open(dst,'wb').write(open(sdir+'/'+name,'rb').read()); print('img',dst)
 os.makedirs('site/ege',exist_ok=True); open('site/ege/index.html','w').write(h); print('built site/ege/index.html', len(secs), 'разделов', ntask, 'задач')
 # Старые адреса разделов ведут в общий курс, в тот же раздел (ссылки из домашки и закладки продолжают работать)
 for src in ORDER:
