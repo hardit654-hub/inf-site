@@ -994,6 +994,6 @@ document.getElementById("logout").onclick=async()=>{try{await api("logout",{})}c
 (async()=>{try{ME=(await api("me")).user;if(ME&&nextUrl()){location.replace(nextUrl());return}}catch(e){app.innerHTML=`<div class="card narrow"><div class="msg">${esc(e.message)}</div></div>`;return}route()})();
 })();
 </script>
-<script src="../newyear.js?v=2" defer></script>
+<script src="../newyear.js?v=3" defer></script>
 </body>
 </html>
