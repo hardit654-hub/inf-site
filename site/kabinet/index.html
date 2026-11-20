@@ -239,7 +239,14 @@ textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc
 .lbrow{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 22px;border-top:1px solid var(--line)}
 .lbrow .pl{font:700 18px var(--f-display);text-align:center;color:var(--muted)}
 .lbrow .pl.m{font-size:24px}
-.lbrow .nm{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbrow .nm{font-weight:500;display:flex;align-items:center;gap:6px;min-width:0}
+.lbrow .nm .nmt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.lbrow .tg{flex:none;font:600 11.5px/1 var(--f-body);padding:4px 9px;border-radius:999px;white-space:nowrap;border:1px solid}
+.lbrow .tg1{background:#fff3c4;color:#8a5a00;border-color:#f0c64a}
+.lbrow .tg2{background:#2a2140;color:#d9c8ff;border-color:#5b4a8a}
+.lbrow .tg3{background:#e3f0ff;color:#1d4f91;border-color:#8db6ea}
+.lbrow .tg4{background:#ffe3f1;color:#a3216a;border-color:#f19ac6}
+.lbrow .tg5{background:#fbecd6;color:#8a5520;border-color:#e2b47a}
 .lbrow .nm small{color:var(--muted);font-weight:400;margin-left:6px}
 .lbrow .cs{display:inline-flex;align-items:center;gap:6px;font:700 16px var(--f-mono)}
 .lbrow .cs .coin{width:18px;height:18px}
@@ -562,7 +569,10 @@ function bindHw(){
 async function lbCard(teacher){
   let d;try{d=await api("leaderboard")}catch(e){return ""}
   const medal=["🥇","🥈","🥉"];
-  const row=r=>`<div class="lbrow${r.me?" me":""}"><span class="pl${r.place<=3?" m":""}">${r.place&&r.place<=3?medal[r.place-1]:(r.place||"—")}</span><span class="nm">${esc(r.name)}${r.me?"<small>это ты</small>":""}</span><span class="cs">${COIN}${r.coins}</span></div>`;
+  /* теги за места в рейтинге: их видят все */
+  const TAGS=["👑 Чемпион","🖤 Тёмный принц","🐳 Дипсик-мастер","👸 Принцесса","🍦 Вафельный рожок"];
+  const tag=p=>p>=1&&p<=5?`<span class="tg tg${p}">${TAGS[p-1]}</span>`:"";
+  const row=r=>`<div class="lbrow${r.me?" me":""}"><span class="pl${r.place<=3?" m":""}">${r.place&&r.place<=3?medal[r.place-1]:(r.place||"—")}</span><span class="nm"><span class="nmt">${esc(r.name)}</span>${tag(r.place)}${r.me?"<small>это ты</small>":""}</span><span class="cs">${COIN}${r.coins}</span></div>`;
   let h=`<section class="card lb"><h2>🏆 Топ‑5 по монеткам</h2><p class="sub">${teacher?"Ученики видят имя и первую букву фамилии.":"Решай задачи без ошибок — так монеток больше всего."}</p>`;
   if(!d.top.length) h+=`<div class="empty">Пока ни у кого нет монеток. ${teacher?"":"Стань первым!"}</div>`;
   h+=d.top.map(row).join("");
