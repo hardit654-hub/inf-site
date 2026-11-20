@@ -107,7 +107,16 @@
         e.style.filter = k >= 2 ? 'blur(' + [0, 0, 0.6, 1.2, 2][k] + 'px)' : '';
       }
     }
-    setInterval(function () { if (!open && Object.keys(els).length) render(); }, 1000);
+    /* на страницах курса внизу панель «Назад / Следующий урок» — поднимаем чат над ней */
+    var lifted = -1;
+    function lift() {
+      var f = document.querySelector('footer.foot'), h = 0;
+      if (f) { var r = f.getBoundingClientRect(); if (r.height && r.bottom >= innerHeight - 2 && r.top < innerHeight) h = Math.round(innerHeight - r.top); }
+      if (h === lifted) return; lifted = h;
+      btn.style.bottom = h ? h + 10 + 'px' : ''; wrap.style.bottom = h ? h + 64 + 'px' : '';
+    }
+    lift(); window.addEventListener('resize', lift);
+    setInterval(function () { lift(); if (!open && Object.keys(els).length) render(); }, 1000);
 
     function setDot() { dot.style.display = unread ? 'block' : 'none'; dot.textContent = unread > 9 ? '9+' : unread; }
 
