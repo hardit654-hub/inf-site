@@ -103,6 +103,13 @@ for name in sorted(set(_re.findall(r'img/(img[\w.\-]+\.png)', json.dumps(oge, en
     if not os.path.exists(b) or open(a,'rb').read()!=open(b,'rb').read(): shutil.copyfile(a,b)
 print('built site/oge/index.html', len(oge['sections']), 'разделов', noge, 'задач')
 
+# Картинки эмодзи (Twemoji) для старых Windows: sources/emoji/*.svg -> site/emoji/ (их подставляет site/emoji.js)
+os.makedirs('site/emoji',exist_ok=True)
+for name in sorted(os.listdir('sources/emoji')) if os.path.isdir('sources/emoji') else []:
+    a2,b2='sources/emoji/'+name,'site/emoji/'+name
+    if name.endswith('.svg') and (not os.path.exists(b2) or open(a2,'rb').read()!=open(b2,'rb').read()): shutil.copyfile(a2,b2)
+print('emoji', len(os.listdir('site/emoji')))
+
 # Структура курсов для кабинета (без ответов): уроки и какие шаги — задачи
 import re
 import html as _H
