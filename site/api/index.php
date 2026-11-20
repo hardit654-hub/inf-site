@@ -629,7 +629,7 @@ case 'material_delete':
     out(['ok' => true]);
 
 case 'leaderboard':
-    // Топ-5 учеников по монеткам. Ученикам — имя и первая буква фамилии, учителю — полностью.
+    // Топ-7 учеников по монеткам. Ученикам — имя и первая буква фамилии, учителю — полностью.
     $u = need_user();
     $teacher = $u['role'] === 'teacher';
     $rows = q("SELECT u.id, u.name, SUM(c.amount) AS coins, MAX(c.created) AS last FROM inf_coins c
@@ -642,7 +642,7 @@ case 'leaderboard':
     $list = []; $me = null;
     foreach ($rows as $i => $r) {
         $item = ['place' => $i + 1, 'name' => $teacher ? $r['name'] : $short($r['name']), 'coins' => (int)$r['coins'], 'me' => (int)$r['id'] === (int)$u['id']];
-        if ($i < 5) $list[] = $item;
+        if ($i < 7) $list[] = $item;
         if ($item['me']) $me = $item;
     }
     if (!$me && !$teacher) $me = ['place' => null, 'name' => $short($u['name']), 'coins' => coins_total((int)$u['id']), 'me' => true];
