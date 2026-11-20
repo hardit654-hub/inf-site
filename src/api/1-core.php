@@ -76,6 +76,9 @@ function schema(PDO $pdo, bool $mysql) {
         PRIMARY KEY (user_id, ckey, sid))$tail");
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_attempts (
         id $ai, k VARCHAR(128) NOT NULL, ts INT NOT NULL)$tail");
+    // чат сайта: сообщения живут сутки (старые удаляются при отправке нового)
+    $pdo->exec("CREATE TABLE IF NOT EXISTS inf_chat (
+        id $ai, user_id INT NOT NULL, text VARCHAR(800) NOT NULL, created INT NOT NULL)$tail");
 }
 schema($pdo, $MYSQL);
 
