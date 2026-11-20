@@ -331,14 +331,15 @@ function draw(now,dt){
   cx.textAlign="center";cx.textBaseline="middle";
   // еда
   const fs=C*.82*(1+Math.sin(now/260)*.07);
-  cx.fillStyle="#fff";cx.font=`${fs}px ${EMO}`;cx.fillText(G.food.e,(G.food.x+.5)*C,(G.food.y+.56)*C);
+  const fim=window.emojiImg&&emojiImg(G.food.e);  // старые Windows: эмодзи картинкой (emoji.js)
+  if(fim)cx.drawImage(fim,(G.food.x+.5)*C-fs/2,(G.food.y+.5)*C-fs/2,fs,fs);else{cx.fillStyle="#fff";cx.font=`${fs}px ${EMO}`;cx.fillText(G.food.e,(G.food.x+.5)*C,(G.food.y+.56)*C)}
   // звезда
   if(G.star){
     const age=now-G.star.born,left=7000-age;
     if(left>1800||Math.floor(now/120)%2){
       const sx=(G.star.x+.5)*C,sy=(G.star.y+.5)*C;
       const g=cx.createRadialGradient(sx,sy,0,sx,sy,C*1.1);g.addColorStop(0,"#ffd34d66");g.addColorStop(1,"#ffd34d00");cx.fillStyle=g;cx.fillRect(sx-C*1.2,sy-C*1.2,C*2.4,C*2.4);
-      cx.save();cx.translate(sx,sy);cx.rotate(Math.sin(now/300)*.3);cx.fillStyle="#fff";cx.font=`${C*.95}px ${EMO}`;cx.fillText("⭐",0,C*.04);cx.restore();
+      cx.save();cx.translate(sx,sy);cx.rotate(Math.sin(now/300)*.3);const sim=window.emojiImg&&emojiImg("⭐");if(sim)cx.drawImage(sim,-C*.47,-C*.47,C*.94,C*.94);else{cx.fillStyle="#fff";cx.font=`${C*.95}px ${EMO}`;cx.fillText("⭐",0,C*.04)}cx.restore();
     }
     $("sstar").textContent="★ "+Math.ceil(left/1000);
   }else $("sstar").textContent=now<G.rainbow?"🌈 радуга":"";
