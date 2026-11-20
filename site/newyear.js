@@ -1,11 +1,14 @@
 /* Новогоднее оформление: падающий снег, гирлянда сверху и Санта на санях на заднем плане.
    Подключается одной строкой на странице. Снег и Санту можно выключить кнопкой ❄ (запоминается на устройстве).
    Сам выключается после 15 января. Не мешает нажатиям: всё рисуется поверх страницы «насквозь». */
-/* Цветные эмодзи для старых Windows: подгружаем emoji.js (работает и после праздников — эта часть не отключается) */
+/* Цветные эмодзи для старых Windows (emoji.js) и чат сайта (chat.js) — работают и после праздников, эта часть не отключается.
+   После правки chat.js поднять номер ?v= здесь и номер newyear.js?v= на страницах (браузеры держат .js в кэше 45 дней). */
 (function () {
   var s = document.currentScript; if (!s || window.__emojiLoad) return; window.__emojiLoad = 1;
-  var e = document.createElement('script'); e.src = s.src.replace(/newyear\.js(\?.*)?$/, 'emoji.js'); e.async = true;
-  (document.head || document.documentElement).appendChild(e);
+  ['emoji.js', 'chat.js?v=1'].forEach(function (f) {
+    var e = document.createElement('script'); e.src = s.src.replace(/newyear\.js(\?.*)?$/, f); e.async = true;
+    (document.head || document.documentElement).appendChild(e);
+  });
 })();
 (function () {
   if (window.__newYear) return; window.__newYear = 1;
