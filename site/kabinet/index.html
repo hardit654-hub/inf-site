@@ -247,6 +247,8 @@ textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc
 .lbrow .tg3{background:#e3f0ff;color:#0f3466;border-color:#6f9fdc}
 .lbrow .tg4{background:#ffe3f1;color:#7a0f4c;border-color:#e57fb3}
 .lbrow .tg5{background:#fbecd6;color:#5e3610;border-color:#d39a55}
+.lbrow .tg6{background:#ffe6dc;color:#8a2a08;border-color:#f0956f}
+.lbrow .tg7{background:#e2f6e2;color:#1d5c1d;border-color:#7cc47c}
 .lbrow .nm small{color:var(--muted);font-weight:400;margin-left:6px}
 .lbrow .cs{display:inline-flex;align-items:center;gap:6px;font:700 16px var(--f-mono)}
 .lbrow .cs .coin{width:18px;height:18px}
@@ -570,10 +572,10 @@ async function lbCard(teacher){
   let d;try{d=await api("leaderboard")}catch(e){return ""}
   const medal=["🥇","🥈","🥉"];
   /* теги за места в рейтинге: их видят все */
-  const TAGS=["👑 Чемпион","🖤 Тёмный принц","🐳 Дипсик-мастер","👸 Принцесса","🍦 Вафельный рожок"];
-  const tag=p=>p>=1&&p<=5?`<span class="tg tg${p}">${TAGS[p-1]}</span>`:"";
+  const TAGS=["👑 Чемпион","🖤 Тёмный принц","🐳 Дипсик-мастер","👸 Принцесса","🍦 Вафельный рожок","🚀 Ракета","🍀 Счастливая семёрка"];
+  const tag=p=>p>=1&&p<=TAGS.length?`<span class="tg tg${p}">${TAGS[p-1]}</span>`:"";
   const row=r=>`<div class="lbrow${r.me?" me":""}"><span class="pl${r.place<=3?" m":""}">${r.place&&r.place<=3?medal[r.place-1]:(r.place||"—")}</span><span class="nm"><span class="nmt">${esc(r.name)}</span>${tag(r.place)}${r.me?"<small>это ты</small>":""}</span><span class="cs">${COIN}${r.coins}</span></div>`;
-  let h=`<section class="card lb"><h2>🏆 Топ‑5 по монеткам</h2><p class="sub">${teacher?"Ученики видят имя и первую букву фамилии.":"Решай задачи без ошибок — так монеток больше всего."}</p>`;
+  let h=`<section class="card lb"><h2>🏆 Топ‑7 по монеткам</h2><p class="sub">${teacher?"Ученики видят имя и первую букву фамилии.":"Решай задачи без ошибок — так монеток больше всего."}</p>`;
   if(!d.top.length) h+=`<div class="empty">Пока ни у кого нет монеток. ${teacher?"":"Стань первым!"}</div>`;
   h+=d.top.map(row).join("");
   if(d.me&&!d.top.some(r=>r.me)) h+=`<div class="lbrow gap">…</div>`+row(d.me);
