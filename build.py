@@ -161,3 +161,17 @@ for so in oge['sections']:
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')
+
+# Кабинет и сервер собираются из маленьких частей: src/kabinet/ и src/api/ (их удобно править по одной).
+# Строка /*#include имя*/ в шаблоне заменяется содержимым файла. Части один раз нарезаны из готовых файлов: tools/split_parts.py.
+import subprocess
+if not (os.path.exists('src/kabinet/index.html') and os.path.exists('src/api/index.php')):
+    subprocess.run(['python3', 'tools/split_parts.py'], check=True)
+def assemble(tpl, out):
+    d = os.path.dirname(tpl); res = []
+    for line in open(tpl, encoding='utf-8').read().splitlines(keepends=True):
+        m = _re.fullmatch(r'/\*#include (\S+)\*/\n?', line)
+        res.append(open(os.path.join(d, m.group(1)), encoding='utf-8').read() if m else line)
+    open(out, 'w', encoding='utf-8').write(''.join(res)); print('собран', out)
+assemble('src/kabinet/index.html', 'site/kabinet/index.html')
+assemble('src/api/index.php', 'site/api/index.php')
