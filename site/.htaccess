@@ -4,3 +4,12 @@
     Header set Content-Disposition "attachment"
   </FilesMatch>
 </IfModule>
+
+# Скрипты, стили и данные: браузер каждый раз сверяется с сервером (если файл не менялся, сервер отвечает коротким «304»).
+# Иначе после правок у учеников неделями остаётся старая версия.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|json)$">
+    Header unset Expires
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
