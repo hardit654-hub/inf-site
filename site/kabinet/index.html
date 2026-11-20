@@ -572,7 +572,7 @@ async function lbCard(teacher){
   let d;try{d=await api("leaderboard")}catch(e){return ""}
   const medal=["🥇","🥈","🥉"];
   /* теги за места в рейтинге: их видят все */
-  const TAGS=["👑 Чемпион","🖤 Тёмный принц","🐳 Дипсик-мастер","👸 Принцесса","🍦 Вафельный рожок","🚀 Ракета","🍀 Счастливая семёрка"];
+  const TAGS=["👑 Чемпион","🖤 Тёмный принц","🐳 Дипсик-мастер","👸 Принцесса","🍦 Воздушный рожок","🚀 Ракета","🍀 Счастливая семёрка"];
   const tag=p=>p>=1&&p<=TAGS.length?`<span class="tg tg${p}">${TAGS[p-1]}</span>`:"";
   const row=r=>`<div class="lbrow${r.me?" me":""}"><span class="pl${r.place<=3?" m":""}">${r.place&&r.place<=3?medal[r.place-1]:(r.place||"—")}</span><span class="nm"><span class="nmt">${esc(r.name)}</span>${tag(r.place)}${r.me?"<small>это ты</small>":""}</span><span class="cs">${COIN}${r.coins}</span></div>`;
   let h=`<section class="card lb"><h2>🏆 Топ‑7 по монеткам</h2><p class="sub">${teacher?"Ученики видят имя и первую букву фамилии.":"Решай задачи без ошибок — так монеток больше всего."}</p>`;
