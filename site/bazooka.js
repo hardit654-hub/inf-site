@@ -1,6 +1,8 @@
 /* Мини-игра «Базука» (новогодняя): кнопка слева внизу на главной и в кабинете.
    Базука от первого лица внизу экрана. Тянешь назад и отпускаешь (как в Angry Birds): направление и сила — от рывка,
-   прицела нет. Ракета летит по баллистике. Попал в Деда Мороза — взрыв, и он рассыпается подарками.
+   прицела нет. Ракета летит по баллистике. Попал в сани — взрыв, и Дед Мороз рассыпается подарками.
+   Попал в оленя — он отцепляется и падает, а сани идут в пике: один олень — плавно, два и больше — круто, как подбитый самолёт;
+   у земли сани разбиваются на подарки, а уцелевшие олени убегают.
    Подключается из newyear.js (после 15.01.2027 вместе с ним выключается). Проверка на любой странице: ?bazooka */
 (function () {
   if (window.__bazooka) return; window.__bazooka = 1;
@@ -28,13 +30,13 @@
     '<circle cx="61" cy="19" r="6.5" fill="#f6c9a8"/><path d="M54.5 19 Q61 34 67.5 19 Q61 23 54.5 19 Z" fill="#fff"/>' +
     '<path d="M54 15 Q60 2 70 9 L67 15 Z" fill="#d32f2f"/><rect x="53" y="13.5" width="16" height="4" rx="2" fill="#fff"/><circle cx="71" cy="9" r="2.6" fill="#fff"/>' +
     '<path d="M68 30 Q78 30 86 36" fill="none" stroke="#d32f2f" stroke-width="4" stroke-linecap="round"/>';
-  var TEAM = '<path d="M86 36 Q140 30 196 38 Q236 34 268 38" fill="none" stroke="#5c3a1f" stroke-width="1.2"/>' + deer(150) + deer(195) + deer(245);
+  var DX = [150, 195, 245];                                       // где олени на рисунке (в единицах 300×80)
   function img(body) {
     var i = new Image();
     i.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="600" height="160">' + body + '</svg>');
     return i;
   }
-  var IMG_ALL = img(SLEIGH + TEAM), IMG_DEER = img(TEAM);
+  var IMG_SLEIGH = img(SLEIGH), IMG_D = DX.map(function (x) { return img(deer(x)); });
 
   ready(function () {
     var css = document.createElement('style');
@@ -64,13 +66,13 @@
 
     var wrap, cv, ctx, hud, hint, W, H, DPR, raf = 0, last = 0, running = false;
     var aim = -Math.PI / 2, power = 0, drag = null;
-    var rockets = [], parts = [], gifts = [], texts = [], santa = null, nextSanta = 0, hits = 0, shots = 0, best = 0;
+    var rockets = [], parts = [], gifts = [], texts = [], runners = [], santa = null, nextSanta = 0, hits = 0, shots = 0, best = 0;
     try { best = +localStorage.getItem('bz-best') || 0; } catch (e) {}
 
     function open() {
       if (running) return;
       wrap = document.createElement('div'); wrap.className = 'bz-wrap';
-      wrap.innerHTML = '<canvas></canvas><div class="bz-hud"></div><div class="bz-hint">Потяни назад и отпусти — ракета полетит по дуге.<br>Чем дальше тянешь, тем сильнее выстрел. Попади в Деда Мороза!</div>' +
+      wrap.innerHTML = '<canvas></canvas><div class="bz-hud"></div><div class="bz-hint">Потяни назад и отпусти — ракета полетит по дуге.<br>Чем дальше тянешь, тем сильнее выстрел. Попади в Деда Мороза!<br>Подбитые олени — и сани уходят в пике.</div>' +
         '<button type="button" class="bz-x" aria-label="Закрыть игру" title="Закрыть (Esc)">✕</button>';
       document.body.appendChild(wrap);
       cv = wrap.querySelector('canvas'); ctx = cv.getContext('2d'); hud = wrap.querySelector('.bz-hud'); hint = wrap.querySelector('.bz-hint');
@@ -79,7 +81,7 @@
       wrap.addEventListener('pointerup', up); wrap.addEventListener('pointercancel', function () { drag = null; power = 0; });
       document.addEventListener('keydown', key); window.addEventListener('resize', size);
       document.documentElement.style.overflow = 'hidden';
-      size(); rockets = []; parts = []; gifts = []; texts = []; santa = null; nextSanta = 0.6; hits = 0; shots = 0;
+      size(); rockets = []; parts = []; gifts = []; texts = []; runners = []; santa = null; nextSanta = 0.6; hits = 0; shots = 0;
       running = true; btn.style.display = 'none'; score(); last = 0; raf = requestAnimationFrame(frame);
     }
     function close() {
@@ -132,12 +134,38 @@
     function spawn() {
       var ltr = Math.random() < 0.5, sw = Math.max(170, Math.min(300, W * 0.42)), sh = sw * 80 / 300;
       var speed = W * (0.11 + Math.random() * 0.09) * (1 + Math.min(hits, 10) * 0.05);
-      santa = { ltr: ltr, w: sw, h: sh, x: ltr ? -sw : W, y0: H * (0.1 + Math.random() * 0.28), vx: ltr ? speed : -speed, t: 0, ph: Math.random() * 6 };
+      santa = { ltr: ltr, w: sw, h: sh, x: ltr ? -sw : W, y0: H * (0.1 + Math.random() * 0.28), vx: ltr ? speed : -speed, t: 0, ph: Math.random() * 6,
+        att: [true, true, true], lost: 0, dive: 0, vy: 0, ang: 0, bobk: 1 };
     }
-    function santaY(s) { return s.y0 + Math.sin(s.t * 2.6 + s.ph) * Math.min(18, H * 0.025); }
+    function santaY(s) { return s.y0 + Math.sin(s.t * 2.6 + s.ph) * Math.min(18, H * 0.025) * s.bobk; }
+    /* точка рисунка (единицы 300×80) → экран; сани с оленями поворачиваются вокруг саней (угол пике s.ang) */
+    function toScreen(s, lx, ly) {
+      var k = s.w / 300, u = lx * k - 55 * k, v = ly * k - 42 * k, c = Math.cos(s.ang), n = Math.sin(s.ang);
+      var u2 = 55 * k + u * c - v * n, v2 = 42 * k + u * n + v * c;
+      return { x: s.ltr ? s.x + u2 : s.x + s.w - u2, y: santaY(s) + v2 };
+    }
     function sleighCenter(s) {                                    // сани с Дедом Морозом — в первых 100 единицах рисунка
-      var k = s.w / 300, cx = s.ltr ? s.x + 55 * k : s.x + s.w - 55 * k;
-      return { x: cx, y: santaY(s) + 42 * k, rx: 48 * k + 8, ry: 34 * k + 8 };
+      var k = s.w / 300, c = toScreen(s, 55, 42);
+      return { x: c.x, y: c.y, rx: 48 * k + 8, ry: 34 * k + 8 };
+    }
+    function deerAt(s, i) { return toScreen(s, DX[i] + 5, 34); }   // середина оленя
+    function runner(s, i, p, fly) {                               // отцепившийся олень: падает, потом убегает по снегу
+      runners.push({ i: i, k: s.w / 300, w: s.w, h: s.h, x: p.x, y: p.y, vx: fly ? s.vx * 0.5 : 0, vy: fly ? -140 + s.vy * 0.4 : 0,
+        a: fly ? s.ang * (s.ltr ? 1 : -1) : 0, va: fly ? rnd(-7, 7) : 0, ltr: s.ltr, run: !fly, t: 0 });
+      if (!fly) runners[runners.length - 1].vx = (s.ltr ? 1 : -1) * rnd(220, 320);
+    }
+    function detach(s, i) {
+      s.att[i] = false; s.lost++; runner(s, i, deerAt(s, i), true);
+      var was = s.dive; s.dive = s.lost >= 2 ? 2 : 1;
+      if (s.dive === 2 && was !== 2) { s.vy = Math.max(s.vy, 90); s.vx *= 0.85; }
+    }
+    function crash(s) {                                           // сани долетели до земли
+      var c = sleighCenter(s), gy = Math.min(c.y, H - 30);
+      for (var i = 0; i < 3; i++) if (s.att[i]) { var p = deerAt(s, i); p.y = H - 6 - 24 * s.w / 300; runner(s, i, p, false); }
+      boom(c.x, gy, ['Сбит! Подарки!', 'Посадка с подарками!', 'Бабах об сугроб!'][hits % 3]);
+      for (var k = 0; k < 16; k++) puff(c.x, H - 6, rnd(-220, 220), rnd(-260, -60), 'smoke');
+      hits++; if (hits > best) { best = hits; try { localStorage.setItem('bz-best', best); } catch (e) {} }
+      score(); santa = null; nextSanta = 1 + Math.random() * 1.2;
     }
 
     /* ---------- частицы, подарки, надписи ---------- */
@@ -146,7 +174,7 @@
       parts.push({ x: x, y: y, vx: vx, vy: vy, t: 0, life: kind === 'fire' ? rnd(0.4, 0.9) : rnd(0.6, 1.3), kind: kind, r: kind === 'fire' ? rnd(3, 7) : rnd(5, 12) });
     }
     var COLORS = [['#e53935', '#ffd54a'], ['#43a047', '#fff'], ['#1e88e5', '#ffd54a'], ['#8e24aa', '#fff'], ['#fb8c00', '#fff'], ['#ffd54a', '#e53935'], ['#00acc1', '#fff']];
-    function boom(x, y) {
+    function boom(x, y, txt) {
       parts.push({ x: x, y: y, t: 0, life: 0.45, kind: 'flash', r: 0 });
       for (var i = 0; i < 46; i++) { var a = rnd(0, 6.28), v = rnd(80, 420); puff(x, y, Math.cos(a) * v, Math.sin(a) * v, i % 3 ? 'fire' : 'smoke'); }
       var n = 12 + Math.floor(Math.random() * 6);
@@ -154,7 +182,12 @@
         var c = COLORS[j % COLORS.length], s = rnd(16, 30);
         gifts.push({ x: x + rnd(-20, 20), y: y + rnd(-14, 14), vx: rnd(-260, 260), vy: rnd(-560, -160), a: rnd(0, 6.28), va: rnd(-7, 7), s: s, c: c[0], r: c[1], t: 0, rest: 0 });
       }
-      texts.push({ x: x, y: y - 30, t: 0, s: ['Бабах! Подарки!', 'В яблочко!', 'Точно в сани!', 'С Новым годом!'][hits % 4] });
+      texts.push({ x: x, y: y - 30, t: 0, s: txt || ['Бабах! Подарки!', 'В яблочко!', 'Точно в сани!', 'С Новым годом!'][hits % 4] });
+    }
+    function smallBoom(x, y, txt) {                               // попадание в оленя: вспышка без подарков
+      parts.push({ x: x, y: y, t: 0, life: 0.3, kind: 'flash', r: 0 });
+      for (var i = 0; i < 22; i++) { var a = rnd(0, 6.28), v = rnd(60, 260); puff(x, y, Math.cos(a) * v, Math.sin(a) * v, i % 3 ? 'fire' : 'smoke'); }
+      texts.push({ x: x, y: y - 24, t: 0, s: txt });
     }
 
     /* ---------- кадр ---------- */
@@ -168,20 +201,51 @@
       var g = G();
       if (!santa) { nextSanta -= dt; if (nextSanta <= 0) spawn(); }
       if (santa) {
-        santa.t += dt; santa.x += santa.vx * dt;
-        if (santa.dead) santa.vx *= 1 + dt * 1.2;                  // олени без саней удирают
-        if (santa.x > W + 40 || santa.x < -santa.w - 40) { santa = null; nextSanta = 0.8 + Math.random() * 1.2; }
+        var s = santa; s.t += dt; s.x += s.vx * dt;
+        if (s.dead) {                                             // олени без саней удирают и выравниваются
+          s.vx *= 1 + dt * 1.2; s.vy += (-60 - s.vy) * Math.min(1, dt * 2); s.y0 += s.vy * dt; s.ang *= 1 - Math.min(1, dt * 3);
+        } else if (s.dive) {                                      // пике: 1 олень потерян — плавно, 2 и больше — круто
+          s.vy += (s.dive === 1 ? g * 0.1 : g * 0.8) * dt; s.y0 += s.vy * dt; s.bobk = Math.max(0, s.bobk - dt * 2);
+          var aim2 = Math.atan2(s.vy, Math.abs(s.vx)) + (s.dive === 2 ? Math.sin(s.t * 26) * 0.05 : 0);
+          s.ang += (aim2 - s.ang) * Math.min(1, dt * (s.dive === 2 ? 5 : 3));
+          var sc = sleighCenter(s);
+          if (Math.random() < (s.dive === 2 ? 1 : 0.35)) puff(sc.x, sc.y, rnd(-40, 40), rnd(-60, 0), s.dive === 2 && Math.random() < 0.45 ? 'fire' : 'smoke');
+          var low = sc.y + sc.ry * 0.6;
+          for (var di = 0; di < 3; di++) if (s.att[di]) low = Math.max(low, deerAt(s, di).y + 18 * s.w / 300);
+          if (low >= H - 6) { crash(s); s = null; }
+        }
+        if (s && (s.x > W + 40 || s.x < -s.w - 40 || santaY(s) < -s.h * 3)) { santa = null; nextSanta = 0.8 + Math.random() * 1.2; }
       }
       for (var i = rockets.length - 1; i >= 0; i--) {
         var r = rockets[i]; r.t += dt; r.vy += g * dt; r.x += r.vx * dt; r.y += r.vy * dt;
         if (Math.random() < 0.9) puff(r.x - r.vx * 0.02, r.y - r.vy * 0.02, rnd(-30, 30), rnd(-30, 30), Math.random() < 0.35 ? 'fire' : 'smoke');
-        var hit = false;
+        var hit = false, deerHit = -1;
         if (santa && !santa.dead) {
           var c = sleighCenter(santa), dx = (r.x - c.x) / c.rx, dy = (r.y - c.y) / c.ry;
           if (dx * dx + dy * dy <= 1) hit = true;
         }
+        if (santa && !hit) {                                     // олени (и с санями, и убегающие)
+          var kk = santa.w / 300;
+          for (var di = 0; di < 3; di++) if (santa.att[di]) {
+            var dp = deerAt(santa, di), ex = (r.x - dp.x) / (26 * kk + 6), ey = (r.y - dp.y) / (22 * kk + 6);
+            if (ex * ex + ey * ey <= 1) { deerHit = di; break; }
+          }
+        }
+        if (deerHit >= 0) {
+          var s1 = santa, n0 = s1.lost;
+          for (di = 0; di < 3; di++) if (s1.att[di]) {          // взрыв задевает и соседа, если попал между оленями
+            var q2 = deerAt(s1, di);
+            if (di === deerHit || Math.hypot(r.x - q2.x, r.y - q2.y) < 34 * kk + 6) {
+              if (s1.dead) { s1.att[di] = false; runner(s1, di, q2, true); } else detach(s1, di);
+            }
+          }
+          var n = s1.lost - n0;
+          smallBoom(r.x, r.y, s1.dead ? 'Олень сбит!' : n >= 2 || s1.lost >= 2 ? 'Пике!' : 'Олень отцепился!');
+          if (s1.dead && !s1.att.some(Boolean)) { santa = null; nextSanta = 0.8 + Math.random(); }
+          rockets.splice(i, 1); continue;
+        }
         if (hit) {
-          boom(r.x, r.y); santa.dead = true; hits++;
+          boom(r.x, r.y); santa.dead = true; santa.dive = 0; hits++;
           if (hits > best) { best = hits; try { localStorage.setItem('bz-best', best); } catch (e) {} }
           score(); rockets.splice(i, 1); continue;
         }
@@ -203,6 +267,17 @@
         if (q.y > floor - q.s / 2) { q.y = floor - q.s / 2; q.vy *= -0.42; q.vx *= 0.7; q.va *= 0.6; if (Math.abs(q.vy) < 40) { q.vy = 0; q.va *= 0.8; } }
         if (q.x < q.s / 2 || q.x > W - q.s / 2) { q.vx *= -0.6; q.x = Math.max(q.s / 2, Math.min(W - q.s / 2, q.x)); }
       }
+      for (i = runners.length - 1; i >= 0; i--) {
+        var u = runners[i], gy0 = floor - 24 * u.k; u.t += dt;
+        if (!u.run) {
+          u.vy += g * 0.8 * dt; u.x += u.vx * dt; u.y += u.vy * dt; u.a += u.va * dt;
+          if (u.y >= gy0) {                                       // приземлился — встаёт и убегает
+            u.y = gy0; u.run = true; u.a = 0; u.vx = (Math.random() < 0.5 ? 1 : -1) * rnd(220, 320);
+            for (var sn = 0; sn < 10; sn++) puff(u.x, floor, rnd(-120, 120), rnd(-160, -30), 'smoke');
+          }
+        } else { u.x += u.vx * dt; u.y = gy0 - Math.abs(Math.sin(u.t * 14)) * 6; }
+        if (u.x < -u.w || u.x > W + u.w || u.t > 14) runners.splice(i, 1);
+      }
       for (i = texts.length - 1; i >= 0; i--) { texts[i].t += dt; texts[i].y -= 30 * dt; if (texts[i].t > 1.6) texts.splice(i, 1); }
     }
 
@@ -213,15 +288,8 @@
       ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.fillRect(0, H - 6, W, 6);       // снег внизу
 
-      if (santa) {
-        var im = santa.dead ? IMG_DEER : IMG_ALL, y = santaY(santa);
-        if (im.complete) {
-          ctx.save();
-          if (!santa.ltr) { ctx.translate(santa.x + santa.w, y); ctx.scale(-1, 1); ctx.drawImage(im, 0, 0, santa.w, santa.h); }   // олени впереди по ходу
-          else ctx.drawImage(im, santa.x, y, santa.w, santa.h);
-          ctx.restore();
-        }
-      }
+      if (santa) drawSanta(santa);
+      for (var ri = 0; ri < runners.length; ri++) drawRunner(runners[ri]);
       for (var i = 0; i < gifts.length; i++) drawGift(gifts[i]);
       for (i = 0; i < parts.length; i++) {
         var p = parts[i], k = p.t / p.life;
@@ -246,6 +314,27 @@
       }
       ctx.globalAlpha = 1;
       drawBazooka();
+    }
+    function drawSanta(s) {
+      var k = s.w / 300, y = santaY(s);
+      ctx.save();
+      ctx.translate(s.ltr ? s.x : s.x + s.w, y); if (!s.ltr) ctx.scale(-1, 1);   // олени впереди по ходу
+      ctx.translate(55 * k, 42 * k); ctx.rotate(s.ang); ctx.translate(-55 * k, -42 * k);
+      if (!s.dead) {                                              // упряжь от саней через оставшихся оленей
+        ctx.strokeStyle = '#5c3a1f'; ctx.lineWidth = Math.max(1, 1.2 * k); ctx.beginPath(); ctx.moveTo(86 * k, 36 * k);
+        for (var i = 0; i < 3; i++) if (s.att[i]) ctx.lineTo((DX[i] + 12) * k, 37 * k);
+        ctx.stroke();
+        if (IMG_SLEIGH.complete) ctx.drawImage(IMG_SLEIGH, 0, 0, s.w, s.h);
+      }
+      for (i = 0; i < 3; i++) if (s.att[i] && IMG_D[i].complete) ctx.drawImage(IMG_D[i], 0, 0, s.w, s.h);
+      ctx.restore();
+    }
+    function drawRunner(u) {
+      var im = IMG_D[u.i]; if (!im.complete) return;
+      ctx.save(); ctx.translate(u.x, u.y); ctx.rotate(u.a);
+      if (u.run ? u.vx < 0 : !u.ltr) ctx.scale(-1, 1);
+      ctx.drawImage(im, -(DX[u.i] + 5) * u.k, -34 * u.k, u.w, u.h);
+      ctx.restore();
     }
     function drawRocket(r) {
       var a = Math.atan2(r.vy, r.vx);
