@@ -13,7 +13,7 @@
   if (now > new Date(2027, 0, 15, 23, 59)) return;           // после праздников ничего не показываем
   (function () {                                              // мини-игра «Базука» (кнопка слева внизу на главной и в кабинете)
     var s = document.currentScript; if (!s) return;
-    var e = document.createElement('script'); e.src = s.src.replace(/newyear\.js(\?.*)?$/, 'bazooka.js'); e.async = true;
+    var e = document.createElement('script'); e.src = s.src.replace(/newyear\.js(\?.*)?$/, 'bazooka.js?v=2'); e.async = true;
     (document.head || document.documentElement).appendChild(e);
   })();
   var KEY = 'ny-snow-off', reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
