@@ -3,7 +3,9 @@
 /*#include 1-core.php*/
 /*#include 2-auth.php*/
 /*#include 3-data.php*/
+/*#include 3a-chat.php*/
 /*#include 4-actions-student.php*/
 /*#include 5-actions-materials.php*/
 /*#include 6-actions-rating.php*/
+/*#include 6a-actions-chat.php*/
 /*#include 7-actions-teacher.php*/
