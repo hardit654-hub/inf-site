@@ -1,0 +1,48 @@
+<!doctype html>
+<!-- Страница собирается из частей src/kabinet/ (build.py). Править части там, а не этот файл. -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Личный кабинет · Артём Свинченко</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16181c">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/*#include style.css*/
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="brand" href="../"><span class="mark">AS</span><span>Артём Свинченко · информатика</span></a>
+    <div class="grow"></div>
+    <a class="hbtn home" href="../" title="На главную"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h5v-5.5h3V20h5V9.5"/></svg><span>На главную</span></a>
+    <span class="who" id="who" hidden></span>
+    <button class="hbtn" id="logout" type="button" hidden>Выйти</button>
+    <button class="hbtn sq" id="theme" type="button" aria-label="Переключить тему"></button>
+  </div>
+  <div class="wrap title"><h1 id="h1">Личный кабинет</h1><p id="hsub">Вход для учеников</p></div>
+</header>
+
+<main class="wrap" id="app"><div class="loading">Загрузка…</div></main>
+
+<script>
+/*#include js/1-base.js*/
+/*#include js/2-login.js*/
+/*#include js/3-progress.js*/
+/*#include js/4-student.js*/
+/*#include js/5-teacher.js*/
+/*#include js/6-calendar.js*/
+/*#include js/7-schedule.js*/
+/*#include js/8-variants.js*/
+/*#include js/9-route.js*/
+</script>
+<script src="../newyear.js" defer></script>
+</body>
+</html>
