@@ -10,6 +10,9 @@ COURSES=[
   dict(src='src/5/course.js', out='site/ege-5/index.html', title='№ 5 · Анализ алгоритмов',
        og_title='№ 5. Анализ алгоритмов — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='Анализ алгоритмов для ЕГЭ по информатике: двоичная запись числа, приписывание разрядов, решение в Python. 7 уроков, 66 задач с автопроверкой.'),
+  dict(src='src/8/course.js', out='site/ege-8/index.html', title='№ 8 · Комбинаторика в Python',
+       og_title='№ 8. Комбинаторика — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Комбинаторика для ЕГЭ по информатике (№ 8): слова и числа с условиями, алфавитный список, перестановки, решение в Python. 8 уроков, 71 задача с автопроверкой.'),
   dict(src='src/12/course.js', out='site/ege-12/index.html', title='№ 12 · Машина Тьюринга',
        og_title='№ 12. Машина Тьюринга — курс', url='https://gsvv.ru/inf/ege-12/', image='https://gsvv.ru/inf/og-12.jpg',
        desc='Исполнитель МТ для ЕГЭ по информатике: таблица программы, устное решение, Python. 9 уроков, 92 задачи с автопроверкой.'),
@@ -55,7 +58,7 @@ def rebase(o, folder):
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
-ORDER=['src/17/course.js','src/4/course.js','src/5/course.js','src/12/course.js','src/13/course.js','src/14/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
+ORDER=['src/17/course.js','src/4/course.js','src/5/course.js','src/8/course.js','src/12/course.js','src/13/course.js','src/14/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
@@ -81,6 +84,7 @@ os.makedirs('site/ege',exist_ok=True); open('site/ege/index.html','w').write(h);
 # Старые адреса разделов ведут в общий курс, в тот же раздел (ссылки из домашки и закладки продолжают работать)
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); num=load_course(src)['section']['num']
+    os.makedirs(os.path.dirname(c['out']),exist_ok=True)
     open(c['out'],'w').write(f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>{c['title']}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
 <link rel="canonical" href="https://gsvv.ru/inf/ege/">
