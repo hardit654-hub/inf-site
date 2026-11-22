@@ -29,6 +29,9 @@ def split_code(h):
     out=[];pos=0
     for m in re.finditer(r'<pre>(?:<code>)?(.*?)(?:</code>)?</pre>',h,flags=re.S):
         if m.start()>pos: out.append({'t':'html','v':h[pos:m.start()]})
+        if '<sub>' in m.group(1) or '<sup>' in m.group(1):  # формула с основаниями систем счисления — не код
+            out.append({'t':'html','v':'<p class="formula">'+re.sub(r'<br\s*/?>','<br>',m.group(1)).strip()+'</p>'})
+            pos=m.end(); continue
         code=H.unescape(re.sub(r'<br\s*/?>','\n',m.group(1))); code=re.sub(r'<[^>]+>','',code)
         out.append({'t':'code','v':code.rstrip()})
         pos=m.end()
