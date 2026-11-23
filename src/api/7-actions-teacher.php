@@ -96,6 +96,4 @@ case 'class_progress':
     foreach ($rows as $r) $res[(string)$r['user_id']] = ['data' => json_decode($r['data']), 'updated' => (int)$r['updated'], 'resets' => (int)$r['resets']];
     out(['ok' => true, 'progress' => (object)$res]);
 
-default:
-    fail('Неизвестное действие', 404);
-}
+

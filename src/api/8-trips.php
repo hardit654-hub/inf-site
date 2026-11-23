@@ -55,3 +55,7 @@ case 'trip_delete':
     $id = (int)arg('id');
     q('DELETE FROM inf_trips WHERE id = ?', [$id]);
     out(['ok' => true]);
+
+default:
+    fail('Неизвестное действие', 404);
+}

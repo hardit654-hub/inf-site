@@ -824,9 +824,7 @@ case 'class_progress':
     foreach ($rows as $r) $res[(string)$r['user_id']] = ['data' => json_decode($r['data']), 'updated' => (int)$r['updated'], 'resets' => (int)$r['resets']];
     out(['ok' => true, 'progress' => (object)$res]);
 
-default:
-    fail('Неизвестное действие', 404);
-}
+
 /* ----- заявки на поездки (форма gsvv.ru/forms) -----
  * trip_apply — открыт всем, кто видит форму (родители). Ничего не раскрывает: только проверяет и сохраняет.
  * Живёт в той же базе, что и кабинет, поэтому учитель видит заявки во вкладке «Заявки на поездку».
@@ -884,3 +882,7 @@ case 'trip_delete':
     $id = (int)arg('id');
     q('DELETE FROM inf_trips WHERE id = ?', [$id]);
     out(['ok' => true]);
+
+default:
+    fail('Неизвестное действие', 404);
+}
