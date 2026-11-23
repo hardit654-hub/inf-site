@@ -1,0 +1,361 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Контрольная по физике № 2: кинематика</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one column "exam sheet" on squared notebook paper; variant tabs on top, task cards, submit bar at the end */
+:root{
+  --paper:#f3f6f9; --grid:#dde5ee; --sheet:#ffffff; --ink:#18263a; --muted:#5a6a80;
+  --line:#c9d4e1; --accent:#2346a8; --accent-soft:#e6ecfa; --ok:#1d7a46; --ok-soft:#e3f3ea; --bad:#b3261e; --bad-soft:#fbe7e5;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11161f; --grid:#1a2230; --sheet:#171e2a; --ink:#e4eaf3; --muted:#9aa8bc;
+  --line:#2c3748; --accent:#8fa9ff; --accent-soft:#1f2a47; --ok:#5fcf8f; --ok-soft:#173226; --bad:#ff8a80; --bad-soft:#3a1d1b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11161f; --grid:#1a2230; --sheet:#171e2a; --ink:#e4eaf3; --muted:#9aa8bc;
+  --line:#2c3748; --accent:#8fa9ff; --accent-soft:#1f2a47; --ok:#5fcf8f; --ok-soft:#173226; --bad:#ff8a80; --bad-soft:#3a1d1b; color-scheme:dark}
+*{box-sizing:border-box}
+body{
+  background:var(--paper);color:var(--ink);font:16px/1.55 var(--f-body);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px;
+}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header.top{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0;text-wrap:balance;font-weight:700}
+.sub{color:var(--muted);margin:0}
+.tabs{display:flex;gap:6px;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:4px;align-self:flex-start}
+.tab{appearance:none;border:0;background:transparent;color:var(--muted);font:600 15px var(--f-body);padding:8px 16px;border-radius:7px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--sheet)}
+.tab:disabled{cursor:not-allowed;opacity:.55}
+.tab:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:20px}
+.student{display:grid;grid-template-columns:1fr 140px;gap:12px}
+@media (max-width:520px){.student{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:500}
+input[type=text]{font:16px var(--f-body);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:9px 11px;width:100%;min-width:0}
+input[type=text]:disabled{opacity:.8}
+.task{display:flex;flex-direction:column;gap:12px}
+.task-head{display:flex;align-items:baseline;gap:10px}
+.num{font:600 13px var(--f-mono);color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.task-head h2{font-size:15px;margin:0;color:var(--muted);font-weight:500}
+.task p{margin:0;max-width:68ch}
+.figure{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+.scroll{overflow-x:auto;max-width:100%}
+table.t{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+table.t td,table.t th{border:1px solid var(--muted);text-align:center;padding:4px 0;min-width:32px;height:30px}
+table.t th{font-weight:600;background:var(--accent-soft)}
+table.t td.x{background:var(--line)}
+table.t th.corner{background:transparent;border-top-color:transparent;border-left-color:transparent}
+table.codes td{padding:4px 18px;font-family:var(--f-mono)}
+table.prog td,table.prog th{padding:4px 12px;font-family:var(--f-mono);white-space:nowrap}
+.graph{width:300px;max-width:100%;height:auto}
+.graph line{stroke:var(--ink);stroke-width:1.6}
+.graph circle{fill:var(--ink)}
+.graph text{fill:var(--ink);font:500 15px var(--f-body)}
+.mono{font-family:var(--f-mono);font-size:.95em}
+details.rules{border-left:3px solid var(--line);padding-left:12px}
+details.rules summary{cursor:pointer;color:var(--accent);font-weight:500}
+details.rules p{margin-top:8px;font-size:15px;color:var(--ink)}
+.answer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:12px}
+.answer label{font-weight:600}
+.answer input{width:150px;font:600 17px var(--f-mono);letter-spacing:.04em}
+.mark{font-weight:600;font-size:14px;border-radius:6px;padding:3px 10px}
+.mark.ok{color:var(--ok);background:var(--ok-soft)}
+.mark.bad{color:var(--bad);background:var(--bad-soft)}
+.actions{display:flex;flex-direction:column;gap:12px}
+.btn{appearance:none;border:0;border-radius:8px;font:600 16px var(--f-body);padding:12px 22px;cursor:pointer;align-self:flex-start}
+.btn.primary{background:var(--accent);color:var(--sheet)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.confirm{display:flex;flex-direction:column;gap:12px;background:var(--accent-soft);border-radius:10px;padding:16px}
+.confirm .row{display:flex;gap:10px;flex-wrap:wrap}
+.warn{color:var(--bad);font-size:14px;margin:0}
+.result{display:flex;flex-direction:column;gap:6px;border:2px solid var(--accent)}
+.result .score{font-size:40px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.result .meta{color:var(--muted);font-size:14px}
+.teacher{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}
+.teacher input{width:110px;font-size:14px;padding:6px 8px}
+.teacher button{font-size:13px;padding:7px 12px}
+.journal textarea{resize:vertical;font-family:var(--f-mono)}
+.journal table.t th,.journal table.t td{white-space:nowrap;padding:6px 10px}
+.code{font:600 20px/1.2 var(--f-mono);letter-spacing:.06em;color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:6px 12px;display:inline-block;user-select:all}
+footer{font-size:12px;color:var(--muted);text-align:center}
+@media print{body{background:#fff}.tabs,.actions,.teacher{display:none}.card{break-inside:avoid}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Физика · кинематика</span>
+    <h1>Контрольная работа № 2: скорость и ускорение при движении по окружности</h1>
+    <p class="sub">Выберите свой вариант, впишите фамилию и класс, решите все задачи и нажмите «Сдать работу». Проверка и оценки появятся после сдачи.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Вариант">
+    <button class="tab" role="tab" id="tab-1" data-v="1">Вариант 1</button>
+    <button class="tab" role="tab" id="tab-2" data-v="2">Вариант 2</button>
+  </div>
+
+  <section class="card student" aria-label="Ученик">
+    <label class="f">Фамилия и имя<input type="text" id="name" autocomplete="name" placeholder="Иванов Пётр"></label>
+    <label class="f">Класс<input type="text" id="cls" placeholder="11 «А»"></label>
+  </section>
+
+  <div id="tasks" style="display:flex;flex-direction:column;gap:18px"></div>
+
+  <section class="actions">
+    <div id="result" class="card result" hidden></div>
+    <button class="btn primary" id="submit">Сдать работу</button>
+    <div class="confirm" id="confirm" hidden>
+      <strong>Сдать работу?</strong>
+      <p id="confirmText" style="margin:0"></p>
+      <div class="row">
+        <button class="btn primary" id="yes">Да, сдать</button>
+        <button class="btn ghost" id="no">Вернуться к заданиям</button>
+      </div>
+    </div>
+    <p class="warn" id="err" hidden></p>
+    <textarea id="copyBox" hidden rows="7" style="width:100%;font:13px/1.4 ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:8px;padding:10px"></textarea>
+    <div class="teacher" id="teacher" hidden>
+      <span>Для учителя:</span>
+      <input type="text" id="pin" inputmode="numeric" placeholder="код учителя" aria-label="Код учителя">
+      <button class="btn ghost" id="copy">Скопировать результаты</button>
+      <button class="btn ghost" id="reset">Новая работа</button>
+      <span id="pinMsg"></span>
+    </div>
+    <div class="card journal" id="journal" hidden>
+      <div class="task-head"><span class="num">Класс</span><h2>Соберите результаты учеников</h2></div>
+      <p class="sub" style="margin:0">Ученик после сдачи видит код своей работы. Впишите коды в поле ниже (можно по одному, каждый с новой строки) и нажмите «Собрать».</p>
+      <textarea id="codeIn" rows="5" placeholder="Вставляйте коды работ: по одному на строку" style="width:100%;font:13px/1.5 ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:8px;padding:10px"></textarea>
+      <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn primary" id="collect">Собрать</button>
+        <button class="btn ghost" id="clearJ">Очистить таблицу</button>
+        <span id="jMsg" class="sub"></span>
+      </div>
+      <div class="scroll" style="margin-top:12px"><table class="t prog" id="jTable" style="width:100%"></table></div>
+    </div>
+    <details class="rules card" id="rules">
+      <summary>Как записывать ответы</summary>
+      <p>Каждая задача — одно число. Целые числа и обыкновенные дроби пишите как есть: <b>2</b>, <b>1/200</b>, <b>0,05</b>. Десятичные дроби — с запятой или точкой: <b>1,18</b> или <b>1.18</b>. Единицы измерения писать не нужно. Если ответ получается приближённым, хватит двух-трёх знаков после запятой.</p>
+    </details>
+    <footer>Контрольная № 2 · физика, 10–11 класс · кинематика движения по окружности</footer>
+  </section>
+</div>
+
+<script src="kr2-check.js"></script>
+<script>
+/* Задачи вариантов. Тексты проверялись по условиям задачника. */
+const V={
+ 1:{
+  t:[
+   ["Найдите отношение скоростей концов минутной и секундной стрелок часов, если минутная стрелка в 3 раза длиннее секундной.","Отношение v<sub>мин</sub> / v<sub>сек</sub> — число."],
+   ["Колесо диаметром 50 см, двигаясь равномерно, проходит расстояние 2 м за 4 с. Какова угловая скорость вращения колеса?","Ответ в рад/с."],
+   ["Шарик движется по окружности радиусом 3 м с постоянной по модулю скоростью так, что полный оборот он совершает за 10 с. Определите ускорение шарика.","Ответ в м/с²."],
+   ["Радиус рабочего колеса гидротурбины в 8 раз больше, а частота вращения в 40 раз меньше, чем у паровой турбины. Сравните центростремительные ускорения точек обода колёс турбин.","Отношение a<sub>гидр</sub> / a<sub>пар</sub> — число."],
+   ["Стержень длиной 1 м вращается вокруг перпендикулярной оси так, что один его конец движется с линейной скоростью 0,4 м/с. Период вращения стержня 4 с. Чему равна линейная скорость другого конца стержня?","Ответ в м/с."]
+  ]},
+ 2:{
+  t:[
+   ["Диаметр передних колёс трактора в 2 раза меньше, чем задних. Сравните частоты вращения колёс при движении трактора.","Отношение ν<sub>пер</sub> / ν<sub>зад</sub> — число."],
+   ["Радиус рукоятки колодезного ворота в 3 раза больше радиуса вала, на который наматывается трос. Какова линейная скорость рукоятки при поднятии ведра с глубины 10 м за 20 с?","Ответ в м/с."],
+   ["Найдите центростремительное ускорение точек колеса автомобиля, соприкасающихся с дорогой, если автомобиль движется со скоростью 72 км/ч и при этом частота вращения колеса 8 с⁻¹.","Ответ в м/с²."],
+   ["Два тела движутся по окружности так, что радиус движения второго тела в 4 раза больше радиуса движения первого. Сравните центростремительные ускорения тел, если линейная скорость второго тела в 2 раза больше.","Отношение a<sub>2</sub> / a<sub>1</sub> — число."],
+   ["Найти радиус вращающегося колеса, если известно, что линейная скорость точки, лежащей на ободе, в 3 раза больше линейной скорости точки, лежащей на 6 см ближе к оси колеса.","Ответ в см."]
+  ]}
+};
+const NUMS=[1,2,3,4,5];
+
+function answerRow(v,n){
+  return `<div class="answer"><label for="a${v}-${n}">Ответ:</label><input type="text" id="a${v}-${n}" data-n="${n}" autocomplete="off"><span class="mark" id="m${v}-${n}" hidden></span></div>`;
+}
+function tasksHTML(v){
+  return V[v].t.map(([txt,hint],i)=>`
+  <article class="card task">
+    <div class="task-head"><span class="num">Задача ${i+1}</span><h2>${hint}</h2></div>
+    <p>${txt}</p>
+    ${answerRow(v,i+1)}
+  </article>`).join('');
+}
+
+/* Самопроверка выполняется в этом же файле, перед публикацией (см. src/kr2/calc.py) */
+/* зачётные значения (уже проверены калькулятором src/kr2/calc.py), допуск: доля и абсолютная часть */
+/* зачётные значения: [значение, допуск в долях, допуск в единицах] — по варианту и задаче */
+const MULTI={1:0,2:0,3:0,4:0,5:0};   // у всех задач один ответ
+/* зачётные значения по варианту, задаче и позиции ответа: [значение, доля допуска, допуск в единицах] */
+const CAND={"1":{1:{1:[[0.05,0,0.0001]]},
+  2:{1:[[2,0,0.001]]},
+  3:{1:[[1.18,0.02,0.005],[1.2,0,0.005]]},
+  4:{1:[[0.005,0.05,0.0005]]},
+  5:{1:[[1.17,0.03,0.02]]}},
+ "2":{1:{1:[[2,0,0.001]]},
+  2:{1:[[1.5,0,0.001]]},
+  3:{1:[[1005.31,0.02,2]]},
+  4:{1:[[1,0,0.001]]},
+  5:{1:[[9,0,0.001]]}}};
+const KEY={"1":{"1":"af50491f","2":"151c0b97","3":"5b529afa","4":"b150f648","5":"30696639"},"2":{"1":"5455e2c7","2":"f63a7e04","3":"c21a9b5a","4":"12f3dc51","5":"777791d6"}};
+const PIN="aabc3e2a", SALT="inf-kr2";
+const h=s=>{let x=0x811c9dc5;for(const c of s){x^=c.charCodeAt(0);x=Math.imul(x,0x01000193)>>>0}return x.toString(16)};
+
+
+/* функция проверки вынесена в kr2-check.js */
+const CHECK=KR2({KEY:KEY,CAND:CAND,MULTI:MULTI,SALT:SALT,h:h});
+const answerOK=CHECK.answerOK;
+
+const ST_KEY="inf-kr2-state";
+let state={v:"1",name:"",cls:"",ans:{1:{},2:{}},done:null};
+try{const s=JSON.parse(localStorage.getItem(ST_KEY)||"null");if(s)state=Object.assign(state,s)}catch(e){}
+function save(){try{localStorage.setItem(ST_KEY,JSON.stringify(state))}catch(e){}}
+
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render(){
+  const v=state.done?state.done.v:state.v;
+  document.querySelectorAll(".tab").forEach(t=>{t.setAttribute("aria-selected",t.dataset.v===v);t.disabled=!!state.done&&t.dataset.v!==v});
+  $("tasks").innerHTML=tasksHTML(v);
+  $("name").value=state.name;$("cls").value=state.cls;
+  NUMS.forEach(n=>{
+    const inp=$(`a${v}-${n}`);if(!inp)return;
+    inp.value=state.ans[v][n]||"";
+    inp.addEventListener("input",()=>{state.ans[v][n]=inp.value.trim();save()});
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();const nx=$(`a${v}-${n+1}`);if(nx)nx.focus();}});
+  });
+  const locked=!!state.done;
+  document.querySelectorAll("input[type=text]:not(#pin)").forEach(i=>i.disabled=locked);
+  $("submit").hidden=locked;$("confirm").hidden=true;$("err").hidden=true;
+  $("rules").hidden=locked;
+  $("teacher").hidden=!locked;$("result").hidden=!locked;
+  if(locked){
+    const r=state.done;let ok=0;
+    NUMS.forEach(n=>{
+      const m=$(`m${v}-${n}`);if(!m)return;
+      m.hidden=false;m.className="mark "+(r.marks[n]?"ok":"bad");m.textContent=r.marks[n]?"верно":"неверно";
+      if(r.marks[n])ok++;
+    });
+    const five=ok/5;
+    const gr=Math.min(5,Math.floor(five*5+1e-9))||2;
+    $("result").innerHTML=`<span class="eyebrow">Работа сдана</span>
+      <div class="score">${ok} из 5</div>
+      <div><b>${esc(state.name)}</b>${state.cls?", "+esc(state.cls):""} · вариант ${v}</div>
+      <div class="meta">Сдано ${r.at}. Покажите этот экран или передайте код учителю.</div>
+      <div class="meta">Код работы:<br><span class="code">${esc(workCode())}</span></div>
+      <div class="meta">Код свой никому не диктуйте, кроме учителя.</div>`;
+  }
+}
+
+
+/* ---------- код работы для учителя ----------
+   Код несёт имя, класс, вариант, отметки и время; защищён короткой подписью,
+   чтобы ученик не мог подделать баллы. Формат: ИМЯ|КЛАСС|V|00101|ГГММДДЧЧММ|ПОДПИСЬ */
+function sign(str){
+  const src=SALT+"|sign|"+str;
+  let a=0x811c9dc5, b=0x9e3779b9;
+  for(let i=0;i<src.length;i++){
+    const c=src.charCodeAt(i)^i;
+    a=Math.imul(a^c,0x01000193)>>>0;
+    b=Math.imul(b+c,0x85ebca6b)>>>0;
+  }
+  return (a.toString(36)+b.toString(36)).slice(0,6).toUpperCase();
+}
+function payloadOf(r){
+  const bits=NUMS.map(n=>r.marks[n]?"1":"0").join("");
+  const d=r.stamp||Date.now();
+  return [r.name.replace(/\|/g,"/"),(r.cls||"").replace(/\|/g,"/"),r.v,bits,d].join("|");
+}
+function workCode(){
+  const r=state.done; if(!r) return "";
+  const body=payloadOf(r);
+  return body+"|"+sign(body);
+}
+function parseCode(raw){
+  const parts=String(raw).trim().split("|");
+  if(parts.length!==6) return null;
+  const body=parts.slice(0,5).join("|");
+  if(sign(body)!==parts[5].toUpperCase()) return null;
+  const d=new Date(+parts[4]);
+  return {name:parts[0],cls:parts[1],v:parts[2],bits:parts[3],stamp:+parts[4],
+    at:isNaN(d)?"":d.toLocaleDateString("ru-RU")+" "+d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})};
+}
+
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  if(state.done)return;state.v=t.dataset.v;save();history.replaceState(null,"","#v"+state.v);render();
+}));
+$("name").addEventListener("input",e=>{state.name=e.target.value;save()});
+$("cls").addEventListener("input",e=>{state.cls=e.target.value;save()});
+
+function submitWork(){
+  if(!state.name.trim()){$("err").textContent="Впишите фамилию и имя в начале работы.";$("err").hidden=false;$("name").focus();return}
+  if(!state.cls.trim()){$("err").textContent="Впишите класс.";$("err").hidden=false;$("cls").focus();return}
+  $("err").hidden=true;
+  const v=state.v;
+  const empty=NUMS.filter(n=>!(state.ans[v][n]||"").trim());
+  $("confirmText").textContent=(empty.length?`Без ответа: задача ${empty.join(", ")}. `:"Все ответы заполнены. ")+"После сдачи изменить ответы будет нельзя.";
+  $("confirm").hidden=false;$("submit").hidden=true;
+}
+$("submit").addEventListener("click",submitWork);
+$("no").addEventListener("click",()=>{$("confirm").hidden=true;$("submit").hidden=false});
+$("yes").addEventListener("click",()=>{
+  const v=state.v,marks={};
+  NUMS.forEach(n=>{marks[n]=answerOK(v,n,state.ans[v][n]||"")});
+  const d=new Date();
+  state.done={v,marks,name:state.name,cls:state.cls,names:NUMS.map(n=>state.ans[v][n]||""),stamp:+d,at:d.toLocaleDateString("ru-RU")+" в "+d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})};
+  save();render();$("result").scrollIntoView({behavior:"smooth",block:"center"});
+});
+$("reset").addEventListener("click",()=>{
+  if(h(SALT+"|pin|"+$("pin").value.trim())!==PIN){$("pinMsg").textContent="Неверный код";return}
+  state={v:state.v,name:"",cls:"",ans:{1:{},2:{}},done:null};save();$("pin").value="";$("pinMsg").textContent="Новая работа готова к вводу.";render();
+});
+$("collect").addEventListener("click",()=>{if(h(SALT+"|pin|"+$("pin").value.trim())!==PIN){$("jMsg").textContent="Сначала введите код учителя.";return}collect()});
+$("clearJ").addEventListener("click",()=>{if(h(SALT+"|pin|"+$("pin").value.trim())!==PIN){$("jMsg").textContent="Сначала введите код учителя.";return}if(!confirm("Очистить таблицу класса? Коды придётся собрать заново."))return;journal=[];try{localStorage.removeItem(J_KEY)}catch(e){}drawJournal();$("jMsg").textContent="Таблица очищена."});
+$("pin").addEventListener("input",()=>{const ok=h(SALT+"|pin|"+$("pin").value.trim())===PIN;$("journal").hidden=!ok;if(ok)drawJournal()});
+$("copy").addEventListener("click",async()=>{
+  if(h(SALT+"|pin|"+$("pin").value.trim())!==PIN){$("pinMsg").textContent="Неверный код";return}
+  const r=state.done;if(!r){$("pinMsg").textContent="Работа не сдана.";return}
+  const n=NUMS.filter(k=>r.marks[k]).length;
+  const txt=[`${state.name}\t${state.cls}\tвариант ${r.v}\t${n} из 5\t${r.at}`,
+    ...NUMS.map(k=>`  задача ${k}: ${r.names[k-1]||"—"} — ${r.marks[k]?"верно":"неверно"}`)].join("\n");
+  try{await navigator.clipboard.writeText(txt);$("pinMsg").textContent="Результат скопирован — вставьте в заметки."}
+  catch(e){$("pinMsg").textContent="Не удалось скопировать, скопируйте текст ниже.";$("copyBox").value=txt;$("copyBox").hidden=false;$("copyBox").select();}
+});
+/* ---------- таблица класса ---------- */
+const J_KEY="inf-kr2-journal";
+let journal=[];
+try{journal=JSON.parse(localStorage.getItem(J_KEY)||"[]")}catch(e){}
+function drawJournal(){
+  const t=$("jTable");
+  if(!journal.length){t.innerHTML="<tr><td style='border:0;color:var(--muted)'>Пока пусто.</td></tr>";return}
+  let total=0;
+  journal.sort((a,b)=>a.cls.localeCompare(b.cls,"ru")||a.name.localeCompare(b.name,"ru"));
+  t.innerHTML="<tr><th>Ученик</th><th>Класс</th><th>Вариант</th><th>Задачи</th><th>Баллы</th><th>Время</th></tr>"+
+    journal.map(j=>{
+      const n=[...j.bits].filter(c=>c==="1").length; total+=n;
+      return `<tr><td style="text-align:left">${esc(j.name)}</td><td>${esc(j.cls||"—")}</td><td>${j.v}</td><td>${[...j.bits].map(c=>c==="1"?"✓":"·").join(" ")}</td><td><b>${n}</b></td><td>${esc(j.at)}</td></tr>`;
+    }).join("")+
+    `<tr><td colspan="4" style="text-align:right">Работ: ${journal.length}</td><td colspan="2" style="text-align:left">средний балл ${(total/journal.length).toFixed(1).replace('.',',')} из 5</td></tr>`;
+}
+function collect(){
+  const lines=$("codeIn").value.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean);
+  let add=0,bad=0;
+  lines.forEach(l=>{
+    const p=parseCode(l);
+    if(!p){bad++;return}
+    if(journal.some(j=>j.bits===p.bits&&j.name===p.name&&j.stamp===p.stamp&&j.cls===p.cls&&j.v===p.v))return;
+    if(journal.some(j=>j.name===p.name&&j.cls===p.cls&&j.stamp===p.stamp))return;
+    journal.push(p);add++;
+  });
+  try{localStorage.setItem(J_KEY,JSON.stringify(journal))}catch(e){}
+  drawJournal();
+  $("jMsg").textContent=(add?`Добавлено работ: ${add}. `:"")+(bad?`Не распознано строк: ${bad}. `:"")+(add?"":"");
+  if(add)$("codeIn").value="";
+}
+
+function fromHash(){const m=location.hash.match(/^#v([12])$/);if(m&&!state.done){state.v=m[1];save()}render()}
+window.addEventListener("hashchange",fromHash);
+fromHash();
+</script>
+
+</body></html>
