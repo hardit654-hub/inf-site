@@ -40,9 +40,9 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy-root/
+          local-dir: ./deploy-root-only/
           server-dir: ./
-          state-name: .ftp-deploy-root-sync-state.json
+          state-name: .ftp-deploy-root-only-sync-state.json
           dangerous-clean-slate: false
 
       # Данные раздела могут прийти сжатыми (src/<раздел>/course.js.xz.b64): распаковываем.
