@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./site/forms/
-          server-dir: ./forms/
+          server-dir: ./../forms/
 
       # Данные раздела могут прийти сжатыми (src/<раздел>/course.js.xz.b64): распаковываем.
       # xz проверяет контрольную сумму — если файл повреждён, загрузка останавливается и сайт не меняется.
