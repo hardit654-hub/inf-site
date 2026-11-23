@@ -1,7 +1,6 @@
 case 'trip_apply':
     need_post();
-    // ловушка для ботов: человек этого поля не видит и не заполнит (диагностика)
-    if (isset($_GET["probe"])) out(["ok"=>true,"probe"=>(string)($_GET["probe"])]);
+    // ловушка для ботов: человек этого поля не видит и не заполнит
     if (trip_clean(arg('site'), 80) !== '') out(['ok' => true, 'saved' => true]);
     $since = time() - 3600;
     q('DELETE FROM inf_trips WHERE created < ?', [time() - 86400 * 400]);
