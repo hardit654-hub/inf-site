@@ -34,7 +34,7 @@ jobs:
 
       # Основной сайт размещён в /inf; FTP-пользователь для forms имеет домашнюю папку /www/gsvv.ru.
       # Поэтому явно пишем основной сайт в подкаталог inf, не в корень домена.
-      - name: Временная заглушка для ссылок ВДК в корне домена
+      - name: Загрузить временную заглушку в корень домена
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -43,6 +43,20 @@ jobs:
           local-dir: ./deploy-root-only/
           server-dir: ./
           state-name: .ftp-deploy-root-only-sync-state.json
+          dangerous-clean-slate: false
+
+      # Страница со ссылками для классных руководителей (gsvv.ru/link/ssylki.html) должна
+      # открываться как раньше — код ВДК живёт отдельно от этого репозитория. Возвращаем
+      # сохранённую копию страницы, чтобы временная заглушка не задела её при обновлениях.
+      - name: Вернуть страницу ссылок ВДК (gsvv.ru/link/ssylki.html)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy-vdk-restore/
+          server-dir: ./link/
+          state-name: .ftp-deploy-vdk-link-sync-state.json
           dangerous-clean-slate: false
 
       # Данные раздела могут прийти сжатыми (src/<раздел>/course.js.xz.b64): распаковываем.
