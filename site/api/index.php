@@ -23,6 +23,10 @@ function fail(string $msg, int $code = 400) { out(['ok' => false, 'error' => $ms
 
 set_exception_handler(function ($e) {
     error_log('inf api: ' . $e->getMessage());
+    // диагностика (?diag=1): показываем текст ошибки только нам, никогда — посетителям
+    if (isset($_GET['diag']) && ($_GET['diag'] === '1' || $_GET['diag'] === 'text')) {
+        out(['ok' => false, 'diag' => get_class($e) . ': ' . $e->getMessage(), 'file' => basename($e->getFile()) . ':' . $e->getLine()], 500);
+    }
     fail('Ошибка сервера. Попробуйте ещё раз чуть позже.', 500);
 });
 
