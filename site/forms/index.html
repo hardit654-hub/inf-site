@@ -142,13 +142,13 @@ section{padding:96px 0;overflow-x:clip}
 .notice b{color:#fff}
 
 /* галерея */
-.gallery{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:220px;gap:14px}
+.gallery{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:215px;gap:14px}
 .gallery figure{margin:0;position:relative;border-radius:var(--r);overflow:hidden;background:linear-gradient(160deg,#0d2438,#091a29);border:1px solid var(--line)}
 .gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
 .gallery figure:hover img{transform:scale(1.05)}
 .gallery figcaption{position:absolute;left:14px;right:14px;bottom:12px;font-size:13.5px;color:#eaf4f8;text-shadow:0 2px 12px rgba(0,0,0,.7);font-weight:600}
 .gallery .g-big{grid-column:span 3;grid-row:span 2}
-@media (max-width:900px){.gallery .g-big{grid-column:span 2;grid-row:span 1}}
+@media (max-width:900px){.gallery .g-big{grid-column:span 2;grid-row:span 2}}
 .gallery .g-wide{grid-column:span 2}
 @media (max-width:900px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:170px}.gallery .g-big{grid-column:span 2;grid-row:span 1}}
 /* заглушка сценария, если фото не пришло */
@@ -429,14 +429,14 @@ footer a:hover{color:var(--aurora)}
     </div>
     <div class="gallery rev" style="margin-top:40px">
       <figure class="g-big">
-        <img src="img/photo-1.jpg" alt="Белое море зимой" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
-        <div class="ph" hidden><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="4"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2 2M18 18l2 2M4 20l2-2M18 6l2-2"/></svg>Белое море во льду</div></div>
-        <figcaption>Белое море зимой</figcaption>
+        <img src="img/photo-1.jpg" alt="Олень кормится с руки" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+        <div class="ph" hidden><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 18c2-5 5-8 8-8s6 3 8 8"/><path d="M8 10V6M16 10V6M5 5l3 2M19 5l-3 2"/></svg>Олени</div></div>
+        <figcaption>Олень кормится с руки</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" src="img/photo-2.jpg" alt="Оленья упряжка" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
-        <div class="ph" hidden><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 18c2-5 5-8 8-8s6 3 8 8"/><path d="M8 10V6M16 10V6M5 5l3 2M19 5l-3 2"/></svg>Олени</div></div>
-        <figcaption>Оленья упряжка</figcaption>
+        <img loading="lazy" src="img/photo-2.jpg" alt="Группа на льду Белого моря" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+        <div class="ph" hidden><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="4"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2 2M18 18l2 2M4 20l2-2M18 6l2-2"/></svg>Белое море во льду</div></div>
+        <figcaption>На льду Белого моря</figcaption>
       </figure>
       <figure>
         <img loading="lazy" src="img/photo-3.jpg" alt="Гончарная мастерская" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
@@ -454,9 +454,9 @@ footer a:hover{color:var(--aurora)}
         <figcaption>Лаборатория</figcaption>
       </figure>
       <figure>
-        <img loading="lazy" src="img/photo-6.jpg" alt="Костёр на берегу" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+        <img loading="lazy" src="img/photo-6.jpg" alt="Уха на костре" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
         <div class="ph" hidden><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3c3 5 5 7 5 10a5 5 0 0 1-10 0c0-3 2-5 5-10z"/><path d="M4 21h16"/></svg>Костёр на берегу</div></div>
-        <figcaption>Костёр на берегу</figcaption>
+        <figcaption>Уха на костре</figcaption>
       </figure>
     </div>
   </div>

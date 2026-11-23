@@ -1,35 +1,6 @@
 {
-    "description": "DO NOT DELETE THIS FILE. This file is used to keep track of which files have been synced in the most recent deployment. If you delete this file a resync will need to be done (which can take a while) - read more: https://github.com/SamKirkland/FTP-Deploy-Action",
-    "version": "1.0.0",
-    "generatedTime": 1795427627468,
-    "data": [
-        {
-            "type": "file",
-            "name": ".ftp-deploy-sync-state.json",
-            "size": 1091,
-            "hash": "54564eb354b06b72646b93b892fba035743a672dd3f5a7ca04457a78ea18ddf8"
-        },
-        {
-            "type": "folder",
-            "name": "img"
-        },
-        {
-            "type": "file",
-            "name": "index.html",
-            "size": 81553,
-            "hash": "e8f2f43ac50306517d5639467f07720474bc1cb26587ff876c67f8988682d7d6"
-        },
-        {
-            "type": "file",
-            "name": "Программа_март_6_дней_масленица_2027.docx",
-            "size": 8039,
-            "hash": "3717890e04328b8859209ab89bb4e4cfe4a2b06315b1e1c5a6ca52d2dc8d5774"
-        },
-        {
-            "type": "file",
-            "name": "img/README.txt",
-            "size": 959,
-            "hash": "a5e07a4ae2d928e75688b63f3ff9a80e043bba36bde22593f53e41af7f29f7d6"
-        }
-    ]
+ "description": "DO NOT DELETE THIS FILE. This file is used to keep track of which files have been synced in the most recent deployment. If you delete this file a resync will need to be done (which can take a while) - read more: https://github.com/SamKirkland/FTP-Deploy-Action",
+ "version": "1.0.0",
+ "generatedTime": 0,
+ "data": []
 }
