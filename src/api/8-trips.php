@@ -17,7 +17,8 @@ case 'trip_apply':
     $grade = (int)arg('grade');
     if ($grade < 5 || $grade > 8) fail('Выберите класс ученика: с 5 по 8');
     $profile = trip_clean(arg('profile'), 16);
-    if (!in_array($profile, ['science', 'pomory', 'later'], true)) fail('Выберите профиль программы');
+    if ($profile === '') $profile = 'later'; // профиль необязателен: решим вместе с родителями
+    if (!in_array($profile, ['science', 'pomory', 'later'], true)) $profile = 'later';
     $note = trip_clean(arg('note'), 700);
     $agree = arg('agree') ? 1 : 0;
     if (!$agree) fail('Отметьте, пожалуйста, что вы ознакомились с программой и условиями');
