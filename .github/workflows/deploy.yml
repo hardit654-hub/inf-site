@@ -20,27 +20,17 @@ jobs:
       - name: Получить файлы сайта
         uses: actions/checkout@v4
 
-      # Проверяем, куда FTP-пользователь может писать: сверху или в своей домашней папке.
-      # Нужно один раз понять, где лежит корень сайта gsvv.ru — рядом с папкой inf.
-      - name: Куда ведёт FTP (разово)
-        run: |
-          python3 - <<'PY'
-          import ftplib, os
-          ftp = ftplib.FTP(os.environ['FTP_SERVER'], os.environ['FTP_USERNAME'], os.environ['FTP_PASSWORD'])
-          print('pwd:', ftp.pwd())
-          for d in ('.', '..', '../..'):
-              try:
-                  ftp.cwd(d)
-                  print('---', d, '->', ftp.pwd())
-                  print(ftp.nlst())
-              except Exception as e:
-                  print('---', d, 'FAIL', e)
-          ftp.quit()
-          PY
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      # Страница предварительной записи на поездку живёт в корне домена: gsvv.ru/forms/.
+      # Загрузка идёт по FTP, а FTP-пользователь посажен прямо в корень сайта — значит, кладём
+      # папку site/forms в папку forms рядом с inf. Загружается только то, что изменилось.
+      - name: Страница записи на поездку (gsvv.ru/forms)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./site/forms/
+          server-dir: ./forms/
 
       # Данные раздела могут прийти сжатыми (src/<раздел>/course.js.xz.b64): распаковываем.
       # xz проверяет контрольную сумму — если файл повреждён, загрузка останавливается и сайт не меняется.
