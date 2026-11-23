@@ -1,20 +1,3 @@
-/* ----- заявки на поездки (форма gsvv.ru/forms) -----
- * trip_apply — открыт всем, кто видит форму (родители). Ничего не раскрывает: только проверяет и сохраняет.
- * Живёт в той же базе, что и кабинет, поэтому учитель видит заявки во вкладке «Заявки на поездку».
- * Защита: заголовок X-Inf (как у остальных POST), скрытое поле-ловушка для ботов,
- * ограничение частоты с одного адреса, ограничение размера. */
-function trip_clean($v, int $max): string {
-    $v = preg_replace('/[\x00-\x1F\x7F]+/u', ' ', (string)$v);
-    return mb_substr(trim($v), 0, $max, 'UTF-8');
-}
-function trip_phone(string $p): string {
-    $d = preg_replace('/\D+/', '', $p);
-    if (strlen($d) === 11 && $d[0] === '8') $d = '7' . substr($d, 1);
-    elseif (strlen($d) === 10) $d = '7' . $d;
-    if (strlen($d) !== 11 || $d[0] !== '7') return '';
-    return '+' . $d;
-}
-
 case 'trip_apply':
     need_post();
     // ловушка для ботов: человек этого поля не видит и не заполнит (диагностика)
@@ -59,4 +42,16 @@ case 'trip_delete':
 
 default:
     fail('Неизвестное действие', 404);
+}
+
+function trip_clean($v, int $max): string {
+    $v = preg_replace('/[\x00-\x1F\x7F]+/u', ' ', (string)$v);
+    return mb_substr(trim($v), 0, $max, 'UTF-8');
+}
+function trip_phone(string $p): string {
+    $d = preg_replace('/\D+/', '', $p);
+    if (strlen($d) === 11 && $d[0] === '8') $d = '7' . substr($d, 1);
+    elseif (strlen($d) === 10) $d = '7' . $d;
+    if (strlen($d) !== 11 || $d[0] !== '7') return '';
+    return '+' . $d;
 }
