@@ -1,0 +1,26 @@
+# Ведомость дисциплинарного контроля.
+
+# Страницы: браузер каждый раз спрашивает сервер, не изменился ли файл.
+# Если не изменился — приходит короткий ответ «304», и страница берётся
+# из памяти телефона. Скачивание заново происходит только после обновления.
+<FilesMatch "\.(html|htm)$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, must-revalidate"
+  </IfModule>
+</FilesMatch>
+
+# Картинки и значки не меняются — храним в кэше месяц, чтобы не грузить их снова.
+<FilesMatch "\.(png|ico|webp|jpg|jpeg|svg)$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "public, max-age=2592000"
+  </IfModule>
+</FilesMatch>
+
+# Файл с номером версии — никогда не кэшировать: по нему страница узнаёт,
+# что вышло обновление, и перезагружается сама.
+<Files "version.txt">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+  </IfModule>
+</Files>

@@ -34,27 +34,28 @@ jobs:
 
       # Основной сайт размещён в /inf; FTP-пользователь для forms имеет домашнюю папку /www/gsvv.ru.
       # Поэтому явно пишем основной сайт в подкаталог inf, не в корень домена.
-      - name: Загрузить временную заглушку в корень домена
+      # В корне домена (gsvv.ru/?k=…) живёт ВДК — ведомость дисциплинарного контроля гимназии.
+      # Она не часть этого репозитория, но лежала в корне и была затёрта заглушкой.
+      # Восстанавливаем её сохранённую копию (страница + правила кэширования .htaccess).
+      - name: Ведомость дисциплинарного контроля в корне домена (gsvv.ru/?k=…)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy-root-only/
+          local-dir: ./deploy-vdk-restore/root/
           server-dir: ./
-          state-name: .ftp-deploy-root-only-sync-state.json
+          state-name: .ftp-deploy-vdk-root-sync-state.json
           dangerous-clean-slate: false
 
-      # Страница со ссылками для классных руководителей (gsvv.ru/link/ssylki.html) должна
-      # открываться как раньше — код ВДК живёт отдельно от этого репозитория. Возвращаем
-      # сохранённую копию страницы, чтобы временная заглушка не задела её при обновлениях.
-      - name: Вернуть страницу ссылок ВДК (gsvv.ru/link/ssylki.html)
+      # Страница со ссылками для классных руководителей (gsvv.ru/link/ssylki.html).
+      - name: Страница ссылок ВДК (gsvv.ru/link/ssylki.html)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy-vdk-restore/
+          local-dir: ./deploy-vdk-link/
           server-dir: ./link/
           state-name: .ftp-deploy-vdk-link-sync-state.json
           dangerous-clean-slate: false

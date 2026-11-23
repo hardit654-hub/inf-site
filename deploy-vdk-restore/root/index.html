@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ведомость дисциплинарного контроля</title>
+  <meta name="theme-color" content="#123240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Ведомость">
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- Значки лежат отдельными файлами в корне сайта: iOS берёт их надёжнее,
+       чем картинку, вшитую в страницу. -->
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <!-- Соединение с хранилищем начинается, пока страница ещё рисуется. -->
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="dns-prefetch" href="https://script.googleusercontent.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" media="print" onload="this.media='all'"
+        href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap">
+  <style>
+    :root {
+      --hero: url("/hero.jpg");
+      --crest: url("/crest.webp");
+      --ink:#1b2127; --ink-soft:#5d6670; --paper:#f5f1e8; --line:#e6dfd1;
+      --brand:#123240; --brand-2:#1d4d61; --gold:#c9a227; --gold-soft:#e8d9a4;
+      --red:#c62026; --red-bg:#fdeceb; --red-line:#d9736c; --green:#2f6b3d;
+      --serif:"PT Serif","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    }
+    * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    /* Белый фон под приложением: если iOS на мгновение оставит щель внизу,
+       она сольётся с нижней панелью, а не мелькнёт бежевой полосой. */
+    html { height:100%; overflow:hidden; background:#fff; }
+    /*
+     * Приложение прибито к краям экрана (position:fixed), а не просто занимает
+     * его высоту. Так страница физически не может сдвинуться — ни вбок, ни
+     * вверх: ни «резиновым» краем при рывке, ни когда iOS приподнимает окно
+     * ради клавиатуры. Прокручивается только список внутри.
+     */
+    body {
+      margin:0; background:var(--paper); color:var(--ink); -webkit-text-size-adjust:100%;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      font-size:16px; line-height:1.35;
+      position:fixed; top:0; left:0; right:0; bottom:0;
+      display:flex; flex-direction:column; overflow:hidden;
+    }
+    /* Пока пишут примечание, нижняя панель не нужна: она всё равно под
+       клавиатурой, а её появление дёргает раскладку. Вернётся, как закроют. */
+    body.typing footer { display:none; }
+    .scroll {
+      flex:1 1 auto; overflow-y:auto; overflow-x:hidden;
+      -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+      padding-bottom:14px;
+    }
+
+    /* Заставка: фасад гимназии, герб, название */
+    .hero {
+      position:relative; text-align:center; color:#fff;
+      padding:calc(16px + env(safe-area-inset-top)) 16px 18px;
+      background:linear-gradient(180deg,rgba(9,26,34,.60),rgba(9,26,34,.74) 55%,rgba(9,26,34,.93)),
+                 var(--hero) center 38%/cover no-repeat;
+      background-color:var(--brand);
+      border-bottom:3px solid var(--gold);
+    }
+    .crest {
+      width:58px; height:58px; border-radius:50%; margin:0 auto 9px; display:block;
+      background:var(--crest) center/contain no-repeat #fff;
+      box-shadow:0 0 0 2px var(--gold),0 4px 14px rgba(0,0,0,.4);
+    }
+    .school {
+      font-family:var(--serif); font-size:12.5px; letter-spacing:1.6px;
+      text-transform:uppercase; color:var(--gold-soft); margin:0 0 7px;
+    }
+    .hero h1 {
+      font-family:var(--serif); font-size:23px; font-weight:700; margin:0;
+      line-height:1.2; text-shadow:0 2px 10px rgba(0,0,0,.45);
+    }
+    .hero .cls {
+      display:block; font-size:38px; letter-spacing:.5px; margin-top:5px;
+    }
+    .rule { width:54px; height:2px; margin:11px auto 0; background:var(--gold); opacity:.75; }
+    .hero .day { margin:7px 0 0; font-size:14px; color:var(--gold-soft); letter-spacing:.4px; }
+    /* Номер сборки под шапкой не показываем — он не нужен учителю.
+       Узнать его можно касанием герба: появится всплывающая подсказка. */
+    .sync {
+      position:absolute; right:12px; top:12px; font-size:11px;
+      color:var(--gold-soft); letter-spacing:.4px;
+    }
+    .sync[hidden] { display:none; }
+
+    main { padding:12px 10px 0; max-width:760px; margin:0 auto; }
+
+    .banner {
+      background:var(--red-bg); border:1px solid var(--red-line); border-left:4px solid var(--red);
+      color:#8c1f14; border-radius:9px; padding:11px 13px; font-size:14.5px; margin-bottom:12px;
+    }
+
+    /* Карточка ученика */
+    .st {
+      background:#fff; border:1px solid var(--line); border-left:4px solid #8bc79a;
+      border-radius:10px; padding:11px 12px 13px; margin-bottom:10px;
+      box-shadow:0 1px 2px rgba(23,32,38,.05);
+    }
+    .st.dirty { border-color:var(--red-line); border-left-color:var(--red); background:#fffbfa; }
+
+    .top { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .name { font-family:var(--serif); font-weight:700; font-size:17.5px; flex:1; min-width:0; }
+    .num { color:var(--ink-soft); font-weight:400; margin-right:6px; font-family:var(--serif); }
+    /* Карандаш: примечание к отметке */
+    .pen {
+      flex:none; width:38px; height:38px; border-radius:50%;
+      border:1px solid var(--line); background:#faf8f3; color:var(--ink-soft);
+      font-size:17px; line-height:1; font-family:inherit; cursor:pointer;
+      transform:scaleX(-1);          /* грифелем вправо */
+    }
+    .pen[aria-pressed="true"] { border-color:var(--gold); background:#fdf6e6; color:#8a6d1f; }
+    .note {
+      /* Ровно 16px: при меньшем шрифте Safari на iPhone приближает страницу,
+         как только палец попадает в поле. Отключить это нельзя — можно только
+         не давать повода. */
+      display:block; width:100%; margin-top:9px; padding:9px 10px; font:inherit; font-size:16px;
+      border:1px solid var(--line); border-radius:9px; background:#fffdf8; resize:vertical;
+      color:var(--ink);
+    }
+    .note:focus { outline:2px solid var(--gold); outline-offset:1px; }
+
+    .flags { display:flex; gap:5px; margin-bottom:9px; }
+    .flag {
+      position:relative; flex:1 1 0; border:1px solid var(--line); background:#faf8f3;
+      color:var(--ink-soft); border-radius:999px; min-height:44px; padding:6px 6px;
+      font-size:15px; font-family:inherit; cursor:pointer;
+    }
+    .flag[aria-pressed="true"] {
+      background:var(--red-bg); border-color:var(--red); color:var(--red);
+      font-weight:600; box-shadow:inset 0 0 0 1px var(--red);
+    }
+    /* Галочку в плашке не рисуем: на узком экране она либо налезает на подпись,
+       либо переносит её на две строки. Отмеченное и так видно — красное и жирное. */
+
+    .selects { display:flex; gap:6px; }
+    .sel { flex:1; min-width:0; }
+    .sel label {
+      display:block; font-size:11px; font-weight:700; letter-spacing:.9px;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px;
+    }
+    select {
+      width:100%; height:44px; padding:0 10px; font-size:16px; font-family:inherit;   /* не мельче 16px — см. .note */
+      font-weight:600; border-radius:8px; appearance:none;
+      color:var(--selink,var(--ink-soft)); background:var(--selbg,#fff);
+      border:1px solid var(--selbd,rgba(0,0,0,.14));
+    }
+    select.empty { font-weight:400; color:var(--ink-soft); }
+
+    /* Примечание под карточкой */
+    .note {
+      /* Ровно 16px: при меньшем шрифте Safari на iPhone приближает страницу,
+         как только палец попадает в поле. Отключить это нельзя — можно только
+         не давать повода. */
+      display:block; width:100%; margin-top:9px; padding:9px 10px; font:inherit; font-size:16px;
+      border:1px solid var(--line); border-radius:9px; background:#fffdf8; resize:vertical;
+      color:var(--ink);
+    }
+    .note:focus { outline:2px solid var(--gold); outline-offset:1px; }
+    /* Закрыть клавиатуру и вернуть нижнюю панель. Видна только во время письма. */
+    .done {
+      display:none; margin-top:7px; margin-left:auto; border:1px solid var(--gold);
+      background:#fdf6e6; color:#8a6d1f; font-family:var(--serif); font-weight:700;
+      font-size:15px; height:40px; padding:0 22px; border-radius:9px; cursor:pointer;
+    }
+    body.typing .done { display:block; }
+
+    footer {
+      flex:none; z-index:30; display:flex; align-items:center; gap:12px;
+      background:#fff; border-top:2px solid var(--gold);
+      padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+      box-shadow:0 -2px 12px rgba(23,32,38,.1);
+    }
+    footer[hidden] { display:none; }
+    .counter { font-size:14.5px; color:var(--ink-soft); flex:1; min-width:0; }
+    .counter b { color:var(--ink); }
+    .save {
+      flex:none; border:0; background:var(--brand-2); color:#fff; font-family:var(--serif);
+      font-size:18px; font-weight:700; height:52px; padding:0 30px; border-radius:10px; cursor:pointer;
+    }
+    .save:disabled { background:#9aa4a0; cursor:default; }
+    /* Вторая кнопка — переход в таблицу своего класса. Рисуем контуром,
+       чтобы «Отправить» осталась главной кнопкой панели. */
+    .book {
+      flex:none; display:flex; align-items:center; height:52px; padding:0 18px;
+      border:2px solid var(--brand-2); border-radius:10px; box-sizing:border-box;
+      background:#fff; color:var(--brand-2); font-family:var(--serif);
+      font-size:17px; font-weight:700; text-decoration:none; white-space:nowrap;
+    }
+    .book[hidden] { display:none; }
+
+    .toast {
+      position:absolute; left:50%; bottom:86px; transform:translateX(-50%) translateY(12px);
+      background:var(--brand); color:#fff; padding:11px 18px; border-radius:9px;
+      border-left:3px solid var(--gold); font-size:14px; max-width:90vw; text-align:center;
+      opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:40;
+    }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    .toast.bad { background:#8c1f14; }
+
+    .skeleton { color:var(--ink-soft); padding:26px 4px; text-align:center; font-family:var(--serif); }
+
+    /* Узкие телефоны (iPhone SE и подобные) — чуть теснее, чтобы «Внешний вид» не переносился */
+    @media (max-width:440px) {
+      .flag { font-size:14px; padding:6px 4px; }
+    }
+    @media (max-width:380px) {
+      .flag { font-size:13px; }
+      .name { font-size:16.5px; }
+      .ok { font-size:12.5px; padding:0 10px 0 8px; }
+      select { padding:0 8px; }     /* шрифт не трогаем: ниже 16px нельзя */
+      footer { gap:8px; padding-left:8px; padding-right:8px; }
+      .counter { font-size:13px; }
+      .book { padding:0 12px; font-size:16px; }
+      .save { padding:0 20px; font-size:17px; }
+    }
+    @media (min-width:620px) { .crest { width:52px; height:52px; } }
+  </style>
+</head>
+<body>
+
+<div class="scroll" id="scroll">
+
+<div class="hero">
+  <span class="sync" id="sync" hidden>обновляю…</span>
+  <div class="crest" id="crest" role="img" aria-label="Герб гимназии"
+       title="Коснитесь, чтобы увидеть версию"></div>
+  <p class="school">Гимназия Святителя Василия Великого</p>
+  <h1>Ведомость дисциплинарного контроля
+    <span class="cls" id="clsName">—</span>
+  </h1>
+  <div class="rule"></div>
+  <p class="day" id="dayName"></p>
+</div>
+
+<main>
+  <div id="banner" class="banner" style="display:none"></div>
+  <div id="list"><div class="skeleton">Загрузка…</div></div>
+</main>
+
+</div><!-- /.scroll -->
+
+<footer id="foot" hidden>
+  <div class="counter" id="counter">—</div>
+  <a class="book" id="book" href="#" target="_blank" rel="noopener"
+     title="Таблица класса: неделя и оценка" hidden>Итоги</a>
+  <button class="save" id="save">Отправить</button>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  //  ЕДИНСТВЕННОЕ, ЧТО НУЖНО ЗАПОЛНИТЬ.
+  //  Адрес хранилища: в главной таблице меню «Ведомость» →
+  //  «Показать адрес хранилища». Он оканчивается на /exec
+  // ─────────────────────────────────────────────────────────────
+  var API_URL = 'https://script.google.com/macros/s/AKfycbx-vKlj4Upo09AgHJVLnL6l2IPHMnBw4yDxZdAaq8TU6ge8oFquE7nK3ZMgNhJ2osd0/exec';
+
+  /**
+   * Версия этой страницы. Рядом на сайте лежит файл version.txt с той же
+   * строкой: страница сверяется с ним при запуске и, если на сайте новее,
+   * перезагружается сама. Так обновление доезжает до значков на экране
+   * «Домой» без участия учителей.
+   *
+   * ПРИ КАЖДОМ ОБНОВЛЕНИИ: поменять здесь и в version.txt одинаково.
+   */
+  var BUILD = '12.10-4';
+
+  // SENDING — сколько отправок сейчас в пути; LOADING — едет свежий список.
+  // Ни то, ни другое не мешает работать: форма очищается сразу, а обмен
+  // с хранилищем идёт в фоне и виден только строчкой в шапке.
+  var DATA = null, KEY = '', SENDING = 0, LOADING = false, LOADED_DAY = '';
+  var $ = function (id) { return document.getElementById(id); };
+  var $list = $('list'), $banner = $('banner'), $counter = $('counter'),
+      $save = $('save'), $toast = $('toast'), $foot = $('foot'), $sync = $('sync'),
+      $book = $('book');
+
+  keyboardGuard();
+  start();
+
+  // Значки — файлами в <head>: apple-touch-icon.png и favicon.png.
+
+  /**
+   * Клавиатура на iPhone не сжимает страницу — она закрывает её нижнюю часть,
+   * и панель с кнопкой «Отправить» оказывается под клавиатурой или прыгает.
+   * Подгоняем высоту приложения под то, что реально видно на экране.
+   */
+  /**
+   * Сторож обновлений. Веб-приложение на экране «Домой» держит страницу в
+   * собственном кэше и может месяцами показывать старую. Поэтому при каждом
+   * запуске и возвращении спрашиваем у сайта version.txt — крошечный файл с
+   * номером версии, который кэшировать запрещено. Номер разошёлся с нашим —
+   * перезагружаемся по адресу с этим номером: для браузера это другой адрес,
+   * и страница придёт с сервера, а не из кэша.
+   *
+   * Отмеченное не теряем: пока в форме есть неотправленные отметки,
+   * перезагрузка откладывается до следующего раза.
+   */
+  function updateGuard() {
+    var checking = false, lastCheck = 0;
+
+    function check() {
+      if (checking || Date.now() - lastCheck < 30000) return;
+      checking = true; lastCheck = Date.now();
+      fetch('version.txt?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.text() : ''; })
+        .then(function (t) {
+          checking = false;
+          var v = String(t || '').trim().split(/\s/)[0];
+          if (!v || v === BUILD) return;
+          if (markedCount()) {                       // идёт работа — не мешаем
+            showBanner('Вышло обновление формы. Отправьте отмеченное — ' +
+                       'страница обновится сама.');
+            return;
+          }
+          // Защита от круга: один и тот же номер дважды не перезагружаем.
+          try {
+            if (sessionStorage.getItem('gsvv_upd') === v) return;
+            sessionStorage.setItem('gsvv_upd', v);
+          } catch (e) {}
+          var url = location.pathname + '?k=' + encodeURIComponent(KEY) +
+                    '&v=' + encodeURIComponent(v);
+          location.replace(url);
+        })
+        .catch(function () { checking = false; });   // нет связи — не беда
+    }
+
+    check();
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) check();
+    });
+    window.addEventListener('pageshow', check);
+  }
+
+  function keyboardGuard() {
+    var vv = window.visualViewport;
+    var last = -1;
+
+    /**
+     * Клавиатура не сжимает страницу, а закрывает её низ. Приложение прибито
+     * к краям экрана, поэтому просто поднимаем его нижний край ровно на
+     * высоту клавиатуры — список кончается там, где она начинается.
+     */
+    function apply() {
+      if (!vv) return;
+      var kb = Math.round(window.innerHeight - vv.height - (vv.offsetTop || 0));
+
+      // Поднимаем низ приложения только когда клавиатура и правда открыта:
+      // в поле стоит курсор, и закрыто ею не меньше трети экрана. Иначе iOS
+      // ещё секунду возвращает чуть заниженную высоту, приложение остаётся
+      // приподнятым, и снизу вылезает полоска фона.
+      var el = document.activeElement;
+      var пишут = !!(el && /^(TEXTAREA|INPUT|SELECT)$/.test(el.tagName));
+      if (!пишут || kb < 120) kb = 0;
+
+      if (Math.abs(kb - last) < 2) return;         // мелкое дрожание не трогаем
+      last = kb;
+      document.body.style.bottom = kb ? kb + 'px' : '';
+    }
+
+    /**
+     * Возврат к исходному. Нужен после всего, что могло сдвинуть экран:
+     * сворачивания приложения, поворота, закрытия клавиатуры.
+     */
+    function reset() {
+      last = -1;
+      document.body.style.bottom = '';
+      try { window.scrollTo(0, 0); } catch (e) {}
+      setTimeout(apply, 60);
+      setTimeout(apply, 350);        // iOS досчитывает размеры с задержкой
+    }
+
+    if (vv) {
+      // Только на изменение размера: событие scroll летит десятками в секунду
+      // и заставляло страницу пересчитываться на каждом кадре.
+      vv.addEventListener('resize', apply);
+    }
+    window.addEventListener('orientationchange', reset);
+    window.addEventListener('pageshow', reset);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) reset();               // вернулись в приложение
+    });
+
+    // Пишут примечание: прячем нижнюю панель и подводим поле к глазам.
+    document.addEventListener('focusin', function (e) {
+      var t = e.target;
+      if (!t || !t.classList || !t.classList.contains('note')) return;
+      document.body.classList.add('typing');
+      setTimeout(function () {
+        try { t.scrollIntoView({ block: 'center' }); } catch (err) {}
+      }, 150);
+    }, true);
+
+    document.addEventListener('focusout', function (e) {
+      var t = e.target;
+      if (!t || !t.classList || !t.classList.contains('note')) return;
+      document.body.classList.remove('typing');
+      reset();
+    }, true);
+  }
+
+  function start() {
+    KEY = decodeURIComponent((location.search.match(/[?&]k=([^&]+)/) || [])[1] || '');
+
+    if (!/\/exec$/.test(API_URL)) {
+      $list.innerHTML = '';
+      return showBanner('Страница не настроена: не указан адрес хранилища. ' +
+        'В главной таблице: меню «Ведомость» → «Показать адрес хранилища».');
+    }
+    if (!KEY) {
+      $list.innerHTML = '';
+      return showBanner('В ссылке нет кода класса. Возьмите ссылку у администратора — ' +
+        'она заканчивается на <b>?k=gsvv…</b>');
+    }
+
+    bind();
+    // Версию прячем с глаз, но оставляем под рукой: касание герба покажет её.
+    $('crest').addEventListener('click', function () { toast('сборка ' + BUILD); });
+    updateGuard();
+    // Список из памяти телефона рисуем мгновенно — отмечать и отправлять
+    // можно сразу, не дожидаясь ответа хранилища. Свежий список приедет
+    // следом и заменит этот.
+    var cached = null;
+    try { cached = checkShape(cache()); } catch (e) { cached = null; }
+    if (cached) { apply(cached); $foot.hidden = false; updateCounter(); }
+    load(true);
+  }
+
+  // ── Обмен с хранилищем ───────────────────────────────────────
+  function api(params) {
+    var q = Object.keys(params).filter(function (k) { return params[k]; })
+      .map(function (k) { return k + '=' + encodeURIComponent(params[k]); }).join('&');
+    return fetch(API_URL + '?' + q).then(parse);
+  }
+
+  function apiSave(body) {
+    // text/plain — чтобы браузер не слал предварительный запрос OPTIONS,
+    // который Apps Script не обрабатывает.
+    return fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      // keepalive — отметки дойдут, даже если страницу закрыли сразу после нажатия.
+      keepalive: true,
+      body: JSON.stringify(body)
+    }).then(parse);
+  }
+
+  /** Ответ старого кода в таблице не годится новой форме — говорим об этом прямо. */
+  function checkShape(d) {
+    if (d && d.students && d.flags && d.disc && d.points) return d;
+    var got = d ? Object.keys(d).join(', ') : 'пусто';
+    throw new Error('Хранилище отвечает по-старому: в ответе нет списка степеней ' +
+      'дисциплины. Пришло: ' + got + '. Нужно обновить код в таблице и создать ' +
+      'НОВУЮ ВЕРСИЮ того самого развёртывания, чей адрес вписан в форму.');
+  }
+
+  function parse(r) {
+    if (!r.ok) throw new Error('Хранилище ответило ошибкой ' + r.status);
+    return r.text().then(function (t) {
+      var j;
+      try { j = JSON.parse(t); }
+      catch (e) { throw new Error('Хранилище вернуло не то, что ожидалось. Проверьте адрес и доступ «Все».'); }
+      if (!j.ok) throw new Error(j.error || 'Неизвестная ошибка');
+      return j.data;
+    });
+  }
+
+  function netHint(e) {
+    var m = (e && e.message) || String(e);
+    if (!/Failed to fetch|NetworkError|Load failed|network/i.test(m)) return e;
+    return new Error(location.protocol === 'file:'
+      ? 'Страница открыта с диска — так браузер запрещает такие запросы. Откройте её по адресу сайта.'
+      : 'Не удалось связаться с хранилищем. Проверьте адрес (оканчивается на /exec) и доступ «Все».');
+  }
+
+  /** Тихая строчка в шапке: единственное место, где видно обмен с хранилищем. */
+  function syncNote() {
+    if (SENDING) { $sync.textContent = 'отправляю…'; $sync.hidden = false; }
+    else if (LOADING) { $sync.textContent = 'обновляю…'; $sync.hidden = false; }
+    else { $sync.hidden = true; }
+  }
+
+  function load(first) {
+    if (LOADING) return;
+    LOADING = true; syncNote();
+    if (!DATA) $list.innerHTML = '<div class="skeleton">Загрузка…</div>';
+
+    api({ k: KEY })
+      .then(checkShape)
+      .then(function (d) {
+        LOADING = false; syncNote();
+        LOADED_DAY = localDay();
+        // Отметки, сделанные пока список ехал, переносим в новый список.
+        apply(d, true); cache(d); $foot.hidden = false;
+      })
+      .catch(function (e) {
+        LOADING = false; syncNote();
+        var msg = netHint(e).message;
+        if (first && DATA) { showBanner(esc(msg) + '<br>Показан список из памяти телефона.'); }
+        else { $list.innerHTML = ''; showBanner(esc(msg)); }
+        updateCounter();
+      });
+  }
+
+  function save() {
+    if (!DATA || !markedCount()) return;
+
+    var send = DATA.students.filter(function (s) { return !isClean(s); })
+      .map(function (s) {
+        var o = { name: s.name, disc: Number(s.disc) || 0,
+                  reward: Number(s.reward) || 0, note: s.note || '' };
+        DATA.flags.forEach(function (f) { o[f.key] = !!s[f.key]; });
+        return o;
+      });
+
+    // Отметки уходят в фоне, а форма очищается сразу — ждать ответа
+    // хранилища не нужно. Если отправка не удастся, отметки вернём.
+    var backup = {};
+    DATA.students.forEach(function (s) { if (!isClean(s)) backup[s.name] = snapshot(s); });
+
+    // Форма чистая сразу же: можно отмечать следующего, не дожидаясь
+    // ответа хранилища. Сама отправка идёт в фоне.
+    blank(); render();
+    SENDING++; syncNote();
+
+    apiSave({ key: KEY, students: send })
+      .then(function (d) {
+        SENDING--; syncNote();
+        var n = (d && d.saved) ? d.saved.rows : send.length;
+        toast('Записано: ' + n + (d && d.saved ? ' · ' + d.saved.at : ''));
+        updateCounter();
+      })
+      .catch(function (e) {
+        SENDING--; syncNote();
+        restore(backup);
+        render();
+        toast('Не отправлено — отметки вернул', true);
+        showBanner(esc(netHint(e).message) + '<br>Нажмите «Отправить» ещё раз.');
+      });
+  }
+
+  function snapshot(s) {
+    var o = { disc: s.disc, reward: s.reward, note: s.note, penOpen: s.penOpen };
+    DATA.flags.forEach(function (f) { o[f.key] = s[f.key]; });
+    return o;
+  }
+
+  /** Возвращает отметки после неудачной отправки, не затирая новые. */
+  function restore(backup) {
+    DATA.students.forEach(function (s) {
+      var b = backup[s.name];
+      if (!b || !isClean(s)) return;      // учитель уже отметил заново — не трогаем
+      DATA.flags.forEach(function (f) { s[f.key] = b[f.key]; });
+      s.disc = b.disc; s.reward = b.reward; s.note = b.note; s.penOpen = b.penOpen;
+    });
+  }
+
+  function cache(d) {
+    try {
+      if (d === undefined) {
+        var raw = localStorage.getItem('gsvv3_' + KEY);
+        return raw ? JSON.parse(raw) : null;
+      }
+      localStorage.setItem('gsvv3_' + KEY, JSON.stringify(d));
+    } catch (e) {}
+    return null;
+  }
+
+  // ── Экраны ───────────────────────────────────────────────────
+  function apply(d, keep) {
+    var was = DATA ? DATA.students.map(function (s) { return s.name; }).join('|') : null;
+    var now = d.students.map(function (s) { return s.name; }).join('|');
+
+    // Что уже отмечено — сохраняем по фамилии, чтобы новый список не стёр работу.
+    var marks = null;
+    if (keep && DATA) {
+      marks = {};
+      // Начатое примечание — тоже работа учителя, даже если отметок ещё нет.
+      DATA.students.forEach(function (s) {
+        if (!isClean(s) || s.note || s.penOpen) marks[s.name] = snapshot(s);
+      });
+    }
+
+    DATA = d;
+    blank();
+    if (marks) restore(marks);
+
+    // Кнопка «Итоги» появляется, только если таблица класса уже заведена.
+    if (d.book) { $book.href = d.book; $book.hidden = false; }
+    else { $book.hidden = true; }
+    $('clsName').textContent = d.cls;
+    $('dayName').textContent = d.dayLabel;
+    document.title = 'Ведомость · ' + d.cls;
+    render();
+
+    if (was !== null && was !== now) toast('Список класса обновлён');
+  }
+
+  /** Обнуляет все отметки: при загрузке и после каждой отправки. */
+  function blank() {
+    DATA.students.forEach(function (s) {
+      DATA.flags.forEach(function (f) { s[f.key] = false; });
+      s.disc = ''; s.reward = ''; s.note = ''; s.penOpen = false;
+    });
+  }
+
+  /** Ученик «пустой», если по нему нечего отправлять. */
+  function isClean(s) {
+    if (Number(s.disc) > 0 || Number(s.reward) > 0) return false;
+    for (var i = 0; i < DATA.flags.length; i++) if (s[DATA.flags[i].key]) return false;
+    return true;
+  }
+
+  function markedCount() {
+    return DATA ? DATA.students.filter(function (s) { return !isClean(s); }).length : 0;
+  }
+
+  function render() {
+    $list.innerHTML = DATA.students.map(cardHtml).join('');
+    updateCounter();
+  }
+
+  var DISC_C = { bg:['#fdecea','#f6cbc6','#eda79e'], bd:['#e0837b','#c9584e','#a63328'],
+                 ink:['#a4271c','#8c1f14','#6b120c'] };
+  var REW_C  = { bg:['#eef7f0','#daf0e0','#c2e7cc'], bd:['#a9d5b2','#84c495','#5fae78'],
+                 ink:['#2f6b3d','#256234','#1c5028'] };
+
+  function cardHtml(s, i) {
+    var marked = !isClean(s);
+    var note = String(s.note || '');
+    return '<div class="st' + (marked ? ' dirty' : '') + '" id="st' + i + '">' +
+      '<div class="top">' +
+        '<div class="name"><span class="num">' + (i + 1) + '.</span>' + esc(s.name) + '</div>' +
+        '<button type="button" class="pen" data-pen="' + i + '" title="Примечание"' +
+          ' aria-pressed="' + (note ? 'true' : 'false') + '">✎</button>' +
+      '</div>' +
+      '<div class="flags">' + DATA.flags.map(function (f) {
+        return '<button type="button" class="flag" data-f="' + i + '" data-k="' + f.key + '"' +
+               ' aria-pressed="' + (s[f.key] ? 'true' : 'false') + '">' + esc(f.short) + '</button>';
+      }).join('') + '</div>' +
+      '<div class="selects">' +
+        selHtml(i, 'disc', 'Дисциплина', s.disc,
+                DATA.disc.map(function (d) { return d.short; }), DISC_C) +
+        selHtml(i, 'reward', 'Поощрение', s.reward,
+                DATA.points.map(function (p) { return p + (p === 1 ? ' балл' : ' балла'); }), REW_C) +
+      '</div>' +
+      (s.penOpen || note
+        ? '<textarea class="note" data-note="' + i + '" rows="2" maxlength="500" ' +
+          'placeholder="Что произошло — по желанию">' + esc(note) + '</textarea>' +
+          '<button type="button" class="done" data-done="' + i + '">Готово</button>'
+        : '') +
+    '</div>';
+  }
+
+  function selHtml(i, kind, label, value, names, c) {
+    var v = Number(value) || 0;
+    var style = v ? ' style="--selbg:' + c.bg[v-1] + ';--selbd:' + c.bd[v-1] + ';--selink:' + c.ink[v-1] + '"' : '';
+    var opts = names.map(function (name, k) {
+      return '<option value="' + (k + 1) + '"' + (k + 1 === v ? ' selected' : '') + '>' +
+             esc(name) + '</option>';
+    }).join('');
+    return '<div class="sel"><label>' + label + '</label>' +
+      '<select data-s="' + i + '" data-kind="' + kind + '"' + style + ' class="' + (v ? '' : 'empty') + '">' +
+      '<option value=""' + (v ? '' : ' selected') + '>—</option>' + opts + '</select></div>';
+  }
+
+  /** Красит выпадающий список под выбранное значение. */
+  function paintSelect(sel, value, c) {
+    var v = Number(value) || 0;
+    if (v) {
+      sel.style.setProperty('--selbg', c.bg[v-1]);
+      sel.style.setProperty('--selbd', c.bd[v-1]);
+      sel.style.setProperty('--selink', c.ink[v-1]);
+      sel.classList.remove('empty');
+    } else {
+      sel.style.removeProperty('--selbg');
+      sel.style.removeProperty('--selbd');
+      sel.style.removeProperty('--selink');
+      sel.classList.add('empty');
+    }
+  }
+
+  /** Подсвечивает карточку, если по ученику есть что отправлять. */
+  function markCard(i) {
+    var card = $('st' + i);
+    if (card) card.classList.toggle('dirty', !isClean(DATA.students[i]));
+  }
+
+  function redraw(i) {
+    $('st' + i).outerHTML = cardHtml(DATA.students[i], i);
+  }
+
+  function bind() {
+    $save.addEventListener('click', save);
+    $list.addEventListener('click', function (e) {
+      // Плашка: включена или нет — одна отправка описывает один случай.
+      // Меняем только саму кнопку: пересборка карточки на каждое касание
+      // заметно тормозит на телефоне.
+      var flag = e.target.closest('[data-f]');
+      if (flag) {
+        var i = +flag.dataset.f, st0 = DATA.students[i];
+        var on = !st0[flag.dataset.k];
+        st0[flag.dataset.k] = on;
+        flag.setAttribute('aria-pressed', on ? 'true' : 'false');
+        markCard(i); updateCounter(); return;
+      }
+      // «Готово» под примечанием: закрыть клавиатуру, вернуть нижнюю панель.
+      var done = e.target.closest('[data-done]');
+      if (done) {
+        var ta0 = $('st' + done.dataset.done).querySelector('.note');
+        if (ta0) ta0.blur();
+        return;
+      }
+      // Карандаш: примечание к тому, что отмечаем.
+      var pen = e.target.closest('[data-pen]');
+      if (pen) {
+        var j = +pen.dataset.pen, st = DATA.students[j];
+        st.penOpen = !st.penOpen;
+        if (!st.penOpen) st.note = '';
+        redraw(j);
+        if (st.penOpen) {
+          var ta = $('st' + j).querySelector('.note');
+          if (ta) {
+            ta.focus();
+            setTimeout(function () {
+              try { ta.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (err) {}
+            }, 350);
+          }
+        }
+        updateCounter();
+      }
+    });
+
+    $list.addEventListener('change', function (e) {
+      var sel = e.target.closest('select[data-kind]');
+      if (!sel) return;
+      var i = +sel.dataset.s, kind = sel.dataset.kind;
+      DATA.students[i][kind] = sel.value ? Number(sel.value) : '';
+      paintSelect(sel, DATA.students[i][kind], kind === 'disc' ? DISC_C : REW_C);
+      markCard(i); updateCounter();
+    });
+
+    // Примечание печатается без перерисовки — иначе слетал бы курсор.
+    $list.addEventListener('input', function (e) {
+      var ta = e.target.closest('[data-note]');
+      if (!ta) return;
+      DATA.students[+ta.dataset.note].note = ta.value;
+      updateCounter();
+    });
+
+    ['visibilitychange', 'pageshow', 'focus'].forEach(function (ev) {
+      (ev === 'visibilitychange' ? document : window).addEventListener(ev, function () {
+        if (document.hidden) return;
+        if (DATA && !markedCount() && !SENDING) { hideBanner(); load(); }
+        else dayGuard();
+      });
+    });
+    // Вкладка может провисеть открытой всю ночь: раз в минуту сверяем день.
+    setInterval(dayGuard, 60000);
+  }
+
+  /**
+   * Следит за сменой суток. Пока правки не отправлены, страницу не
+   * перезагружаем — иначе они пропали бы; вместо этого предупреждаем.
+   */
+  function dayGuard() {
+    if (!DATA || SENDING || localDay() === LOADED_DAY) return;
+    if (!markedCount()) { hideBanner(); load(); return; }
+    showBanner('Наступил новый день, а форма открыта за <b>' + esc(DATA.dayLabel) + '</b>. ' +
+               'Отправьте отмеченное или обновите страницу.');
+  }
+
+  function localDay() {
+    var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+
+
+
+  function updateCounter() {
+    if (!DATA) return;
+    var n = markedCount();
+    $counter.innerHTML = n ? 'Отмечено: <b>' + n + '</b>' : 'Отметьте нарушение';
+    $save.disabled = !n;
+  }
+
+  function showBanner(html) { $banner.innerHTML = html; $banner.style.display = 'block'; }
+  function hideBanner() { $banner.style.display = 'none'; }
+
+  var tt = null;
+  function toast(text, bad) {
+    $toast.textContent = text;
+    $toast.className = 'toast show' + (bad ? ' bad' : '');
+    clearTimeout(tt);
+    tt = setTimeout(function () { $toast.className = 'toast' + (bad ? ' bad' : ''); }, 3200);
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function remember(k, v) {
+    try {
+      if (v === undefined) return localStorage.getItem('gsvv_' + k);
+      localStorage.setItem('gsvv_' + k, v);
+    } catch (e) {}
+    return null;
+  }
+</script>
+</body>
+</html>
