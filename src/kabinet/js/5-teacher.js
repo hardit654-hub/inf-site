@@ -12,13 +12,15 @@ async function viewTeacher(){
      <button class="tab" role="tab" data-t="progress">Прогресс</button>
      <button class="tab" role="tab" data-t="skills">Задания ЕГЭ</button>
      <button class="tab" role="tab" data-t="variants">Варианты</button>
-     <button class="tab" role="tab" data-t="rating">Рейтинг</button></nav><div id="pane"><div class="loading">Загрузка…</div></div>`;
+     <button class="tab" role="tab" data-t="rating">Рейтинг</button>
+     <button class="tab" role="tab" data-t="trips">Заявки на поездку</button></nav><div id="pane"><div class="loading">Загрузка…</div></div>`;
   app.querySelectorAll(".tab").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;try{sessionStorage.setItem("kab-tab",TAB)}catch(e){}viewTeacher()}});
   try{STUDENTS=(await api("students")).students}catch(e){document.getElementById("pane").innerHTML=`<div class="msg">${esc(e.message)}</div>`;return}
   if(TAB==="rating"){document.getElementById("pane").innerHTML=await lbCard(true);return}
   if(TAB==="variants"){paneVariants();return}
   if(TAB==="skills"){paneSkills();return}
   if(TAB==="schedule"){paneSchedule();return}
+  if(TAB==="trips"){paneTrips();return}
   TAB==="students"?paneStudents():paneProgress();
 }
 function credText(login,pass){return "Сайт: "+SITE+"\nЛогин: "+login+"\nПароль: "+pass}

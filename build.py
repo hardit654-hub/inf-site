@@ -194,3 +194,7 @@ def assemble(tpl, out):
     open(out, 'w', encoding='utf-8').write(''.join(res)); print('собран', out)
 assemble('src/kabinet/index.html', 'site/kabinet/index.html')
 assemble('src/api/index.php', 'site/api/index.php')
+# форма записи на поездку: исходник — src/forms/index.html
+if os.path.exists('src/forms/index.html'):
+    os.makedirs('site/forms', exist_ok=True)
+    shutil.copy('src/forms/index.html', 'site/forms/index.html'); print('скопирована site/forms/index.html')

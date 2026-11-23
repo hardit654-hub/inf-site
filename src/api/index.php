@@ -9,3 +9,4 @@
 /*#include 6-actions-rating.php*/
 /*#include 6a-actions-chat.php*/
 /*#include 7-actions-teacher.php*/
+/*#include 8-trips.php*/

@@ -76,6 +76,11 @@ function schema(PDO $pdo, bool $mysql) {
         PRIMARY KEY (user_id, ckey, sid))$tail");
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_attempts (
         id $ai, k VARCHAR(128) NOT NULL, ts INT NOT NULL)$tail");
+    // заявки на поездки (форма gsvv.ru/forms): предварительная запись родителей
+    $pdo->exec("CREATE TABLE IF NOT EXISTS inf_trips (
+        id $ai, kid VARCHAR(200) NOT NULL, parent VARCHAR(140) NOT NULL, phone VARCHAR(24) NOT NULL,
+        grade INT NOT NULL DEFAULT 0, profile VARCHAR(16) NOT NULL DEFAULT '', note VARCHAR(700) NOT NULL DEFAULT '',
+        agree INT NOT NULL DEFAULT 0, created INT NOT NULL, ip VARCHAR(64) NOT NULL DEFAULT '')$tail");
     // чат сайта: сообщения живут сутки (старые удаляются при отправке нового)
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_chat (
         id $ai, user_id INT NOT NULL, text VARCHAR(800) NOT NULL, created INT NOT NULL)$tail");
