@@ -1,13 +1,13 @@
 {
     "description": "DO NOT DELETE THIS FILE. This file is used to keep track of which files have been synced in the most recent deployment. If you delete this file a resync will need to be done (which can take a while) - read more: https://github.com/SamKirkland/FTP-Deploy-Action",
     "version": "1.0.0",
-    "generatedTime": 1795470830931,
+    "generatedTime": 1795521574882,
     "data": [
         {
             "type": "file",
             "name": ".ftp-deploy-sync-state.json",
             "size": 3319,
-            "hash": "fab93fa19e3612c48de6d8a1e4ae68a67b190ab872a55dda8a3dc91bbaec1783"
+            "hash": "423eace4ff797e691dc024fbbca04876e140c09ddc6adb1112adc94c9e86ff19"
         },
         {
             "type": "folder",
@@ -16,8 +16,8 @@
         {
             "type": "file",
             "name": "index.html",
-            "size": 83227,
-            "hash": "91828e3d548f08c029361707704b0e4e3037288b8883de199ef2c39e0890a28a"
+            "size": 88925,
+            "hash": "9702352f287f365ef125de7331a7d37a13b86581c9c9c5d67ef8efb07fce3f1d"
         },
         {
             "type": "file",
@@ -33,15 +33,15 @@
         },
         {
             "type": "file",
-            "name": "img/deer.jpg",
-            "size": 135740,
-            "hash": "b2537b4f46fe46bfad70561674000f3c229617006067acced80f62e5f30e95e4"
-        },
-        {
-            "type": "file",
             "name": "img/fire.jpg",
             "size": 77434,
             "hash": "0f86cb04082e5ae51c4df99e561e19fc1903ae92fd59f15cedbff38ebb20d395"
+        },
+        {
+            "type": "file",
+            "name": "img/deer.jpg",
+            "size": 135740,
+            "hash": "b2537b4f46fe46bfad70561674000f3c229617006067acced80f62e5f30e95e4"
         },
         {
             "type": "file",
