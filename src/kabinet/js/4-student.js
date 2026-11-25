@@ -9,13 +9,21 @@ async function viewStudent(){
       <div><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div></div>
       <div class="cnum">${s.done} из ${s.total} задач решено${by[c.key]?` · ${COIN} ${by[c.key]}`:""}</div>
       ${s.lessons.filter(l=>l.total).map(l=>{const ex=exRes(p.progress[c.key],l.num);return `<div class="lrow"><span>${c.kind==="variant"?`<a href="${esc(c.url)}#${esc(l.num)}${ex?"-res":""}">${esc(l.title)}</a>`:esc(LN(l)+" "+l.title)}</span><div class="meter"><i style="width:${pct(l.done,l.total)}%"></i></div><b>${ex?ex.test+" б.":l.done+"/"+l.total}</b></div>`}).join("")}
-      <a class="btn" href="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
+      <a class="btn" href="${esc(c.url)}" data-go="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
     ${pwCard()}`;
+  bindGo();
   bindPw();
   bindHw();
   lbCard(false).then(h=>{const s=document.getElementById("lbslot");if(s)s.innerHTML=h});
 }
 let HWCTX={cat:[],prog:{}};
+/* Переход «Начать / Продолжить»: сначала сохраняем на устройстве, чей это кабинет — чтобы работа,
+   открытая в этом браузере, не подхватила чужой черновик или чужую сданную работу (было с контрольной № 1). */
+function bindGo(){
+  document.querySelectorAll("[data-go]").forEach(a=>a.onclick=()=>{
+    try{localStorage.setItem("inf-uid",String(ME.id));localStorage.setItem("inf-name",JSON.stringify([ME.id,ME.name]))}catch(e){}
+  });
+}
 /* разделы одного курса (ЕГЭ: № 4, № 12, …) — одной карточкой */
 function groupCat(cat){
   const out=[],g={};

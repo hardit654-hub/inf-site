@@ -1,0 +1,330 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Контрольная по информатике</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one column "exam sheet" on squared notebook paper; variant tabs on top, task cards, submit bar at the end */
+:root{
+  --paper:#f3f6f9; --grid:#dde5ee; --sheet:#ffffff; --ink:#18263a; --muted:#5a6a80;
+  --line:#c9d4e1; --accent:#2346a8; --accent-soft:#e6ecfa; --ok:#1d7a46; --ok-soft:#e3f3ea; --bad:#b3261e; --bad-soft:#fbe7e5;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11161f; --grid:#1a2230; --sheet:#171e2a; --ink:#e4eaf3; --muted:#9aa8bc;
+  --line:#2c3748; --accent:#8fa9ff; --accent-soft:#1f2a47; --ok:#5fcf8f; --ok-soft:#173226; --bad:#ff8a80; --bad-soft:#3a1d1b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11161f; --grid:#1a2230; --sheet:#171e2a; --ink:#e4eaf3; --muted:#9aa8bc;
+  --line:#2c3748; --accent:#8fa9ff; --accent-soft:#1f2a47; --ok:#5fcf8f; --ok-soft:#173226; --bad:#ff8a80; --bad-soft:#3a1d1b; color-scheme:dark}
+*{box-sizing:border-box}
+body{
+  background:var(--paper);color:var(--ink);font:16px/1.55 var(--f-body);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px;
+}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header.top{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0;text-wrap:balance;font-weight:700}
+.sub{color:var(--muted);margin:0}
+.tabs{display:flex;gap:6px;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:4px;align-self:flex-start}
+.tab{appearance:none;border:0;background:transparent;color:var(--muted);font:600 15px var(--f-body);padding:8px 16px;border-radius:7px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--sheet)}
+.tab:disabled{cursor:not-allowed;opacity:.55}
+.tab:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:20px}
+.student{display:grid;grid-template-columns:1fr 140px;gap:12px}
+@media (max-width:520px){.student{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:500}
+input[type=text]{font:16px var(--f-body);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:9px 11px;width:100%;min-width:0}
+input[type=text]:disabled{opacity:.8}
+.task{display:flex;flex-direction:column;gap:12px}
+.task-head{display:flex;align-items:baseline;gap:10px}
+.num{font:600 13px var(--f-mono);color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.task-head h2{font-size:15px;margin:0;color:var(--muted);font-weight:500}
+.task p{margin:0;max-width:68ch}
+.figure{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+.scroll{overflow-x:auto;max-width:100%}
+table.t{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+table.t td,table.t th{border:1px solid var(--muted);text-align:center;padding:4px 0;min-width:32px;height:30px}
+table.t th{font-weight:600;background:var(--accent-soft)}
+table.t td.x{background:var(--line)}
+table.t th.corner{background:transparent;border-top-color:transparent;border-left-color:transparent}
+table.codes td{padding:4px 18px;font-family:var(--f-mono)}
+table.prog td,table.prog th{padding:4px 12px;font-family:var(--f-mono);white-space:nowrap}
+.graph{width:300px;max-width:100%;height:auto}
+.graph line{stroke:var(--ink);stroke-width:1.6}
+.graph circle{fill:var(--ink)}
+.graph text{fill:var(--ink);font:500 15px var(--f-body)}
+.mono{font-family:var(--f-mono);font-size:.95em}
+details.rules{border-left:3px solid var(--line);padding-left:12px}
+details.rules summary{cursor:pointer;color:var(--accent);font-weight:500}
+details.rules p{margin-top:8px;font-size:15px;color:var(--ink)}
+.answer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:12px}
+.answer label{font-weight:600}
+.answer input{width:150px;font:600 17px var(--f-mono);letter-spacing:.04em}
+.mark{font-weight:600;font-size:14px;border-radius:6px;padding:3px 10px}
+.mark.ok{color:var(--ok);background:var(--ok-soft)}
+.mark.bad{color:var(--bad);background:var(--bad-soft)}
+.actions{display:flex;flex-direction:column;gap:12px}
+.btn{appearance:none;border:0;border-radius:8px;font:600 16px var(--f-body);padding:12px 22px;cursor:pointer;align-self:flex-start}
+.btn.primary{background:var(--accent);color:var(--sheet)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.confirm{display:flex;flex-direction:column;gap:12px;background:var(--accent-soft);border-radius:10px;padding:16px}
+.confirm .row{display:flex;gap:10px;flex-wrap:wrap}
+.warn{color:var(--bad);font-size:14px;margin:0}
+.result{display:flex;flex-direction:column;gap:6px;border:2px solid var(--accent)}
+.result .score{font-size:40px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.result .meta{color:var(--muted);font-size:14px}
+.teacher{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}
+.teacher input{width:110px;font-size:14px;padding:6px 8px}
+.teacher button{font-size:13px;padding:7px 12px}
+footer{font-size:12px;color:var(--muted);text-align:center}
+.busybox{background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--bad);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.busybox p{margin:0}
+.busybox .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:4px}
+@media print{body{background:#fff}.tabs,.actions,.teacher{display:none}.card{break-inside:avoid}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Информатика · формат ЕГЭ</span>
+    <h1>Контрольная работа: задания 1, 4, 11, 12</h1>
+    <p class="sub">Решите задания и впишите ответ в поле под каждым. В ответ записывается только целое число.</p>
+  </header>
+
+  <div id="who" hidden></div>
+
+  <div class="tabs" role="tablist" aria-label="Вариант">
+    <button class="tab" role="tab" id="tab-1" data-v="1">Вариант 1</button>
+    <button class="tab" role="tab" id="tab-2" data-v="2">Вариант 2</button>
+  </div>
+
+  <section class="card student" aria-label="Ученик">
+    <label class="f">Фамилия и имя<input type="text" id="name" autocomplete="name" placeholder="Иванов Пётр"></label>
+    <label class="f">Класс<input type="text" id="cls" placeholder="11 «А»"></label>
+  </section>
+
+  <div id="tasks" style="display:flex;flex-direction:column;gap:18px"></div>
+
+  <section class="actions">
+    <div id="result" class="card result" hidden></div>
+    <button class="btn primary" id="submit">Сдать работу</button>
+    <div class="confirm" id="confirm" hidden>
+      <strong>Сдать работу?</strong>
+      <p id="confirmText" style="margin:0"></p>
+      <div class="row">
+        <button class="btn primary" id="yes">Да, сдать</button>
+        <button class="btn ghost" id="no">Вернуться к заданиям</button>
+      </div>
+    </div>
+    <p class="warn" id="err" hidden></p>
+    <div class="teacher" id="teacher" hidden>
+      <span>Для учителя:</span>
+      <input type="text" id="pin" inputmode="numeric" placeholder="код" aria-label="Код учителя">
+      <button class="btn ghost" id="reset">Очистить работу</button>
+      <span id="pinMsg"></span>
+    </div>
+  </section>
+  <footer>Задания составлены по варианту КЕГЭ «Апробация 14.05.26» (kompege.ru)</footer>
+</div>
+
+<script>
+const P={B:[90,50,-26,6],H:[212,70,-8,-12],F:[330,75,10,0],D:[425,148,2,22],A:[103,133,-26,12],G:[313,218,-24,-8],E:[180,256,-26,16],C:[337,295,8,8]};
+const EDGES=[["B","H"],["B","A"],["A","H"],["A","E"],["H","F"],["F","G"],["F","D"],["D","C"],["G","C"],["E","G"],["E","C"]];
+function graphSVG(){
+  return `<svg class="graph" viewBox="55 25 400 295" role="img" aria-label="Схема дорог: граф с вершинами A, B, C, D, E, F, G, H">`+
+    EDGES.map(([a,b])=>`<line x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}"/>`).join("")+
+    Object.entries(P).map(([k,[x,y,dx,dy]])=>`<circle cx="${x}" cy="${y}" r="3.5"/><text x="${x+dx}" y="${y+dy}">${k}</text>`).join("")+
+  `</svg>`;
+}
+function distTable(w){ // w: {"1-5":9,...}
+  let h=`<div class="scroll"><table class="t"><tr><th class="corner"></th>`;
+  for(let j=1;j<=8;j++) h+=`<th>${j}</th>`;
+  h+=`</tr>`;
+  for(let i=1;i<=8;i++){
+    h+=`<tr><th>${i}</th>`;
+    for(let j=1;j<=8;j++){
+      if(i===j){h+=`<td class="x"></td>`;continue}
+      const k=i<j?`${i}-${j}`:`${j}-${i}`;
+      h+=`<td>${w[k]??""}</td>`;
+    }
+    h+=`</tr>`;
+  }
+  return h+`</table></div>`;
+}
+function codeTable(rows){
+  return `<table class="t codes">`+rows.map(([l,c])=>`<tr><td style="font-family:var(--f-body)">${l}</td><td>${c}</td></tr>`).join("")+`</table>`;
+}
+const PROG=`<div class="scroll"><table class="t prog">
+<tr><th class="corner"></th><th>λ</th><th>0</th><th>1</th></tr>
+<tr><th>q<sub>0</sub></th><td>λ, R, q<sub>1</sub></td><td></td><td></td></tr>
+<tr><th>q<sub>1</sub></th><td>λ, L, q<sub>2</sub></td><td>0, R, q<sub>1</sub></td><td>1, R, q<sub>1</sub></td></tr>
+<tr><th>q<sub>2</sub></th><td></td><td>λ, L, q<sub>3</sub></td><td>λ, L, q<sub>3</sub></td></tr>
+<tr><th>q<sub>3</sub></th><td></td><td>λ, S, q<sub>3</sub></td><td>1, S, q<sub>3</sub></td></tr>
+</table></div>`;
+const MT_RULES=`<details class="rules"><summary>Как работает исполнитель МТ</summary>
+<p>Исполнитель МТ — головка, которая движется вдоль бесконечной ленты из ячеек. В каждой ячейке записан ровно один символ алфавита, включая пустой символ λ. Работа идёт по тактам; в начале головка находится в состоянии q<sub>0</sub>. За такт головка обозревает текущую ячейку и выполняет команду из таблицы, стоящую на пересечении строки текущего состояния и столбца обозреваемого символа.</p>
+<p>Команда состоит из трёх элементов через запятую: символ, который записывается в текущую ячейку; направление — <b>L</b> (сдвиг влево), <b>R</b> (вправо), <b>N</b> (без сдвига) или <b>S</b> (остановка после выполнения команды); новое состояние головки. Сдвиг выполняется после записи символа. Например, команда <span class="mono">0, L, q<sub>3</sub></span>: записать «0», сдвинуться на ячейку влево и перейти в состояние q<sub>3</sub>.</p>
+</details>`;
+
+const V={
+ 1:{
+  t1:{"1-5":9,"1-6":15,"1-7":25,"2-3":21,"2-4":24,"2-8":6,"3-7":18,"3-8":17,"4-7":13,"5-6":27,"5-8":11},
+  t1q:"из пункта B в пункт H и из пункта A в пункт E",
+  t4:[["Г","11"],["Д","1000"],["Е","010"],["Ж","1001"],["З","011"]],
+  t11:{alpha:62,n:"5 895 222",mb:23},
+  t12:1097
+ },
+ 2:{
+  t1:{"1-5":9,"1-6":16,"1-7":23,"2-3":21,"2-4":22,"2-8":6,"3-7":18,"3-8":19,"4-7":13,"5-6":27,"5-8":14},
+  t1q:"из пункта B в пункт H и из пункта A в пункт E",
+  t4:[["Г","00"],["Д","010"],["Е","011"],["Ж","100"],["З","1010"]],
+  t11:{alpha:58,n:"4 895 222",mb:26},
+  t12:1161
+ }
+};
+const KEY={"1":{"1":"488fac22","4":"d4cf907a","11":"24a338e6","12":"d242fe59"},"2":{"1":"7cb6071a","4":"ba57c46d","11":"cd52136c","12":"fff15900"}};
+const PIN="85bbad4a", SALT="inf-kr";
+const h=s=>{let x=0x811c9dc5;for(const c of s){x^=c.charCodeAt(0);x=Math.imul(x,0x01000193)>>>0}return x.toString(16)};
+
+function tasksHTML(v){
+  const d=V[v];
+  return `
+  <article class="card task">
+    <div class="task-head"><span class="num">Задание 1</span><h2>Граф и таблица расстояний</h2></div>
+    <p>На рисунке схема дорог <i>N</i>-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>
+    <div class="figure">${distTable(d.t1)}${graphSVG()}</div>
+    <p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог ${d.t1q}.</p>
+    <p>В ответе запишите целое число.</p>
+    ${answerRow(v,1)}
+  </article>
+
+  <article class="card task">
+    <div class="task-head"><span class="num">Задание 4</span><h2>Условие Фано</h2></div>
+    <p>По каналу связи передаются сообщения, содержащие только восемь букв: А, Б, В, Г, Д, Е, Ж и З. Для передачи используется двоичный код, удовлетворяющий условию Фано. Кодовые слова для некоторых букв известны.</p>
+    ${codeTable(d.t4)}
+    <p>Какое наименьшее количество двоичных знаков требуется для кодирования трёх оставшихся букв? В ответе запишите суммарную длину кодовых слов для букв А, Б, В.</p>
+    <p style="font-size:14px;color:var(--muted)"><i>Примечание.</i> Условие Фано означает, что никакое кодовое слово не является началом другого кодового слова. Это обеспечивает возможность однозначной расшифровки закодированных сообщений.</p>
+    ${answerRow(v,4)}
+  </article>
+
+  <article class="card task">
+    <div class="task-head"><span class="num">Задание 11</span><h2>Объём информации</h2></div>
+    <p>На предприятии каждой изготовленной детали присваивают серийный номер, содержащий десятичные цифры и символы из ${d.t11.alpha}-символьного специального алфавита. В базе данных каждый серийный номер занимает одинаковое и минимально возможное число байт. При этом используется посимвольное кодирование серийных номеров, все символы кодируются одинаковым и минимально возможным числом бит. Известно, что ${d.t11.n} серийных номера занимают более ${d.t11.mb} Мбайт памяти. Определите минимально возможную длину серийного номера.</p>
+    ${answerRow(v,11)}
+  </article>
+
+  <article class="card task">
+    <div class="task-head"><span class="num">Задание 12</span><h2>Исполнитель МТ</h2></div>
+    ${MT_RULES}
+    <p>На ленте в соседних ячейках записано двоичное представление числа <b>${d.t12}</b> без ведущих нулей. Ячейки справа и слева от последовательности заполнены пустыми символами «λ». В начальный момент времени головка расположена в ближайшей слева к последовательности ячейке.</p>
+    <p>Программа работы исполнителя:</p>
+    ${PROG}
+    <p>Определите результат работы программы. В ответе запишите получившееся на ленте число в десятичной системе счисления.</p>
+    ${answerRow(v,12)}
+  </article>`;
+}
+function answerRow(v,n){
+  return `<div class="answer"><label for="a${v}-${n}">Ответ:</label><input type="text" id="a${v}-${n}" data-n="${n}" inputmode="numeric" autocomplete="off"><span class="mark" id="m${v}-${n}" hidden></span></div>`;
+}
+
+const NUMS=[1,4,11,12];
+const ST_KEY="inf-kr-state",BAK_KEY="inf-kr-backup";   // BAK_KEY — чужая работа, отложенная до «Нажать заново» или «Вернуть»
+let state={v:"1",name:"",cls:"",ans:{1:{},2:{}},done:null};
+try{const s=JSON.parse(localStorage.getItem(ST_KEY)||"null");if(s)state=Object.assign(state,s)}catch(e){}
+function save(){try{localStorage.setItem(ST_KEY,JSON.stringify(state))}catch(e){}}
+
+/* Чья это работа. Кабинет перед переходом пишет inf-uid (id вошедшего ученика) и inf-name (id и имя).
+   Если работа сохранена от другого ученика (со старого или общего браузера), она не показывается,
+   а откладывается и её можно один раз вернуть по фамилии. */
+let busy=false,backup=null;
+function loadOwner(){let uid=null,name=null;
+  try{uid=localStorage.getItem("inf-uid");const n=JSON.parse(localStorage.getItem("inf-name")||"null");if(n&&n[0]!==undefined)name=n}catch(e){}
+  return{uid:uid?String(uid):null,name:name&&name[1]?String(name[1]):null}}
+OWNER=loadOwner();
+if(state.owner&&OWNER.uid&&String(state.owner)!==OWNER.uid){busy=true;localStorage.setItem(BAK_KEY,JSON.stringify(state));backup=JSON.parse(localStorage.getItem(BAK_KEY))}
+function fresh(){return{v:"1",name:"",cls:"",ans:{1:{},2:{}},done:null,owner:OWNER.uid||""}}
+function sameName(a,b){const f=s=>s.trim().toLowerCase().replace(/ё/g,"е").replace(/\s+/g," ");return !!a&&!!b&&f(a)===f(b)}
+function showBusy(){const b=document.getElementById("who");if(!b)return;
+  b.hidden=!busy;if(!busy)return;
+  const nm=OWNER.name||"";
+  const f=backup&&backup.name?backup.name.replace(/\s+/g," ").trim().toLowerCase():"";
+  const foreign=f&&!(f===nm.replace(/\s+/g," ").trim().toLowerCase()||f.indexOf(nm.replace(/\s+/g," ").trim().toLowerCase()+" ")===0)?"Ученик «"+esc(backup.name)+"» уже сдавал работу в этом браузере. ":"";
+  b.innerHTML=`<div class="busybox">
+    <p><b>Начать заново?</b></p>
+    <p class="sub" style="margin:0">${foreign}Ваша работа, открытая здесь раньше, сохранилась — её можно вернуть по фамилии и имени.</p>
+    <p class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn primary" type="button" id="bnew">Начать заново</button>
+    <span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><input type="text" id="bwho" placeholder="Фамилия и имя" style="width:180px"> <button class="btn ghost" type="button" id="bback">Вернуть свою работу</button></span></p>
+    <p class="warn" id="bmsg" hidden></p></div>`;
+  document.getElementById("bnew").onclick=()=>{const v=fresh();localStorage.setItem(ST_KEY,JSON.stringify(v));localStorage.removeItem(BAK_KEY);backup=null;state=v;busy=false;location.reload()};
+  document.getElementById("bback").onclick=()=>{
+    const m=document.getElementById("bmsg"),n=document.getElementById("bwho").value;
+    const okName=(OWNER.name&&sameName(OWNER.name,n))||(backup&&sameName(backup.name,n));
+    if(!okName){m.textContent="Имя не совпадает. Напишите фамилию и имя так, как они в работе, или начните заново.";m.hidden=false;return}
+    const v=Object.assign({},backup||state,{owner:OWNER.uid||""});localStorage.removeItem(BAK_KEY);localStorage.setItem(ST_KEY,JSON.stringify(v));location.reload()};
+}
+
+const $=id=>document.getElementById(id);
+function render(){
+  if(busy){showBusy();return}
+  if(!state.owner&&state.name)state.owner=OWNER.uid||"";   // старая работа без метки: подписываем при переходе
+  document.getElementById("who").hidden=true;
+  const v=state.done?state.done.v:state.v;
+  document.querySelectorAll(".tab").forEach(t=>{t.setAttribute("aria-selected",t.dataset.v===v);t.disabled=!!state.done&&t.dataset.v!==v});
+  $("tasks").innerHTML=tasksHTML(v);
+  $("name").value=state.name;$("cls").value=state.cls;
+  NUMS.forEach(n=>{
+    const inp=$(`a${v}-${n}`);inp.value=state.ans[v][n]||"";
+    inp.addEventListener("input",()=>{state.ans[v][n]=inp.value.trim();save()});
+  });
+  const locked=!!state.done;
+  document.querySelectorAll("input[type=text]:not(#pin)").forEach(i=>i.disabled=locked);
+  $("submit").hidden=locked;$("confirm").hidden=true;$("err").hidden=true;
+  $("teacher").hidden=!locked;$("result").hidden=!locked;
+  if(locked){
+    const r=state.done;
+    NUMS.forEach(n=>{const m=$(`m${v}-${n}`);m.hidden=false;m.className="mark "+(r.marks[n]?"ok":"bad");m.textContent=r.marks[n]?"верно":"неверно"});
+    const ok=NUMS.filter(n=>r.marks[n]).length;
+    $("result").innerHTML=`<span class="eyebrow">Работа сдана</span>
+      <div class="score">${ok} из 4</div>
+      <div><b>${esc(state.name)}</b>${state.cls?", "+esc(state.cls):""} · вариант ${v}</div>
+      <div class="meta">Сдано ${r.at}. Покажите этот экран учителю.</div>`;
+  }
+}
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  if(state.done)return; state.v=t.dataset.v; save(); history.replaceState(null,"","#v"+state.v); render();
+}));
+$("name").addEventListener("input",e=>{state.name=e.target.value;save()});
+$("cls").addEventListener("input",e=>{state.cls=e.target.value;save()});
+$("submit").addEventListener("click",()=>{
+  if(!state.name.trim()){$("err").textContent="Впишите фамилию и имя в начале работы.";$("err").hidden=false;$("name").focus();return}
+  $("err").hidden=true;
+  const empty=NUMS.filter(n=>!(state.ans[state.v][n]||"").trim());
+  $("confirmText").textContent=(empty.length?`Без ответа: задани${empty.length>1?"я":"е"} ${empty.join(", ")}. `:"Все ответы заполнены. ")+"После сдачи изменить ответы будет нельзя.";
+  $("confirm").hidden=false;$("submit").hidden=true;
+});
+$("no").addEventListener("click",()=>{$("confirm").hidden=true;$("submit").hidden=false});
+$("yes").addEventListener("click",()=>{
+  const v=state.v, marks={};
+  NUMS.forEach(n=>{const a=(state.ans[v][n]||"").replace(/\s+/g,"");marks[n]=!!a&&h(`${SALT}|${v}|${n}|${a}`)===KEY[v][n]});
+  const d=new Date();
+  state.owner=OWNER.uid||"";
+  state.done={v,marks,at:d.toLocaleDateString("ru-RU")+" в "+d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})};
+  save();render();$("result").scrollIntoView({behavior:"smooth",block:"center"});
+});
+$("reset").addEventListener("click",()=>{
+  if(h(SALT+"|pin|"+$("pin").value.trim())!==PIN){$("pinMsg").textContent="Неверный код";return}
+  $("pin").dataset.v=state.v;
+  state=fresh();state.v=$("pin").dataset.v||state.v;save();$("pin").value="";$("pinMsg").textContent="Новая работа готова к вводу.";render();
+});
+function fromHash(){const m=location.hash.match(/^#v([12])$/);if(m&&!state.done){state.v=m[1];save()}render()}
+window.addEventListener("hashchange",fromHash);
+fromHash();
+</script>
+
+</body></html>
