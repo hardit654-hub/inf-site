@@ -232,27 +232,50 @@ function answerRow(v,n){
 }
 
 const NUMS=[1,4,11,12];
-const ST_KEY="inf-kr-state",BAK_KEY="inf-kr-backup";   // BAK_KEY — чужая работа, отложенная до «Нажать заново» или «Вернуть»
+const ST_KEY="inf-kr-state",BAK_KEY="inf-kr-backup";   // BAK_KEY — чужая работа, отложенная до «Начать заново» или «Вернуть»
+const MANUAL_KEY="inf-kr-manual";   // вход по прямой ссылке, без кабинета: здесь имя, которое ученик вписал сам
+
+/* Чья это работа. Кабинет перед переходом пишет inf-uid (номер вошедшего ученика) и inf-name (номер и имя).
+   Работа сравнивается с тем, кто сейчас: не совпало — она не открывается.
+   Без кабинета сравниваем по имени, которое ученик вписывал в работу. */
+function sameName(a,b){const f=s=>String(s||"").trim().toLowerCase().replace(/ё/g,"е").replace(/\s+/g," ");return !!a&&!!b&&f(a)===f(b)}
+
 let state={v:"1",name:"",cls:"",ans:{1:{},2:{}},done:null};
 try{const s=JSON.parse(localStorage.getItem(ST_KEY)||"null");if(s)state=Object.assign(state,s)}catch(e){}
 function save(){try{localStorage.setItem(ST_KEY,JSON.stringify(state))}catch(e){}}
 
-/* Чья это работа. Кабинет перед переходом пишет inf-uid (id вошедшего ученика) и inf-name (id и имя).
-   Если работа сохранена от другого ученика (со старого или общего браузера), она не показывается,
-   а откладывается и её можно один раз вернуть по фамилии. */
+function loadOwner(){
+  let uid=null,name=null;
+  try{
+    const u=Number(localStorage.getItem("inf-uid"));if(u>0)uid=u;
+    const n=JSON.parse(localStorage.getItem("inf-name")||"null");
+    if(Array.isArray(n)&&n.length>1&&n[1]){name=String(n[1]);if(!uid&&n[0]>0)uid=Number(n[0])}
+  }catch(e){}
+  return{uid:uid?String(uid):null,name:name};
+}
+const OWNER=loadOwner();
+const manualName=()=>{try{return localStorage.getItem(MANUAL_KEY)||""}catch(e){return""}};
+
+/* Кто писал сохранённую работу: метка из кабинета, иначе вписанное имя */
+function workFilled(st){return !!(st.done||["1","2"].some(k=>Object.keys(st.ans&&st.ans[k]||{}).some(n=>((st.ans[k][n]||"")).trim())))}
+function workIsForeign(){
+  if(!workFilled(state))return false;                 // пустая работа — не чужая
+  if(OWNER.uid&&state.owner)return String(state.owner)!==OWNER.uid;
+  const me=OWNER.name||manualName();
+  if(!me)return false;                                // не знаем, кто вошёл — работу не отнимаем
+  return !sameName(state.name,me);
+}
+
 let busy=false,backup=null;
-function loadOwner(){let uid=null,name=null;
-  try{uid=localStorage.getItem("inf-uid");const n=JSON.parse(localStorage.getItem("inf-name")||"null");if(n&&n[0]!==undefined)name=n}catch(e){}
-  return{uid:uid?String(uid):null,name:name&&name[1]?String(name[1]):null}}
-OWNER=loadOwner();
-if(state.owner&&OWNER.uid&&String(state.owner)!==OWNER.uid){busy=true;localStorage.setItem(BAK_KEY,JSON.stringify(state));backup=JSON.parse(localStorage.getItem(BAK_KEY))}
+if(workIsForeign()){
+  busy=true;
+  try{localStorage.setItem(BAK_KEY,JSON.stringify(state));backup=JSON.parse(localStorage.getItem(BAK_KEY))}catch(e){}
+}
 function fresh(){return{v:"1",name:"",cls:"",ans:{1:{},2:{}},done:null,owner:OWNER.uid||""}}
-function sameName(a,b){const f=s=>s.trim().toLowerCase().replace(/ё/g,"е").replace(/\s+/g," ");return !!a&&!!b&&f(a)===f(b)}
 function showBusy(){const b=document.getElementById("who");if(!b)return;
   b.hidden=!busy;if(!busy)return;
-  const nm=OWNER.name||"";
-  const f=backup&&backup.name?backup.name.replace(/\s+/g," ").trim().toLowerCase():"";
-  const foreign=f&&!(f===nm.replace(/\s+/g," ").trim().toLowerCase()||f.indexOf(nm.replace(/\s+/g," ").trim().toLowerCase()+" ")===0)?"Ученик «"+esc(backup.name)+"» уже сдавал работу в этом браузере. ":"";
+  const nm=OWNER.name||localStorage.getItem(MANUAL_KEY)||"";
+  const foreign=backup&&backup.name&&!sameName(backup&&backup.name,nm)?"В этом браузере уже была работа другого ученика («"+esc(backup.name)+"»). ":"";
   b.innerHTML=`<div class="busybox">
     <p><b>Начать заново?</b></p>
     <p class="sub" style="margin:0">${foreign}Ваша работа, открытая здесь раньше, сохранилась — её можно вернуть по фамилии и имени.</p>
@@ -261,16 +284,20 @@ function showBusy(){const b=document.getElementById("who");if(!b)return;
     <p class="warn" id="bmsg" hidden></p></div>`;
   document.getElementById("bnew").onclick=()=>{const v=fresh();localStorage.setItem(ST_KEY,JSON.stringify(v));localStorage.removeItem(BAK_KEY);backup=null;state=v;busy=false;location.reload()};
   document.getElementById("bback").onclick=()=>{
-    const m=document.getElementById("bmsg"),n=document.getElementById("bwho").value;
-    const okName=(OWNER.name&&sameName(OWNER.name,n))||(backup&&sameName(backup.name,n));
-    if(!okName){m.textContent="Имя не совпадает. Напишите фамилию и имя так, как они в работе, или начните заново.";m.hidden=false;return}
-    const v=Object.assign({},backup||state,{owner:OWNER.uid||""});localStorage.removeItem(BAK_KEY);localStorage.setItem(ST_KEY,JSON.stringify(v));location.reload()};
+    const m=document.getElementById("bmsg"),n=document.getElementById("bwho").value.trim();
+    const workName=(backup||state||{}).name||"";
+    /* Вернуть можно только свою работу: имя должно совпасть с именем, под которым она писалась.
+       Если работа никому не подписана — годится любое вписанное имя. */
+    const ok=workName?sameName(workName,n):n.length>2;
+    if(!ok){m.textContent="Это не та работа: имя не совпадает. Впишите фамилию и имя так же, как в прошлой работе, или начните заново.";m.hidden=false;return}
+    const v=Object.assign({},backup||state,{owner:OWNER.uid||""});
+    if(!OWNER.uid)localStorage.setItem(MANUAL_KEY,n.replace(/\s+/g," "));
+    localStorage.removeItem(BAK_KEY);localStorage.setItem(ST_KEY,JSON.stringify(v));location.reload()};
 }
 
 const $=id=>document.getElementById(id);
 function render(){
   if(busy){showBusy();return}
-  if(!state.owner&&state.name)state.owner=OWNER.uid||"";   // старая работа без метки: подписываем при переходе
   document.getElementById("who").hidden=true;
   const v=state.done?state.done.v:state.v;
   document.querySelectorAll(".tab").forEach(t=>{t.setAttribute("aria-selected",t.dataset.v===v);t.disabled=!!state.done&&t.dataset.v!==v});
@@ -299,7 +326,7 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
   if(state.done)return; state.v=t.dataset.v; save(); history.replaceState(null,"","#v"+state.v); render();
 }));
-$("name").addEventListener("input",e=>{state.name=e.target.value;save()});
+$("name").addEventListener("input",e=>{state.name=e.target.value;if(!OWNER.uid&&e.target.value.trim())localStorage.setItem(MANUAL_KEY,e.target.value.replace(/\s+/g," ").trim());save()});
 $("cls").addEventListener("input",e=>{state.cls=e.target.value;save()});
 $("submit").addEventListener("click",()=>{
   if(!state.name.trim()){$("err").textContent="Впишите фамилию и имя в начале работы.";$("err").hidden=false;$("name").focus();return}
@@ -314,6 +341,7 @@ $("yes").addEventListener("click",()=>{
   NUMS.forEach(n=>{const a=(state.ans[v][n]||"").replace(/\s+/g,"");marks[n]=!!a&&h(`${SALT}|${v}|${n}|${a}`)===KEY[v][n]});
   const d=new Date();
   state.owner=OWNER.uid||"";
+  if(!OWNER.uid)localStorage.setItem(MANUAL_KEY,state.name.replace(/\s+/g," ").trim());
   state.done={v,marks,at:d.toLocaleDateString("ru-RU")+" в "+d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})};
   save();render();$("result").scrollIntoView({behavior:"smooth",block:"center"});
 });
