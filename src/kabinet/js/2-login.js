@@ -10,7 +10,7 @@ function viewLogin(teacherExists){
   const f=document.getElementById("f"),m=document.getElementById("m"),go=document.getElementById("go");
   document.getElementById("l").focus();
   f.onsubmit=async e=>{e.preventDefault();msg(m,"");setBusy(go,true,"Входим…");
-    try{const j=await api("login",{login:f.l.value,password:f.p.value});ME=j.user;CAT=null;clearLocalIfOther();const n=nextUrl();if(n){location.href=n;return}route()}
+    try{const j=await api("login",{login:f.l.value,password:f.p.value});ME=j.user;CAT=null;clearLocalIfOther();saveWho();const n=nextUrl();if(n){location.href=n;return}route()}
     catch(err){msg(m,err.message);setBusy(go,false)}};
 }
 function clearLocalIfOther(){

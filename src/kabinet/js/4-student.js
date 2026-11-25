@@ -12,6 +12,7 @@ async function viewStudent(){
       <a class="btn" href="${esc(c.url)}" data-go="${esc(c.url)}">${s.touched?"Продолжить":"Начать"}</a></article>`}).join("")}</div>
     ${pwCard()}`;
   bindGo();
+  saveWho();
   bindPw();
   bindHw();
   lbCard(false).then(h=>{const s=document.getElementById("lbslot");if(s)s.innerHTML=h});
@@ -24,6 +25,9 @@ function bindGo(){
     try{localStorage.setItem("inf-uid",String(ME.id));localStorage.setItem("inf-name",JSON.stringify([ME.id,ME.name]))}catch(e){}
   });
 }
+/* Та же метка — при открытии кабинета: ученик зашёл в кабинет, значит в этом браузере работает он.
+   Если в браузере осталась работа другого ученика, контрольная покажет «Начать заново» вместо неё. */
+function saveWho(){try{localStorage.setItem("inf-uid",String(ME.id));localStorage.setItem("inf-name",JSON.stringify([ME.id,ME.name]))}catch(e){}}
 /* разделы одного курса (ЕГЭ: № 4, № 12, …) — одной карточкой */
 function groupCat(cat){
   const out=[],g={};

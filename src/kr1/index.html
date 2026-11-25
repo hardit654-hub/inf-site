@@ -233,13 +233,15 @@ function answerRow(v,n){
 
 const NUMS=[1,4,11,12];
 const ST_KEY="inf-kr-state",BAK_KEY="inf-kr-backup";   // BAK_KEY — чужая работа, отложенная до «Начать заново» или «Вернуть»
-const MANUAL_KEY="inf-kr-manual";   // вход по прямой ссылке, без кабинета: здесь имя, которое ученик вписал сам
+const MANUAL_KEY="inf-kr-manual";   // имя ученика на этом устройстве (его же пишет кабинет при входе)
 
 /* Чья это работа. Кабинет перед переходом пишет inf-uid (номер вошедшего ученика) и inf-name (номер и имя).
    Работа сравнивается с тем, кто сейчас: не совпало — она не открывается.
    Без кабинета сравниваем по имени, которое ученик вписывал в работу. */
 function sameName(a,b){const f=s=>String(s||"").trim().toLowerCase().replace(/ё/g,"е").replace(/\s+/g," ");return !!a&&!!b&&f(a)===f(b)}
 
+/* чей это браузер — запоминаем сразу: кабинет пишет inf-uid и inf-name, контрольная дублирует имя в inf-kr-manual.
+   Тогда и работа, сданная без кабинета, в следующий раз будет узнана как чужая. */
 let state={v:"1",name:"",cls:"",ans:{1:{},2:{}},done:null};
 try{const s=JSON.parse(localStorage.getItem(ST_KEY)||"null");if(s)state=Object.assign(state,s)}catch(e){}
 function save(){try{localStorage.setItem(ST_KEY,JSON.stringify(state))}catch(e){}}
@@ -255,6 +257,7 @@ function loadOwner(){
 }
 const OWNER=loadOwner();
 const manualName=()=>{try{return localStorage.getItem(MANUAL_KEY)||""}catch(e){return""}};
+try{if(OWNER.name)localStorage.setItem(MANUAL_KEY,OWNER.name)}catch(e){}
 
 /* Кто писал сохранённую работу: метка из кабинета, иначе вписанное имя */
 function workFilled(st){return !!(st.done||["1","2"].some(k=>Object.keys(st.ans&&st.ans[k]||{}).some(n=>((st.ans[k][n]||"")).trim())))}
@@ -263,6 +266,7 @@ function workIsForeign(){
   if(OWNER.uid&&state.owner)return String(state.owner)!==OWNER.uid;
   const me=OWNER.name||manualName();
   if(!me)return false;                                // не знаем, кто вошёл — работу не отнимаем
+  if(!state.name)return false;                        // в работе нет имени — сверять не с чем
   return !sameName(state.name,me);
 }
 
@@ -291,7 +295,7 @@ function showBusy(){const b=document.getElementById("who");if(!b)return;
     const ok=workName?sameName(workName,n):n.length>2;
     if(!ok){m.textContent="Это не та работа: имя не совпадает. Впишите фамилию и имя так же, как в прошлой работе, или начните заново.";m.hidden=false;return}
     const v=Object.assign({},backup||state,{owner:OWNER.uid||""});
-    if(!OWNER.uid)localStorage.setItem(MANUAL_KEY,n.replace(/\s+/g," "));
+    localStorage.setItem(MANUAL_KEY,(workName||n).replace(/\s+/g," "));
     localStorage.removeItem(BAK_KEY);localStorage.setItem(ST_KEY,JSON.stringify(v));location.reload()};
 }
 
@@ -326,7 +330,7 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
   if(state.done)return; state.v=t.dataset.v; save(); history.replaceState(null,"","#v"+state.v); render();
 }));
-$("name").addEventListener("input",e=>{state.name=e.target.value;if(!OWNER.uid&&e.target.value.trim())localStorage.setItem(MANUAL_KEY,e.target.value.replace(/\s+/g," ").trim());save()});
+$("name").addEventListener("input",e=>{state.name=e.target.value;if(e.target.value.trim())localStorage.setItem(MANUAL_KEY,e.target.value.replace(/\s+/g," ").trim());save()});
 $("cls").addEventListener("input",e=>{state.cls=e.target.value;save()});
 $("submit").addEventListener("click",()=>{
   if(!state.name.trim()){$("err").textContent="Впишите фамилию и имя в начале работы.";$("err").hidden=false;$("name").focus();return}
@@ -341,7 +345,7 @@ $("yes").addEventListener("click",()=>{
   NUMS.forEach(n=>{const a=(state.ans[v][n]||"").replace(/\s+/g,"");marks[n]=!!a&&h(`${SALT}|${v}|${n}|${a}`)===KEY[v][n]});
   const d=new Date();
   state.owner=OWNER.uid||"";
-  if(!OWNER.uid)localStorage.setItem(MANUAL_KEY,state.name.replace(/\s+/g," ").trim());
+  if(state.name.trim())localStorage.setItem(MANUAL_KEY,state.name.replace(/\s+/g," ").trim());
   state.done={v,marks,at:d.toLocaleDateString("ru-RU")+" в "+d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})};
   save();render();$("result").scrollIntoView({behavior:"smooth",block:"center"});
 });
