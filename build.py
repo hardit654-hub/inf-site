@@ -56,11 +56,26 @@ def scrub(o):
     s=s.replace('PRO100 ЕГЭ информатика ЕГЭ','')
     return s
 def rebase(o, folder):
-    """Относительные ссылки на картинки и файлы раздела -> ../<папка раздела>/… (страница курса теперь /ege/)."""
-    rel=lambda u: u if _re.match(r'(https?:|//|/|\.\./|#|data:|mailto:)', u) else '../'+folder+'/'+u
-    if isinstance(o, dict): return {k: (rel(v) if k in ('href','src') and isinstance(v,str) else rebase(v, folder)) for k,v in o.items()}
-    if isinstance(o, list): return [rebase(x, folder) for x in o]
-    if isinstance(o, str): return _re.sub(r'((?:src|href)=")([^"]+)"', lambda m: m.group(1)+rel(m.group(2))+'"', o)
+    """Переписывает ссылки относительно общего адреса курса /ege/."""
+    def rel(u):
+        if _re.match(r'(https?:|//|/|\.\./|#|data:|mailto:)', u):
+            return u
+        if u.startswith('img/'):
+            return u
+        return '../%s/%s' % (folder, u)
+    if isinstance(o, dict):
+        return {k: (rel(v) if k in ('href', 'src') and isinstance(v, str) else rebase(v, folder)) for k, v in o.items()}
+    if isinstance(o, list):
+        return [rebase(x, folder) for x in o]
+    if isinstance(o, str):
+        def replace(m):
+            value=m.group(2)
+            if value.startswith('../') or value.startswith('http:') or value.startswith('data:') or value.startswith('#'):
+                return m.group(0)
+            if value.startswith('img2.'):
+                value='img/'+value
+            return m.group(1)+rel(value)+'"'
+        return _re.sub(r'((?:src|href)=")([^"]+)"', replace, o)
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
@@ -79,13 +94,18 @@ desc='Курс ЕГЭ по информатике: '+', '.join(c['title'].split(
 h=eng.replace('{{TITLE}}','ЕГЭ по информатике').replace('{{OG_TITLE}}','ЕГЭ по информатике — курс').replace('{{DESC}}',desc).replace('{{URL}}','https://gsvv.ru/inf/ege/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}','<script>\n'+data.replace('</script>','<\\/script>')+'\n</script>')
 # Картинки разделов: sources/<раздел>/img<раздел>.<урок>.<шаг>-<n>.png (качает fetch.yml) -> site/<папка раздела>/img/ (без «img» в имени)
 for src in ORDER:
-    c=next(x for x in COURSES if x['src']==src); num=load_course(src)['section']['num']; folder=c['out'].split('/')[1]
-    sdir='sources/%s'%num
+    c=next(x for x in COURSES if x['src']==src); num=load_course(src)['section']['num']; folder='ege' if num==1 else c['out'].split('/')[1]
+    sdir='sources/1' if num==1 else 'sources/%s'%num
     if not os.path.isdir(sdir): continue
     for name in sorted(os.listdir(sdir)):
-        if not _re.match(r'img%s\.\d+\.\d+-\d+\.png$'%num, name): continue
-        dst='site/%s/img/%s'%(folder,name[3:])
-        if not os.path.exists(dst): os.makedirs(os.path.dirname(dst),exist_ok=True); open(dst,'wb').write(open(sdir+'/'+name,'rb').read()); print('img',dst)
+        if not _re.match(r'img%s\.\d+\.\d+-\d+\.png$'%(2 if num==1 else num), name): continue
+        if num == 1:
+            img_1 = 'site/ege/img/%s' % name
+        else:
+            img_1 = 'site/%s/img/%s' % (folder, name[3:])
+            original = 'site/%s/img/%s' % (folder, name)
+            if not os.path.exists(original): os.makedirs(os.path.dirname(original),exist_ok=True); open(original,'wb').write(open(sdir+'/'+name,'rb').read()); print('img',original)
+        if not os.path.exists(img_1): os.makedirs(os.path.dirname(img_1),exist_ok=True); open(img_1,'wb').write(open(sdir+'/'+name,'rb').read()); print('img',img_1)
 os.makedirs('site/ege',exist_ok=True); open('site/ege/index.html','w').write(h); print('built site/ege/index.html', len(secs), 'разделов', ntask, 'задач')
 # Старые адреса разделов ведут в общий курс, в тот же раздел (ссылки из домашки и закладки продолжают работать)
 for src in ORDER:

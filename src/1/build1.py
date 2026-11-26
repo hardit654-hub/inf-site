@@ -1,10 +1,6 @@
 """Раздел № 1 «Графы, таблицы дорог» курса ЕГЭ.
 
-Источник текстов задач — исходный курс (раздел 2, семь уроков), текст без изменений;
-дополнение — задачи открытого банка КЕГЭ, которых в курсе нет.
-Картинки не скачиваются: таблицы и схемы перерисованы по содержимому
-(src/1/pics.py, src/1/pics_kege.py -> tools/figs.py) и встраиваются в страницу.
-Ответы — src/1/answers1.py: правильные попытки из банка задач + пересчёт программой.
+Картинки оставляются исходными: исходные изображения предпочтительнее неточных перерисовок.
 
 Запуск: python3 src/1/build1.py
 """
@@ -62,21 +58,21 @@ KEGE = {2: (15, [37, 39, 10083, 16312, 42])}
 
 KEEP = {"class", "style"}
 def _keep_img(tag):
-    m = re.search(r'ucarecdn\.stepik\.net/([0-9a-f\-]+)/', tag)
-    return '<img src="https://ucarecdn.stepik.net/%s/">' % m.group(1) if m else ''
+    return re.sub(r'\\s+(?:alt|height|name|width)="[^"]*"', '', tag)
+
 
 def clean(h):
-    h = re.sub(r'<img\b[^>]*>', lambda m: _keep_img(m.group(0)), h)
+    h = re.sub(r'<img\\b[^>]*>', lambda m: _keep_img(m.group(0)), h)
     h = re.sub(r'<(?!img\b)(\w+)((?:\s+[\w-]+(?:="[^"]*")?)*)\s*(/?)>',
                lambda m: '<' + m.group(1) + ''.join(f' {a}="{v}"' for a, v in re.findall(r'([\w-]+)="([^"]*)"', m.group(2))
                                                     if a in KEEP or (a == 'href' and m.group(1) == 'a')) + m.group(3) + '>', h)
     h = re.sub(r'</?(span|font|div)\b[^>]*>', '', h)
-    # скрытая подпись источника в цвете фона
     h = re.sub(r'<sup><sub>[^<]*</sub></sup>', '', h)
     h = re.sub(r'<p style="text-align: right;">\s*</p>', '', h)
     h = re.sub(r'\s+', ' ', h).strip()
     h = re.sub(r'<p>(?:&nbsp;|\s|<br>)*</p>', '', h)
     return h
+
 
 def url2name():
     m = {}
@@ -98,8 +94,23 @@ def fig(name):
     return figs.fragment(spec)
 
 def put_figs(h, name=None, extra=""):
-    """Заменить картинки шага на локальные схемы, сохраняя исходные как fallback."""
-    h = re.sub(r'<img\b[^>]*>', lambda m: fig(name) or fig(m.group(0)) or m.group(0), h)
+    """Локальные исходники подставляются из sources/1; содержимое картинки не меняется."""
+    def local_image(match):
+        tag = match.group(0)
+        ids = re.findall(r'ucarecdn\.stepik\.net/([0-9a-f\-]+)/', tag)
+        fname = U2N.get(ids[0]) if ids else name
+        if not fname:
+            return tag
+        original = fname if fname.startswith("img") else "img" + fname
+        src = os.path.join(ROOT, "sources/1", original)
+        if not os.path.isfile(src):
+            src = os.path.join(ROOT, "sources/2", original)
+        if os.path.isfile(src):
+            target = fname if fname.startswith("img") else "img" + fname
+            tag = re.sub(r'src="[^"]*"', 'src="img/%s"' % target, tag)
+            tag = re.sub(r'<img\b', '<img class="fig-source"', tag, count=1)
+        return tag
+    h = re.sub(r'<img\b[^>]*>', local_image, h)
     if extra:
         h += extra
     return h
@@ -193,6 +204,11 @@ def build():
                 out.append({"type": "video", "title": VIDEO.get(tid) or "Видеоразбор"}); continue
             ids = re.findall(r"ucarecdn\.stepik\.net/([0-9a-f\-]+)/", b["text"])
             fname = U2N.get(ids[0]) if ids else None
+            candidate = "img%s-1.png" % tid
+            if os.path.isfile(os.path.join(ROOT, "sources/1", candidate)):
+                fname = candidate
+            elif tid == "3.5":
+                fname = "img2.3.5-1.png"
             if name in ("number", "string", "table", "matching") and tid not in TEXT:
                 ans = ANS.get(tid, "")
                 if not ans:
