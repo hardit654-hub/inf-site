@@ -78,19 +78,20 @@ def math(h):
                   h, flags=re.S)
 
 
+def tw(m):
+    """Таблица из исходного шага: стили рамки убираем, даём прокрутку."""
+    t = re.sub(r'<table\b[^>]*>', "<table>", m.group(0))
+    t = re.sub(r"<(?:tbody|thead|tfoot)>|</(?:tbody|thead|tfoot)>", "", t)
+    t = re.sub(r"\s+", " ", t)
+    t = re.sub(r">\s+", ">", t)
+    t = re.sub(r"\s+<", "<", t)
+    return '<div class="tw">' + t + "</div>"
+
+
 def to_blocks(h):
-    """HTML шага -> блоки движка (html / code / details); таблицы — в «tw»."""
+    """HTML шага -> блоки движка (html / code); таблицы — в «tw» с прокруткой."""
     h = math(h)
     # таблицу из исходного шага (формулу в условии) оставляем, но с прокруткой
-    def tw(m):
-        """Таблица исходного шага: без рамки-стилей, пустые ячейки — пустые."""
-        t = m.group(0)
-        t = re.sub(r'<table\b[^>]*>', '<table class="fig">', t)
-        t = re.sub(r"<(?:tbody|thead|tfoot)>|</(?:tbody|thead|tfoot)>", "", t)
-        t = re.sub(r'\s+', " ", t)
-        t = re.sub(r'>\s+(\S)', r">\1", t)
-        t = re.sub(r'(\S)\s+<', r"\1<", t)
-        return '<div class="tw">' + t + "</div>"
     h = re.sub(r"<table\b[^>]*>.*?</table>", tw, h, flags=re.S)
     out = []
     pos = 0
@@ -167,7 +168,9 @@ def build():
                 out.append({"type": "text", "blocks": to_blocks(h)})
                 continue
             if b["name"] != "string":
-                out.append({"type": "text", "blocks": blocks(tid, b)})
+                # теория: текстовый шаг без задачи и без кнопки «Заполнить»
+                h = blank(re.sub(r"<img\b[^>]*>", "", b["text"]))
+                out.append({"type": "text", "blocks": to_blocks(h)})
                 continue
             ans = answers2.KEYS[tid]
             out.append({"type": "fill", "blocks": blocks(tid, b),
