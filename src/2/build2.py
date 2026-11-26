@@ -1,8 +1,8 @@
 """Раздел № 2 «Логика» курса ЕГЭ.
 
-Теория и тексты задач перенесены из исходного курса без изменений; таблицы
-в условиях нарисованы картинками, поэтому рисуем их сами (figs.table_html) по
-проверенным данным из tables2.py. Ответы сверяются командой
+Теория и тексты задач берутся из выгрузки исходного курса без изменений,
+вместе с разметкой: таблицы условий и формулы остаются как были. Ответы
+сверяются командой
     python3 src/2/tables2.py && python3 src/2/check2.py
 
 Запуск: python3 src/2/build2.py
@@ -18,7 +18,6 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.dirname(HERE))
-import figs                        # noqa: E402
 import answers2                    # noqa: E402
 import tables2                     # noqa: E402
 from check2 import EN, load_bank   # noqa: E402
@@ -54,14 +53,9 @@ VIDEO = {
 KEGE = {4: (9, [70, 71, 74, 75, 76, 78, 79, 83, 46, 85,
                 734, 735, 791, 816, 1185, 1267, 1282, 1357, 1422, 1846])}
 
-# «Кто заполнял» — таблица без верхнего ряда с вопросительными знаками
-NOHEAD = {"1.1", "1.12", "2.5", "2.6", "2.14", "2.15", "4.1", "4.2", "4.3", "4.4", "4.5"}
 
-def table_html(tid):
-    head, rows, _ = tables2.load(tables2.TABLES[tid][0])
-    cells = [["" if c is None else str(c) for c in r] for r in rows]
-    return '<div class="tw">' + figs.table_html(
-        {"cols": [] if tid in NOHEAD else head, "cells": cells}) + "</div>"
+
+
 
 
 def blank(h):
@@ -78,13 +72,38 @@ def math(h):
                   h, flags=re.S)
 
 
+def TD_WRAP(tag):
+    """Атрибуты ячейки: отступы исходника заменяем аккуратными."""
+    style = re.search(r'style="([^"]*)"', tag)
+    keep = []
+    if style:
+        css = {k.strip(): v.strip() for k, v in
+               (x.split(":", 1) for x in style.group(1).split(";") if ":" in x)}
+        css.pop("padding", None)
+        css["padding"] = "3px 10px"
+        keep.append("style=\"%s\"" % ";".join("%s:%s" % (k, v) for k, v in css.items()))
+    align = re.search(r'\b(align|valign)="([^"]*)"', tag)
+    if align:
+        keep.append('%s="%s"' % align.groups())
+    return "<td" + ("" if not keep else " " + " ".join(keep)) + ">"
+
+
 def tw(m):
-    """Таблица из исходного шага: стили рамки убираем, даём прокрутку."""
+    """Таблица из исходного шага: стили рамки убираем, даём прокрутку.
+
+    Текст в ячейках иногда обёрнут в <p> с отступами — внутри таблицы
+    такие абзацы сливаются в один.
+    """
     t = re.sub(r'<table\b[^>]*>', "<table>", m.group(0))
     t = re.sub(r"<(?:tbody|thead|tfoot)>|</(?:tbody|thead|tfoot)>", "", t)
+    t = re.sub(r"<p\b[^>]*>\s*</p>", "", t)
+    t = re.sub(r"</?p\b[^>]*>", "\x00", t)
     t = re.sub(r"\s+", " ", t)
+    # ячейки с обнулёнными отступами выглядят слишком тесно — даём обычные
+    t = re.sub(r"<td\b[^>]*>", lambda m: TD_WRAP(m.group(0)), t)
     t = re.sub(r">\s+", ">", t)
     t = re.sub(r"\s+<", "<", t)
+    t = re.sub(r"\x00+", " ", t).replace("\x00", " ")
     return '<div class="tw">' + t + "</div>"
 
 
@@ -106,17 +125,8 @@ def to_blocks(h):
 
 
 def blocks(tid, body, extra=""):
-    """HTML шага -> блоки движка; вместо картинки таблицы — нарисованная таблица."""
-    h = body["text"]
-    imgs = list(re.finditer(r'<p[^>]*>\s*(?:<a[^>]*>)?\s*<img\b[^>]*>\s*(?:</a>)?\s*</p>', h))
-    if imgs:
-        # первая картинка после формулы — таблица условия
-        m = imgs[0]
-        before, after = h[:m.start()], h[m.end():]
-        for extra_img in imgs[1:]:
-            after = after.replace(extra_img.group(0), "", 1)
-        h = before + table_html(tid) + after
-    h = blank(re.sub(r"<img\b[^>]*>", "", h)) + extra
+    """HTML шага -> блоки движка; разметка условия сохраняется как есть."""
+    h = blank(re.sub(r"<img\b[^>]*>", "", body["text"])) + extra
     return to_blocks(h)
 
 
