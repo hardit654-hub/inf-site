@@ -1,0 +1,4557 @@
+{
+ "units": {
+  "1": {
+   "unit": 1420692,
+   "lesson": 890678,
+   "title": null
+  },
+  "2": {
+   "unit": 1420693,
+   "lesson": 560561,
+   "title": null
+  },
+  "3": {
+   "unit": 2040743,
+   "lesson": 1986500,
+   "title": null
+  },
+  "4": {
+   "unit": 1420694,
+   "lesson": 1035874,
+   "title": null
+  },
+  "5": {
+   "unit": 1420695,
+   "lesson": 1035224,
+   "title": null
+  },
+  "6": {
+   "unit": 1420696,
+   "lesson": 1064510,
+   "title": null
+  },
+  "7": {
+   "unit": 1420697,
+   "lesson": 760445,
+   "title": null
+  }
+ },
+ "lessons": {
+  "560561": {
+   "title": "Сопоставление схемы и таблицы ",
+   "steps": [
+    4375060,
+    2266875,
+    2275942,
+    3729202,
+    4273724,
+    3354585,
+    2266869,
+    2266872,
+    4273751,
+    4274568,
+    2266870,
+    3354600,
+    2562473,
+    2266873,
+    4275945
+   ]
+  },
+  "760445": {
+   "title": "Тренировка",
+   "steps": [
+    3161156,
+    4276903,
+    3161153,
+    8346190,
+    4333236,
+    3161154,
+    5798766,
+    10025907,
+    3161152,
+    5798781,
+    3161155,
+    3928353,
+    4653370,
+    4922630
+   ]
+  },
+  "890678": {
+   "title": "💡 Теория графов",
+   "steps": [
+    4375056,
+    3729201,
+    3729193,
+    4280460,
+    3729194
+   ]
+  },
+  "1035224": {
+   "title": "Симметричные графы, графы без длин дорог",
+   "steps": [
+    4375065,
+    4274538,
+    4274537,
+    4274543,
+    4274545,
+    4274554,
+    4274559,
+    4274557,
+    4274544,
+    4274549,
+    4274551,
+    4274575
+   ]
+  },
+  "1035874": {
+   "title": "Стандартные задачи",
+   "steps": [
+    4375063,
+    4276851,
+    4333096,
+    4276857,
+    4333109,
+    4276852,
+    4276853,
+    4276862,
+    4276856
+   ]
+  },
+  "1064510": {
+   "title": "Решение в Python",
+   "steps": [
+    4403681,
+    8493299,
+    8493298,
+    8347035,
+    8493300,
+    4403700
+   ]
+  },
+  "1986500": {
+   "title": "Супер алгоритм для устного решения",
+   "steps": [
+    8494096,
+    8481163,
+    8345767,
+    8345768,
+    8345703,
+    8345284,
+    8345304,
+    8345788,
+    8346104,
+    8346103,
+    8346264
+   ]
+  }
+ },
+ "steps": {
+  "2266869": {
+   "id": 2266869,
+   "lesson": 560561,
+   "position": 7,
+   "status": "ready",
+   "block": {
+    "name": "number",
+    "text": "<p><em><strong>Попробуйте решить задачу самостоятельно, а после обязательно посмотрите её разбор на следующем шаге </strong></em>😉</p>\n\n<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"187\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/236c187a-40f8-415c-8bbe-02a5edc8d656/\" width=\"578\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите длину дороги из пункта В в пункт Б.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-2266869",
+   "subscriptions": [
+    "31-77-2266869",
+    "30-77-2266869"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 24159,
+   "passed_by": 19969,
+   "correct_ratio": 0.7030407740152038,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 4,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    12
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 2245961,
+   "create_date": "2021-07-12T18:46:27Z",
+   "update_date": "2026-01-28T08:39:30Z",
+   "discussions_count": 9,
+   "discussion_proxy": "77-2266869-1",
+   "discussion_threads": [
+    "77-2266869-1",
+    "77-2266869-2"
+   ]
+  },
+  "2266870": {
+   "id": 2266870,
+   "lesson": 560561,
+   "position": 11,
+   "status": "ready",
+   "block": {
+    "name": "number",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"274\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/677600aa-7459-4ec6-a23f-56d029d4e612/\" width=\"739\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова протяжённость дороги из пункта Ж в пункт Г.<br>\nВ ответе запишите целое число – так, как оно указано в таблице.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-2266870",
+   "subscriptions": [
+    "31-77-2266870",
+    "30-77-2266870"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 21654,
+   "passed_by": 17988,
+   "correct_ratio": 0.7294605147820543,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    1,
+    1,
+    1,
+    9
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 2245962,
+   "create_date": "2021-07-12T18:48:08Z",
+   "update_date": "2026-01-28T08:39:26Z",
+   "discussions_count": 12,
+   "discussion_proxy": "77-2266870-1",
+   "discussion_threads": [
+    "77-2266870-1",
+    "77-2266870-2"
+   ]
+  },
+  "2266872": {
+   "id": 2266872,
+   "lesson": 560561,
+   "position": 8,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 261434,
+     "thumbnail": "https://cdn.stepik.net/video/261434/thumbnail/c3b727a1cd0321fd5e9b3b11e6fa4629.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/261434/1080/ea6ab3a137e817d3f345bc31717b9d6b.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/261434/720/54981c021db6117147e7fea92eda9a8f.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/261434/540/6e457a8b0ba60e23347502d26f718c61.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/261434/360/0a968db899e1762ee0abc13f611c4dcd.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/261434/240/497bafe2334a6922a50f386c69d9f924.mp4"
+      }
+     ],
+     "duration": 287,
+     "status": "ready",
+     "upload_date": "2022-10-12T09:59:38Z",
+     "filename": "https://drive.google.com/file/d/1fFZWP4w1p0sjb-vDMF-QdbWlbY3Ogjbj/view?usp=sharing"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-2266872",
+   "subscriptions": [
+    "31-77-2266872",
+    "30-77-2266872"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 22494,
+   "passed_by": 22494,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    1,
+    17
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 2245964,
+   "create_date": "2021-07-12T18:52:50Z",
+   "update_date": "2023-08-09T14:33:50Z",
+   "discussions_count": 11,
+   "discussion_proxy": "77-2266872-1",
+   "discussion_threads": [
+    "77-2266872-1"
+   ]
+  },
+  "2266873": {
+   "id": 2266873,
+   "lesson": 560561,
+   "position": 14,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 251913,
+     "thumbnail": "https://cdn.stepik.net/video/251913/thumbnail/d61e54fb7a7b1ff282ec81a24da7521a.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/251913/1080/cf6aa6cc7ce004c9c4f795cd847269d3.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/251913/720/093d82e17debda0dd109176a1a643557.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/251913/540/b50c26f7be47fd1ba4f2e43687897424.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/251913/360/372e280a6a8b6f37e8f1784354fdad07.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/251913/240/0ffc095a3fec9d941f69982d53cb414e.mp4"
+      }
+     ],
+     "duration": 658,
+     "status": "ready",
+     "upload_date": "2022-08-09T08:09:18Z",
+     "filename": "1-2 отм.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-2266873",
+   "subscriptions": [
+    "31-77-2266873",
+    "30-77-2266873"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 19143,
+   "passed_by": 19143,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    2,
+    0,
+    1,
+    0,
+    19
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 2245965,
+   "create_date": "2021-07-12T18:52:50Z",
+   "update_date": "2023-08-09T14:33:50Z",
+   "discussions_count": 6,
+   "discussion_proxy": "77-2266873-1",
+   "discussion_threads": [
+    "77-2266873-1"
+   ]
+  },
+  "2266875": {
+   "id": 2266875,
+   "lesson": 560561,
+   "position": 2,
+   "status": "ready",
+   "block": {
+    "name": "number",
+    "text": "<p><em><strong>Попробуйте решить задачу самостоятельно, а после обязательно посмотрите её разбор на следующем шаге </strong></em>😉</p>\n\n<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"197\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/1bf8fdd3-ce92-4898-a341-eae3f11f3c24/\" width=\"617\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова длина дороги из пункта Е в пункт В.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-2266875",
+   "subscriptions": [
+    "31-77-2266875",
+    "30-77-2266875"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 27999,
+   "passed_by": 20758,
+   "correct_ratio": 0.7174872779968321,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    2,
+    0,
+    1,
+    1,
+    13
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 2245967,
+   "create_date": "2021-07-12T18:53:42Z",
+   "update_date": "2026-01-28T08:39:29Z",
+   "discussions_count": 20,
+   "discussion_proxy": "77-2266875-1",
+   "discussion_threads": [
+    "77-2266875-1",
+    "77-2266875-2"
+   ]
+  },
+  "2275942": {
+   "id": 2275942,
+   "lesson": 560561,
+   "position": 3,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 261433,
+     "thumbnail": "https://cdn.stepik.net/video/261433/thumbnail/0b0e219062da94100f609f9d5f23c7da.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/261433/1080/1a265acb9f65cb6a65c5175a46070f18.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/261433/720/8e230e5d31d86707f7905dad54340444.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/261433/540/34c8dde7cc1f131fd7862a73be24f2d9.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/261433/360/47fbd87e62c094d1d93aca933ffb3175.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/261433/240/a53408be22df7bd41a8e728b3d20be3a.mp4"
+      }
+     ],
+     "duration": 451,
+     "status": "ready",
+     "upload_date": "2022-10-12T09:58:19Z",
+     "filename": "№ 1 1 Ок-1.m4v"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-2275942",
+   "subscriptions": [
+    "31-77-2275942",
+    "30-77-2275942"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 26236,
+   "passed_by": 26236,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    2,
+    3,
+    22
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 2255034,
+   "create_date": "2021-07-20T10:13:27Z",
+   "update_date": "2023-08-09T14:33:50Z",
+   "discussions_count": 17,
+   "discussion_proxy": "77-2275942-1",
+   "discussion_threads": [
+    "77-2275942-1"
+   ]
+  },
+  "2562473": {
+   "id": 2562473,
+   "lesson": 560561,
+   "position": 13,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p><em><strong>Попробуйте решить задачу самостоятельно, а после обязательно посмотрите её разбор на следующем шаге </strong></em>😉</p>\n\n<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"189\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/3426c238-98c4-4b2a-831c-081c533e2918/\" width=\"592\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите длину кратчайшего пути из пункта Е в пункт В. <br>\nВ ответе запишите целое число – количество километров.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-2562473",
+   "subscriptions": [
+    "31-77-2562473",
+    "30-77-2562473"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 18761,
+   "passed_by": 15094,
+   "correct_ratio": 0.5102047611120359,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    2,
+    0,
+    1,
+    0,
+    12
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 2541565,
+   "create_date": "2021-12-03T08:37:58Z",
+   "update_date": "2026-01-28T08:39:22Z",
+   "discussions_count": 20,
+   "discussion_proxy": "77-2562473-1",
+   "discussion_threads": [
+    "77-2562473-1",
+    "77-2562473-2"
+   ]
+  },
+  "3161152": {
+   "id": 3161152,
+   "lesson": 760445,
+   "position": 9,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"221\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/c163c1cb-4b93-40d8-9416-b400a1d747f9/\" width=\"781\"></p>\n\n<p> </p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова протяжённость дороги из пункта К в пункт Д.<br>\nВ ответе запишите целое число – так, как оно указано в таблице.</p>\n\n<p><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3161152",
+   "subscriptions": [
+    "31-77-3161152",
+    "30-77-3161152"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 5742,
+   "passed_by": 4427,
+   "correct_ratio": 0.771684773236765,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    0,
+    0,
+    2
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3140244,
+   "create_date": "2022-07-25T13:14:01Z",
+   "update_date": "2026-04-18T12:33:08Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-3161152-1",
+   "discussion_threads": [
+    "77-3161152-1",
+    "77-3161152-2"
+   ]
+  },
+  "3161153": {
+   "id": 3161153,
+   "lesson": 760445,
+   "position": 3,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"246\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/43f7540c-c918-43b4-9e80-02e869f3c3b5/\" width=\"766\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта Д в пункты Е и Г.<br>\nВ ответе запишите целое число.</p>\n\n<p> </p>\n\n<p><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3161153",
+   "subscriptions": [
+    "31-77-3161153",
+    "30-77-3161153"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6470,
+   "passed_by": 5014,
+   "correct_ratio": 0.6438078336924832,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    1,
+    4
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3140245,
+   "create_date": "2022-07-25T13:14:01Z",
+   "update_date": "2026-01-28T08:35:55Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-3161153-1",
+   "discussion_threads": [
+    "77-3161153-1",
+    "77-3161153-2"
+   ]
+  },
+  "3161154": {
+   "id": 3161154,
+   "lesson": 760445,
+   "position": 6,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"215\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/9bb65563-4ff1-4369-babc-cc97a8b4c37e/\" width=\"696\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта Г в пункты Е и Д. В ответе запишите целое число.</p>\n\n<p><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3161154",
+   "subscriptions": [
+    "31-77-3161154",
+    "30-77-3161154"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6026,
+   "passed_by": 4652,
+   "correct_ratio": 0.6298779670108623,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    0,
+    0,
+    4
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3140246,
+   "create_date": "2022-07-25T13:14:01Z",
+   "update_date": "2026-01-28T08:35:55Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-3161154-1",
+   "discussion_threads": [
+    "77-3161154-1",
+    "77-3161154-2"
+   ]
+  },
+  "3161155": {
+   "id": 3161155,
+   "lesson": 760445,
+   "position": 11,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"219\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/c8922fca-fe38-46db-8a4e-b6d1db73d24f/\" width=\"600\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта G в пункт C и из пункта B в пункт H.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3161155",
+   "subscriptions": [
+    "31-77-3161155",
+    "30-77-3161155"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 5643,
+   "passed_by": 4228,
+   "correct_ratio": 0.6467129071170085,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    0,
+    0,
+    5
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3140247,
+   "create_date": "2022-07-25T13:14:01Z",
+   "update_date": "2026-04-18T12:33:07Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-3161155-1",
+   "discussion_threads": [
+    "77-3161155-1",
+    "77-3161155-2"
+   ]
+  },
+  "3161156": {
+   "id": 3161156,
+   "lesson": 760445,
+   "position": 1,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"285\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/ef990ad5-cfb6-4751-8a7d-8861b513c9ba/\" width=\"796\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта А в пункты В и Б.<br>\nВ ответе запишите целое число</p>\n\n<p><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3161156",
+   "subscriptions": [
+    "31-77-3161156",
+    "30-77-3161156"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 10011,
+   "passed_by": 5892,
+   "correct_ratio": 0.6239975002603896,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    0,
+    1,
+    16
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3140248,
+   "create_date": "2022-07-25T13:14:02Z",
+   "update_date": "2026-01-28T08:35:55Z",
+   "discussions_count": 17,
+   "discussion_proxy": "77-3161156-1",
+   "discussion_threads": [
+    "77-3161156-1",
+    "77-3161156-2"
+   ]
+  },
+  "3354585": {
+   "id": 3354585,
+   "lesson": 560561,
+   "position": 6,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"194\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/8007e7f3-5559-45e7-ae09-6c25dc6f0baf/\" width=\"605\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова длина дороги из пункта Г в пункт В.</p>\n\n<details><summary>Решение</summary>\n\n<p>Заметим, что из городов В и Г выходит по четыре дороги. Эти два города являются единственными городами, из которых выходит по четыре дороги. Значит этим городам соответствуют города П2 и П3. По условии задачи нам нужна дорога между городами В и Г. То есть между городами П2 и П3. Ищем длину этой дороги в таблице – 8.</p>\n\n<p><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>\n</details>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3354585",
+   "subscriptions": [
+    "31-77-3354585",
+    "30-77-3354585"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 17685,
+   "passed_by": 14813,
+   "correct_ratio": 0.8549072971593809,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    2,
+    2,
+    1,
+    15
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3333677,
+   "create_date": "2022-10-11T14:51:35Z",
+   "update_date": "2026-01-28T08:39:22Z",
+   "discussions_count": 7,
+   "discussion_proxy": "77-3354585-1",
+   "discussion_threads": [
+    "77-3354585-1",
+    "77-3354585-2"
+   ]
+  },
+  "3354600": {
+   "id": 3354600,
+   "lesson": 560561,
+   "position": 12,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"222\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/6c5adb71-383a-4e46-b642-064b6361b3ba/\" width=\"584\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова длина дороги из пункта Е в пункт В.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3354600",
+   "subscriptions": [
+    "31-77-3354600",
+    "30-77-3354600"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 15292,
+   "passed_by": 12599,
+   "correct_ratio": 0.647142278070531,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    2,
+    1,
+    12
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3333692,
+   "create_date": "2022-10-11T15:16:24Z",
+   "update_date": "2026-01-28T08:39:22Z",
+   "discussions_count": 6,
+   "discussion_proxy": "77-3354600-1",
+   "discussion_threads": [
+    "77-3354600-1",
+    "77-3354600-2"
+   ]
+  },
+  "3729193": {
+   "id": 3729193,
+   "lesson": 890678,
+   "position": 3,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align: center;\">Термины по теории графов</h2>\n\n<p>📝 <strong>Граф</strong> — совокупность вершин и рёбер.</p>\n\n<p>📝 <strong>Взвешенный граф</strong> — граф, в котором каждое ребро имеет вес (числовое значение).</p>\n\n<p>📝 <strong>Ориентированный граф</strong> — граф, в котором каждое ребро имеет направление.</p>\n\n<p>📝 <strong>Степень вершины графа</strong> — это количество выходящих из неё (или, что то же самое, входящих в неё) рёбер.</p>\n\n<p>📝 <strong>Петля</strong> — ребро графа, исходящее из вершины и возвращающееся в ту же вершину.</p>\n\n<p>📝 <strong>Матрица смежности</strong> — это вид представления графа в виде матрицы, в которой, если на пересечении строки, соответствующей одной вершине, и столбца, соответствующего второй вершине, стоит отметка, то она означает наличие ребра между этими двумя вершинами.</p>\n\n<p>📝 <strong>Весовая матрица</strong> — это вид представления графа в виде матрицы, в которой, если на пересечении строки, соответствующей одной вершине, и столбца, соответствующего второй вершине, стоит число (вес), то оно означает наличие ребра данного веса между этими двумя вершинами.</p>\n\n<p style=\"text-align: right;\"><span style=\"color: #ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-3729193",
+   "subscriptions": [
+    "31-77-3729193",
+    "30-77-3729193"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 19399,
+   "passed_by": 19399,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    0,
+    4,
+    20
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3708284,
+   "create_date": "2023-01-30T06:56:26Z",
+   "update_date": "2023-08-09T14:30:28Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-3729193-1",
+   "discussion_threads": [
+    "77-3729193-1"
+   ]
+  },
+  "3729194": {
+   "id": 3729194,
+   "lesson": 890678,
+   "position": 5,
+   "status": "ready",
+   "block": {
+    "name": "table",
+    "text": "<h3>Постройте матрицу смежности для графа:</h3>\n\n<p>     <img alt=\"\" height=\"198\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/215e416c-1341-46e1-ae1d-5d4703878b52/\" width=\"219\"></p>\n\n<p style=\"text-align: right;\"><span style=\"color: #ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3729194",
+   "subscriptions": [
+    "31-77-3729194",
+    "30-77-3729194"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 17850,
+   "passed_by": 13793,
+   "correct_ratio": 0.6486934881791787,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    2,
+    1,
+    3,
+    1,
+    15
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3708285,
+   "create_date": "2023-01-30T06:57:10Z",
+   "update_date": "2023-08-09T14:30:28Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-3729194-1",
+   "discussion_threads": [
+    "77-3729194-1",
+    "77-3729194-2"
+   ]
+  },
+  "3729201": {
+   "id": 3729201,
+   "lesson": 890678,
+   "position": 2,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 288239,
+     "thumbnail": "https://cdn.stepik.net/video/288239/thumbnail/3ba4301bfe8b7b09b203bbb61fbb04ee.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/288239/1080/1c47b78463c2269cda7988c686609d5f.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/288239/720/892d3b6885144a9f7f2b6e1d78f9f5b2.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/288239/540/6b746dd05379c1f32095659cc3afa785.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/288239/360/42cbed116fb8919d8b133938e7072190.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/288239/240/ae3e69da3771d1307ca284dc20a9fbcb.mp4"
+      }
+     ],
+     "duration": 435,
+     "status": "ready",
+     "upload_date": "2023-01-30T06:58:21Z",
+     "filename": "Теория по графам.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-3729201",
+   "subscriptions": [
+    "31-77-3729201",
+    "30-77-3729201"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 22283,
+   "passed_by": 22283,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    3,
+    32
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3708292,
+   "create_date": "2023-01-30T06:57:16Z",
+   "update_date": "2023-08-09T14:30:28Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-3729201-1",
+   "discussion_threads": [
+    "77-3729201-1"
+   ]
+  },
+  "3729202": {
+   "id": 3729202,
+   "lesson": 560561,
+   "position": 4,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align: center;\">Конспект по № 1</h2>\n\n<h3><strong>Решим задачу:</strong></h3>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>\n\t\t\t<p><em>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</em></p>\n\n\t\t\t<p><img alt=\"\" height=\"168\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/4c63e9f2-2c63-49a5-9587-57e613fc6806/\" width=\"526\"></p>\n\n\t\t\t<p><em>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова длина дороги из пункта В в пункт Е.</em></p>\n\t\t\t</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n<h3><strong>Решение:</strong></h3>\n\n<p>Проставим в матрице смежности и на графе степени вершин – количество дорог, которые выходят из каждого города.</p>\n\n<p><img alt=\"\" height=\"156\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/6d36de02-e504-4f22-a46f-8e54462d2dbe/\" width=\"527\"></p>\n\n<p><strong>1. </strong>Чтобы найти длину дороги из пункта В в пункт Е, нужно найти номера городов В и Е в таблице.</p>\n\n<ul>\n\t<li>Заметим, что город В – <strong>единственный </strong>город, из которого выходит <strong>пять </strong>дорог. Ищем такой город в таблице. Это город П6. Значит, город В – это город П6.</li>\n\t<li>Заметим, что город Е – <strong>единственный </strong>город, из которого выходит <strong>четыре </strong>дороги. Ищем такой город в таблице. Это город П4. Значит, город Е – это город П4.</li>\n</ul>\n\n<p><strong>2. </strong>Чтобы найти длину дороги между городами В и Е, смотрим на ячейку в таблице, находящуюся на пересечение городов П6 и П4. Получаем длину дороги ВЕ — 20.</p>\n\n<p><img alt=\"\" height=\"156\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/086cb10a-9cb4-4154-9352-1cfd4323d910/\" width=\"527\"></p>\n\n<h3><strong>Ответ:</strong> 20.</h3>\n\n<p style=\"text-align: right;\"><span style=\"color: #ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-3729202",
+   "subscriptions": [
+    "31-77-3729202",
+    "30-77-3729202"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 16255,
+   "passed_by": 16255,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    1,
+    15
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3708293,
+   "create_date": "2023-01-30T06:58:58Z",
+   "update_date": "2024-01-27T08:56:20Z",
+   "discussions_count": 5,
+   "discussion_proxy": "77-3729202-1",
+   "discussion_threads": [
+    "77-3729202-1"
+   ]
+  },
+  "3928353": {
+   "id": 3928353,
+   "lesson": 760445,
+   "position": 12,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>(СтатГрад) На рисунке схема дорог изображена в виде графа, в таблице звёздочками обозначено наличие дороги между населёнными пунктами. Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Выпишите последовательно без пробелов и знаков препинания указанные на графе буквенные обозначения пунктов от П1 до П8: сначала букву, соответствующую П1, затем букву, соответствующую П2, и т. д.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"253\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/95e9f9cb-f57a-47b5-8214-6003414d45b9/\" width=\"624\"></p>\n\n<details><summary>Видеоразбор</summary>\n\n<p>    <a href=\"https://youtu.be/GoUlzv4t2e8?t=196\" rel=\"noopener noreferrer nofollow\">https://youtu.be/GoUlzv4t2e8?t=196</a></p>\n\n<p>    <a href=\"https://vk.com/video-205997912_456239216\" rel=\"noopener noreferrer nofollow\">https://vk.com/video-205997912_456239216</a></p>\n\n<p><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>\n</details>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-3928353",
+   "subscriptions": [
+    "31-77-3928353",
+    "30-77-3928353"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 5424,
+   "passed_by": 4040,
+   "correct_ratio": 0.6769434775401956,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    1,
+    0,
+    0,
+    6
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 3907450,
+   "create_date": "2023-04-04T09:36:24Z",
+   "update_date": "2026-04-18T12:33:08Z",
+   "discussions_count": 6,
+   "discussion_proxy": "77-3928353-1",
+   "discussion_threads": [
+    "77-3928353-1",
+    "77-3928353-2"
+   ]
+  },
+  "4273724": {
+   "id": 4273724,
+   "lesson": 560561,
+   "position": 5,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке справа схема дорог <em>N</em>-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"227\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/c34def77-f296-4836-9219-ae5558433457/\" width=\"657\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова длина дороги из пункта Е в пункт Г.<br>\nВ ответе запишите целое число – так, как оно указано в таблице.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4273724",
+   "subscriptions": [
+    "31-77-4273724",
+    "30-77-4273724"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 14256,
+   "passed_by": 11695,
+   "correct_ratio": 0.7804206801651268,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    2,
+    2,
+    12
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4252821,
+   "create_date": "2023-07-10T07:07:55Z",
+   "update_date": "2026-01-28T08:39:23Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-4273724-1",
+   "discussion_threads": [
+    "77-4273724-1",
+    "77-4273724-2"
+   ]
+  },
+  "4273751": {
+   "id": 4273751,
+   "lesson": 560561,
+   "position": 9,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"217\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/b8db349e-dad6-4ae6-b09b-f35429a376e6/\" width=\"617\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите длину дороги из пункта Е в пункт Б.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4273751",
+   "subscriptions": [
+    "31-77-4273751",
+    "30-77-4273751"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 12731,
+   "passed_by": 10619,
+   "correct_ratio": 0.6543187458386296,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    7
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4252848,
+   "create_date": "2023-07-10T07:31:02Z",
+   "update_date": "2026-01-28T08:39:22Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-4273751-1",
+   "discussion_threads": [
+    "77-4273751-1",
+    "77-4273751-2"
+   ]
+  },
+  "4274537": {
+   "id": 4274537,
+   "lesson": 1035224,
+   "position": 3,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 317708,
+     "thumbnail": "https://cdn.stepik.net/video/317708/thumbnail/e7d406b8295b85050a1f51d5b8889c99.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/317708/1080/8baf80eeea71d8dd3c7e72b50eaa159b.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/317708/720/0a2e0678f8805f3d35e31cc4791372db.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/317708/540/a1c290773ed00df147ef77706f210922.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/317708/360/575019932ffb2fb394067e6599100f24.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/317708/240/1d6afaaa7634da2399a74551391a84c0.mp4"
+      }
+     ],
+     "duration": 463,
+     "status": "ready",
+     "upload_date": "2023-07-10T09:03:09Z",
+     "filename": "№ 1 Симметричный Граф. сжатый.m4v"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4274537",
+   "subscriptions": [
+    "31-77-4274537",
+    "30-77-4274537"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 7771,
+   "passed_by": 7771,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    3,
+    13
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253634,
+   "create_date": "2023-07-10T08:53:08Z",
+   "update_date": "2023-08-09T14:36:43Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-4274537-1",
+   "discussion_threads": [
+    "77-4274537-1"
+   ]
+  },
+  "4274538": {
+   "id": 4274538,
+   "lesson": 1035224,
+   "position": 2,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p><em><strong>Попробуйте решить задачу самостоятельно, а после обязательно посмотрите её разбор на следующем шаге </strong></em>😉</p>\n\n<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"240\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/b758960b-251d-4cce-af37-e4e3ea317f3e/\" width=\"554\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова протяжённость дороги из пункта Д в пункт Е. В ответе запишите целое число – так, как оно указано в таблице.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274538",
+   "subscriptions": [
+    "31-77-4274538",
+    "30-77-4274538"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 8926,
+   "passed_by": 6601,
+   "correct_ratio": 0.7007452503411358,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    10
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253635,
+   "create_date": "2023-07-10T08:53:08Z",
+   "update_date": "2026-01-28T08:43:53Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-4274538-1",
+   "discussion_threads": [
+    "77-4274538-1",
+    "77-4274538-2"
+   ]
+  },
+  "4274543": {
+   "id": 4274543,
+   "lesson": 1035224,
+   "position": 4,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"233\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/6818cc5b-6458-45ae-96b2-2d0a051392c6/\" width=\"600\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта В в пункт Б и из пункта Г в пункт Д.</p>\n\n<p>В ответе запишите целое число. </p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274543",
+   "subscriptions": [
+    "31-77-4274543",
+    "30-77-4274543"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 7743,
+   "passed_by": 6225,
+   "correct_ratio": 0.670929241261722,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    4
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253640,
+   "create_date": "2023-07-10T08:55:50Z",
+   "update_date": "2026-01-28T08:43:53Z",
+   "discussions_count": 8,
+   "discussion_proxy": "77-4274543-1",
+   "discussion_threads": [
+    "77-4274543-1",
+    "77-4274543-2"
+   ]
+  },
+  "4274544": {
+   "id": 4274544,
+   "lesson": 1035224,
+   "position": 9,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке слева изображена схема дорог Н-ского района, в таблице звёздочкой обозначено наличие дороги из одного населённого пункта в другой. Отсутствие звёздочки означает, что такой дороги нет.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"237\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/4b06763b-764b-4d86-9037-ff3be0c66f56/\" width=\"639\"></p>\n\n<p>Каждому населённому пункту на схеме соответствует его номер в таблице, но неизвестно, какой именно номер. Определите, какие номера населённых пунктов в таблице могут соответствовать населённым пунктам F и B на схеме. В ответе запишите эти два номера в возрастающем порядке без пробелов и знаков препинания.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274544",
+   "subscriptions": [
+    "31-77-4274544",
+    "30-77-4274544"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6544,
+   "passed_by": 5187,
+   "correct_ratio": 0.6372893684082919,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    8
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253641,
+   "create_date": "2023-07-10T08:55:51Z",
+   "update_date": "2026-01-28T08:43:52Z",
+   "discussions_count": 5,
+   "discussion_proxy": "77-4274544-1",
+   "discussion_threads": [
+    "77-4274544-1",
+    "77-4274544-2"
+   ]
+  },
+  "4274545": {
+   "id": 4274545,
+   "lesson": 1035224,
+   "position": 5,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог <em>N</em>-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"211\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/b36f76f5-a7d1-4a61-8bb0-4001090eeb1d/\" width=\"618\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта Б в пункт А и из пункта Д в пункт Е.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274545",
+   "subscriptions": [
+    "31-77-4274545",
+    "30-77-4274545"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 7355,
+   "passed_by": 5857,
+   "correct_ratio": 0.6891167560009321,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    8
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253642,
+   "create_date": "2023-07-10T08:55:51Z",
+   "update_date": "2026-01-28T08:43:52Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-4274545-1",
+   "discussion_threads": [
+    "77-4274545-1",
+    "77-4274545-2"
+   ]
+  },
+  "4274549": {
+   "id": 4274549,
+   "lesson": 1035224,
+   "position": 10,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке слева изображена схема дорог N-ского района. В таблице звёздочкой обозначено наличие дороги из одного населённого пункта в другой. Отсутствие звёздочки означает, что такой дороги нет.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"295\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/afc073e6-741e-4105-8198-f92205869d56/\" width=\"742\"></p>\n\n<p>Каждому населённому пункту на схеме соответствует его номер в таблице, но неизвестно, какой именно номер. Определите, какие номера населённых пунктов в таблице могут соответствовать населённым пунктам E и G на схеме. В ответе запишите эти два номера в возрастающем порядке без пробелов и знаков препинания.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274549",
+   "subscriptions": [
+    "31-77-4274549",
+    "30-77-4274549"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6394,
+   "passed_by": 5114,
+   "correct_ratio": 0.6957750269106566,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    7
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253646,
+   "create_date": "2023-07-10T08:57:58Z",
+   "update_date": "2026-01-28T08:43:53Z",
+   "discussions_count": 1,
+   "discussion_proxy": "77-4274549-1",
+   "discussion_threads": [
+    "77-4274549-1",
+    "77-4274549-2"
+   ]
+  },
+  "4274551": {
+   "id": 4274551,
+   "lesson": 1035224,
+   "position": 11,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке слева изображена схема дорог Н-ского района, в таблице звёздочкой обозначено наличие дороги из одного населённого пункта в другой. Отсутствие звёздочки означает, что такой дороги нет.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"219\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/be580b3c-924f-4d1d-837c-5c280ae7831e/\" width=\"584\"></p>\n\n<p>Каждому населённому пункту на схеме соответствует его номер в таблице, но неизвестно, какой именно номер. Определите, какие номера населённых пунктов в таблице могут соответствовать населённым пунктам D и A на схеме. В ответе запишите эти два номера в возрастающем порядке без пробелов и знаков препинания.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274551",
+   "subscriptions": [
+    "31-77-4274551",
+    "30-77-4274551"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6301,
+   "passed_by": 5018,
+   "correct_ratio": 0.5995501893939394,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    16
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253648,
+   "create_date": "2023-07-10T08:57:58Z",
+   "update_date": "2026-01-28T08:43:55Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-4274551-1",
+   "discussion_threads": [
+    "77-4274551-1",
+    "77-4274551-2"
+   ]
+  },
+  "4274554": {
+   "id": 4274554,
+   "lesson": 1035224,
+   "position": 6,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p><em><strong>Попробуйте решить задачу самостоятельно, а после обязательно посмотрите её разбор на следующем шаге </strong></em>😉</p>\n\n<p>В таблице содержатся сведения о дорогах между населёнными пунктами (звёздочка означает, что дорога между соответствующими городами есть). На рисунке справа та же схема дорог изображена в виде графа.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"235\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/ac1ddc49-e816-4dfa-9306-9c6f620d9edc/\" width=\"630\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите номера населённых пунктов В и Б в таблице. В ответе напишите два числа без разделителей: сначала для пункта Б, затем для пункта В.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274554",
+   "subscriptions": [
+    "31-77-4274554",
+    "30-77-4274554"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 7155,
+   "passed_by": 5786,
+   "correct_ratio": 0.6514763231197772,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    7
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253651,
+   "create_date": "2023-07-10T09:01:40Z",
+   "update_date": "2026-01-28T08:43:53Z",
+   "discussions_count": 1,
+   "discussion_proxy": "77-4274554-1",
+   "discussion_threads": [
+    "77-4274554-1",
+    "77-4274554-2"
+   ]
+  },
+  "4274557": {
+   "id": 4274557,
+   "lesson": 1035224,
+   "position": 8,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>В таблице содержатся сведения о дорогах между населёнными пунктами (звёздочка означает, что дорога между соответствующими городами есть). На рисунке справа та же схема дорог изображена в виде графа.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"272\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/0c30ee0f-e0e7-4ded-a66d-cb241239966d/\" width=\"637\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите номера населённых пунктов В и Ж в таблице. В ответе напишите два числа без разделителей: сначала для пункта Ж, затем для пункта В.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274557",
+   "subscriptions": [
+    "31-77-4274557",
+    "30-77-4274557"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6883,
+   "passed_by": 5336,
+   "correct_ratio": 0.5192400424341788,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    10
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253654,
+   "create_date": "2023-07-10T09:02:15Z",
+   "update_date": "2026-01-28T08:43:52Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-4274557-1",
+   "discussion_threads": [
+    "77-4274557-1",
+    "77-4274557-2"
+   ]
+  },
+  "4274559": {
+   "id": 4274559,
+   "lesson": 1035224,
+   "position": 7,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 319907,
+     "thumbnail": "https://cdn.stepik.net/video/319907/thumbnail/ac1a9ae8b37eb968d81d6ab587f6080b.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/319907/1080/64857ddb812857380ec90d3840f81499.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/319907/720/eeb86bc5971c964bbd619dc4f0c745aa.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/319907/540/21545a93c28995c57c6e79382bf6ba59.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/319907/360/5019f22f2b8dc2731a7cbd948ae05617.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/319907/240/cb391f926645895c0e1c9687b8427239.mp4"
+      }
+     ],
+     "duration": 446,
+     "status": "ready",
+     "upload_date": "2023-07-25T11:07:18Z",
+     "filename": "https://drive.google.com/file/d/1nGI1v_7hB7vmE-GdFmGC2VI9hAHsweko/view?usp=sharing"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4274559",
+   "subscriptions": [
+    "31-77-4274559",
+    "30-77-4274559"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6821,
+   "passed_by": 6821,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    10
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253656,
+   "create_date": "2023-07-10T09:04:40Z",
+   "update_date": "2023-08-09T14:36:43Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-4274559-1",
+   "discussion_threads": [
+    "77-4274559-1"
+   ]
+  },
+  "4274568": {
+   "id": 4274568,
+   "lesson": 560561,
+   "position": 10,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"245\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/a941c930-ef46-4b36-a414-5a07f9af90a4/\" width=\"733\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова протяжённость дороги из пункта Д в пункт Г.<br>\nВ ответе запишите целое число – так, как оно указано в таблице.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274568",
+   "subscriptions": [
+    "31-77-4274568",
+    "30-77-4274568"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 12292,
+   "passed_by": 10231,
+   "correct_ratio": 0.6755087445549705,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    1,
+    13
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253665,
+   "create_date": "2023-07-10T09:09:43Z",
+   "update_date": "2026-01-28T08:39:22Z",
+   "discussions_count": 5,
+   "discussion_proxy": "77-4274568-1",
+   "discussion_threads": [
+    "77-4274568-1",
+    "77-4274568-2"
+   ]
+  },
+  "4274575": {
+   "id": 4274575,
+   "lesson": 1035224,
+   "position": 12,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длине этих дорог в километрах.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"222\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/e6777123-afee-49a8-9822-9f105fb51365/\" width=\"578\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите длину более короткой из дорог БА и АВ. В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4274575",
+   "subscriptions": [
+    "31-77-4274575",
+    "30-77-4274575"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6426,
+   "passed_by": 5080,
+   "correct_ratio": 0.6389442231075697,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    5,
+    128
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4253672,
+   "create_date": "2023-07-10T09:14:02Z",
+   "update_date": "2026-01-28T08:43:52Z",
+   "discussions_count": 6,
+   "discussion_proxy": "77-4274575-1",
+   "discussion_threads": [
+    "77-4274575-1",
+    "77-4274575-2"
+   ]
+  },
+  "4275945": {
+   "id": 4275945,
+   "lesson": 560561,
+   "position": 15,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"205\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/852d4e6f-9bc8-473c-abfd-42e3bec00a42/\" width=\"576\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите длину кратчайшего пути из пункта Е в пункт В.</p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4275945",
+   "subscriptions": [
+    "31-77-4275945",
+    "30-77-4275945"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 11502,
+   "passed_by": 9040,
+   "correct_ratio": 0.7079919616633173,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    8,
+    2,
+    1,
+    9,
+    336
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4255042,
+   "create_date": "2023-07-10T15:48:42Z",
+   "update_date": "2026-01-28T08:39:22Z",
+   "discussions_count": 18,
+   "discussion_proxy": "77-4275945-1",
+   "discussion_threads": [
+    "77-4275945-1",
+    "77-4275945-2"
+   ]
+  },
+  "4276851": {
+   "id": 4276851,
+   "lesson": 1035874,
+   "position": 2,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p><em><strong>Попробуйте решить задачу самостоятельно, а после обязательно посмотрите её разбор на следующем шаге </strong></em>😉</p>\n\n<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"218\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/36ef9096-1ede-451a-9e9a-8bb6beba3cf2/\" width=\"584\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта D в пункт H и из пункта A в пункт B.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4276851",
+   "subscriptions": [
+    "31-77-4276851",
+    "30-77-4276851"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 11171,
+   "passed_by": 7797,
+   "correct_ratio": 0.6045889101338432,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    3,
+    0,
+    1,
+    0,
+    11
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4255948,
+   "create_date": "2023-07-11T08:36:42Z",
+   "update_date": "2026-01-28T08:42:18Z",
+   "discussions_count": 10,
+   "discussion_proxy": "77-4276851-1",
+   "discussion_threads": [
+    "77-4276851-1",
+    "77-4276851-2"
+   ]
+  },
+  "4276852": {
+   "id": 4276852,
+   "lesson": 1035874,
+   "position": 6,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"230\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/fe6981fd-5ed0-44c2-afd0-99b7c3435ba9/\" width=\"684\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта B в пункт D и из пункта F в пункт A.</p>\n\n<p>В ответе запишите целое число.</p>\n\n<details><summary>Видеоразбор</summary>\n\n<p><a href=\"https://rutube.ru/video/f309de47cad216efa33c35b6590de8c9/?r=wd&amp;t=37\" rel=\"noopener noreferrer nofollow\">https://rutube.ru/video/f309de47cad216efa33c35b6590de8c9/?r=wd&amp;t=37</a></p>\n\n<p style=\"text-align:center;\"><iframe allowfullscreen=\"\" height=\"567\" src=\"https://www.youtube.com/embed/OpNX4AEsRq4?start=71\" width=\"1000\"></iframe></p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>\n</details>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4276852",
+   "subscriptions": [
+    "31-77-4276852",
+    "30-77-4276852"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 8766,
+   "passed_by": 6857,
+   "correct_ratio": 0.7144772117962467,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    1,
+    7
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4255950,
+   "create_date": "2023-07-11T08:36:42Z",
+   "update_date": "2026-01-28T08:42:18Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-4276852-1",
+   "discussion_threads": [
+    "77-4276852-1",
+    "77-4276852-2"
+   ]
+  },
+  "4276853": {
+   "id": 4276853,
+   "lesson": 1035874,
+   "position": 7,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"211\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/cceae13f-2d9c-4e64-96c4-bc0a880914b2/\" width=\"623\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта D в пункт A и из пункта G в пункт C.</p>\n\n<p>В ответе запишите целое число.</p>\n\n<details><summary>Видеоразбор</summary>\n\n<p><a href=\"https://rutube.ru/video/4867e8f7b9a2fe68fca002084a7ef3cf/?r=wd&amp;t=12\" rel=\"noopener noreferrer nofollow\">https://rutube.ru/video/4867e8f7b9a2fe68fca002084a7ef3cf/?r=wd&amp;t=12</a></p>\n\n<p style=\"text-align:center;\"><iframe allowfullscreen=\"\" height=\"567\" src=\"https://www.youtube.com/embed/zM_rQ0AHArc?start=11\" width=\"1000\"></iframe></p>\n\n<p style=\"text-align:right;\"><span style=\"color:#ffffff;\"><sup><sub>PRO100 ЕГЭ информатика ЕГЭ</sub></sup></span></p>\n</details>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4276853",
+   "subscriptions": [
+    "31-77-4276853",
+    "30-77-4276853"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 8322,
+   "passed_by": 6542,
+   "correct_ratio": 0.7276431718061674,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    7
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4255949,
+   "create_date": "2023-07-11T08:36:42Z",
+   "update_date": "2026-01-28T08:42:17Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-4276853-1",
+   "discussion_threads": [
+    "77-4276853-1",
+    "77-4276853-2"
+   ]
+  },
+  "4276856": {
+   "id": 4276856,
+   "lesson": 1035874,
+   "position": 9,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"267\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/e8921086-81cc-45a5-9218-86fe394414c3/\" width=\"629\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта D в пункт C и из пункта E в пункт G.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4276856",
+   "subscriptions": [
+    "31-77-4276856",
+    "30-77-4276856"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 8096,
+   "passed_by": 6229,
+   "correct_ratio": 0.5970036032619003,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    2,
+    0,
+    1,
+    8,
+    169
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4255953,
+   "create_date": "2023-07-11T08:37:33Z",
+   "update_date": "2026-01-28T08:42:18Z",
+   "discussions_count": 8,
+   "discussion_proxy": "77-4276856-1",
+   "discussion_threads": [
+    "77-4276856-1",
+    "77-4276856-2"
+   ]
+  },
+  "4276857": {
+   "id": 4276857,
+   "lesson": 1035874,
+   "position": 4,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p><em><strong>Попробуйте решить задачу самостоятельно, а после обязательно посмотрите её разбор на следующем шаге </strong></em>😉</p>\n\n<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"260\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/91f19a26-a244-4efe-961b-6a1c790ea313/\" width=\"781\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта B в пункт D и из пункта A в пункт E.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4276857",
+   "subscriptions": [
+    "31-77-4276857",
+    "30-77-4276857"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 9361,
+   "passed_by": 7423,
+   "correct_ratio": 0.69698655540102,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    1,
+    4
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4255954,
+   "create_date": "2023-07-11T08:37:33Z",
+   "update_date": "2026-01-28T08:42:17Z",
+   "discussions_count": 9,
+   "discussion_proxy": "77-4276857-1",
+   "discussion_threads": [
+    "77-4276857-1",
+    "77-4276857-2"
+   ]
+  },
+  "4276862": {
+   "id": 4276862,
+   "lesson": 1035874,
+   "position": 8,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"272\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/50449b8f-d98f-451b-82ce-95b67accfd6d/\" width=\"684\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак<br>\nне связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта <em>B</em> в пункт <em>F</em> и из пункта <em>E</em> в пункт <em>C</em>.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4276862",
+   "subscriptions": [
+    "31-77-4276862",
+    "30-77-4276862"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 8076,
+   "passed_by": 6355,
+   "correct_ratio": 0.632258700581682,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    3
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4255959,
+   "create_date": "2023-07-11T08:40:15Z",
+   "update_date": "2026-01-28T08:42:18Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-4276862-1",
+   "discussion_threads": [
+    "77-4276862-1",
+    "77-4276862-2"
+   ]
+  },
+  "4276903": {
+   "id": 4276903,
+   "lesson": 760445,
+   "position": 2,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"236\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/e33af485-9e87-48ad-a6a5-224bf87052e9/\" width=\"618\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта В в пункт Е и из пункта Б в пункт Д.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4276903",
+   "subscriptions": [
+    "31-77-4276903",
+    "30-77-4276903"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6732,
+   "passed_by": 5080,
+   "correct_ratio": 0.6588401334359764,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    0,
+    0,
+    5
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4256000,
+   "create_date": "2023-07-11T08:51:36Z",
+   "update_date": "2026-01-28T08:35:55Z",
+   "discussions_count": 7,
+   "discussion_proxy": "77-4276903-1",
+   "discussion_threads": [
+    "77-4276903-1",
+    "77-4276903-2"
+   ]
+  },
+  "4280460": {
+   "id": 4280460,
+   "lesson": 890678,
+   "position": 4,
+   "status": "ready",
+   "block": {
+    "name": "matching",
+    "text": "",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4280460",
+   "subscriptions": [
+    "31-77-4280460",
+    "30-77-4280460"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 16847,
+   "passed_by": 12264,
+   "correct_ratio": 0.769553417221811,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    2,
+    0,
+    7
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4259557,
+   "create_date": "2023-07-12T15:32:03Z",
+   "update_date": "2023-08-09T14:30:28Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-4280460-1",
+   "discussion_threads": [
+    "77-4280460-1",
+    "77-4280460-2"
+   ]
+  },
+  "4333096": {
+   "id": 4333096,
+   "lesson": 1035874,
+   "position": 3,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 319906,
+     "thumbnail": "https://cdn.stepik.net/video/319906/thumbnail/ceef2c5edc53329f1c046bec43a3fb7e.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/319906/1080/92bb8f322b22346d1b809466c94368ea.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/319906/720/ab6d14e0d181880b5b8e3bf994c964fb.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/319906/540/487def04d146084274fa17667516fe6b.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/319906/360/d1ec7e0c3a94301ea130cc80a8b2941c.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/319906/240/16c2f273b0bb8edb114a007f2a44d7f6.mp4"
+      }
+     ],
+     "duration": 732,
+     "status": "ready",
+     "upload_date": "2023-07-25T11:06:56Z",
+     "filename": "https://drive.google.com/file/d/1UCBpQUiuTH3HVrnX3y3rarwehFww3Efa/view?usp=sharing"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4333096",
+   "subscriptions": [
+    "31-77-4333096",
+    "30-77-4333096"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 9461,
+   "passed_by": 9461,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    1,
+    2,
+    0,
+    12
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4312193,
+   "create_date": "2023-07-25T11:06:39Z",
+   "update_date": "2023-08-09T14:34:43Z",
+   "discussions_count": 15,
+   "discussion_proxy": "77-4333096-1",
+   "discussion_threads": [
+    "77-4333096-1"
+   ]
+  },
+  "4333109": {
+   "id": 4333109,
+   "lesson": 1035874,
+   "position": 5,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 319908,
+     "thumbnail": "https://cdn.stepik.net/video/319908/thumbnail/6f56e30f9e6276b7e61cfb1ad30dff19.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/319908/1080/8742f97500e0eee6923bf007262b1d7e.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/319908/720/3242b8e01562006a0bd84543c73d0727.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/319908/540/5f51489eaff9722c6cadb92759bec860.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/319908/360/0d116a674ba6c6a7527ae4c154592b84.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/319908/240/0b6698319c0a381a0bc9caa75a6ba5d7.mp4"
+      }
+     ],
+     "duration": 361,
+     "status": "ready",
+     "upload_date": "2023-07-25T11:07:51Z",
+     "filename": "https://drive.google.com/file/d/1rjYurI1NBLxeSc-f2rI0ZRxDjts2UQ8a/view?usp=sharing"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4333109",
+   "subscriptions": [
+    "31-77-4333109",
+    "30-77-4333109"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 8544,
+   "passed_by": 8544,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    2,
+    0,
+    9
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4312206,
+   "create_date": "2023-07-25T11:07:39Z",
+   "update_date": "2023-08-09T14:34:41Z",
+   "discussions_count": 7,
+   "discussion_proxy": "77-4333109-1",
+   "discussion_threads": [
+    "77-4333109-1"
+   ]
+  },
+  "4333236": {
+   "id": 4333236,
+   "lesson": 760445,
+   "position": 5,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке изображена схема дорог <em>N</em>-ского района, в таблице звёздочкой обозначено наличие дороги из одного населённого пункта в другой. Отсутствие звёздочки означает, что такой дороги нет.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"248\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/29ef540e-561a-4c4b-b234-93f39399f9e9/\" width=\"626\"></p>\n\n<p>Каждому населённому пункту на схеме соответствует номер в таблице, но неизвестно, какой именно номер. Определите, какие номера в таблице могут соответствовать населённым пунктам G и A на схеме. В ответе запишите эти два номера в возрастающем порядке без пробелов и знаков препинания.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4333236",
+   "subscriptions": [
+    "31-77-4333236",
+    "30-77-4333236"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 5933,
+   "passed_by": 4521,
+   "correct_ratio": 0.5809814391050089,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    0,
+    0,
+    5
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4312333,
+   "create_date": "2023-07-25T11:54:23Z",
+   "update_date": "2026-01-28T08:35:55Z",
+   "discussions_count": 8,
+   "discussion_proxy": "77-4333236-1",
+   "discussion_threads": [
+    "77-4333236-1",
+    "77-4333236-2"
+   ]
+  },
+  "4375056": {
+   "id": 4375056,
+   "lesson": 890678,
+   "position": 1,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align: center;\">Содержание урока</h2>\n\n<p>В этом уроке мы изучим основные теоретические сведения по теории графов.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4375056",
+   "subscriptions": [
+    "31-77-4375056",
+    "30-77-4375056"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 20774,
+   "passed_by": 20774,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    4,
+    0,
+    1,
+    3,
+    16
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4354153,
+   "create_date": "2023-08-09T14:30:28Z",
+   "update_date": "2023-08-09T14:30:35Z",
+   "discussions_count": 1,
+   "discussion_proxy": "77-4375056-1",
+   "discussion_threads": [
+    "77-4375056-1"
+   ]
+  },
+  "4375060": {
+   "id": 4375060,
+   "lesson": 560561,
+   "position": 1,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align: center;\">Содержание урока</h2>\n\n<p>В этом уроке мы изучим основные приёмы, необходимые для решения № 1.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4375060",
+   "subscriptions": [
+    "31-77-4375060",
+    "30-77-4375060"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 18931,
+   "passed_by": 18931,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    2,
+    0,
+    1,
+    0,
+    18
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4354157,
+   "create_date": "2023-08-09T14:33:50Z",
+   "update_date": "2023-08-14T10:35:09Z",
+   "discussions_count": 1,
+   "discussion_proxy": "77-4375060-1",
+   "discussion_threads": [
+    "77-4375060-1"
+   ]
+  },
+  "4375063": {
+   "id": 4375063,
+   "lesson": 1035874,
+   "position": 1,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align: center;\">Содержание урока</h2>\n\n<p>В этом уроке мы продолжим изучать приёмы, необходимые для решения № 1.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4375063",
+   "subscriptions": [
+    "31-77-4375063",
+    "30-77-4375063"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 12389,
+   "passed_by": 12389,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    2,
+    0,
+    16
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4354160,
+   "create_date": "2023-08-09T14:34:41Z",
+   "update_date": "2023-08-14T10:35:01Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-4375063-1",
+   "discussion_threads": [
+    "77-4375063-1"
+   ]
+  },
+  "4375065": {
+   "id": 4375065,
+   "lesson": 1035224,
+   "position": 1,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align: center;\">Содержание урока</h2>\n\n<p>В этом уроке мы научимся решать № 1 с симметричным графом и № 1 с дорогами с неизвестной длиной. </p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4375065",
+   "subscriptions": [
+    "31-77-4375065",
+    "30-77-4375065"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 10146,
+   "passed_by": 10146,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    2,
+    0,
+    12
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4354162,
+   "create_date": "2023-08-09T14:36:43Z",
+   "update_date": "2023-08-09T14:36:43Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-4375065-1",
+   "discussion_threads": [
+    "77-4375065-1"
+   ]
+  },
+  "4403681": {
+   "id": 4403681,
+   "lesson": 1064510,
+   "position": 1,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align:center;\">Содержание урока</h2>\n\n<p>В этом уроке мы научимся решать № 1 с помощью программирования.</p>\n\n<p><strong>Зачем решать № 1 кодом?</strong></p>\n\n<ol>\n\t<li>Чтобы проверить себя. Можно решить устно, решить кодом и сравнить полученные ответы.</li>\n\t<li>Решать кодом № 1 очень просто. Наверняка, кто-то выберет основным именно программный способ.</li>\n</ol>\n\n<p><strong>Решать кодом № 1 сложно?</strong><br>\nНет, легко! Можно просто выучить шаблон. К тому же можно запросто понять как он работает. Этот способ реально лёгкий.</p>\n\n<p> </p>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%;\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>\n\t\t\t<p><strong><span style=\"color:#ff4363;\">❗ На данный момент в курсе мы ещё не изучили Python. Вернитесь к этому уроку, когда его изучите.</span></strong></p>\n\n\t\t\t<p>Чтобы понять решение № 1 в Python нужно знать</p>\n\n\t\t\t<ul>\n\t\t\t\t<li>Списки</li>\n\t\t\t\t<li>Списочные выражение</li>\n\t\t\t\t<li>split()</li>\n\t\t\t\t<li>replace()</li>\n\t\t\t</ul>\n\t\t\t</td>\n\t\t</tr>\n\t</tbody>\n</table>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4403681",
+   "subscriptions": [
+    "31-77-4403681",
+    "30-77-4403681"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 2092,
+   "passed_by": 2092,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    4
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4382778,
+   "create_date": "2023-08-17T14:36:27Z",
+   "update_date": "2026-11-25T10:13:25Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-4403681-1",
+   "discussion_threads": [
+    "77-4403681-1"
+   ]
+  },
+  "4403700": {
+   "id": 4403700,
+   "lesson": 1064510,
+   "position": 6,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align:center;\">Наш предыдущий способ решения № 1 кодом</h2>\n\n<p>Если Вы уже выучили наш старый код для решения № 1, то используйте его. Не нужно переучиваться на новую версию кода.<br>\nИменно для Вас мы оставили данный конспект.</p>\n\n<p>Всем остальным рекомендуем пропустить данный материал.</p>\n\n<h3 style=\"text-align:center;\">Видеоразбор</h3>\n\n<p><iframe allowfullscreen=\"\" height=\"567\" src=\"https://www.youtube.com/embed/9MeuO8eR55Y\" width=\"1000\"></iframe></p>\n\n<p>Если видео не грузится, то можно посмотреть его</p>\n\n<ul>\n\t<li><a href=\"https://youtu.be/9MeuO8eR55Y\" rel=\"noopener noreferrer nofollow\">В ютубе</a></li>\n\t<li><a href=\"https://vk.com/video-205997912_456239189\" rel=\"noopener noreferrer nofollow\">В ВК</a></li>\n</ul>\n\n<h3 style=\"text-align:center;\">Шаблон решения № 1 в Python</h3>\n\n<pre><code class=\"language-python\">from itertools import *\n\ntable = 'Выписываем дороги цифрами'\ngraph = 'Выписываем дороги буквами'\n\nfor per in permutations('Выписываем все города буквами'):\n    new_graph = table\n    for i in range(1, 'Указываем количество городов + 1'):\n        new_graph = new_graph.replace(str(i), per[i-1])\n\n    if set(graph.split()) == set(new_graph.split()):\n        print('1 2 3 4 5 6')\n        print(*per)</code></pre>\n\n<h3 style=\"text-align:center;\">Пример использования шаблона</h3>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%;\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>\n\t\t\t<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n\t\t\t<p><img alt=\"\" height=\"154\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/4ec14803-5bfc-4b32-83d0-8c67617fa11a/\" width=\"487\"></p>\n\n\t\t\t<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова длина дороги из пункта В в пункт Д.</p>\n\t\t\t</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n<h3 style=\"text-align:center;\">Решение</h3>\n\n<pre><code class=\"language-python\">from itertools import *\n\ntable = '12 15 16 21 24 25 34 42 43 45 51 52 54 56 61 65'\ngraph = 'аб ба ав ва бв вб бг гб гд дг де ед вд дв вг гв'\n\nfor per in permutations('абвгде'):\n    new_graph = table\n    for i in range(1, 7):\n        new_graph = new_graph.replace(str(i), per[i-1])\n\n    if set(graph.split()) == set(new_graph.split()):\n        print('1 2 3 4 5 6')\n        print(*per)</code></pre>\n\n<p> Программа выводит</p>\n\n<pre><code class=\"language-no-highlight\">1 2 3 4 5 6\nб г е д в а</code></pre>\n\n<p>Это значит, что пункту 1 соответствует Б, пункту 2 соответствует Г...</p>\n\n<p>Нам нужна длина дороги ВД, то есть длина дороги между пунктами 5 и 4. Смотрим в таблицу, получаем ответ – 5.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4403700",
+   "subscriptions": [
+    "31-77-4403700",
+    "30-77-4403700"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 1407,
+   "passed_by": 1407,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    1
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4382797,
+   "create_date": "2023-08-17T14:59:06Z",
+   "update_date": "2025-10-22T08:22:52Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-4403700-1",
+   "discussion_threads": [
+    "77-4403700-1"
+   ]
+  },
+  "4653370": {
+   "id": 4653370,
+   "lesson": 760445,
+   "position": 13,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>(СтатГрад) На рисунке схема дорог изображена в виде графа, в таблице звёздочками обозначено наличие дороги между населёнными пунктами. Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Выпишите последовательно без пробелов и знаков препинания указанные на графе буквенные обозначения пунктов от П1 до П9: сначала букву, соответствующую П1, затем букву, соответствующую П2, и т. д.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"262\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/1b879a23-7e3f-41ad-994f-909342666600/\" width=\"678\"></p>\n\n<p> </p>\n\n<details><summary>Видеоразбор</summary>\n\n<p>    <a href=\"https://www.youtube.com/live/BzVI_V02CQU?si=kDa_pon_Vn4N51Wj&amp;t=207\" rel=\"noopener noreferrer nofollow\">https://www.youtube.com/live/BzVI_V02CQU?si=kDa_pon_Vn4N51Wj&amp;t=207</a></p>\n\n<p>    <a href=\"https://vk.com/video-205997912_456239208\" rel=\"noopener noreferrer nofollow\">https://vk.com/video-205997912_456239208</a></p>\n</details>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-4653370",
+   "subscriptions": [
+    "31-77-4653370",
+    "30-77-4653370"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 4914,
+   "passed_by": 3454,
+   "correct_ratio": 0.7327586206896551,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    1,
+    5
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4632467,
+   "create_date": "2023-10-29T13:33:04Z",
+   "update_date": "2026-04-18T12:33:07Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-4653370-1",
+   "discussion_threads": [
+    "77-4653370-1",
+    "77-4653370-2"
+   ]
+  },
+  "4922630": {
+   "id": 4922630,
+   "lesson": 760445,
+   "position": 14,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h1 style=\"text-align: center;\">Ещё больше задач для тренировки</h1>\n\n<p>Ссылка на это видео в рутуб: <a href=\"https://rutube.ru/video/a65a2cd8ba16a22439121b5369d42697/?r=wd\" rel=\"noopener noreferrer nofollow\">https://rutube.ru/video/a65a2cd8ba16a22439121b5369d42697/?r=wd</a>.</p>\n\n<p style=\"text-align: center;\"><iframe allowfullscreen=\"\" height=\"567\" src=\"https://www.youtube.com/embed/v62J4jx2QUc\" width=\"1000\"></iframe></p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-4922630",
+   "subscriptions": [
+    "31-77-4922630",
+    "30-77-4922630"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 4703,
+   "passed_by": 4703,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    0,
+    0,
+    10
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 4901727,
+   "create_date": "2023-12-24T08:53:29Z",
+   "update_date": "2026-04-18T12:33:07Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-4922630-1",
+   "discussion_threads": [
+    "77-4922630-1"
+   ]
+  },
+  "5798766": {
+   "id": 5798766,
+   "lesson": 760445,
+   "position": 7,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах). Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"226\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/985a3a63-38d0-4568-9677-f185a7da1a92/\" width=\"482\"></p>\n\n<p>Определите сумму протяженностей дорог из пункта пункта A в пункт Е и из пункта B в пункт H.<br>\nВ ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-5798766",
+   "subscriptions": [
+    "31-77-5798766",
+    "30-77-5798766"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 3643,
+   "passed_by": 2555,
+   "correct_ratio": 0.46391382405745063,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    0,
+    0,
+    6
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 5777860,
+   "create_date": "2024-08-05T14:23:38Z",
+   "update_date": "2026-01-28T08:35:55Z",
+   "discussions_count": 6,
+   "discussion_proxy": "77-5798766-1",
+   "discussion_threads": [
+    "77-5798766-1",
+    "77-5798766-2"
+   ]
+  },
+  "5798781": {
+   "id": 5798781,
+   "lesson": 760445,
+   "position": 10,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, звёздочка в ячейке таблицы обозначает наличие дороги между двумя пунктами. Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"218\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/4acec508-b0b2-41ba-9a40-654d6469bac6/\" width=\"512\"></p>\n\n<p>Определите сумму протяженностей дорог из пункта D в пункт B и из пункта C в пункт A. В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-5798781",
+   "subscriptions": [
+    "31-77-5798781",
+    "30-77-5798781"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 3421,
+   "passed_by": 2522,
+   "correct_ratio": 0.6938163988014165,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    0,
+    1,
+    4
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 5777875,
+   "create_date": "2024-08-05T14:27:16Z",
+   "update_date": "2026-04-18T12:33:09Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-5798781-1",
+   "discussion_threads": [
+    "77-5798781-1",
+    "77-5798781-2"
+   ]
+  },
+  "8345284": {
+   "id": 8345284,
+   "lesson": 1986500,
+   "position": 6,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах). </p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"358\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/5e11cf72-27f7-4154-ad99-2f85b5c38f3c/\" width=\"752\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта G в пункт A и из пункта D в пункт E.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-8345284",
+   "subscriptions": [
+    "31-77-8345284",
+    "30-77-8345284"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 3084,
+   "passed_by": 1937,
+   "correct_ratio": 0.577935522034901,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    2,
+    1,
+    2,
+    1,
+    8
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8324375,
+   "create_date": "2025-10-07T08:46:18Z",
+   "update_date": "2026-01-28T08:41:07Z",
+   "discussions_count": 6,
+   "discussion_proxy": "77-8345284-1",
+   "discussion_threads": [
+    "77-8345284-1"
+   ]
+  },
+  "8345304": {
+   "id": 8345304,
+   "lesson": 1986500,
+   "position": 7,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 553525,
+     "thumbnail": "https://cdn.stepik.net/video/553525/thumbnail/342a13a34f506a0c2b57837df2cd5809.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/553525/1080/b4dc18e89efa3d55054cfc0b80031b27.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/553525/720/51d8386324a03d89ba65b72db68068c9.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/553525/540/cd5796a24a3a4259437a625b76bc4abb.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/553525/360/02d036ae9ca67ee29213230d8ee681b4.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/553525/240/3b6056392af0d4281aaad84aa85b6284.mp4"
+      }
+     ],
+     "duration": 659,
+     "status": "ready",
+     "upload_date": "2025-10-20T16:18:42Z",
+     "filename": "Номер 1 3 1080.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8345304",
+   "subscriptions": [
+    "31-77-8345304",
+    "30-77-8345304"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 2903,
+   "passed_by": 2903,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    1,
+    1,
+    1,
+    29
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8324395,
+   "create_date": "2025-10-07T08:47:19Z",
+   "update_date": "2025-10-22T09:27:12Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-8345304-1",
+   "discussion_threads": [
+    "77-8345304-1"
+   ]
+  },
+  "8345703": {
+   "id": 8345703,
+   "lesson": 1986500,
+   "position": 5,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"238\" src=\"https://pro100ege.org/media/uploads/mceclip0_r5mwyCt.png\" width=\"594\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта E в пункт G и из пункта F в пункт H.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-8345703",
+   "subscriptions": [
+    "31-77-8345703",
+    "30-77-8345703"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 3348,
+   "passed_by": 2079,
+   "correct_ratio": 0.6065997130559541,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    0,
+    13
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8324794,
+   "create_date": "2025-10-07T09:14:51Z",
+   "update_date": "2026-01-28T08:41:07Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-8345703-1",
+   "discussion_threads": [
+    "77-8345703-1"
+   ]
+  },
+  "8345767": {
+   "id": 8345767,
+   "lesson": 1986500,
+   "position": 3,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"220\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/92705bf9-5baa-43bd-bbd9-afb94576558b/\" width=\"615\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта F в пункт G и из пункта С в пункт В.<br>\nВ ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-8345767",
+   "subscriptions": [
+    "31-77-8345767",
+    "30-77-8345767"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 4471,
+   "passed_by": 2304,
+   "correct_ratio": 0.5946496815286624,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    3,
+    1,
+    1,
+    1,
+    17
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8324858,
+   "create_date": "2025-10-07T09:19:43Z",
+   "update_date": "2026-03-03T10:24:09Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-8345767-1",
+   "discussion_threads": [
+    "77-8345767-1"
+   ]
+  },
+  "8345768": {
+   "id": 8345768,
+   "lesson": 1986500,
+   "position": 4,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 553524,
+     "thumbnail": "https://cdn.stepik.net/video/553524/thumbnail/50e1573d7bfd7a1af0e590656fef2cf7.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/553524/1080/0212eeb50f9592710b68c72827872860.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/553524/720/366d9e6d43a6a6f126e2dc53c5f45ac2.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/553524/540/6426475f9e1720d403a7dda000ff5a05.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/553524/360/3c5e1acad3fcc5c558dcfc7f79ab2a59.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/553524/240/1967065c095103a51a175d49fedb4bf7.mp4"
+      }
+     ],
+     "duration": 361,
+     "status": "ready",
+     "upload_date": "2025-10-20T16:18:23Z",
+     "filename": "Номер 1 2 1080.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8345768",
+   "subscriptions": [
+    "31-77-8345768",
+    "30-77-8345768"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 3489,
+   "passed_by": 3489,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    2,
+    0,
+    25
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8324859,
+   "create_date": "2025-10-07T09:19:45Z",
+   "update_date": "2025-10-22T09:27:12Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-8345768-1",
+   "discussion_threads": [
+    "77-8345768-1"
+   ]
+  },
+  "8345788": {
+   "id": 8345788,
+   "lesson": 1986500,
+   "position": 8,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"251\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/cd55ccb1-52c3-4e90-9522-9bdf354e7fb5/\" width=\"698\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта B в пункт C и из пункта А в пункт Н.<br>\nВ ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-8345788",
+   "subscriptions": [
+    "31-77-8345788",
+    "30-77-8345788"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 2969,
+   "passed_by": 1816,
+   "correct_ratio": 0.5968688845401174,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    2,
+    18
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8324879,
+   "create_date": "2025-10-07T09:22:28Z",
+   "update_date": "2026-01-28T08:41:07Z",
+   "discussions_count": 4,
+   "discussion_proxy": "77-8345788-1",
+   "discussion_threads": [
+    "77-8345788-1"
+   ]
+  },
+  "8346103": {
+   "id": 8346103,
+   "lesson": 1986500,
+   "position": 10,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 553526,
+     "thumbnail": "https://cdn.stepik.net/video/553526/thumbnail/eab659bd0b29552c7d3a6a450714d92c.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/553526/1080/839c98d710c36b483afb2193e4c321ae.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/553526/720/524a8771e4dce57b3f927d0fe1a69311.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/553526/540/0666f159521365a555b62242becf9ed7.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/553526/360/172ab526a1715b9cb4350e835c897361.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/553526/240/2576030ccb33f97d4cdd9af3e136b41e.mp4"
+      }
+     ],
+     "duration": 316,
+     "status": "ready",
+     "upload_date": "2025-10-20T16:18:54Z",
+     "filename": "Номер 1 4 1080.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8346103",
+   "subscriptions": [
+    "31-77-8346103",
+    "30-77-8346103"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 2656,
+   "passed_by": 2656,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    0,
+    1,
+    2,
+    13
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8325194,
+   "create_date": "2025-10-07T09:26:58Z",
+   "update_date": "2025-10-22T09:27:12Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-8346103-1",
+   "discussion_threads": [
+    "77-8346103-1"
+   ]
+  },
+  "8346104": {
+   "id": 8346104,
+   "lesson": 1986500,
+   "position": 9,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"239\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/4124a9b7-a13f-4cd2-a83e-55d3f67a6eff/\" width=\"650\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта D в пункт E и из пункта G в пункт D. <br>\nВ ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-8346104",
+   "subscriptions": [
+    "31-77-8346104",
+    "30-77-8346104"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 2878,
+   "passed_by": 1801,
+   "correct_ratio": 0.7165354330708661,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    2,
+    0,
+    16
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8325195,
+   "create_date": "2025-10-07T09:26:58Z",
+   "update_date": "2026-01-28T08:41:07Z",
+   "discussions_count": 1,
+   "discussion_proxy": "77-8346104-1",
+   "discussion_threads": [
+    "77-8346104-1"
+   ]
+  },
+  "8346190": {
+   "id": 8346190,
+   "lesson": 760445,
+   "position": 4,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"234\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/6b5caecf-a758-4dd6-a814-9b7adc7922a2/\" width=\"599\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта A в пункт B и из пункта E в пункт F.<br>\nВ ответе запишите целое число</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-8346190",
+   "subscriptions": [
+    "31-77-8346190",
+    "30-77-8346190"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 1713,
+   "passed_by": 1247,
+   "correct_ratio": 0.5107330903199676,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    5
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8325281,
+   "create_date": "2025-10-07T09:30:11Z",
+   "update_date": "2026-01-28T08:35:56Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-8346190-1",
+   "discussion_threads": [
+    "77-8346190-1"
+   ]
+  },
+  "8346264": {
+   "id": 8346264,
+   "lesson": 1986500,
+   "position": 11,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>В таблице содержатся сведения о дорогах между населёнными пунктами (звёздочка означает, что дорога между соответствующими городами есть). На рисунке справа та же схема дорог изображена в виде графа.</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"383\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/2ace7eb3-a43e-47a2-9994-a8171f3a5eb7/\" width=\"654\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите номера населённых пунктов В и Б в таблице.</p>\n\n<p>В ответе напишите два числа без разделителей: сначала для пункта Б, затем для пункта В.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-8346264",
+   "subscriptions": [
+    "31-77-8346264",
+    "30-77-8346264"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 2783,
+   "passed_by": 1714,
+   "correct_ratio": 0.613652357494722,
+   "worth": 1,
+   "is_solutions_unlocked": true,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    1,
+    1,
+    1,
+    0,
+    19
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8325355,
+   "create_date": "2025-10-07T09:35:36Z",
+   "update_date": "2026-01-28T08:41:07Z",
+   "discussions_count": 0,
+   "discussion_proxy": "77-8346264-1",
+   "discussion_threads": [
+    "77-8346264-1"
+   ]
+  },
+  "8347035": {
+   "id": 8347035,
+   "lesson": 1064510,
+   "position": 4,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align:center;\">Шаблон решения № 1 в Python</h2>\n\n<pre><code class=\"language-python\">from itertools import *\n\nprint('1 2 3 4 ...')\nfor per in permutations(&lt;буквенные обозначения городов&gt;):\n    g = &lt;граф&gt;\n    t = &lt;таблица&gt;\n    for i in range(&lt;количество городов&gt;):\n        g = g.replace(per[i], str(i + 1))\n    if {s[0]: set(s[1:]) for s in g.split()} == {s[0]: set(s[1:]) for s in t.split()}:\n        print(*per)\n</code></pre>\n\n<p>Для решения любого задания № 1 с реальных ЕГЭ прошлых лет, можно написать данный код, заполнить пропуски и получить ответ на задание.</p>\n\n<p>На наш взгляд, данный код решит задание с <strong>реального экзамена текущего года</strong> с вероятностью 98%.<br>\nМогут возникнуть трудности, если поменяется формулировка задания или если будет больше девяти городов.</p>\n\n<h2 style=\"text-align:center;\">Пример использования шаблона</h2>\n\n<h3 style=\"text-align:center;\">Условие </h3>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%;\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>\n\t\t\t<p>На рисунке справа схема дорог Н-ского района изображена в виде графа, в таблице содержатся сведения о длинах этих дорог (в километрах).</p>\n\n\t\t\t<p><img alt=\"\" height=\"154\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/4ec14803-5bfc-4b32-83d0-8c67617fa11a/\" width=\"487\"></p>\n\n\t\t\t<p>Так как таблицу и схему рисовали независимо друг от друга, то нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова длина дороги из пункта В в пункт Д.</p>\n\t\t\t</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n<h3 style=\"text-align:center;\">Решение</h3>\n\n<pre><code class=\"language-python\">from itertools import *\n\nprint('1 2 3 4 5 6')\nfor per in permutations('абвгде'):\n    g = 'абв багв вабгд гбвд дгве ед'\n    t = '1256 2145 34 4235 51246 615'\n    for i in range(6):\n        g = g.replace(per[i], str(i + 1))\n    if {s[0]: set(s[1:]) for s in g.split()} == {s[0]: set(s[1:]) for s in t.split()}:\n        print(*per)</code></pre>\n\n<p> Программа выводит</p>\n\n<pre><code class=\"language-no-highlight\">1 2 3 4 5 6\nб г е д в а</code></pre>\n\n<p>Это значит, что пункту 1 соответствует Б, пункту 2 соответствует Г...<br>\nНам нужна длина дороги ВД, то есть длина дороги между пунктами 4 и 5. Смотрим в таблицу, получаем ответ – 5.</p>\n\n<h3 style=\"text-align:center;\">Пояснения по написанию кода</h3>\n\n<p><img alt=\"\" height=\"173\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/4ec14803-5bfc-4b32-83d0-8c67617fa11a/\" width=\"547\"></p>\n\n<p><strong>1. Переписываем граф</strong><br>\nДля каждого города из графа указываем его соседей. <code>g = 'а... б... в... г... д... е...'</code> Вместо троеточий записываем соседей данного города.</p>\n\n<p>В данном случае из города <code>а</code> идут дороги в города <code>б</code> и <code>в</code> – поэтому получается <code><strong>а</strong>бв</code>. Из города <code>б</code> идут дороги в города <code>а</code>, <code>г</code> и <code>в</code>  –  <code><strong>б</strong>агв</code>. Аналогично записываем остальные города.</p>\n\n<pre><code class=\"language-python\">g = 'абв багв вабгд гбвд дгве ед'</code></pre>\n\n<p> </p>\n\n<p><strong>2.</strong> <strong>Переписываем таблицу</strong><br>\nДля каждого города из таблицы указываем его соседей. <code>t = '1... 2... 3... 4... 5... 6...'</code> Вместо троеточий записываем соседей данного города.</p>\n\n<p>В данном случае из города <code>1</code> идут дороги в города <code>2</code>, <code>5</code> и <code>6</code> – поэтому получается <code><span style=\"color:#000000;\"><strong>1</strong>256</span></code>. Из города <code>2</code> идут дороги в города <code>1</code>, <code>4</code> и <code>5</code>  –  <code><strong>2</strong><span style=\"color:#000000;\">145</span></code>. Аналогично записываем остальные города.</p>\n\n<pre><code class=\"language-python\">t = '1256 2145 34 4235 51246 615'</code></pre>\n\n<p> </p>\n\n<p><strong>3. Заполняем оставшиеся пропуски</strong></p>\n\n<ul>\n\t<li><code>print(<span style=\"color:#ff4363;\">'1 2 3 4 5 6'</span>)</code> – выводим числа от 1 до 6, так как в этой задаче всего 6 городов.</li>\n\t<li><code>for per in permutations(<span style=\"color:#ff4363;\">'абвгде'</span>):</code> – Записываем строку с <strong>буквенными </strong>обозначениями всех городов.</li>\n\t<li><code>for i in range(<span style=\"color:#ff4363;\">6</span>):</code> – Ставим число 6, так как в данной задаче всего 6 городов.</li>\n</ul>\n\n<p>Полный код</p>\n\n<pre><code class=\"language-python\">from itertools import *\n\nprint('1 2 3 4 5 6') # Выводим числа от 1 до 6, так как всего 6 городов\nfor per in permutations('абвгде'): # Указываем используемые города\n    g = 'абв багв вабгд гбвд дгве ед'\n    t = '1256 2145 34 4235 51246 615'\n    for i in range(6): # Ставим число 6, так как в данной задаче всего 6 городов\n        g = g.replace(per[i], str(i + 1))\n    if {s[0]: set(s[1:]) for s in g.split()} == {s[0]: set(s[1:]) for s in t.split()}:\n        print(*per)</code></pre>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8347035",
+   "subscriptions": [
+    "31-77-8347035",
+    "30-77-8347035"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 552,
+   "passed_by": 552,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    2
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8326126,
+   "create_date": "2025-10-07T11:05:26Z",
+   "update_date": "2026-03-05T09:19:12Z",
+   "discussions_count": 2,
+   "discussion_proxy": "77-8347035-1",
+   "discussion_threads": [
+    "77-8347035-1"
+   ]
+  },
+  "8481163": {
+   "id": 8481163,
+   "lesson": 1986500,
+   "position": 2,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 553523,
+     "thumbnail": "https://cdn.stepik.net/video/553523/thumbnail/5cc21381fbc90f0bf4a3a894b7b87dbe.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/553523/1080/628b034c37713ae9b8cfc9c3ac7222d4.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/553523/720/fef59fd1c0f5d86e899e217bcd5237c4.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/553523/540/fb367bce5cd0a897615bb7c6140cba2e.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/553523/360/9af9175bf55fc1efc361f2dedbe889e6.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/553523/240/f46a1959b778f9561ac9280ba8e59441.mp4"
+      }
+     ],
+     "duration": 590,
+     "status": "ready",
+     "upload_date": "2025-10-20T16:18:08Z",
+     "filename": "Номер 1 1 1080.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8481163",
+   "subscriptions": [
+    "31-77-8481163",
+    "30-77-8481163"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 4783,
+   "passed_by": 4783,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    4,
+    0,
+    2,
+    4,
+    89
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8460254,
+   "create_date": "2025-10-20T16:18:07Z",
+   "update_date": "2025-10-22T09:27:12Z",
+   "discussions_count": 5,
+   "discussion_proxy": "77-8481163-1",
+   "discussion_threads": [
+    "77-8481163-1"
+   ]
+  },
+  "8493298": {
+   "id": 8493298,
+   "lesson": 1064510,
+   "position": 3,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 553903,
+     "thumbnail": "https://cdn.stepik.net/video/553903/thumbnail/a9a1575c6ad8b5fea4bf38e4843c29e9.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/553903/1080/f7614f620159f6bf76941ba169063fb1.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/553903/720/87d9469c4ff9102493955aabaed625f8.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/553903/540/a11574816ce0549cbdc4630fb919d1ad.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/553903/360/6c3da88d2370eb43da8b2a3758e2e347.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/553903/240/3a93c3dc0f0531d5708da28779fa3a28.mp4"
+      }
+     ],
+     "duration": 264,
+     "status": "ready",
+     "upload_date": "2025-10-22T08:22:19Z",
+     "filename": "1 кодом шаблон 2 1080.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8493298",
+   "subscriptions": [
+    "31-77-8493298",
+    "30-77-8493298"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 482,
+   "passed_by": 482,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    3
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8472389,
+   "create_date": "2025-10-22T08:22:52Z",
+   "update_date": "2025-10-22T08:22:53Z",
+   "discussions_count": 0,
+   "discussion_proxy": "77-8493298-1",
+   "discussion_threads": [
+    "77-8493298-1"
+   ]
+  },
+  "8493299": {
+   "id": 8493299,
+   "lesson": 1064510,
+   "position": 2,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 553902,
+     "thumbnail": "https://cdn.stepik.net/video/553902/thumbnail/63e41f62be7b75e38f33ffbfe1b87ada.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/553902/1080/2044695c3a9ff91a6d15a2a00a8f8cc4.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/553902/720/010fe66619e777232835c3add9a1003d.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/553902/540/dc0794fb75ee6cbc22ffda0b2f200806.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/553902/360/679cfc9757a98d18bdf7342ea19f2038.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/553902/240/e8e17b1a1644e2df80650c1a18c51c28.mp4"
+      }
+     ],
+     "duration": 309,
+     "status": "ready",
+     "upload_date": "2025-10-22T08:22:08Z",
+     "filename": "1 кодом шаблон 1 1080.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8493299",
+   "subscriptions": [
+    "31-77-8493299",
+    "30-77-8493299"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 617,
+   "passed_by": 617,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    1,
+    4
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8472390,
+   "create_date": "2025-10-22T08:22:52Z",
+   "update_date": "2025-10-22T08:22:53Z",
+   "discussions_count": 1,
+   "discussion_proxy": "77-8493299-1",
+   "discussion_threads": [
+    "77-8493299-1"
+   ]
+  },
+  "8493300": {
+   "id": 8493300,
+   "lesson": 1064510,
+   "position": 5,
+   "status": "ready",
+   "block": {
+    "name": "video",
+    "text": "",
+    "video": {
+     "id": 553904,
+     "thumbnail": "https://cdn.stepik.net/video/553904/thumbnail/7289acbd14875266e57466c5c068b588.jpg",
+     "urls": [
+      {
+       "quality": "1080",
+       "url": "https://cdn.stepik.net/video/553904/1080/c0a61d55d16328b6c3138d57e8b003bd.mp4"
+      },
+      {
+       "quality": "720",
+       "url": "https://cdn.stepik.net/video/553904/720/d7e120caced6f0dd0a0806ff4cf18af6.mp4"
+      },
+      {
+       "quality": "540",
+       "url": "https://cdn.stepik.net/video/553904/540/9f29a8f7480ce1e79064361e72370c34.mp4"
+      },
+      {
+       "quality": "360",
+       "url": "https://cdn.stepik.net/video/553904/360/710f112b4a800eb4a16d92edf51330a9.mp4"
+      },
+      {
+       "quality": "240",
+       "url": "https://cdn.stepik.net/video/553904/240/e8132743fde121751a8ff01190e1f47b.mp4"
+      }
+     ],
+     "duration": 870,
+     "status": "ready",
+     "upload_date": "2025-10-22T08:22:42Z",
+     "filename": "1 код объяснение 1080.mp4"
+    },
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8493300",
+   "subscriptions": [
+    "31-77-8493300",
+    "30-77-8493300"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 415,
+   "passed_by": 415,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    1,
+    0,
+    16
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8472391,
+   "create_date": "2025-10-22T08:22:52Z",
+   "update_date": "2025-10-22T08:22:53Z",
+   "discussions_count": 5,
+   "discussion_proxy": "77-8493300-1",
+   "discussion_threads": [
+    "77-8493300-1"
+   ]
+  },
+  "8494096": {
+   "id": 8494096,
+   "lesson": 1986500,
+   "position": 1,
+   "status": "ready",
+   "block": {
+    "name": "text",
+    "text": "<h2 style=\"text-align:center;\">Содержание урока</h2>\n\n<p>В данном уроке разберём очень простой и эффективный алгоритм решения № 1.</p>\n\n<p>Обязательно изучите данный урок!</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "comment": "#"
+   },
+   "progress": "77-8494096",
+   "subscriptions": [
+    "31-77-8494096",
+    "30-77-8494096"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 6030,
+   "passed_by": 6030,
+   "correct_ratio": null,
+   "worth": 0,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    4,
+    3,
+    20
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 8473187,
+   "create_date": "2025-10-22T09:27:12Z",
+   "update_date": "2025-10-22T09:27:12Z",
+   "discussions_count": 3,
+   "discussion_proxy": "77-8494096-1",
+   "discussion_threads": [
+    "77-8494096-1"
+   ]
+  },
+  "10025907": {
+   "id": 10025907,
+   "lesson": 760445,
+   "position": 8,
+   "status": "ready",
+   "block": {
+    "name": "string",
+    "text": "<p>На рисунке схема дорог N-ского района изображена в виде графа, в таблице содержатся сведения о протяжённости каждой из этих дорог (в километрах).</p>\n\n<p style=\"text-align:center;\"><img alt=\"\" height=\"236\" name=\"image.png\" src=\"https://ucarecdn.stepik.net/16b92d7b-844c-4266-b170-d475c1b2b580/\" width=\"581\"></p>\n\n<p>Так как таблицу и схему рисовали независимо друг от друга, нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе. Определите, какова сумма протяжённостей дорог из пункта B в пункт A и из пункта H в пункт A.</p>\n\n<p>В ответе запишите целое число.</p>",
+    "video": null,
+    "options": {},
+    "subtitle_files": [],
+    "is_deprecated": false
+   },
+   "actions": {
+    "submit": "#",
+    "comment": "#"
+   },
+   "progress": "77-10025907",
+   "subscriptions": [
+    "31-77-10025907",
+    "30-77-10025907"
+   ],
+   "instruction": null,
+   "session": null,
+   "instruction_type": null,
+   "viewed_by": 706,
+   "passed_by": 503,
+   "correct_ratio": 0.6047619047619047,
+   "worth": 1,
+   "is_solutions_unlocked": false,
+   "solutions_unlocked_attempts": 3,
+   "has_submissions_restrictions": false,
+   "max_submissions_count": 3,
+   "variation": 1,
+   "variations_count": 1,
+   "is_enabled": true,
+   "needs_plan": null,
+   "num_grades": [
+    0,
+    0,
+    0,
+    0,
+    7
+   ],
+   "user_step_grade": null,
+   "user_step_vote": null,
+   "step_issue": 10004997,
+   "create_date": "2026-04-18T12:33:07Z",
+   "update_date": "2026-04-18T12:33:08Z",
+   "discussions_count": 0,
+   "discussion_proxy": "77-10025907-1",
+   "discussion_threads": [
+    "77-10025907-1"
+   ]
+  }
+ }
+}

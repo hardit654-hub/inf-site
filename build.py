@@ -1,6 +1,9 @@
 """Собирает страницы курсов: src/engine.html + src/<курс>/course.js -> site/<папка>/index.html"""
 import json
 COURSES=[
+  dict(src='src/1/course.js', out='site/ege-1/index.html', title='№ 1 · Графы, таблицы дорог',
+       og_title='№ 1. Графы, таблицы дорог — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Графы и таблицы дорог для ЕГЭ по информатике: сопоставление схемы и таблицы, кратчайший путь, решение в Python. 7 уроков, 39 задач с автопроверкой.'),
   dict(src='src/17/course.js', out='site/ege-17/index.html', title='Системы счисления',
        og_title='Системы счисления — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='Системы счисления для ЕГЭ: перевод чисел, шестнадцатеричная система, сложение и вычитание, полезные свойства.'),
@@ -61,7 +64,7 @@ def rebase(o, folder):
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
-ORDER=['src/17/course.js','src/4/course.js','src/5/course.js','src/8/course.js','src/11/course.js','src/12/course.js','src/13/course.js','src/14/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
+ORDER=['src/1/course.js','src/17/course.js','src/4/course.js','src/5/course.js','src/8/course.js','src/11/course.js','src/12/course.js','src/13/course.js','src/14/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']

@@ -33,8 +33,6 @@ img2.5.9-1.png https://ucarecdn.stepik.net/4b06763b-764b-4d86-9037-ff3be0c66f56/
 img2.5.10-1.png https://ucarecdn.stepik.net/afc073e6-741e-4105-8198-f92205869d56/
 img2.5.11-1.png https://ucarecdn.stepik.net/be580b3c-924f-4d1d-837c-5c280ae7831e/
 img2.5.12-1.png https://ucarecdn.stepik.net/e6777123-afee-49a8-9822-9f105fb51365/
-img2.6.4-1.png https://ucarecdn.stepik.net/4ec14803-5bfc-4b32-83d0-8c67617fa11a/
-img2.6.4-2.png https://ucarecdn.stepik.net/4ec14803-5bfc-4b32-83d0-8c67617fa11a/
 img2.6.6-1.png https://ucarecdn.stepik.net/4ec14803-5bfc-4b32-83d0-8c67617fa11a/
 img2.7.1-1.png https://ucarecdn.stepik.net/ef990ad5-cfb6-4751-8a7d-8861b513c9ba/
 img2.7.2-1.png https://ucarecdn.stepik.net/e33af485-9e87-48ad-a6a5-224bf87052e9/
