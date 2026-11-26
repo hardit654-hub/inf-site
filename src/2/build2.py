@@ -88,7 +88,7 @@ def blocks(tid, body, extra=""):
             after = after.replace(extra_img.group(0), "", 1)
         h = before + table_html(tid) + after
     h = blank(h) + extra
-    return to_blocks(h)
+    return to_blocks(re.sub(r"\n{3,}", "\n\n", h))
 
 
 def kege_blocks(text):
@@ -137,7 +137,7 @@ def build():
                 h += ('<p><em>В этом шаге две функции — такие задачи решаются '
                       'программой из урока «Полностью программное решение».</em></p>'
                       if tid in ("4.10", "4.11") else "")
-                out.append({"type": "text", "blocks": to_blocks(h)})
+                out.append({"type": "text", "blocks": to_blocks(re.sub(r"\n{3,}", "\n\n", h))})
                 continue
             if b["name"] != "string":
                 out.append({"type": "text", "blocks": to_blocks(blank(b["text"]))})
