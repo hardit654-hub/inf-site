@@ -85,7 +85,7 @@ def to_blocks(h):
     def tw(m):
         """Таблица исходного шага: без рамки-стилей, пустые ячейки — пустые."""
         t = m.group(0)
-        t = re.sub(r'<table\b[^>]*>', "<table>", t)
+        t = re.sub(r'<table\b[^>]*>', '<table class="fig">', t)
         t = re.sub(r"<(?:tbody|thead|tfoot)>|</(?:tbody|thead|tfoot)>", "", t)
         t = re.sub(r'\s+', " ", t)
         t = re.sub(r'>\s+(\S)', r">\1", t)
@@ -94,10 +94,10 @@ def to_blocks(h):
     h = re.sub(r"<table\b[^>]*>.*?</table>", tw, h, flags=re.S)
     out = []
     pos = 0
-    for m in re.finditer(r"<details><summary>(.*?)</summary>(.*?)</details>", h, flags=re.S):
+    # разборы из исходного шага остаются только в виде подсказки «смотрите видео»
+    for m in re.finditer(r"<details><summary>(.*?)</summary>.*?</details>", h, flags=re.S):
         out += split_code(h[pos:m.start()])
         title = html.unescape(re.sub(r"<[^>]+>", "", m.group(1))).strip()
-        out.append({"t": "details", "title": title, "v": split_code(m.group(2))})
         pos = m.end()
     out += split_code(h[pos:])
     return [b for b in out if b["t"] in ("code", "details")
