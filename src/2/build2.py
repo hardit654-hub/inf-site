@@ -7,6 +7,7 @@
 
 Запуск: python3 src/2/build2.py
 """
+import html
 import json
 import os
 import re
@@ -20,8 +21,8 @@ sys.path.insert(0, os.path.dirname(HERE))
 import figs                        # noqa: E402
 import answers2                    # noqa: E402
 import tables2                     # noqa: E402
-from check2 import EN, load_bank, text_of  # noqa: E402
-from stepik_conv import to_blocks  # noqa: E402
+from check2 import EN, load_bank   # noqa: E402
+from stepik_conv import split_code  # noqa: E402
 
 FULL = os.path.join(ROOT, "sources/2-logika/steps_all.json")
 OUT = os.path.join(HERE, "course.js")
@@ -53,45 +54,73 @@ VIDEO = {
 KEGE = {4: (9, [70, 71, 74, 75, 76, 78, 79, 83, 46, 85,
                 734, 735, 791, 816, 1185, 1267, 1282, 1357, 1422, 1846])}
 
-# задачи, для которых формула в условии не распознаётся автоматически
-FORMULA = {
-    "2.5": "(x ∨ ¬y) ∧ ¬(y ≡ z) ∧ ¬w",
-    "2.6": "¬(y → x) ∨ (z → w) ∨ ¬z",
-    "4.1": "((x → z) → y) ∨ ¬w",
-}
-
 # «Кто заполнял» — таблица без верхнего ряда с вопросительными знаками
 NOHEAD = {"1.1", "1.12", "2.5", "2.6", "2.14", "2.15", "4.1", "4.2", "4.3", "4.4", "4.5"}
-
 
 def table_html(tid):
     head, rows, _ = tables2.load(tables2.TABLES[tid][0])
     cells = [["" if c is None else str(c) for c in r] for r in rows]
-    return figs.table_html({"cols": [] if tid in NOHEAD else head, "cells": cells})
+    return '<div class="tw">' + figs.table_html(
+        {"cols": [] if tid in NOHEAD else head, "cells": cells}) + "</div>"
 
 
 def blank(h):
-    """Пустые абзацы и висячие пробелы убираем, остальное не трогаем."""
+    """Пустые абзацы, лишние пустые строки и висячие пробелы убираем."""
     h = re.sub(r"<p[^>]*>(?:\s|&nbsp;|<br\s*/?>)*</p>", "", h)
+    h = re.sub(r"\n{3,}", "\n\n", h)
     return h.strip()
+
+
+def math(h):
+    r"""<span class="math-tex">\(...\)</span> -> <span class="tex">...</span>."""
+    return re.sub(r'<span class="math-tex">\\\((.+?)\\\)</span>',
+                  lambda m: '<span class="tex">' + html.escape(m.group(1).strip(), quote=False) + '</span>',
+                  h, flags=re.S)
+
+
+def to_blocks(h):
+    """HTML шага -> блоки движка (html / code / details); таблицы — в «tw»."""
+    h = math(h)
+    # таблицу из исходного шага (формулу в условии) оставляем, но с прокруткой
+    def tw(m):
+        """Таблица исходного шага: без рамки-стилей, пустые ячейки — пустые."""
+        t = m.group(0)
+        t = re.sub(r'<table\b[^>]*>', "<table>", t)
+        t = re.sub(r"<(?:tbody|thead|tfoot)>|</(?:tbody|thead|tfoot)>", "", t)
+        t = re.sub(r'\s+', " ", t)
+        t = re.sub(r'>\s+(\S)', r">\1", t)
+        t = re.sub(r'(\S)\s+<', r"\1<", t)
+        return '<div class="tw">' + t + "</div>"
+    h = re.sub(r"<table\b[^>]*>.*?</table>", tw, h, flags=re.S)
+    out = []
+    pos = 0
+    for m in re.finditer(r"<details><summary>(.*?)</summary>(.*?)</details>", h, flags=re.S):
+        out += split_code(h[pos:m.start()])
+        title = html.unescape(re.sub(r"<[^>]+>", "", m.group(1))).strip()
+        out.append({"t": "details", "title": title, "v": split_code(m.group(2))})
+        pos = m.end()
+    out += split_code(h[pos:])
+    return [b for b in out if b["t"] in ("code", "details")
+            or re.sub(r"<[^>]+>|\s|&nbsp;", "", b["v"])]
 
 
 def blocks(tid, body, extra=""):
     """HTML шага -> блоки движка; вместо картинки таблицы — нарисованная таблица."""
     h = body["text"]
     imgs = list(re.finditer(r'<p[^>]*>\s*(?:<a[^>]*>)?\s*<img\b[^>]*>\s*(?:</a>)?\s*</p>', h))
-    if imgs and tid != "2.16":
+    if imgs:
         # первая картинка после формулы — таблица условия
         m = imgs[0]
         before, after = h[:m.start()], h[m.end():]
-        for n, extra_img in enumerate(imgs[1:], 1):
+        for extra_img in imgs[1:]:
             after = after.replace(extra_img.group(0), "", 1)
         h = before + table_html(tid) + after
-    h = blank(h) + extra
-    return to_blocks(re.sub(r"\n{3,}", "\n\n", h))
+    h = blank(re.sub(r"<img\b[^>]*>", "", h)) + extra
+    return to_blocks(h)
 
 
 def kege_blocks(text):
+    r"""Задача из банка: \(...\) -> формулы обычными символами в «span class="tex"»."""
     t = text
     for a, b in EN.items():
         t = t.replace(a, b)
@@ -126,21 +155,19 @@ def build():
             if not b or b["name"] == "video":
                 out.append({"type": "video", "title": VIDEO.get(tid, "Видеоразбор")})
                 continue
-            # картинки-таблицы не переносим (рисованные таблицы уже нарисованы
-            # из данных), остальные картинки в этом разделе не нужны
-            b = dict(b, text=re.sub(r"<img\b[^>]*>", "", b["text"]))
             if tid in TEXT:
                 # картинку с таблицей не сохраняем: перенести её без ошибок
                 # нельзя, поэтому шаг идёт с пометкой
                 h = re.sub(r"<p[^>]*>\s*<img\b[^>]*>\s*</p>", "<p>"
-                           "<em>Таблица к задаче — в разборе.</em></p>", blank(b["text"]))
+                           "<em>Таблица к задаче — в разборе.</em></p>", b["text"])
+                h = blank(re.sub(r"<img\b[^>]*>", "", h))
                 h += ('<p><em>В этом шаге две функции — такие задачи решаются '
                       'программой из урока «Полностью программное решение».</em></p>'
                       if tid in ("4.10", "4.11") else "")
-                out.append({"type": "text", "blocks": to_blocks(re.sub(r"\n{3,}", "\n\n", h))})
+                out.append({"type": "text", "blocks": to_blocks(h)})
                 continue
             if b["name"] != "string":
-                out.append({"type": "text", "blocks": to_blocks(blank(b["text"]))})
+                out.append({"type": "text", "blocks": blocks(tid, b)})
                 continue
             ans = answers2.KEYS[tid]
             out.append({"type": "fill", "blocks": blocks(tid, b),
