@@ -1,0 +1,4149 @@
+[
+ {
+  "taskId": 31499,
+  "comment": "Демоверсия 2027",
+  "key": "yxzw",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "((x eqv not y) imp not (w imp x)) or not z",
+  "got": [
+   "yxzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 31348,
+  "comment": "Пересдача 08.07.26",
+  "key": "zyxw",
+  "vars": [
+   "z",
+   "y",
+   "x",
+   "w"
+  ],
+  "formula": "(z imp not (y imp x)) or w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 31210,
+  "comment": "Резерв 22.06.26",
+  "key": "zywx",
+  "vars": [
+   "y",
+   "w",
+   "x",
+   "z"
+  ],
+  "formula": "((y imp w) imp x) or not z",
+  "got": [
+   "zywx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 31140,
+  "comment": "Основная волна 19.06.26",
+  "key": "zxwy",
+  "vars": [
+   "z",
+   "x",
+   "y",
+   "w"
+  ],
+  "formula": "not (z imp x) or (y imp w) or not y",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 31109,
+  "comment": "Основная волна 18.06.26",
+  "key": "xwyz",
+  "vars": [
+   "w",
+   "x",
+   "z",
+   "y"
+  ],
+  "formula": "((w eqv not x) imp not (z imp w)) or not y",
+  "got": [
+   "xwyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 29953,
+  "comment": "Апробация 14.05.26",
+  "key": "zwyx",
+  "vars": [
+   "x",
+   "w",
+   "z",
+   "y"
+  ],
+  "formula": "not ((x imp w) imp (w eqv z)) and y",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 29334,
+  "comment": "Открытый вариант 2026",
+  "key": "yxwz",
+  "vars": [
+   "z",
+   "x",
+   "y",
+   "w"
+  ],
+  "formula": "((z imp x) imp (x eqv y)) or not w",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 28923,
+  "comment": "ЕГКР 18.04.26",
+  "key": "wxyz",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "(x and not z and not w ) or (x and not z and y )",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 28750,
+  "comment": "Досрочная волна 2026",
+  "key": "ywxz",
+  "vars": [
+   "w",
+   "z",
+   "y",
+   "x"
+  ],
+  "formula": "(w eqv z) or not (y imp w) or not x",
+  "got": [
+   "ywxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 27757,
+  "comment": "Апробация 04.03.26",
+  "key": "xwzy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "( not x and y and z and not w ) or ( not x and y and not z and not w ) or ( x and y and z and not w )",
+  "got": [
+   "xwzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 27614,
+  "comment": "Апробация 04.03.26",
+  "key": "wzxy",
+  "vars": [
+   "z",
+   "y",
+   "x",
+   "w"
+  ],
+  "formula": "( not z and y and x and not w ) or ( not z and y and not x and not w ) or ( z and y and x and not w )",
+  "got": [
+   "wzxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 25341,
+  "comment": "ЕГКР 13.12.25",
+  "key": "zwxy",
+  "vars": [
+   "w",
+   "z",
+   "y",
+   "x"
+  ],
+  "formula": "(w eqv z) or not (y imp w) or not x",
+  "got": [
+   "zwxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 23739,
+  "comment": "Демоверсия 2026",
+  "key": "zyxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x or y) and not (y eqv z) and not w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 23548,
+  "comment": "Пересдача 03.07.25",
+  "key": "wyxz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((x or y) imp z) or (y eqv w) or z",
+  "got": [
+   "wyxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 23361,
+  "comment": "Резервный день 19.06.25",
+  "key": "zxwy",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "not (y imp (x eqv z)) and (w imp x)",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 23261,
+  "comment": "Основная волна 11.06.25",
+  "key": "yxwz",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "not (w imp (x eqv y)) and (z imp x)",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 23186,
+  "comment": "Основная волна 10.06.25",
+  "key": "yzxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x imp y) and z and not w",
+  "got": [
+   "yzxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 22423,
+  "comment": "",
+  "key": "wxyz",
+  "vars": [
+   "z",
+   "x",
+   "y",
+   "w"
+  ],
+  "formula": "((z → x) and (x → y)) or (w ≡ (z or x))",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 22421,
+  "comment": "",
+  "key": "xyzw",
+  "vars": [
+   "z",
+   "y",
+   "x",
+   "w"
+  ],
+  "formula": "¬(¬(z→y)∨(x≡w)∨x)",
+  "got": [
+   "xyzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 22073,
+  "comment": "",
+  "key": "ywxz",
+  "vars": [
+   "z",
+   "y",
+   "w",
+   "x"
+  ],
+  "formula": "(z imp y) or ((w imp x) imp y)",
+  "got": [
+   "ywxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 21888,
+  "comment": "Открытый вариант 2025",
+  "key": "xwzy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x and not y) or (y eqv z) or w",
+  "got": [
+   "xwzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 21697,
+  "comment": "ЕГКР 19.04.25",
+  "key": "zyxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "not (x imp y) or (z eqv w) or z",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 21401,
+  "comment": "Досрочная волна 2025",
+  "key": "xwzy",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "x and (z imp w) and not y",
+  "got": [
+   "xwzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20948,
+  "comment": "",
+  "key": "wxzy",
+  "vars": [
+   "z",
+   "w",
+   "y",
+   "x"
+  ],
+  "formula": "z or (z eqv w) or not (y imp x)",
+  "got": [
+   "wxzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20894,
+  "comment": "Апробация 05.03.25",
+  "key": "xyzw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "¬(x → y) or (z → w) or ¬z",
+  "got": [
+   "xyzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20820,
+  "comment": "",
+  "key": "zxwy",
+  "vars": [
+   "y",
+   "x",
+   "w",
+   "z"
+  ],
+  "formula": "(((y imp ¬x) and y) eqv w) and z",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20802,
+  "comment": "Апробация 05.03.25",
+  "key": "zxyw",
+  "vars": [
+   "w",
+   "z",
+   "x",
+   "y"
+  ],
+  "formula": "(w imp not (z imp x)) or y",
+  "got": [
+   "zxyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20569,
+  "comment": "",
+  "key": "zxyw",
+  "vars": [
+   "w",
+   "z",
+   "x",
+   "y"
+  ],
+  "formula": "((w imp z) eqv (x imp not y)) and (x or z)",
+  "got": [
+   "zxyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20567,
+  "comment": "",
+  "key": "yxwz",
+  "vars": [
+   "y",
+   "z",
+   "w",
+   "x"
+  ],
+  "formula": "y and (z eqv (w imp (x or z)))",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20564,
+  "comment": "",
+  "key": "zxwy",
+  "vars": [
+   "x",
+   "w",
+   "y",
+   "z"
+  ],
+  "formula": "x and ((w imp y) eqv z)",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 20563,
+  "comment": "",
+  "key": "dcba",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "((a imp b) imp c) or not d",
+  "got": [
+   "dcba"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 19886,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "¬(¬x ∨ y) ∨ (y ≡ z) ∨ ¬w",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 19234,
+  "comment": "ЕГКР 21.12.24",
+  "key": "yxwz",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "¬((¬x or y) and not w) or ¬(z and not (y and w))",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 18917,
+  "comment": "Новогодний вариант 2025",
+  "key": "star",
+  "vars": [
+   "s",
+   "r",
+   "a",
+   "t"
+  ],
+  "formula": "(s or not r) and not (r eqv a) and t",
+  "got": [
+   "rtas",
+   "star"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 18870,
+  "comment": "",
+  "key": "yzxw",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "((x → z) → w) ∨ ¬y",
+  "got": [
+   "yzxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 18576,
+  "comment": "",
+  "key": "yxwz",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "¬(w → (x ≡ y or y)) ∧ (z → x)",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 18482,
+  "comment": "",
+  "key": "xywz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x eqv (y imp (z or x))) and w",
+  "got": [
+   "xywz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 18307,
+  "comment": "",
+  "key": "dbca",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "((a or b) imp (¬c and a)) and d",
+  "got": [
+   "dbca"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 18162,
+  "comment": "",
+  "key": "adbc",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "((a imp b) eqv c) or d",
+  "got": [
+   "adbc"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 18126,
+  "comment": "",
+  "key": "yzxw",
+  "vars": [
+   "z",
+   "x",
+   "w",
+   "y"
+  ],
+  "formula": "((z ≡ x) → w) ∧ (w → (y ∧ x))",
+  "got": [
+   "yzxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 17856,
+  "comment": "Демоверсия 2025",
+  "key": "zywx",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "((w imp y) imp x) or not z",
+  "got": [
+   "zywx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 17807,
+  "comment": "",
+  "key": "zwyx",
+  "vars": [
+   "y",
+   "x",
+   "w",
+   "z"
+  ],
+  "formula": "( not (( not y imp x) imp w)) or (z imp x)",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 17773,
+  "comment": "",
+  "key": "xwyz",
+  "vars": [
+   "y",
+   "x",
+   "w",
+   "z"
+  ],
+  "formula": "(y imp x) and not w and z",
+  "got": [
+   "xwyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 17665,
+  "comment": "Пересдача 04.07.24",
+  "key": "zyxw",
+  "vars": [
+   "z",
+   "y",
+   "x",
+   "w"
+  ],
+  "formula": "(z imp not (y imp x )) or w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 17621,
+  "comment": "Основная волна 19.06.24",
+  "key": "zxyw",
+  "vars": [
+   "x",
+   "z",
+   "y",
+   "w"
+  ],
+  "formula": "not (x imp z) or (y eqv w) or y",
+  "got": [
+   "zxyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 17543,
+  "comment": "Основная волна 08.06.24",
+  "key": "xzyw",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "(y imp not (x imp z)) or w",
+  "got": [
+   "xzyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 17515,
+  "comment": "Основная волна 07.06.24",
+  "key": "yxwz",
+  "vars": [
+   "x",
+   "w",
+   "y",
+   "z"
+  ],
+  "formula": "not (x imp w) or (y imp z) or not y",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 16368,
+  "comment": "ЕГКР 27.04.24",
+  "key": "wyzx",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "not (x or y) and not w or not (z or w) and y",
+  "got": [
+   "wyzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 16313,
+  "comment": "Открытый вариант 2024",
+  "key": "zxyw",
+  "vars": [
+   "x",
+   "z",
+   "y",
+   "w"
+  ],
+  "formula": "not (x imp z) or (y eqv w) or y",
+  "got": [
+   "zxyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 16249,
+  "comment": "Джобс 03.05.24",
+  "key": "dcba",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "(a imp b) and (b imp not c) and ( not c imp d)",
+  "got": [
+   "dcba"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 15314,
+  "comment": "Досрочная волна 2024",
+  "key": "wyzx",
+  "vars": [
+   "x",
+   "z",
+   "y",
+   "w"
+  ],
+  "formula": "(x and not z) or (y eqv z) or not w",
+  "got": [
+   "wyzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 14651,
+  "comment": "Открытый курс \"Слово пацана\"",
+  "key": "xwyz",
+  "vars": [
+   "z",
+   "x",
+   "w",
+   "y"
+  ],
+  "formula": "((z imp x) eqv (w imp y) or (x and w))",
+  "got": [
+   "xwyz",
+   "xwzy",
+   "xywz",
+   "xyzw",
+   "xzwy",
+   "xzyw"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 14392,
+  "comment": "",
+  "key": "yzwx",
+  "vars": [
+   "w",
+   "z",
+   "y",
+   "x"
+  ],
+  "formula": "¬(w → (z ≡ y)) ∧ (x → z)",
+  "got": [
+   "yzwx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 14391,
+  "comment": "",
+  "key": "xyzw",
+  "vars": [
+   "z",
+   "y",
+   "w",
+   "x"
+  ],
+  "formula": "(z → y) ∧ ¬w ∧ x",
+  "got": [
+   "xyzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 14390,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "z",
+   "w",
+   "x",
+   "y"
+  ],
+  "formula": "(z and not w) or (z ≡ x) or y",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 14388,
+  "comment": "",
+  "key": "yxzw",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "x ∧ (y ∨ w) ∨ ¬(x ∨ w) ∨ z",
+  "got": [
+   "yxzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 13800,
+  "comment": "",
+  "key": "xwzy",
+  "vars": [
+   "x",
+   "a",
+   "n",
+   "d",
+   "n",
+   "t",
+   "y"
+  ],
+  "formula": "not ((x eqv y) or (y eqv w) or (w eqv z)) or (x and not y)",
+  "got": [
+   "xwzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 13799,
+  "comment": "",
+  "key": "zyxw",
+  "vars": [
+   "x",
+   "w",
+   "y",
+   "z"
+  ],
+  "formula": "(( not x and w) imp y) and (y imp (z and not y))",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 13798,
+  "comment": "",
+  "key": "zyxw",
+  "vars": [
+   "y",
+   "a",
+   "n",
+   "d",
+   "n",
+   "t",
+   "x",
+   "a",
+   "n",
+   "d",
+   "w"
+  ],
+  "formula": "(x or ( not z and w) or w) eqv (y and not x and w)",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 13797,
+  "comment": "",
+  "key": "ywxz",
+  "vars": [
+   "x",
+   "z",
+   "y",
+   "w"
+  ],
+  "formula": "( not x and (z imp y) and not w) or ((z eqv w) and (x or y imp w))",
+  "got": [
+   "ywxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 13089,
+  "comment": "",
+  "key": "uywzx",
+  "vars": [
+   "z",
+   "w",
+   "y",
+   "x",
+   "u"
+  ],
+  "formula": "((z imp w) and (y eqv not x)) imp (u eqv (y or z))",
+  "got": [
+   "uywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 13077,
+  "comment": "",
+  "key": "zywx",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "status": "формула не найдена"
+ },
+ {
+  "taskId": 12911,
+  "comment": "",
+  "key": "zyx",
+  "vars": [
+   "z",
+   "x",
+   "y"
+  ],
+  "formula": "( not z) and x or x and y",
+  "got": [
+   "zyx"
+  ],
+  "unique_rows": false,
+  "mode": "full",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 12718,
+  "comment": "",
+  "key": "mlnk",
+  "vars": [
+   "c",
+   "k",
+   "m",
+   "n",
+   "l"
+  ],
+  "formula": "not (k imp m) and (k or n) or (l imp n)",
+  "got": [
+   "mlnk"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 12671,
+  "comment": "",
+  "key": "wxyz",
+  "vars": [
+   "y",
+   "x",
+   "a",
+   "n",
+   "d",
+   "n",
+   "t",
+   "w"
+  ],
+  "formula": "not (x eqv w and not z) and (y eqv x and not w)",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 12670,
+  "comment": "",
+  "key": "yzwx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((x and not y) imp (z and w)) and ((y imp z) or (w imp x))",
+  "got": [
+   "yzwx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 12456,
+  "comment": "",
+  "key": "wxyz",
+  "vars": [
+   "y",
+   "x",
+   "w",
+   "z"
+  ],
+  "formula": "not (y imp (x eqv w)) and (z imp x)",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 12234,
+  "comment": "ЕГКР 16.12.23",
+  "key": "xywz",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "y and (x or z) or not (y or z) or w",
+  "got": [
+   "xywz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 12091,
+  "comment": "Новогодний вариант",
+  "key": "hpny",
+  "vars": [
+   "y",
+   "h",
+   "n",
+   "p"
+  ],
+  "formula": "y and not (y or h) or not (y imp h) and (n imp p)",
+  "got": [
+   "hpny"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 11650,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "z",
+   "m",
+   "p",
+   "y"
+  ],
+  "formula": "((y and (x eqv not z)) imp w) and (z imp y)",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 11606,
+  "comment": "",
+  "key": "zwxy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x imp y) and ( not y imp z) and w",
+  "got": [
+   "zwxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 11220,
+  "comment": "",
+  "key": "wzxy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x imp y) and z and not w",
+  "got": [
+   "wzxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 10704,
+  "comment": "",
+  "key": "zyxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x or not y) and not (x eqv z) and w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 10084,
+  "comment": "Демоверсия 2024",
+  "key": "wzyx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x and not y) or (y eqv z) or not w",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9905,
+  "comment": "",
+  "key": "wxzy",
+  "vars": [
+   "z",
+   "m",
+   "p",
+   "w"
+  ],
+  "formula": "(x imp y) and (y imp z) and (z imp w)",
+  "got": [
+   "wxzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9825,
+  "comment": "Основная волна 27.06.23",
+  "key": "zwyx",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "(x imp (z eqv w)) or not (y imp w)",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9771,
+  "comment": "Основная волна 20.06.23",
+  "key": "wxyz",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "(y imp x) and not z and w",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9733,
+  "comment": "Основная волна 19.06.23",
+  "key": "yxwz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x and not y) or (x eqv z) or w",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9689,
+  "comment": "Danov2307",
+  "key": "ywzx",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "(w or x or y) imp (( y or z) and x or y and (w or z))",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9532,
+  "comment": "Джобс 14.06.23",
+  "key": "zwyx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x imp y) and ( not y eqv z) and w",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9357,
+  "comment": "Джобс 10.06.23",
+  "key": "wyxz",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "status": "формула не найдена"
+ },
+ {
+  "taskId": 9149,
+  "comment": "Джобс 06.06.2023",
+  "key": "zwxy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((x imp y) or (z eqv x)) and (w imp z)",
+  "got": [
+   "zwxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 9055,
+  "comment": "Danov2306",
+  "key": "ywzx",
+  "vars": [
+   "w",
+   "z",
+   "y",
+   "x"
+  ],
+  "formula": "((w imp z) eqv y) imp x",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8938,
+  "comment": "Джобс 02.06.2023",
+  "key": "xzwy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((x or y) eqv (y imp z)) or w",
+  "got": [
+   "xzwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8647,
+  "comment": "",
+  "key": "xzyw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x or not y) and z and not w",
+  "got": [
+   "xzyw",
+   "yzxw",
+   "zxyw"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8613,
+  "comment": "",
+  "key": "ywzx",
+  "vars": [
+   "n",
+   "t",
+   "x",
+   "r",
+   "w"
+  ],
+  "formula": "( not x or y or not z or w) and not ( not x or w)",
+  "got": [
+   "ywzx",
+   "yzwx"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8547,
+  "comment": "",
+  "key": "ctab",
+  "vars": [
+   "t",
+   "a",
+   "n",
+   "d",
+   "n",
+   "t",
+   "a",
+   "r",
+   "c",
+   "a",
+   "n",
+   "d",
+   "n",
+   "t",
+   "b"
+  ],
+  "formula": "( not a or not b) and (c imp not a) and (t and not a or c and not b)",
+  "got": [
+   "ctab",
+   "tcba"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8489,
+  "comment": "Апробация 17.05",
+  "key": "xyzw",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "((w imp y) imp (x eqv y)) or not z",
+  "got": [
+   "xyzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8460,
+  "comment": "",
+  "key": "xzwy",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "((x eqv z) or ¬ (x eqv w)) and ((y imp x) or ¬ z)",
+  "got": [
+   "xzwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8358,
+  "comment": "Danov2305",
+  "key": "yzxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x or y or z) imp (x and (y or w))",
+  "got": [
+   "yzxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 8146,
+  "comment": "/dev/inf 05.23",
+  "key": "zxwy",
+  "vars": [
+   "z",
+   "y",
+   "x",
+   "w"
+  ],
+  "formula": "( not z eqv not y) or ( not x and y) or w",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 7830,
+  "comment": "Danov2304",
+  "key": "yxwz",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "not y and (x imp ( not z eqv w)) or z",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 7804,
+  "comment": "",
+  "key": "ywzx",
+  "vars": [
+   "y",
+   "z",
+   "x",
+   "w"
+  ],
+  "formula": "not (y imp z) or ( not x imp not w) or x",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 7667,
+  "comment": "",
+  "key": "cdba",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "((a imp b) eqv c) or not d and (d imp not a)",
+  "got": [
+   "cdba"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 7664,
+  "comment": "",
+  "key": "3",
+  "vars": [
+   "b",
+   "d"
+  ],
+  "got": [
+   "3"
+  ],
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 7604,
+  "comment": "Досрочная волна 2023",
+  "key": "yxzw",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "not (y and not x) and not (x eqv z) and w",
+  "got": [
+   "yxzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 7302,
+  "comment": "Вариант от ChatGPT",
+  "key": "wzxy",
+  "vars": [
+   "z",
+   "w",
+   "x",
+   "y"
+  ],
+  "formula": "z or not (w imp x) or ( not z imp not y)",
+  "got": [
+   "wzxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 7023,
+  "comment": "Danov2303",
+  "key": "xzwy",
+  "vars": [
+   "w",
+   "y",
+   "z",
+   "x"
+  ],
+  "formula": "¬ ((( ¬ w → ¬ y) → ¬ z) → x)",
+  "got": [
+   "xzwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6992,
+  "comment": "",
+  "key": "wyxz",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "status": "формула не найдена"
+ },
+ {
+  "taskId": 6989,
+  "comment": "",
+  "key": "2",
+  "vars": [
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "x imp y and z",
+  "got": [
+   "2"
+  ],
+  "count_task": true,
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6904,
+  "comment": "",
+  "key": "ywzx",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "not (((x imp y and w) and (z imp x or y)) eqv w)",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6878,
+  "comment": "OpenFIPI",
+  "key": "wxyz",
+  "vars": [
+   "y",
+   "x",
+   "w",
+   "z"
+  ],
+  "formula": "not (y imp (x eqv w)) and (z imp x)",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6877,
+  "comment": "OpenFIPI",
+  "key": "xywz",
+  "vars": [
+   "y",
+   "w",
+   "x",
+   "z"
+  ],
+  "formula": "not (y imp w) or (x imp z) or not x",
+  "got": [
+   "xywz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6853,
+  "comment": "",
+  "key": "ywzx",
+  "vars": [
+   "x",
+   "m",
+   "p",
+   "w"
+  ],
+  "formula": "((x imp y) or (z imp w)) and not (x imp w)",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6843,
+  "comment": "",
+  "key": "zwyx",
+  "vars": [
+   "z",
+   "w",
+   "y",
+   "x"
+  ],
+  "formula": "(z imp w) and y and not x",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6842,
+  "comment": "",
+  "key": "xywz",
+  "vars": [
+   "w",
+   "z",
+   "y",
+   "x"
+  ],
+  "formula": "w and ((z or y) eqv (z and x))",
+  "got": [
+   "xywz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6841,
+  "comment": "",
+  "key": "zwyx",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "w and ((y imp x) imp z)",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6838,
+  "comment": "",
+  "key": "wxzy",
+  "vars": [
+   "z",
+   "w",
+   "x",
+   "y"
+  ],
+  "formula": "(z eqv w) and (x imp y) or not w",
+  "got": [
+   "wxzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6837,
+  "comment": "",
+  "key": "00101",
+  "vars": [
+   "x",
+   "a",
+   "b",
+   "c",
+   "d",
+   "e"
+  ],
+  "formula": "(x_1 ∨ ¬x_2 ∨ ¬x_3 ∨ x_4 ∨ ¬x_5) ∧ (¬x_1 ∨ ¬x_2 ∨ x_3 ∨ x_4 ∨ x_5) ∧ (x_1 ∨ ¬x_2 ∨ ¬x_3 ∨ ¬x_4 ∨ x_5)",
+  "cells": true,
+  "got": [
+   "00101"
+  ],
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6776,
+  "comment": "",
+  "key": "xwyz",
+  "vars": [
+   "x",
+   "w",
+   "y",
+   "z"
+  ],
+  "formula": "not (x imp w) or (y imp z) or not y",
+  "got": [
+   "xwyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6737,
+  "comment": "Апробация 10.03.23",
+  "key": "yzxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x imp not (y imp z)) or w",
+  "got": [
+   "yzxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6598,
+  "comment": "Пробник ИМЦ СПб",
+  "key": "xzyw",
+  "vars": [
+   "x",
+   "w",
+   "y",
+   "z"
+  ],
+  "formula": "((x imp w) and ( not y imp z)) imp ((z eqv x) or (w and not y))",
+  "got": [
+   "xzyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6283,
+  "comment": "",
+  "key": "8",
+  "vars": [
+   "x",
+   "m",
+   "p",
+   "n",
+   "t",
+   "z"
+  ],
+  "formula": "not ( not (x imp not w) and z) and not (w imp z) and (x imp not z)",
+  "got": [
+   "8"
+  ],
+  "count_task": true,
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6255,
+  "comment": "Danov2302",
+  "key": "yxwz",
+  "vars": [
+   "w",
+   "y",
+   "z",
+   "x"
+  ],
+  "formula": "w or (y imp z) and x",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6074,
+  "comment": "/dev/inf 02.2023",
+  "key": "yxwz",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "(w eqv y) or (( not x imp z) and ( not z imp y))",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6034,
+  "comment": "ФИПИ 04.02.23",
+  "key": "wxzy",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "not ((w or not y) and x) or (y eqv z)",
+  "got": [
+   "wxzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 6009,
+  "comment": "ФИПИ 03.02.23",
+  "key": "zwyx",
+  "vars": [
+   "z",
+   "w",
+   "y",
+   "x"
+  ],
+  "formula": "not (z or (w imp y)) or (x imp z)",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5939,
+  "comment": "",
+  "key": "wxzy",
+  "vars": [
+   "x",
+   "z",
+   "y",
+   "w"
+  ],
+  "formula": "((x imp z) and y) imp w",
+  "got": [
+   "wxzy",
+   "wzxy",
+   "xwzy",
+   "xzwy",
+   "zwxy",
+   "zxwy"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5867,
+  "comment": "Danov 2301",
+  "key": "ywzx",
+  "vars": [
+   "w",
+   "z",
+   "x",
+   "y"
+  ],
+  "formula": "(w eqv (z imp x)) and y",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5741,
+  "comment": "",
+  "key": "23",
+  "vars": [],
+  "status": "нет списка переменных"
+ },
+ {
+  "taskId": 5657,
+  "comment": " Вариант 09.01.23",
+  "key": "xzwy",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "w and ((x imp y) eqv (y imp z))",
+  "got": [
+   "xzwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5620,
+  "comment": "",
+  "key": "wxyz",
+  "vars": [
+   "z",
+   "x",
+   "y",
+   "w"
+  ],
+  "formula": "not (z imp x) or (y eqv w) or w",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5483,
+  "comment": "",
+  "key": "yzxw",
+  "vars": [
+   "z",
+   "x",
+   "w",
+   "y"
+  ],
+  "formula": "(z eqv not x) imp ((w imp not y) and (y imp x))",
+  "got": [
+   "yzxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5424,
+  "comment": "Джобс 21.12.22",
+  "key": "ywxz",
+  "vars": [
+   "p",
+   "r",
+   "n",
+   "t",
+   "p"
+  ],
+  "formula": "(p_3 imp p_1) imp (p_4 or not p_2)",
+  "got": [
+   "wxyz",
+   "wxzy",
+   "wyxz",
+   "wyzx",
+   "wzxy",
+   "wzyx",
+   "xwyz",
+   "xwzy",
+   "xywz",
+   "xyzw",
+   "xzwy",
+   "xzyw",
+   "ywxz",
+   "ywzx",
+   "yxwz",
+   "yxzw",
+   "yzwx",
+   "yzxw",
+   "zwxy",
+   "zwyx",
+   "zxwy",
+   "zxyw",
+   "zywx",
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5277,
+  "comment": "/dev/inf 12.2022",
+  "key": "zxwy",
+  "vars": [
+   "w",
+   "y",
+   "z",
+   "x"
+  ],
+  "formula": "not (w eqv y) and (z imp w) and not x",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5241,
+  "comment": "",
+  "key": "zwyx",
+  "vars": [
+   "x",
+   "m",
+   "p",
+   "w",
+   "y",
+   "m",
+   "p",
+   "z"
+  ],
+  "formula": "(w and y) or (x imp w eqv y imp z)",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5108,
+  "comment": "/dev/inf 11.22",
+  "key": "zwyx",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "not (w imp x) or (y imp z) or not y",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 5057,
+  "comment": "",
+  "key": "zwyx",
+  "vars": [
+   "w",
+   "y",
+   "z",
+   "x"
+  ],
+  "formula": "(w imp (y eqv z)) and (y eqv (z imp x))",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4690,
+  "comment": "Демоверсия 2023",
+  "key": "yxzw",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "not (y imp x) or (z imp w) or not z",
+  "got": [
+   "yxzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4662,
+  "comment": "Резервный день 2022",
+  "key": "wyxz",
+  "vars": [
+   "w",
+   "x",
+   "z",
+   "y"
+  ],
+  "formula": "w imp ((x imp z) imp y)",
+  "got": [
+   "wyxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4607,
+  "comment": "Основная волна 2022",
+  "key": "zxyw",
+  "vars": [
+   "x",
+   "z",
+   "y",
+   "w"
+  ],
+  "formula": "((x imp z) imp y) or not w",
+  "got": [
+   "zxyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4582,
+  "comment": "Основная волна 2022",
+  "key": "wzyx",
+  "vars": [
+   "w",
+   "z",
+   "x",
+   "y"
+  ],
+  "formula": "not (w imp z) or (x imp y) or not x",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4459,
+  "comment": "Джобс 15.06.2022",
+  "key": "zyxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "( not x imp y) and ( not y eqv z) and w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4371,
+  "comment": "Вариант от учеников",
+  "key": "bdac",
+  "vars": [
+   "b",
+   "a",
+   "c",
+   "d"
+  ],
+  "formula": "b imp (a and c or d and not a)",
+  "got": [
+   "bdac"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4314,
+  "comment": "Пробный 06.2022 /dev/inf advanced",
+  "key": "13",
+  "vars": [
+   "a",
+   "b"
+  ],
+  "formula": "a → ¬ b",
+  "status": "нет таблицы"
+ },
+ {
+  "taskId": 4252,
+  "comment": "/dev/inf 06.2022",
+  "key": "zyxw",
+  "vars": [
+   "z",
+   "w",
+   "y",
+   "x"
+  ],
+  "formula": "z or ((w or not y) eqv (x imp z))",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4183,
+  "comment": "Открытый вариант 2022",
+  "key": "zxwy",
+  "vars": [
+   "x",
+   "w",
+   "y",
+   "z"
+  ],
+  "formula": "not (x imp w) or (y eqv z) or y",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 4093,
+  "comment": "",
+  "key": "xywz",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "not (x imp y) or ( not w imp not z) or w",
+  "got": [
+   "xywz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 3880,
+  "comment": "Джобс 14.05.2022",
+  "key": "dacb",
+  "vars": [
+   "a",
+   "r",
+   "n",
+   "t",
+   "c",
+   "m",
+   "p",
+   "a",
+   "a",
+   "n",
+   "d",
+   "b",
+   "a",
+   "n",
+   "d",
+   "n",
+   "t",
+   "c"
+  ],
+  "formula": "d and (a or not c imp a and b and not c)",
+  "got": [
+   "dacb"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 3723,
+  "comment": "Джобс 05.05.2022",
+  "key": "bdca",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "(a imp b) and (c imp d) or not c",
+  "got": [
+   "bdca"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 3588,
+  "comment": "Апробация 27.04.2022",
+  "key": "zywx",
+  "vars": [
+   "y",
+   "w",
+   "x",
+   "z"
+  ],
+  "formula": "not (y imp w) or (x eqv z) or x",
+  "got": [
+   "zywx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 3355,
+  "comment": "Джобс 22.04.2022",
+  "key": "zwyx",
+  "vars": [
+   "y",
+   "x",
+   "w",
+   "z"
+  ],
+  "formula": "(y or x) eqv (y imp w) or not z",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 3209,
+  "comment": "Досрочный этап 2022",
+  "key": "xzyw",
+  "vars": [
+   "x",
+   "z",
+   "y",
+   "w"
+  ],
+  "formula": "not (x imp z) or (y eqv w) or not y",
+  "got": [
+   "xzyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 3141,
+  "comment": "",
+  "key": "yzx",
+  "vars": [
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "(x imp y) and (z or y or ( not y imp x ))",
+  "got": [
+   "yzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 3136,
+  "comment": "",
+  "key": "zxy",
+  "vars": [
+   "z",
+   "a",
+   "n",
+   "d",
+   "x"
+  ],
+  "formula": "(y imp z) and not (z and x)",
+  "got": [
+   "zxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2922,
+  "comment": "Апробация 19.02.2022",
+  "key": "zyxw",
+  "vars": [
+   "w",
+   "z",
+   "x",
+   "y"
+  ],
+  "formula": "(w eqv z) or (x and not y) or w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2848,
+  "comment": "Статград 08.02.2022",
+  "key": "zwyx",
+  "vars": [
+   "y",
+   "z",
+   "w",
+   "x"
+  ],
+  "formula": "( not y imp (z eqv w)) and ((z imp x) eqv w)",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2792,
+  "comment": "Статград 17.12.2021",
+  "key": "yxwz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((x → y) ∧ (z ∨ w)) → ((x ≡ w) ∨ (y ∧ ¬ z))",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2695,
+  "comment": "Пробный 02.2022 /dev/inf Middle level",
+  "key": "4",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "(w or y) and (x imp not z) and not w",
+  "got": [
+   "4"
+  ],
+  "count_task": true,
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2664,
+  "comment": "Пробный 02.2022 /dev/inf Base level",
+  "key": "yxzw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x or y) and (x imp not z) and not w",
+  "got": [
+   "yxzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2565,
+  "comment": "",
+  "key": "yxwz",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z",
+   "n"
+  ],
+  "formula": "((w → y) ∧ ( ¬ x → z)) → ((z ≡ w) ∨ (y ∧ ¬ x))",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2534,
+  "comment": "Статград 27.10.2021",
+  "key": "wzyx",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "(x ≡ ¬ y) → ((x ∧ w) ≡ (z ∧ ¬ w))",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2511,
+  "comment": "Новогодний вариант 2021/2022",
+  "key": "рзмд",
+  "vars": [],
+  "status": "нет списка переменных"
+ },
+ {
+  "taskId": 2458,
+  "comment": "",
+  "key": "xywz",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "¬ (x → y) ∨ ( ¬ w → ¬ z) ∨ w",
+  "got": [
+   "xywz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2408,
+  "comment": "",
+  "key": "4",
+  "vars": [
+   "b",
+   "c"
+  ],
+  "got": [
+   "4"
+  ],
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2373,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x ∨ ¬ y) ∧ ¬ (x ≡ z) ∧ w",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2205,
+  "comment": "Halloween 2021",
+  "key": "lwnh",
+  "vars": [
+   "h",
+   "l",
+   "w",
+   "n"
+  ],
+  "formula": "¬ (h → l) → ¬ (w → n) ∧ h",
+  "got": [
+   "lwnh"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 2111,
+  "comment": "Danov2101",
+  "key": "bacd",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "( not a imp b) and (b eqv not c) and not d",
+  "got": [
+   "bacd"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1955,
+  "comment": "Демоверсия 2022",
+  "key": "wxyz",
+  "vars": [
+   "y",
+   "x",
+   "w",
+   "z"
+  ],
+  "formula": "¬ (y → (x ≡ w)) ∧ (z → x)",
+  "got": [
+   "wxyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1888,
+  "comment": "",
+  "key": "yxwz",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "not x or z or not w and y",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1846,
+  "comment": "Основная волна 2021",
+  "key": "cdba",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "(¬a and ¬b) ∨ (b ≡ c) ∨ d",
+  "got": [
+   "cdba"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1788,
+  "comment": "",
+  "key": "cadb",
+  "vars": [
+   "b",
+   "d"
+  ],
+  "formula": "(a ∧ b ≡ ¬ c) ∧ (b → d)",
+  "got": [
+   "cadb"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1741,
+  "comment": "Danov2102",
+  "key": "xyzw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "¬ x ∧ y ∨ z ∧ ¬ y ∨ ¬ z ∧ w",
+  "got": [
+   "xyzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1731,
+  "comment": "",
+  "key": "wyxz",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "¬ ( (x ≡ y) ∨ (x ≡ w)) ∨ z ∨ ¬ ( y → w)",
+  "got": [
+   "wyxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1602,
+  "comment": "Алексеев А.",
+  "key": "xwyz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((x ≡ y) ∧ (z ∧ ¬ w)) ≡ ¬ (((y → w) ∧ (z ≡ y)) ∨ y)",
+  "got": [
+   "xwyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1529,
+  "comment": "",
+  "key": "xwyz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "¬ ((x ≡ y) ∨ (x ≡ z)) ∨ w ∨ ¬ (y → z)",
+  "got": [
+   "xwyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1528,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "y",
+   "z",
+   "y",
+   "x"
+  ],
+  "formula": "¬ w ∧ ( y ∨ z → y ∧ ¬ x)",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1525,
+  "comment": "",
+  "key": "ywzx",
+  "vars": [
+   "x",
+   "y",
+   "w",
+   "z"
+  ],
+  "formula": "((x → y) ∧ (y → w)) ∨ (z ≡ (x ∨ y))",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1524,
+  "comment": "",
+  "key": "xzy",
+  "vars": [
+   "x",
+   "z"
+  ],
+  "formula": "(x ∨ y) → (x ≡ z)",
+  "got": [
+   "xzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1523,
+  "comment": "",
+  "key": "zwxy",
+  "vars": [
+   "y",
+   "x"
+  ],
+  "formula": "¬ w ∧ z ∧ ( y → x)",
+  "got": [
+   "zwxy"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1522,
+  "comment": "",
+  "key": "zxy",
+  "vars": [
+   "y",
+   "x"
+  ],
+  "formula": "(x → z) ∧ (y → x)",
+  "got": [
+   "zxy"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1521,
+  "comment": "",
+  "key": "acb",
+  "vars": [
+   "a",
+   "c"
+  ],
+  "formula": "(a → b) → ( ¬ a ∧ c)",
+  "got": [
+   "acb"
+  ],
+  "unique_rows": false,
+  "mode": "full",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1520,
+  "comment": "",
+  "key": "cba",
+  "vars": [
+   "a",
+   "a",
+   "n",
+   "d",
+   "b",
+   "m",
+   "p",
+   "n",
+   "t",
+   "c"
+  ],
+  "formula": "(a imp b) and (a and b imp not c)",
+  "got": [
+   "cba"
+  ],
+  "unique_rows": false,
+  "mode": "full",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1422,
+  "comment": "",
+  "key": "zxwy",
+  "vars": [
+   "z",
+   "w",
+   "x",
+   "y"
+  ],
+  "formula": "¬(z ∧ ¬w) ∨ ((z → w) ≡ (x → y))",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1357,
+  "comment": "Джобс 16.05.2021",
+  "key": "cadb",
+  "vars": [
+   "b",
+   "m",
+   "p",
+   "d"
+  ],
+  "formula": "((a and b) eqv not c) and (b imp d)",
+  "got": [
+   "cadb"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1333,
+  "comment": "Danov2101",
+  "key": "zywx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x → y) ∧ (y → z) ∧ (z → w)",
+  "got": [
+   "zywx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1307,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "(w imp y) and ((x imp z) eqv (y imp x))",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1282,
+  "comment": "Открытый вариант КЕГЭ",
+  "key": "zywx",
+  "vars": [
+   "w",
+   "z"
+  ],
+  "formula": "(x → y) ∨ ¬( w → z)",
+  "got": [
+   "zywx"
+  ],
+  "unique_rows": false,
+  "mode": "false_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1267,
+  "comment": "Алексеев А.",
+  "key": "wxzy",
+  "vars": [
+   "w",
+   "y",
+   "z",
+   "x"
+  ],
+  "formula": "((w imp y) or not (y imp z)) and not x and not (x eqv z)",
+  "got": [
+   "wxzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1235,
+  "comment": "Статград 26.04.2021",
+  "key": "yzwx",
+  "vars": [
+   "x",
+   "z"
+  ],
+  "formula": "((x ∧ ¬ y) ≡ (z ∨ ¬ w)) → (x ∧ z)",
+  "got": [
+   "yzwx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1210,
+  "comment": "Апробация 27.04",
+  "key": "zxwy",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "(y → x) ∨ ¬ ((x → z) ∧ (z → x)) ∧ ¬ w",
+  "got": [
+   "zxwy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1185,
+  "comment": "Апробация 27.04",
+  "key": "wzxy",
+  "vars": [
+   "y",
+   "x",
+   "z",
+   "w"
+  ],
+  "formula": "(y → x) ∨ ¬ ((x → z) ∧ (z → x)) ∧ ¬w",
+  "got": [
+   "wzxy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1160,
+  "comment": "",
+  "key": "zyxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "( ¬ x ∧ ¬ y) ∨ (x ≡ z) ∨ w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1044,
+  "comment": "Джобс 15.03.2021",
+  "key": "cadb",
+  "vars": [
+   "a",
+   "b",
+   "c",
+   "d"
+  ],
+  "formula": "a ∧ ¬ b ∨ (a ∨ b) ∧ c ∨ d",
+  "got": [
+   "cadb"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 962,
+  "comment": "100 базовых задач Е. Джобс",
+  "key": "wyzx",
+  "vars": [
+   "w",
+   "x",
+   "z",
+   "y"
+  ],
+  "formula": "(w ∨ x ∨ ¬ z ∨ y) ∧ (w ∨ x ∨ ¬ z ∨ ¬ y) ∧ (w ∨ ¬ x ∨ ¬ z ∨ ¬ y)",
+  "got": [
+   "wxyz",
+   "wxzy",
+   "wyxz",
+   "wyzx",
+   "wzxy",
+   "wzyx"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 961,
+  "comment": "100 базовых задач Е. Джобс",
+  "key": "ywzx",
+  "vars": [
+   "w",
+   "x",
+   "z",
+   "y"
+  ],
+  "formula": "w ∧ (x ≡ (z → y))",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 960,
+  "comment": "100 базовых задач Е. Джобс",
+  "key": "bca",
+  "vars": [
+   "a",
+   "b",
+   "c"
+  ],
+  "formula": "a ∧ ¬ b ∨ c",
+  "got": [
+   "bca"
+  ],
+  "unique_rows": false,
+  "mode": "full",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 914,
+  "comment": "Джобс 08.02.2020",
+  "key": "cdab",
+  "vars": [
+   "d",
+   "a"
+  ],
+  "formula": "(a → b) ∧ ¬ (b ≡ c) ∧ (d → a)",
+  "got": [
+   "cdab"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 867,
+  "comment": "Джобс 25.12.2020",
+  "key": "wzyx",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "(w → y) ∧ ((x → z) ≡ (y → x))",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 816,
+  "comment": "Джобс 14.12.2020",
+  "key": "yxz",
+  "vars": [
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "¬(x ≡ y → z)",
+  "got": [
+   "yxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 791,
+  "comment": "Джобс 07.12.2020",
+  "key": "zwyx",
+  "vars": [
+   "z",
+   "y"
+  ],
+  "formula": "(y → x ˅ z) ˄ (z → y)",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 766,
+  "comment": "Джобс 30.11.2020",
+  "key": "yxzw",
+  "vars": [
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "(x ˄ (y ˅ ¬ z) ˄ w) ≡ (x → ¬ y ˄ z)",
+  "got": [
+   "yxzw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 742,
+  "comment": "",
+  "key": "zyxw",
+  "vars": [
+   "z",
+   "w"
+  ],
+  "formula": "x ∧ ¬ y ∧ ( ¬ z ∨ w)",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 741,
+  "comment": "",
+  "key": "yxwz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x ∧ ¬ y) ∨ (y ≡ z) ∨ w",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 740,
+  "comment": "",
+  "key": "yzx",
+  "vars": [
+   "x",
+   "z"
+  ],
+  "formula": "((y ∨ z) → x) ∨ (x ≡ z)",
+  "got": [
+   "yzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 738,
+  "comment": "",
+  "key": "wxzy",
+  "vars": [
+   "y",
+   "z"
+  ],
+  "formula": "x ∨ ( ¬ y ∨ z ∨ ¬ w) ∧ (y ∨ ¬ z)",
+  "got": [
+   "wxzy"
+  ],
+  "unique_rows": false,
+  "mode": "false_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 737,
+  "comment": "",
+  "key": "zwxy",
+  "vars": [
+   "y",
+   "x"
+  ],
+  "formula": "¬ w ∧ z ∧ (y → x)",
+  "got": [
+   "zwxy"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 735,
+  "comment": "",
+  "key": "wxzy",
+  "vars": [
+   "z",
+   "w"
+  ],
+  "formula": "¬y ∧ x ∧ (¬z ∨ w)",
+  "got": [
+   "wxzy"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 734,
+  "comment": "",
+  "key": "yzx",
+  "vars": [
+   "x",
+   "z"
+  ],
+  "formula": "(¬x ∧ y ∧ z) ∨ (¬x ∧ ¬z)",
+  "got": [
+   "yzx"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 710,
+  "comment": "Джобс 23.11.2020",
+  "key": "xwyz",
+  "vars": [
+   "w",
+   "x"
+  ],
+  "formula": "((y → x) ∨ ( ¬ z ∧ w)) ≡ (w ≡ x)",
+  "got": [
+   "xwyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 659,
+  "comment": "Джобс 09.11.2020",
+  "key": "yzwx",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "((x → z) ∧ (z → w)) ∨ (y ≡ (x ∨ z))",
+  "got": [
+   "yzwx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 614,
+  "comment": "Джобс 02.11.2020",
+  "key": "wyzx",
+  "vars": [
+   "x",
+   "w"
+  ],
+  "formula": "(( ¬ y → w) → (x → z)) → (x → w)",
+  "got": [
+   "wyzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 567,
+  "comment": "Джобс 26.10.2020",
+  "key": "bca",
+  "vars": [
+   "a",
+   "b",
+   "c"
+  ],
+  "formula": "a ≡ b ˅ b → c",
+  "got": [
+   "acb",
+   "bca"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 485,
+  "comment": "Джобс 19.10.2020",
+  "key": "cab",
+  "vars": [
+   "a",
+   "b",
+   "c"
+  ],
+  "formula": "a ≡ b ˅ c ≡ b",
+  "got": [
+   "acb",
+   "cab"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 454,
+  "comment": "Джобс 12.10.2020",
+  "key": "bdca",
+  "vars": [
+   "b",
+   "a",
+   "c",
+   "d"
+  ],
+  "formula": "¬ (b → a) ∧ (c → d) ˅ a ∧ b ∧ c ∧ ¬ d",
+  "got": [
+   "bacd",
+   "badc",
+   "bcad",
+   "bcda",
+   "bdac",
+   "bdca"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 419,
+  "comment": "Джобс 05.10.2020",
+  "key": "dabc",
+  "vars": [
+   "a",
+   "d",
+   "b",
+   "c"
+  ],
+  "formula": "(a → d) ∧ ¬ (b → c)",
+  "got": [
+   "dabc"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 394,
+  "comment": "",
+  "key": "zwyx",
+  "vars": [
+   "w",
+   "y",
+   "x",
+   "z"
+  ],
+  "formula": "(w ∧ y) ∨ ((x → w) ≡ (y → z))",
+  "got": [
+   "zwyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 335,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "w or (x imp y) and ( not z imp x)",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 334,
+  "comment": "",
+  "key": "zwyx",
+  "vars": [
+   "x",
+   "w",
+   "y",
+   "z"
+  ],
+  "formula": "((x → w) ∨ y ∧ ¬ z) ∧ ((y → ¬ z) ∨ x ∧ ¬ w)",
+  "got": [
+   "ywzx",
+   "zwyx"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 332,
+  "comment": "",
+  "key": "4",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "(x ∨ y ∧ ¬z) ∧ ¬w",
+  "got": [
+   "4"
+  ],
+  "count_task": true,
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 294,
+  "comment": "Джобс 28.09.2020",
+  "key": "ywzx",
+  "vars": [
+   "y",
+   "w"
+  ],
+  "formula": "x ∨ ( ¬ y ∨ z ∨ w) ∧ (y ∨ ¬ w)",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": false,
+  "mode": "false_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 259,
+  "comment": "Джобс 21.09.2020",
+  "key": "zxy",
+  "vars": [
+   "y",
+   "z"
+  ],
+  "formula": "(x → y) ∧ (y → z)",
+  "got": [
+   "zxy"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 203,
+  "comment": "Джобс 14.09.2020",
+  "key": "xzwy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "( ¬ x ∨ y ∨ ¬ z) ∧ (x ∨ ¬ y) ∨ ¬ w",
+  "got": [
+   "xzwy"
+  ],
+  "unique_rows": false,
+  "mode": "false_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 85,
+  "comment": "Джобс 07.09.2020",
+  "key": "xwyz",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "(x ≡ ¬z) → ((x ∨ w) ≡ y)",
+  "got": [
+   "xwyz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 83,
+  "comment": "",
+  "key": "ywzx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x ∧ ¬y) ∨ (x ≡ z) ∨ w",
+  "got": [
+   "ywzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 82,
+  "comment": "",
+  "key": "xwzy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x ∧ ¬ y) ∨ (y ≡ z) ∨ ¬ w",
+  "got": [
+   "xwyz",
+   "xwzy"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 81,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "z",
+   "x"
+  ],
+  "formula": "w ∨ (x → y) ∧ ( ¬ z → x)",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 80,
+  "comment": "",
+  "key": "yzwx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((x → y) ∨ ¬ (z → w)) ∧ ((w → ¬ x) ∨ ( ¬ y → z))",
+  "got": [
+   "ywzx",
+   "yzwx",
+   "zywx"
+  ],
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 79,
+  "comment": "",
+  "key": "wzyx",
+  "vars": [
+   "w",
+   "y",
+   "z",
+   "x"
+  ],
+  "formula": "¬w ∧ ( y ∨ z → ¬x ∧ y)",
+  "got": [
+   "wzyx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 78,
+  "comment": "",
+  "key": "ywxz",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x → y ∧ ¬ z) ∨ w",
+  "got": [
+   "ywxz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 77,
+  "comment": "",
+  "key": "4",
+  "vars": [
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "(x ∨ (y ∧ ¬ z)) ∧ ¬ w",
+  "got": [
+   "4"
+  ],
+  "count_task": true,
+  "unique_rows": false,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 76,
+  "comment": "",
+  "key": "yzwx",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "((¬x and y) ≡ z) and w",
+  "got": [
+   "yzwx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 75,
+  "comment": "",
+  "key": "zxy",
+  "vars": [
+   "x",
+   "y",
+   "z"
+  ],
+  "formula": "(¬x ∧ y ∧ z) ∨ (¬x ∧ ¬y ∧ z) ∨ (¬x ∧ ¬y ∧ ¬z)",
+  "got": [
+   "zxy"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 74,
+  "comment": "",
+  "key": "abc",
+  "vars": [
+   "b",
+   "c"
+  ],
+  "formula": "(a ∧ ¬c) ∨ (¬b ∧ ¬c)",
+  "got": [
+   "abc"
+  ],
+  "unique_rows": false,
+  "mode": "full",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 73,
+  "comment": "",
+  "key": "xzwy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "( ¬ x ∧ y ∧ ¬ z ∨ x ∧ ¬ y) ∧ ¬ w",
+  "got": [
+   "xzwy"
+  ],
+  "unique_rows": false,
+  "mode": "true_rows",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 72,
+  "comment": "",
+  "key": "yzx",
+  "vars": [
+   "x",
+   "z"
+  ],
+  "formula": "(z ∨ y) → (x ≡ z)",
+  "got": [
+   "yzx"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 71,
+  "comment": "",
+  "key": "yxwz",
+  "vars": [
+   "z",
+   "x",
+   "w",
+   "y"
+  ],
+  "formula": "((z → x) ∧ (x → w)) ∨ (y ≡ (z ∨ x))",
+  "got": [
+   "yxwz"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 70,
+  "comment": "",
+  "key": "xwzy",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x or not y) and not (y eqv z) and w",
+  "got": [
+   "xwzy"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 46,
+  "comment": "Джобс 31.08.2020",
+  "key": "xzyw",
+  "vars": [
+   "x",
+   "z",
+   "w",
+   "y"
+  ],
+  "formula": "(x ∧ z) ∨ ((w → x) ≡ (z → y))",
+  "got": [
+   "xzyw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ },
+ {
+  "taskId": 1,
+  "comment": "Демоверсия 2021",
+  "key": "zyxw",
+  "vars": [
+   "x",
+   "y",
+   "z",
+   "w"
+  ],
+  "formula": "(x ∨ y) ∧ ¬ (y ≡ z) ∧ ¬ w",
+  "got": [
+   "zyxw"
+  ],
+  "unique_rows": true,
+  "mode": "fragment",
+  "status": "подтверждено"
+ }
+]
