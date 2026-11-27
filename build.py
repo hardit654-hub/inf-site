@@ -19,6 +19,9 @@ COURSES=[
   dict(src='src/8/course.js', out='site/ege-8/index.html', title='№ 8 · Комбинаторика в Python',
        og_title='№ 8. Комбинаторика — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='Комбинаторика для ЕГЭ по информатике (№ 8): слова и числа с условиями, алфавитный список, перестановки, решение в Python. 8 уроков, 71 задача с автопроверкой.'),
+  dict(src='src/10/course.js', out='site/ege-43/index.html', title='№ 10 · Поиск слов',
+       og_title='№ 10. Поиск слов — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
+       desc='Поиск слов в текстовом редакторе для ЕГЭ по информатике (№ 10): стандартные задачи, сноски, поиск в составе слов, слова через дефис. 5 уроков, 39 задач с автопроверкой.'),
   dict(src='src/11/course.js', out='site/ege-11/index.html', title='№ 11 · Информационный объём',
        og_title='№ 11. Информационный объём — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='Информационный объём для ЕГЭ по информатике (№ 11): посимвольное кодирование, пароли и идентификаторы, серийные номера, решение в Python. 7 уроков, 61 задача с автопроверкой.'),
@@ -85,7 +88,7 @@ def rebase(o, folder):
     return o
 # Один курс «ЕГЭ»: все разделы на одной странице, слева — оглавление по номерам заданий.
 # Прогресс каждого раздела хранится под прежним ключом (course-ege-inf-s<номер>), поэтому ответы учеников сохраняются.
-ORDER=['src/1/course.js','src/2/course.js','src/17/course.js','src/4/course.js','src/5/course.js','src/8/course.js','src/11/course.js','src/12/course.js','src/13/course.js','src/14/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
+ORDER=['src/1/course.js','src/2/course.js','src/17/course.js','src/4/course.js','src/5/course.js','src/8/course.js','src/10/course.js','src/11/course.js','src/12/course.js','src/13/course.js','src/14/course.js','src/18/course.js','src/19-21/course.js','src/22/course.js']
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
