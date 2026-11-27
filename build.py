@@ -6,7 +6,7 @@ COURSES=[
        desc='Графы и таблицы дорог для ЕГЭ по информатике: сопоставление схемы и таблицы, кратчайший путь, решение в Python. 7 уроков, 39 задач с автопроверкой.'),
   dict(src='src/2/course.js', out='site/ege-2/index.html', title='№ 2 · Логика',
        og_title='№ 2. Логика — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
-       desc='Логика для ЕГЭ по информатике (№ 2): таблицы истинности, сопоставление столбцов с переменными, решение в Python. 4 урока, 51 задача с автопроверкой.'),
+       desc='Логика для ЕГЭ по информатике (№ 2): таблицы истинности, сопоставление столбцов с переменными, решение в Python. 4 урока, 55 заданий.'),
   dict(src='src/17/course.js', out='site/ege-17/index.html', title='Системы счисления',
        og_title='Системы счисления — курс', url='https://gsvv.ru/inf/ege/', image='https://gsvv.ru/inf/og-course.jpg',
        desc='Системы счисления для ЕГЭ: перевод чисел, шестнадцатеричная система, сложение и вычитание, полезные свойства.'),
@@ -77,6 +77,9 @@ def rebase(o, folder):
                 return m.group(0)
             if value.startswith('img2.'):
                 value='img/'+value
+            if value.startswith('img/logic2-'):
+                value='img/'+value[4:]
+            
             return m.group(1)+rel(value)+'"'
         return _re.sub(r'((?:src|href)=")([^"]+)"', replace, o)
     return o
@@ -86,7 +89,7 @@ ORDER=['src/1/course.js','src/2/course.js','src/17/course.js','src/4/course.js',
 secs=[]
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); d=load_course(src); s=d['section']
-    folder=c['out'].split('/')[1]
+    folder='ege' if s['num']==1 else c['out'].split('/')[1]
     les=rebase(scrub(s['lessons']), folder)
     for i,l in enumerate(les,1): l['label']=str(i)   # показываем «1, 2, 3…» внутри номера; num остаётся ключом прогресса
     secs.append(dict(num=s['num'], title=c['title'], key='course-%s-s%s'%(d['id'],s['num']), lessons=les))
@@ -98,14 +101,16 @@ h=eng.replace('{{TITLE}}','ЕГЭ по информатике').replace('{{OG_TI
 # Картинки разделов: sources/<раздел>/img<раздел>.<урок>.<шаг>-<n>.png (качает fetch.yml) -> site/<папка раздела>/img/ (без «img» в имени)
 for src in ORDER:
     c=next(x for x in COURSES if x['src']==src); num=load_course(src)['section']['num']; folder='ege' if num==1 else c['out'].split('/')[1]
-    sdir='sources/1' if num==1 else 'sources/%s'%num
+    sdir='sources/1' if num==1 else ('sources/2' if num==2 else 'sources/%s'%num)
     if not os.path.isdir(sdir): continue
     for name in sorted(os.listdir(sdir)):
-        if not _re.match(r'img%s\.\d+\.\d+-\d+\.png$'%(2 if num==1 else num), name): continue
-        if num == 1:
+        if num == 2:
+            if not _re.match(r'logic2-\d+\.\d+-\d+\.png$', name): continue
+        elif not _re.match(r'img%s\.\d+\.\d+-\d+\.png$'%num, name): continue
+        if num in (1, 2):
             img_1 = 'site/ege/img/%s' % name
         else:
-            img_1 = 'site/%s/img/%s' % (folder, name[3:])
+            img_1 = 'site/%s/img/%s' % (folder, name)
             original = 'site/%s/img/%s' % (folder, name)
             if not os.path.exists(original): os.makedirs(os.path.dirname(original),exist_ok=True); open(original,'wb').write(open(sdir+'/'+name,'rb').read()); print('img',original)
         if not os.path.exists(img_1): os.makedirs(os.path.dirname(img_1),exist_ok=True); open(img_1,'wb').write(open(sdir+'/'+name,'rb').read()); print('img',img_1)

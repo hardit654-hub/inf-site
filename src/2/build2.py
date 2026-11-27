@@ -34,8 +34,16 @@ TITLES = {
     "4": "Тренировка",
 }
 
-# Информационные шаги без проверяемого ответа по признаку в исходном дампе.
-TEXT = {"2.16", "4.9", "4.10", "4.11"}
+# Текстовые шаги без проверяемого ключа.
+TEXT = {"2.16", "4.9"}
+
+# Дополнительные задания исходной тренировки без проверенного ключа;
+# сохраняются как упражнения с вводом ответа, но не включаются в автопроверку.
+UNKEYED_FILL = {"4.10", "4.11"}
+ASSETS = os.path.join(ROOT, "sources/2")
+IMAGE_STEPS = {"1.1", "1.3", "1.4", "1.5", "1.6", "1.8", "1.9", "1.11", "1.12", "1.13", "1.15",
+               "2.1", "2.3", "2.4", "2.5", "2.6", "2.7", "2.9", "2.11", "2.12", "2.14", "2.15",
+               "4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7", "4.8", "4.10", "4.11"}
 
 # видео: исходный шаг содержит только запись разбора, поэтому пока заголовок
 # и место под ролик (своё видео вставится позже)
@@ -124,10 +132,27 @@ def to_blocks(h):
             or re.sub(r"<[^>]+>|\s|&nbsp;", "", b["v"])]
 
 
+def replace_images(tid, h):
+    index = 0
+    def local_image(m):
+        nonlocal index
+        index += 1
+        src = os.path.join(ASSETS, "logic2-%s-%d.png" % (tid, index))
+        if not os.path.isfile(src):
+            raise FileNotFoundError("нет изображения таблицы: " + src)
+        rel = "img/logic2-%s-%d.png" % (tid, index)
+        return '<p><img class="fig-source" src="%s" alt="Фрагмент таблицы истинности"></p>' % rel
+    return re.sub(r'<img\b[^>]*>', local_image, h)
+
+
 def blocks(tid, body, extra=""):
-    """HTML шага -> блоки движка; разметка условия сохраняется как есть."""
-    h = blank(re.sub(r"<img\b[^>]*>", "", body["text"])) + extra
-    return to_blocks(h)
+    """HTML шага -> блоки движка; изображения таблиц локальные, без платформенных ссылок."""
+    h = body["text"]
+    if tid in IMAGE_STEPS:
+        h = replace_images(tid, h)
+    else:
+        h = re.sub(r"<img\b[^>]*>", "", h)
+    return to_blocks(blank(h) + extra)
 
 
 def kege_blocks(text):
@@ -166,13 +191,34 @@ def build():
             if not b or b["name"] == "video":
                 out.append({"type": "video", "title": VIDEO.get(tid, "Видеоразбор")})
                 continue
+            if b["name"] == "string" and tid not in answers2.KEYS:
+                h = b["text"]
+                if tid in IMAGE_STEPS:
+                    h = replace_images(tid, h)
+                else:
+                    h = re.sub(r"<img\b[^>]*>", "", h)
+                h = blank(h)
+                out.append({"type": "fill", "blocks": to_blocks(h),
+                            "fields": [{"label": "Ответ", "n": 1, "txt": 1}], "answer": []})
+                continue
+            if tid in UNKEYED_FILL:
+                h = replace_images(tid, b["text"])
+                h = blank(h)
+                out.append({"type": "fill", "blocks": to_blocks(h),
+                            "fields": [{"label": "Ответ", "n": 1, "txt": 1}], "answer": []})
+                continue
             if tid in TEXT:
-                h = blank(re.sub(r"<img\b[^>]*>", "", b["text"]))
+                h = b["text"]
+                if tid in IMAGE_STEPS:
+                    h = replace_images(tid, h)
+                else:
+                    h = re.sub(r"<img\b[^>]*>", "", h)
+                h = blank(h)
                 out.append({"type": "text", "blocks": to_blocks(h)})
                 continue
             if b["name"] != "string":
-                # теория: текстовый шаг без задачи и без кнопки «Заполнить»
-                h = blank(re.sub(r"<img\b[^>]*>", "", b["text"]))
+                # теоретический блок по явному типу шага источника: без поля ответа
+                h = blank(b["text"])
                 out.append({"type": "text", "blocks": to_blocks(h)})
                 continue
             ans = answers2.KEYS[tid]
