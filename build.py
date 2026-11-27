@@ -159,6 +159,13 @@ for name in sorted(set(_re.findall(r'img/(img[\w.\-]+\.png)', json.dumps(oge, en
     if not os.path.exists(b) or open(a,'rb').read()!=open(b,'rb').read(): shutil.copyfile(a,b)
 print('built site/oge/index.html', len(oge['sections']), 'разделов', noge, 'задач')
 
+# Курс «Электронные таблицы» (LibreOffice Calc и MS Excel): собирается src/excel/build_excel.py (он же кладёт img/ и files/ в site/excel)
+xl=load_course('src/excel/course.js')
+nxl=sum(1 for s in xl['sections'] for l in s['lessons'] for st in l['steps'] if st['type'] in ('fill','choice','match'))
+h=eng.replace('{{TITLE}}','Электронные таблицы · LibreOffice Calc и MS Excel').replace('{{OG_TITLE}}','Электронные таблицы — курс').replace('{{DESC}}','Знакомство с LibreOffice Calc и MS Excel: формулы и адресация, функции СУММ, СЧЁТЕСЛИ, СУММЕСЛИМН, ВПР, фильтр и сортировка, решение задач ЕГЭ в электронных таблицах. %d задач с автопроверкой.'%nxl).replace('{{URL}}','https://gsvv.ru/inf/excel/').replace('{{IMAGE}}','https://gsvv.ru/inf/og-course.jpg').replace('{{COURSE_DATA}}','<script>\nwindow.COURSE = '+json.dumps(xl, ensure_ascii=False).replace('</script>','<\\/script>')+';\n</script>')
+os.makedirs('site/excel',exist_ok=True); open('site/excel/index.html','w').write(h)
+print('built site/excel/index.html', len(xl['sections']), 'разделов', nxl, 'задач')
+
 # Картинки эмодзи (Twemoji) для старых Windows: sources/emoji/*.svg -> site/emoji/ (их подставляет site/emoji.js)
 os.makedirs('site/emoji',exist_ok=True)
 for name in sorted(os.listdir('sources/emoji')) if os.path.isdir('sources/emoji') else []:
@@ -214,6 +221,10 @@ for so in oge['sections']:
     cat.append(dict(key='course-%s-s%s'%(oge['id'],so['num']), title=so['title'], url='../oge/', group='ОГЭ',
         lessons=[dict(num=l['num'], label=l.get('label',l['num']), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
                       labels=[task_label(st) for st in l['steps']]) for l in so['lessons']]))
+for sx in xl['sections']:
+    cat.append(dict(key='course-%s-s%s'%(xl['id'],sx['num']), title='Электронные таблицы: LibreOffice Calc и MS Excel', url='../excel/', group='Электронные таблицы',
+        lessons=[dict(num=l['num'], label=l.get('label',l['num']), title=l['title'], steps=[('task' if st['type'] in ('fill','choice','match') else st['type']) for st in l['steps']],
+                      labels=[task_label(st) for st in l['steps']], **keys(l)) for l in sx['lessons']]))
 os.makedirs('site/kabinet',exist_ok=True)
 json.dump(dict(courses=cat), open('site/kabinet/courses.json','w'), ensure_ascii=False, indent=1)
 print('built site/kabinet/courses.json')
