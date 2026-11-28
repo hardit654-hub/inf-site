@@ -44,7 +44,8 @@ function egeCard(G,p,by){
     <div class="cnum">${done} из ${total} задач решено${coins?` · ${COIN} ${coins}`:""}</div>${rows}
     <a class="btn" href="${esc(G.url)}">${touched?"Продолжить":"Начать"}</a></article>`;
 }
-function hwTasksHTML(tasks){
+function hwTasksHTML(tasks,late){
+  late=late||new Set();
   /* домашка блоками: один блок на урок («42.1 Теория — 12 задач»); нажатие открывает курс на первой нерешённой задаче */
   if(!tasks||!tasks.length)return"";
   const groups=[];let solved=0,n=0;
@@ -53,10 +54,10 @@ function hwTasksHTML(tasks){
     const st=((HWCTX.prog[key]||{}).data||{}).st||{};const ok=!!(st[sid]&&st[sid].ok);n++;if(ok)solved++;
     let g=groups.find(x=>x.key===key);if(!g){g={key,c,blocks:[]};groups.push(g)}
     let b=g.blocks.find(x=>x.ln===ln);if(!b){b={ln,L,all:0,ok:0,first:null,min:sn};g.blocks.push(b)}
-    b.all++;if(ok)b.ok++;else if(b.first==null||sn<b.first)b.first=sn;if(sn<b.min)b.min=sn});
+    b.all++;if(ok)b.ok++;else{if(late.has(tk))b.late=(b.late||0)+1;if(b.first==null||sn<b.first)b.first=sn}if(sn<b.min)b.min=sn});
   const block=(g,b)=>{const vr=g.c.kind==="variant",done=b.ok>=b.all,to=done?b.min:b.first;
     const cnt=done?`✓ ${b.all} из ${b.all}`:b.ok?`${b.ok} из ${b.all}`:`${b.all} ${taskWord(b.all)}`;
-    return `<a class="hwb${done?" ok":""}" href="${esc(g.c.url)}#${esc(b.ln)}-${to}"><span class="hwbt">${vr?"":`<small>${esc(LN(b.L))}</small>`}${esc(b.L.title)}</span><span class="hwbc">${cnt}</span><span class="hwba" aria-hidden="true">›</span></a>`};
+    return `<a class="hwb${done?" ok":b.late?" late":""}" href="${esc(g.c.url)}#${esc(b.ln)}-${to}"><span class="hwbt">${vr?"":`<small>${esc(LN(b.L))}</small>`}${esc(b.L.title)}${b.late?` <span class="latetag" title="Просрочено задач: ${b.late}">ПРОСРОЧЕНО</span>`:""}</span><span class="hwbc">${cnt}</span><span class="hwba" aria-hidden="true">›</span></a>`};
   return `<div class="hwbar">${solved>=n?"<b>✓ Все задачи решены</b>":`Решено <b>${solved} из ${n}</b>`}<div class="meter"><i style="width:${pct(solved,n)}%"></i></div></div>
     <div class="hwl">${groups.map(g=>`<h4>${esc(g.c.title)}</h4>${g.blocks.map(b=>block(g,b)).join("")}`).join("")}</div>`;
 }
@@ -83,7 +84,7 @@ function hwFresh(i){
   /* срок домашки прошёл: решённые задачи убираем из кабинета, нерешённые остаются долгом */
   if(!i.hw_due||!isLate(i.hw_due))return i;
   const tasks=(i.hw_tasks||[]).filter(tk=>{const [key,sid]=tk.split("|");const st=((HWCTX.prog[key]||{}).data||{}).st||{};return!(st[sid]&&st[sid].ok)});
-  return Object.assign({},i,{hw_tasks:tasks,homework:i.hw_done?"":i.homework});
+  return Object.assign({},i,{hw_tasks:tasks,homework:i.hw_done?"":i.homework,hw_late:tasks});
 }
 function infoCards(i){
   i=hwFresh(i);
@@ -91,11 +92,12 @@ function infoCards(i){
   const sch=i.schedule&&i.schedule.length?`<div class="days">${i.schedule.map(x=>`<div class="day"><b>${DAYS[x.day]}</b><span>${x.time}</span><small class="muted">${x.dur||60} мин</small></div>`).join("")}</div>${nb?`<div class="next">Следующее занятие<b>${fmtNext(nb)}</b></div>`:""}`
     :`<p class="muted" style="margin:0">Расписание пока не назначено.</p>`;
   const tasks=i.hw_tasks||[];
-  const hw=(i.homework||tasks.length)?`${i.homework?`<div class="hw hwnote">${linkify(i.homework)}</div>`:""}${hwTasksHTML(tasks)}<div class="hwmeta">${i.hw_due?`<span>Сделать до <span class="due${isLate(i.hw_due)&&!i.hw_done?" late":""}">${fmtDue(i.hw_due)}</span></span>`:""}
+  const lateSet=new Set(i.hw_late||[]),lateN=tasks.filter(tk=>{if(!lateSet.has(tk))return false;const [key,sid]=tk.split("|");const st=((HWCTX.prog[key]||{}).data||{}).st||{};return!(st[sid]&&st[sid].ok)}).length+(i.homework&&!i.hw_done&&isLate(i.hw_due)&&!tasks.length?1:0);
+  const hw=(i.homework||tasks.length)?`${i.homework?`<div class="hw hwnote">${linkify(i.homework)}</div>`:""}${hwTasksHTML(tasks,new Set(i.hw_late||[]))}<div class="hwmeta">${i.hw_due?`<span>Сделать до <span class="due${isLate(i.hw_due)&&!i.hw_done?" late":""}">${fmtDue(i.hw_due)}</span></span>`:""}
       ${i.homework?(i.hw_done?`<span class="done">✓ Отмечено как сделанное</span><button class="btn ghost small" id="hwundo" type="button">Отменить</button>`:`<button class="btn small" id="hwdone" type="button">Я сделал(а)</button>`):""}</div>`
     :`<p class="muted" style="margin:0">Сейчас домашнего задания нет.</p>`;
   return `<div class="duo"><section class="card" id="schcard"><div class="ic"><span class="em">📅</span><h2>Расписание занятий</h2></div>${sch}${deadlineHTML(i)}</section>
-    <section class="card" id="hwcard"><div class="ic"><span class="em">📝</span><h2>Домашнее задание</h2></div>${hw}</section></div>`;
+    <section class="card" id="hwcard"><div class="ic"><span class="em">📝</span><h2>Домашнее задание</h2>${lateN?`<span class="latetag" title="Просрочено задач: ${lateN}">ПРОСРОЧЕНО</span>`:""}</div>${hw}</section></div>`;
 }
 function bindHw(){
   const d=document.getElementById("hwdone"),u=document.getElementById("hwundo");

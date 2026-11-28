@@ -79,10 +79,11 @@ function coins_total(int $uid): int {
 
 /* ---------- расписание и домашка ---------- */
 function info_of(int $uid): array {
-    $r = one('SELECT schedule, homework, hw_tasks, hw_due, hw_set, hw_done, skills, updated FROM inf_student_info WHERE user_id = ?', [$uid]);
+    $r = one('SELECT schedule, homework, hw_tasks, hw_late, hw_due, hw_set, hw_done, skills, updated FROM inf_student_info WHERE user_id = ?', [$uid]);
     return [
         'skills' => (object)($r && $r['skills'] ? (json_decode($r['skills'], true) ?: []) : []),
         'hw_tasks' => $r && $r['hw_tasks'] ? json_decode($r['hw_tasks'], true) : [],
+        'hw_late' => $r && $r['hw_late'] ? json_decode($r['hw_late'], true) : [],
         'schedule' => $r && $r['schedule'] ? json_decode($r['schedule'], true) : [],
         'homework' => $r ? (string)$r['homework'] : '',
         'hw_due' => $r ? (string)$r['hw_due'] : '',
@@ -138,11 +139,17 @@ function save_info(int $id, string $hw, array $tasks, string $due, ?array $sched
     $changed = $hw !== $old['homework'] || $due !== $old['hw_due'] || $tasks !== $old['hw_tasks'];
     $hwSet = $changed ? (($hw === '' && !$tasks) ? 0 : time()) : $old['hw_set'];
     $hwDone = $changed ? 0 : $old['hw_done'];
+    // просроченные задачи: срок старой домашки истёк, задача не решена и осталась в новой выдаче.
+    // Если учитель только сдвинул срок (задачи те же) — новых просрочек не добавляем.
+    $late = $old['hw_late'];
+    if ($tasks !== $old['hw_tasks'] && $old['hw_due'] !== '' && $old['hw_due'] < date('Y-m-d'))
+        $late = array_merge($late, hw_unsolved($id, $old['hw_tasks']));
+    $late = array_values(array_intersect(array_unique($late), $tasks));
     $j = json_encode($sched ?? $old['schedule'], JSON_UNESCAPED_UNICODE);
     if (one('SELECT user_id FROM inf_student_info WHERE user_id = ?', [$id]))
-        q('UPDATE inf_student_info SET schedule = ?, homework = ?, hw_tasks = ?, hw_due = ?, hw_set = ?, hw_done = ?, updated = ? WHERE user_id = ?', [$j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time(), $id]);
+        q('UPDATE inf_student_info SET schedule = ?, homework = ?, hw_tasks = ?, hw_late = ?, hw_due = ?, hw_set = ?, hw_done = ?, updated = ? WHERE user_id = ?', [$j, $hw, json_encode($tasks), json_encode($late), $due, $hwSet, $hwDone, time(), $id]);
     else
-        q('INSERT INTO inf_student_info (user_id, schedule, homework, hw_tasks, hw_due, hw_set, hw_done, updated) VALUES (?,?,?,?,?,?,?,?)', [$id, $j, $hw, json_encode($tasks), $due, $hwSet, $hwDone, time()]);
+        q('INSERT INTO inf_student_info (user_id, schedule, homework, hw_tasks, hw_late, hw_due, hw_set, hw_done, updated) VALUES (?,?,?,?,?,?,?,?,?)', [$id, $j, $hw, json_encode($tasks), json_encode($late), $due, $hwSet, $hwDone, time()]);
 }
 function clean_schedule($s): array {
     $out = [];

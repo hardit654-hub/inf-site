@@ -210,6 +210,8 @@ textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc
 .hwb .hwbt{flex:1;min-width:0;font-weight:600;font-size:15.5px;line-height:1.3}.hwb .hwbt small{color:var(--muted);font-weight:500;margin-right:8px;font-family:var(--f-mono);font-size:13px}
 .hwb .hwbc{font:700 13.5px var(--f-mono);color:var(--amber);white-space:nowrap}
 .hwb .hwba{font-size:22px;line-height:1;color:var(--muted)}
+.hwb.late{background:var(--red-soft);border-left-color:var(--red)}.hwb.late:hover{border-color:var(--red)}.hwb.late .hwbc{color:var(--red)}
+.latetag{display:inline-block;margin-left:6px;font:700 11.5px var(--f-mono);letter-spacing:.05em;color:#fff;background:var(--red);border-radius:4px;padding:2px 7px;vertical-align:2px}
 .hwb.ok{background:var(--green-soft);border-left-color:var(--green)}.hwb.ok:hover{border-color:var(--green)}.hwb.ok .hwbc{color:var(--green-ink)}
 .hwi{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:var(--card)}
 .hwi:hover{border-color:var(--green)}

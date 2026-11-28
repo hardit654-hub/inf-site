@@ -72,6 +72,10 @@ button{font:inherit}
 .sq.on{outline:2px solid #fff;outline-offset:1px}
 .hwt{display:inline-block;font:700 11px var(--f-mono);color:#2a1a00;background:#ff9f1a;border-radius:99px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 .sq.hw::before{content:"";position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:#ff9f1a;border:2px solid var(--bar)}
+.sq.hw.late::before{background:#e5484d}
+.hwt.late{background:#e5484d;color:#fff;letter-spacing:.03em}
+.latetag{margin-left:auto;font:700 12px var(--f-mono);letter-spacing:.05em;color:#fff;background:#e5484d;border-radius:4px;padding:2px 8px}
+.hwnote.late{border-color:#e5484d}
 .hwnote{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#b86b00;background:#fff3e0;border:1px solid #ffd59a;border-radius:6px;padding:8px 12px}
 :root[data-theme="dark"] .hwnote{background:#3a2a10;color:#ffc46b;border-color:#5c4214}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hwnote{background:#3a2a10;color:#ffc46b;border-color:#5c4214}}
@@ -350,7 +354,9 @@ SECS.forEach(s=>{let x={pos:null,st:{}};try{const y=JSON.parse(localStorage.getI
 const DIRTY=new Set();
 /* Синхронизация с личным кабинетом: если ученик вошёл, прогресс уходит на сервер (../api). Без входа всё работает как раньше — только на этом устройстве. */
 const API="../api/index.php";
-let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false,COINS=null,HW=new Set();
+let ME=null,syncT=null,syncing=false,dirty=false,syncErr=false,COINS=null,HW=new Set(),HWLATE=new Set();
+/* задача домашки просрочена: срок прошёл (или задача перешла из прошлой домашки нерешённой), а решения нет */
+const hwLate=(li,si)=>HWLATE.has(hwId(li,si))&&!passed(li,si);
 const COIN_SVG='<svg class="coin" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#f6c43a"/><circle cx="10" cy="10" r="9" fill="none" stroke="#c98a12" stroke-width="1.2"/><circle cx="10" cy="10" r="5.6" fill="none" stroke="#c98a12" stroke-width="1.4"/><path d="M6.2 6.4a5 5 0 0 1 4-2" stroke="#fff6cf" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>';
 /* Монетки: 3 за задачу минус 1 за каждую неверную попытку; если смотрели ответ — 0.
    С кабинетом считает сервер (каждая задача оплачивается один раз навсегда), без кабинета — по ответам на этом устройстве. */
@@ -431,7 +437,9 @@ async function initSync(){
   try{const j=await api("me");ME=j.user;if(ME){COINS=j.coins||0}}catch(e){paintCoins(0);return}  // нет сервера (например, страница открыта с диска) — работаем локально
   SECS.forEach(sec=>{const S=SS[sec.key];if(ME&&S.uid&&S.uid!==ME.id){SS[sec.key]={pos:null,st:{}};saveKey(sec.key)}});  // на этом устройстве остался чужой прогресс
   paintAcct();paintCoins(0);
-  if(ME){try{const i=await api("info_get");(i.hw_tasks||[]).forEach(x=>HW.add(x))}catch(e){}
+  if(ME){try{const i=await api("info_get");(i.hw_tasks||[]).forEach(x=>HW.add(x));
+      const over=i.hw_due&&new Date(i.hw_due+"T23:59:59")<new Date();
+      (over?(i.hw_tasks||[]):(i.hw_late||[]).filter(x=>HW.has(x))).forEach(x=>HWLATE.add(x))}catch(e){}
     await pull(true);render()}
 }
 function localCoins(){let s=0;lessons.forEach((L,li)=>(L.steps||[]).forEach((st,si)=>{if(isTask(st))s+=coinFor(rec(li,si))}));return s}
@@ -551,18 +559,19 @@ function renderToc(){
   let allDone=0,all=0,h="";
   const csec=lessons[cur.li].sec;if(!renderToc.init){renderToc.init=true;OPEN.add(csec.idx)}  // при загрузке раскрываем текущий раздел; дальше можно свернуть всё
   SECS.forEach(sec=>{
-    let sd=0,sa=0,hwS=0,rows="";
+    let sd=0,sa=0,hwS=0,latS=0,rows="";
     sec.lessons.forEach((L,j)=>{const li=sec.off+j;
       if(!L.steps){rows+=`<button class="les" disabled><span class="n">${L.label||L.num}</span><span class="t">${esc(L.title)}</span><span class="c">скоро</span></button>`;return}
       const p=lessonStat(li);sd+=p.done;sa+=p.total;
       const cls=p.done===p.total?" done":p.done?" part":"";
       const hwn=L.steps.reduce((a,_,si)=>a+(HW.has(hwId(li,si))&&!passed(li,si)?1:0),0);hwS+=hwn;
-      rows+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.label||L.num}</span><span class="t">${esc(L.title)}${hwn?` <span class="hwt" title="Задач из домашки: ${hwn}">ДЗ ${hwn}</span>`:""}</span><span class="c">${p.done}/${p.total}</span></button>`;
+      const lat=L.steps.reduce((a,_,si)=>a+(hwLate(li,si)?1:0),0);latS+=lat;
+      rows+=`<button class="les${li===cur.li?" on":""}${cls}" style="--p:${Math.round(p.done/p.total*100)}%" data-li="${li}"><span class="n">${L.label||L.num}</span><span class="t">${esc(L.title)}${hwn?` <span class="hwt" title="Задач из домашки: ${hwn}">ДЗ ${hwn}</span>`:""}${lat?` <span class="hwt late" title="Просрочено задач: ${lat}">ПРОСРОЧЕНО</span>`:""}</span><span class="c">${p.done}/${p.total}</span></button>`;
     });
     allDone+=sd;all+=sa;
     if(!MULTI){h+=`<div class="mod"><span class="n">${sec.num}</span><span>✅ ${esc(sec.title)}</span></div>`+rows;return}
     const open=OPEN.has(sec.idx);
-    h+=`<button class="mod sec${open?" open":""}${sec===csec?" cur":""}" data-sec="${sec.idx}" aria-expanded="${open}"><span class="chev">›</span><span class="st">${esc(sec.title)}${hwS?` <span class="hwt">ДЗ ${hwS}</span>`:""}</span><span class="c">${sd}/${sa}</span></button>`+(open?rows:"");
+    h+=`<button class="mod sec${open?" open":""}${sec===csec?" cur":""}" data-sec="${sec.idx}" aria-expanded="${open}"><span class="chev">›</span><span class="st">${esc(sec.title)}${hwS?` <span class="hwt">ДЗ ${hwS}</span>`:""}${latS?` <span class="hwt late">ПРОСРОЧЕНО</span>`:""}</span><span class="c">${sd}/${sa}</span></button>`+(open?rows:"");
   });
   $("toclist").innerHTML=h;
   $("toclist").querySelectorAll(".les[data-li]").forEach(b=>b.onclick=()=>{go(+b.dataset.li,null);if(matchMedia("(max-width:900px)").matches)setToc(false)});
@@ -576,9 +585,9 @@ function sqHTML(li,i){
   if(isTask(s)){if(x.ok){c+=x.rev?" rev":" ok";icon=ICON.check}else if(x.att){c+=" bad";icon=ICON.cross}}
   else if(x.seen)c+=" seen";
   if(i===cur.si)c+=" on";
-  const hw=HW.has(hwId(li,i));if(hw)c+=" hw";
+  const hw=HW.has(hwId(li,i)),late=hw&&hwLate(li,i);if(hw)c+=" hw";if(late)c+=" late";
   const fn=isTask(s)?fireN(li,i):0;
-  return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}${hw?", домашнее задание":""}${fn?", сложная: "+fn:""}" title="Шаг ${i+1}${hw?" · домашнее задание":""}${fn?" · 🔥 сложная ("+fn+")":""}">${icon}${fn?'<span class="fdot">🔥</span>':""}</button>`;
+  return `<button class="${c}" data-si="${i}" aria-label="Шаг ${i+1}${hw?", домашнее задание":""}${late?", просрочено":""}${fn?", сложная: "+fn:""}" title="Шаг ${i+1}${hw?" · домашнее задание":""}${late?" · ПРОСРОЧЕНО":""}${fn?" · 🔥 сложная ("+fn+")":""}">${icon}${fn?'<span class="fdot">🔥</span>':""}</button>`;
 }
 /* ---------- огоньки ---------- */
 let FIRE={},MYF=new Set();
@@ -623,7 +632,7 @@ function render(){
   $("lbar").innerHTML=`${MULTI?`<span class="lsec">${esc(L.sec.title)}</span>`:""}<b>${L.label||L.num} ${esc(L.title)}</b><span>${p.done} из ${p.total} шагов пройдено</span><span>${p.ok} из ${p.tasks} баллов получено</span>`;
   $("pts").innerHTML=`Шаг <b>${cur.si+1}</b> из ${L.steps.length}`;
   let h="";
-  if(HW.has(hwId(cur.li,cur.si))) h+=`<div class="hwnote">📝 Эта задача — из домашнего задания${x.ok?" · решена ✓":""}</div>`;
+  if(HW.has(hwId(cur.li,cur.si))) h+=`<div class="hwnote${hwLate(cur.li,cur.si)?" late":""}">📝 Эта задача — из домашнего задания${x.ok?" · решена ✓":""}${hwLate(cur.li,cur.si)?'<span class="latetag">ПРОСРОЧЕНО</span>':""}</div>`;
   if(isTask(s)) h+=fireHTML(cur.li,cur.si);
   if(s.title&&s.type!=="video") h+=`<h2 class="left">${esc(s.title)}</h2>`;
   if(s.type==="video"){

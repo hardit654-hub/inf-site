@@ -57,6 +57,9 @@ function schema(PDO $pdo, bool $mysql) {
     try { $pdo->query('SELECT hw_tasks FROM inf_student_info LIMIT 0'); }
     catch (Exception $e) { $pdo->exec('ALTER TABLE inf_student_info ADD COLUMN hw_tasks TEXT'); }
     // отметки учителя по заданиям ЕГЭ 1–27: {"4":"g","12":"y","22":"r"}
+    // задачи домашки, срок которых уже прошёл, а они не были решены (плашка «ПРОСРОЧЕНО»)
+    try { $pdo->query('SELECT hw_late FROM inf_student_info LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec('ALTER TABLE inf_student_info ADD COLUMN hw_late TEXT'); }
     try { $pdo->query('SELECT skills FROM inf_student_info LIMIT 0'); }
     catch (Exception $e) { $pdo->exec('ALTER TABLE inf_student_info ADD COLUMN skills TEXT'); }
     // категория ученика: «Школа» / «Репетиторство» (новая колонка, по умолчанию пустая)
