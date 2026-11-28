@@ -67,7 +67,7 @@ def scrub(o):
     s=_re.sub(r'<p>(?:(?!</p>).)*?pro100ege(?:(?!</p>).)*?</p>', '', s, flags=_re.S|_re.I)
     s=_re.sub(r'\(\s*PRO100 ЕГЭ\s*\)\s*', '', s)
     s=_re.sub(r'<p>(?:(?!</p>).)*?(?:stepik\.org|во вкладке решени)(?:(?!</p>).)*?</p>', '', s, flags=_re.S|_re.I)
-    s=_re.sub(r'<p>(?:\s|<[^>]+>)*PRO100 ЕГЭ информатика ЕГЭ(?:\s|<[^>]+>)*</p>', '', s)
+    s=_re.sub(r'<p\b[^>]*>(?:\s|<[^>]+>)*PRO100 ЕГЭ информатика ЕГЭ(?:\s|<[^>]+>)*</p>', '', s)
     s=s.replace('PRO100 ЕГЭ информатика ЕГЭ','')
     return s
 def rebase(o, folder):
@@ -88,6 +88,8 @@ def rebase(o, folder):
             if value.startswith('../') or value.startswith('http:') or value.startswith('data:') or value.startswith('#'):
                 return m.group(0)
             if value.startswith('img2.'):
+                value='img/'+value
+            if _re.match(r'img[0-9]', value):
                 value='img/'+value
             if value.startswith('img/logic2-'):
                 value='img/'+value[4:]
