@@ -645,7 +645,18 @@ function render(){
   if(!ME)paintCoins(0);
 }
 let katexP=null;
+function texDelims(root){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeValue.includes("\\(")&&!n.parentElement.closest("pre,code,textarea,input,.tex,.katex")?1:2});
+  const ns=[];while(w.nextNode())ns.push(w.currentNode);
+  ns.forEach(n=>{
+    const parts=n.nodeValue.split(/\\\(([\s\S]*?)\\\)/);if(parts.length<3)return;
+    const f=document.createDocumentFragment();
+    parts.forEach((p,i)=>{if(i%2){const sp=document.createElement("span");sp.className="tex";sp.textContent=p;f.appendChild(sp)}else if(p)f.appendChild(document.createTextNode(p))});
+    n.replaceWith(f);
+  });
+}
 function renderTex(){
+  texDelims($("step"));
   const els=[...document.querySelectorAll("#step .tex:not([data-done])")];if(!els.length)return;
   if(!katexP)katexP=new Promise((res,rej)=>{
     const l=document.createElement("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css";document.head.appendChild(l);
