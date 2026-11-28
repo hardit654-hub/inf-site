@@ -126,6 +126,12 @@ function hw_unsolved(int $uid, array $tasks): array {
     return $out;
 }
 function clean_cat($c): string { return mb_substr(trim((string)$c), 0, 32, 'UTF-8'); }
+// класс ученика: только 5, 9, 10, 11 (0 — не задан)
+function clean_grade($g): int { $g = (int)$g; return in_array($g, [5, 9, 10, 11], true) ? $g : 0; }
+// назначенные курсы: ЕГЭ, ОГЭ, 7 класс, Электронные таблицы. Пустой список — открыты все курсы
+const COURSE_IDS = ['ege-inf', 'oge-inf', 'inf7', 'excel'];
+function courses_list($s): array { return array_values(array_intersect(COURSE_IDS, explode(',', (string)$s))); }
+function clean_courses($a): string { return implode(',', array_values(array_intersect(COURSE_IDS, is_array($a) ? array_map('strval', $a) : []))); }
 function clean_hw_input(): array {
     $hw = trim(str_replace("\r", '', (string)arg('homework')));
     if (mb_strlen($hw, 'UTF-8') > 5000) fail('Домашнее задание слишком длинное (до 5000 символов)');

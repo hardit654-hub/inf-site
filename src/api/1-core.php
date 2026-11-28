@@ -65,6 +65,11 @@ function schema(PDO $pdo, bool $mysql) {
     // категория ученика: «Школа» / «Репетиторство» (новая колонка, по умолчанию пустая)
     try { $pdo->query('SELECT cat FROM inf_users LIMIT 0'); }
     catch (Exception $e) { $pdo->exec("ALTER TABLE inf_users ADD COLUMN cat VARCHAR(32) NOT NULL DEFAULT ''"); }
+    // класс ученика (5, 9, 10, 11; 0 — не задан) и назначенные курсы (через запятую; пусто — открыты все)
+    try { $pdo->query('SELECT grade FROM inf_users LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec('ALTER TABLE inf_users ADD COLUMN grade INT NOT NULL DEFAULT 0'); }
+    try { $pdo->query('SELECT courses FROM inf_users LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec("ALTER TABLE inf_users ADD COLUMN courses VARCHAR(255) NOT NULL DEFAULT ''"); }
     // закрытые материалы (варианты СтатГрада и т. п.): видны только вошедшим
     $blob = $mysql ? 'MEDIUMBLOB' : 'BLOB';
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_materials (

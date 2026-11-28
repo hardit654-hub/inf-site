@@ -44,7 +44,7 @@ function current_user() {
     $u = null;
     $t = $_COOKIE[COOKIE] ?? '';
     if (!preg_match('/^[0-9a-f]{64}$/', $t)) return null;
-    $r = one('SELECT u.id, u.login, u.name, u.role, u.last_seen FROM inf_sessions s JOIN inf_users u ON u.id = s.user_id
+    $r = one('SELECT u.id, u.login, u.name, u.role, u.grade, u.courses, u.last_seen FROM inf_sessions s JOIN inf_users u ON u.id = s.user_id
               WHERE s.token = ? AND s.expires > ?', [token_hash($t), time()]);
     if ($r) {
         $r['id'] = (int)$r['id'];
@@ -56,7 +56,8 @@ function current_user() {
 }
 function need_user() { $u = current_user(); if (!$u) fail('Нужно войти', 401); return $u; }
 function need_teacher() { $u = need_user(); if ($u['role'] !== 'teacher') fail('Только для учителя', 403); return $u; }
-function public_user($u) { return $u ? ['id' => (int)$u['id'], 'login' => $u['login'], 'name' => $u['name'], 'role' => $u['role']] : null; }
+function public_user($u) { return $u ? ['id' => (int)$u['id'], 'login' => $u['login'], 'name' => $u['name'], 'role' => $u['role'],
+    'grade' => (int)($u['grade'] ?? 0), 'courses' => courses_list($u['courses'] ?? '')] : null; }
 
 /* ---------- защита от подбора пароля ---------- */
 function client_ip(): string { return substr((string)($_SERVER['REMOTE_ADDR'] ?? ''), 0, 64); }

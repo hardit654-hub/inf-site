@@ -1,10 +1,10 @@
 /* ----- кабинет учителя ----- */
 case 'students':
     need_teacher();
-    $rows = q("SELECT u.id, u.login, u.name, u.note, u.cat, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
+    $rows = q("SELECT u.id, u.login, u.name, u.note, u.cat, u.grade, u.courses, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
                LEFT JOIN (SELECT user_id, SUM(amount) AS s FROM inf_coins GROUP BY user_id) c ON c.user_id = u.id
                WHERE u.role = 'student' ORDER BY u.name")->fetchAll();
-    foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['info'] = info_of($r['id']); $r['info']['hw_prog'] = hw_progress($r['id'], $r['info']['hw_tasks']); }
+    foreach ($rows as &$r) { foreach (['id','grade','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['courses'] = courses_list($r['courses']); $r['info'] = info_of($r['id']); $r['info']['hw_prog'] = hw_progress($r['id'], $r['info']['hw_tasks']); }
     out(['ok' => true, 'students' => $rows]);
 
 case 'student_create':
@@ -42,6 +42,8 @@ case 'student_update':
     q('UPDATE inf_users SET name = ?, note = ? WHERE id = ?', [clean_name(arg('name')), mb_substr(trim((string)arg('note')), 0, 200, 'UTF-8'), $id]);
     global $IN;
     if (array_key_exists('cat', $IN)) q('UPDATE inf_users SET cat = ? WHERE id = ?', [clean_cat(arg('cat')), $id]);
+    if (array_key_exists('grade', $IN)) q('UPDATE inf_users SET grade = ? WHERE id = ?', [clean_grade(arg('grade')), $id]);
+    if (array_key_exists('courses', $IN)) q('UPDATE inf_users SET courses = ? WHERE id = ?', [clean_courses(arg('courses')), $id]);
     out(['ok' => true]);
 
 case 'students_move':

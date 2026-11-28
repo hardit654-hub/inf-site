@@ -18,13 +18,18 @@ function paneSchedule(){
     await viewTeacher();const s=STUDENTS.find(x=>x.id===id);if(s)editInfo(s)});
 }
 function plural(n,a,b,c){const m=n%10,h=n%100;return m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c}
+const GRADES=[5,9,10,11];
+/* курсы для назначения ученику: id курса (как в courses.json "course-<id>-sN") и название */
+const COURSE_SETS=[["ege-inf","ЕГЭ"],["oge-inf","ОГЭ"],["inf7","7 класс"],["excel","Электронные таблицы"]];
 function editInfo(s){
   const i=s.info||{schedule:[],homework:"",hw_due:""};
   const slot=document.getElementById("editslot");
   const row=x=>`<div class="srow"><select class="sd">${DAYS.slice(1).map((d,k)=>`<option value="${k+1}" ${x.day===k+1?"selected":""}>${d}</option>`).join("")}</select><input type="time" class="st" value="${x.time||"17:00"}" required><input type="number" class="dur" min="15" max="240" step="15" value="${x.dur||60}" title="Длительность, мин"><span class="muted">мин</span><button class="btn danger small rm" type="button">Убрать</button></div>`;
   slot.innerHTML=`<div class="card edit"><h2>${esc(s.name)}: занятия и домашка</h2><p class="sub">Ученик увидит это у себя в кабинете сразу после сохранения.</p>
    <form id="ef"><div class="row"><div class="field" style="flex:0 1 220px"><label for="eca">Категория</label>${catSel("eca",catOf(s))}</div>
-    <div class="field" style="flex:0 1 200px"><label for="egr">Класс / группа</label><input id="egr" list="grplist" value="${esc(s.note||"")}" placeholder="10 класс"></div></div>
+    <div class="field" style="flex:0 1 200px"><label for="egr">Класс / группа</label><input id="egr" list="grplist" value="${esc(s.note||"")}" placeholder="10 класс"></div>
+    <div class="field" style="flex:0 1 150px"><label for="egd">Класс</label><select id="egd" class="sel"><option value="0">— не задан —</option>${GRADES.map(g=>`<option value="${g}" ${s.grade===g?"selected":""}>${g} класс</option>`).join("")}</select></div></div>
+    <div class="field"><label>Курсы ученика <span class="muted">(ничего не отмечено — открыты все)</span></label><div class="crsel">${COURSE_SETS.map(([id,t])=>`<label class="chk"><input type="checkbox" class="crs" value="${id}" ${(s.courses||[]).includes(id)?"checked":""}> ${t}</label>`).join("")}</div></div>
     <label>Расписание</label><div id="rows">${(i.schedule.length?i.schedule:[]).map(row).join("")}</div>
     <button class="btn ghost small" type="button" id="addrow">+ Добавить день</button>
     <div class="field" style="margin-top:18px"><label>Домашнее задание: задачи из курсов <span class="muted" id="pkall"></span></label><div id="picker"><div class="loading" style="padding:14px">Загрузка курсов…</div></div></div>
@@ -45,7 +50,8 @@ function editInfo(s){
     setBusy(b,true,"Сохраняем…");
     const hw_tasks=[...document.querySelectorAll("#picker .tk:checked")].map(c=>c.value);
     try{const ng=document.getElementById("egr").value.trim(),nc=document.getElementById("eca").value;
-      if(ng!==grpOf(s)||nc!==catOf(s))await api("student_update",{id:s.id,name:s.name,note:ng,cat:nc});
+      const gd=+document.getElementById("egd").value,crs=[...document.querySelectorAll("#ef .crs:checked")].map(c=>c.value);
+      if(ng!==grpOf(s)||nc!==catOf(s)||gd!==(s.grade||0)||crs.join()!==(s.courses||[]).join())await api("student_update",{id:s.id,name:s.name,note:ng,cat:nc,grade:gd,courses:crs});
       await api("info_set",{id:s.id,schedule,homework:document.getElementById("hwt").value,hw_tasks,hw_due:document.getElementById("hwd").value});
       STUDENTS=(await api("students")).students;paneStudents();const ns=STUDENTS.find(x=>x.id===s.id);editInfo(ns);msg(document.getElementById("em"),"Сохранено — ученик уже видит это в кабинете",true)}
     catch(err){msg(m,err.message);setBusy(b,false)}};

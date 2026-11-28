@@ -21,7 +21,7 @@ function ago(ts){
 const EGE=["Графы и таблицы","Таблицы истинности","Базы данных","Кодирование, условие Фано","Анализ алгоритмов","Черепаха","Графика и звук","Комбинаторика","Электронные таблицы","Поиск в тексте","Объём информации","Машина Тьюринга","IP-адреса и маски","Системы счисления","Логические выражения","Рекурсия","Последовательности","Динамика в таблицах","Теория игр: 1 ход","Теория игр: 2 хода","Теория игр: стратегия","Параллельные процессы","Количество программ","Обработка строк","Делители и маски","Сортировка данных","Анализ данных"];
 const SKW={g:"Хорошо получается",y:"Так себе",r:"Не пройдено"};
 /* раздел курса для номера задания (ссылка с плитки) */
-function skLinks(cat){const m={};(cat||[]).forEach(c=>{if(c.group!=="ЕГЭ")return;const num=(c.key.match(/-s(\d+)$/)||[])[1];if(!num)return;const u=c.url+"?s="+num;
+function skLinks(cat){const m={};(cat||[]).forEach(c=>{if(c.group!=="ЕГЭ"||(typeof closedCourse==="function"&&closedCourse(c.key)))return;const num=(c.key.match(/-s(\d+)$/)||[])[1];if(!num)return;const u=c.url+"?s="+num;
   const t=c.title.match(/№\s*(\d+)(?:[–-](\d+))?/);if(t){for(let k=+t[1];k<=+(t[2]||t[1]);k++)m[k]=u}else if(/Системы счисления/.test(c.title))m[14]=u});return m}
 function skCounts(sk){const n={g:0,y:0,r:0,e:0};for(let k=1;k<=27;k++)n[sk[k]||"e"]++;return n}
 function skillsCard(sk,cat){

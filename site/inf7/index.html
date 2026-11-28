@@ -178,6 +178,13 @@ details.box{border:1px solid var(--line);border-radius:6px;padding:0 16px;backgr
 details.box>summary{cursor:pointer;font-weight:500;padding:12px 0;color:var(--accent)}
 details.box[open]>summary{border-bottom:1px solid var(--line);margin-bottom:12px}
 details.box>div{display:flex;flex-direction:column;gap:10px;padding-bottom:14px}
+.closedwall{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+.closedwall>div{max-width:460px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.closedwall h2{margin:0;font-size:22px}
+.closedwall p{margin:0;color:var(--muted)}
+.closedwall .btn{display:inline-block;padding:10px 18px;border-radius:8px;background:var(--accent,#2b6cb0);color:#fff;text-decoration:none;font-weight:600}
+.closedtag{display:inline-block;font:700 12px var(--f-mono);letter-spacing:.06em;color:#fff;background:#7a7f87;border-radius:4px;padding:3px 9px}
+body.isclosed{overflow:hidden}
 .locked{display:flex;gap:12px;align-items:center;border:1px dashed var(--line-strong);border-radius:6px;padding:11px 16px;color:var(--muted)}
 .locked svg{width:18px;height:18px;flex:none}
 .locked span{display:flex;flex-direction:column;gap:1px}
@@ -435,12 +442,18 @@ async function pull(first){
 }
 async function initSync(){
   try{const j=await api("me");ME=j.user;if(ME){COINS=j.coins||0}}catch(e){paintCoins(0);return}  // нет сервера (например, страница открыта с диска) — работаем локально
+  if(ME&&ME.role!=="teacher"&&(ME.courses||[]).length&&["ege-inf","oge-inf","inf7","excel"].includes(C.id)&&!ME.courses.includes(C.id)){closedWall();return}  // курс не назначен ученику
   SECS.forEach(sec=>{const S=SS[sec.key];if(ME&&S.uid&&S.uid!==ME.id){SS[sec.key]={pos:null,st:{}};saveKey(sec.key)}});  // на этом устройстве остался чужой прогресс
   paintAcct();paintCoins(0);
   if(ME){try{const i=await api("info_get");(i.hw_tasks||[]).forEach(x=>HW.add(x));
       const over=i.hw_due&&new Date(i.hw_due+"T23:59:59")<new Date();
       (over?(i.hw_tasks||[]):(i.hw_late||[]).filter(x=>HW.has(x))).forEach(x=>HWLATE.add(x))}catch(e){}
     await pull(true);render()}
+}
+function closedWall(){
+  const w=document.createElement("div");w.className="closedwall";
+  w.innerHTML=`<div><span class="closedtag">ЗАКРЫТО</span><h2>${esc(C.title||document.title)}</h2><p>Этот курс вам пока не назначен. Чтобы открыть его, напишите учителю.</p><a class="btn" href="../kabinet/">В личный кабинет</a></div>`;
+  document.body.appendChild(w);document.body.classList.add("isclosed");
 }
 function localCoins(){let s=0;lessons.forEach((L,li)=>(L.steps||[]).forEach((st,si)=>{if(isTask(st))s+=coinFor(rec(li,si))}));return s}
 function paintCoins(gained){

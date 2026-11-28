@@ -77,6 +77,11 @@ input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc663
 .lrow .meter{height:6px}
 .lrow b{font:500 12.5px var(--f-mono);color:var(--muted);text-align:right}
 .course .btn{align-self:flex-start;margin-top:4px}
+.course.closed{opacity:.75;background:var(--chip);align-self:start}
+.course.closed .cnum{font:400 14px/1.45 var(--f-body)}
+.closedtag{display:inline-block;margin-left:6px;font:700 11.5px var(--f-mono);letter-spacing:.05em;color:#fff;background:var(--muted);border-radius:4px;padding:2px 7px;vertical-align:2px}
+.crsel{display:flex;flex-wrap:wrap;gap:8px 18px}
+.crsel .chk{display:inline-flex;align-items:center;gap:6px;font-size:15px;cursor:pointer}
 
 /* вкладки учителя */
 .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}

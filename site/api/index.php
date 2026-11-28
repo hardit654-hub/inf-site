@@ -67,6 +67,11 @@ function schema(PDO $pdo, bool $mysql) {
     // категория ученика: «Школа» / «Репетиторство» (новая колонка, по умолчанию пустая)
     try { $pdo->query('SELECT cat FROM inf_users LIMIT 0'); }
     catch (Exception $e) { $pdo->exec("ALTER TABLE inf_users ADD COLUMN cat VARCHAR(32) NOT NULL DEFAULT ''"); }
+    // класс ученика (5, 9, 10, 11; 0 — не задан) и назначенные курсы (через запятую; пусто — открыты все)
+    try { $pdo->query('SELECT grade FROM inf_users LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec('ALTER TABLE inf_users ADD COLUMN grade INT NOT NULL DEFAULT 0'); }
+    try { $pdo->query('SELECT courses FROM inf_users LIMIT 0'); }
+    catch (Exception $e) { $pdo->exec("ALTER TABLE inf_users ADD COLUMN courses VARCHAR(255) NOT NULL DEFAULT ''"); }
     // закрытые материалы (варианты СтатГрада и т. п.): видны только вошедшим
     $blob = $mysql ? 'MEDIUMBLOB' : 'BLOB';
     $pdo->exec("CREATE TABLE IF NOT EXISTS inf_materials (
@@ -141,7 +146,7 @@ function current_user() {
     $u = null;
     $t = $_COOKIE[COOKIE] ?? '';
     if (!preg_match('/^[0-9a-f]{64}$/', $t)) return null;
-    $r = one('SELECT u.id, u.login, u.name, u.role, u.last_seen FROM inf_sessions s JOIN inf_users u ON u.id = s.user_id
+    $r = one('SELECT u.id, u.login, u.name, u.role, u.grade, u.courses, u.last_seen FROM inf_sessions s JOIN inf_users u ON u.id = s.user_id
               WHERE s.token = ? AND s.expires > ?', [token_hash($t), time()]);
     if ($r) {
         $r['id'] = (int)$r['id'];
@@ -153,7 +158,8 @@ function current_user() {
 }
 function need_user() { $u = current_user(); if (!$u) fail('Нужно войти', 401); return $u; }
 function need_teacher() { $u = need_user(); if ($u['role'] !== 'teacher') fail('Только для учителя', 403); return $u; }
-function public_user($u) { return $u ? ['id' => (int)$u['id'], 'login' => $u['login'], 'name' => $u['name'], 'role' => $u['role']] : null; }
+function public_user($u) { return $u ? ['id' => (int)$u['id'], 'login' => $u['login'], 'name' => $u['name'], 'role' => $u['role'],
+    'grade' => (int)($u['grade'] ?? 0), 'courses' => courses_list($u['courses'] ?? '')] : null; }
 
 /* ---------- защита от подбора пароля ---------- */
 function client_ip(): string { return substr((string)($_SERVER['REMOTE_ADDR'] ?? ''), 0, 64); }
@@ -332,6 +338,12 @@ function hw_unsolved(int $uid, array $tasks): array {
     return $out;
 }
 function clean_cat($c): string { return mb_substr(trim((string)$c), 0, 32, 'UTF-8'); }
+// класс ученика: только 5, 9, 10, 11 (0 — не задан)
+function clean_grade($g): int { $g = (int)$g; return in_array($g, [5, 9, 10, 11], true) ? $g : 0; }
+// назначенные курсы: ЕГЭ, ОГЭ, 7 класс, Электронные таблицы. Пустой список — открыты все курсы
+const COURSE_IDS = ['ege-inf', 'oge-inf', 'inf7', 'excel'];
+function courses_list($s): array { return array_values(array_intersect(COURSE_IDS, explode(',', (string)$s))); }
+function clean_courses($a): string { return implode(',', array_values(array_intersect(COURSE_IDS, is_array($a) ? array_map('strval', $a) : []))); }
 function clean_hw_input(): array {
     $hw = trim(str_replace("\r", '', (string)arg('homework')));
     if (mb_strlen($hw, 'UTF-8') > 5000) fail('Домашнее задание слишком длинное (до 5000 символов)');
@@ -755,10 +767,10 @@ case 'chat_send':
 /* ----- кабинет учителя ----- */
 case 'students':
     need_teacher();
-    $rows = q("SELECT u.id, u.login, u.name, u.note, u.cat, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
+    $rows = q("SELECT u.id, u.login, u.name, u.note, u.cat, u.grade, u.courses, u.created_at, u.last_seen, COALESCE(c.s, 0) AS coins FROM inf_users u
                LEFT JOIN (SELECT user_id, SUM(amount) AS s FROM inf_coins GROUP BY user_id) c ON c.user_id = u.id
                WHERE u.role = 'student' ORDER BY u.name")->fetchAll();
-    foreach ($rows as &$r) { foreach (['id','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['info'] = info_of($r['id']); $r['info']['hw_prog'] = hw_progress($r['id'], $r['info']['hw_tasks']); }
+    foreach ($rows as &$r) { foreach (['id','grade','created_at','last_seen','coins'] as $f) $r[$f] = (int)$r[$f]; $r['courses'] = courses_list($r['courses']); $r['info'] = info_of($r['id']); $r['info']['hw_prog'] = hw_progress($r['id'], $r['info']['hw_tasks']); }
     out(['ok' => true, 'students' => $rows]);
 
 case 'student_create':
@@ -796,6 +808,8 @@ case 'student_update':
     q('UPDATE inf_users SET name = ?, note = ? WHERE id = ?', [clean_name(arg('name')), mb_substr(trim((string)arg('note')), 0, 200, 'UTF-8'), $id]);
     global $IN;
     if (array_key_exists('cat', $IN)) q('UPDATE inf_users SET cat = ? WHERE id = ?', [clean_cat(arg('cat')), $id]);
+    if (array_key_exists('grade', $IN)) q('UPDATE inf_users SET grade = ? WHERE id = ?', [clean_grade(arg('grade')), $id]);
+    if (array_key_exists('courses', $IN)) q('UPDATE inf_users SET courses = ? WHERE id = ?', [clean_courses(arg('courses')), $id]);
     out(['ok' => true]);
 
 case 'students_move':

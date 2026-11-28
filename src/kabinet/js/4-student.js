@@ -33,9 +33,15 @@ function groupCat(cat){
   const out=[],g={};
   cat.forEach(c=>{if(!c.group||c.kind==="variant"){out.push(c);return}
     if(!g[c.group]){g[c.group]={title:c.group,url:c.url,parts:[]};out.push(g[c.group])}g[c.group].parts.push(c)});
-  return out;
+  const shut=c=>c.parts&&c.parts.every(x=>closedCourse(x.key));
+  return out.filter(c=>!shut(c)).concat(out.filter(shut));
 }
+/* курс не назначен ученику: учитель отметил другие курсы (пустой список — открыты все) */
+const courseId=key=>key.replace(/^course-/,"").replace(/-s\d+$/,"");
+const closedCourse=key=>!!(ME&&ME.role!=="teacher"&&ME.courses&&ME.courses.length&&!ME.courses.includes(courseId(key)));
 function egeCard(G,p,by){
+  if(G.parts.every(c=>closedCourse(c.key)))return `<article class="course closed"><h3>${esc(G.title)} <span class="closedtag">ЗАКРЫТО</span></h3>
+    <div class="cnum">Курс пока не назначен. Чтобы открыть его, напишите учителю.</div></article>`;
   let done=0,total=0,coins=0,touched=false;
   const rows=G.parts.map(c=>{const s=stats(c,(p.progress[c.key]||{}).data);done+=s.done;total+=s.total;coins+=by[c.key]||0;touched=touched||s.touched;
     return `<div class="lrow"><span>${esc(c.title)}</span><div class="meter"><i style="width:${pct(s.done,s.total)}%"></i></div><b>${s.done}/${s.total}</b></div>`}).join("");
