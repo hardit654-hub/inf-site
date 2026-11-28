@@ -193,6 +193,9 @@ textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #66cc
 .pl{border-top:1px solid var(--line)}
 .pl>summary{cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 4px;font-size:15px}
 .pl>summary small{color:var(--muted);margin-left:auto;white-space:nowrap}
+.pl>summary::-webkit-details-marker{display:none}
+.pl>summary::after{content:"▸";color:var(--muted);transition:transform .15s;flex:none}
+.pl[open]>summary::after{transform:rotate(90deg)}
 .pl input,.pt input{width:18px;height:18px;accent-color:var(--green-d);flex:none}
 .tasks{display:flex;flex-direction:column;padding:0 0 8px 32px}
 .pt{display:flex;align-items:flex-start;gap:10px;padding:6px 4px;font-size:14px;line-height:1.4;border-radius:8px;cursor:pointer}

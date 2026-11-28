@@ -56,8 +56,7 @@ async function buildPicker(sel){
     const any=c.lessons.some(l=>l.steps.some((s,k)=>s==="task"&&sel.has(c.key+"|"+l.num+"/"+K(l,k))));
     return `<details class="pick" ${any?"open":""}><summary>${esc(c.title)}<span class="pc" data-pc></span></summary><div class="lessons">${c.lessons.map(l=>{
       const tk=l.steps.map((s,k)=>s==="task"?k+1:0).filter(Boolean);if(!tk.length)return"";
-      const lany=tk.some(n=>sel.has(c.key+"|"+l.num+"/"+K(l,n-1)));
-      return `<details class="pl" ${lany?"open":""}><summary><input type="checkbox" class="lall" aria-label="Все задачи урока ${esc(l.num)}"><span>${esc(LN(l)+" "+l.title)}</span><small data-lc></small></summary><div class="tasks">${tk.map(n=>{const v=c.key+"|"+l.num+"/"+K(l,n-1);
+      return `<details class="pl"><summary><input type="checkbox" class="lall" aria-label="Все задачи урока ${esc(l.num)}"><span>${esc(LN(l)+" "+l.title)}</span><small data-lc></small></summary><div class="tasks">${tk.map(n=>{const v=c.key+"|"+l.num+"/"+K(l,n-1);
         return `<label class="pt"><input type="checkbox" class="tk" value="${esc(v)}" ${sel.has(v)?"checked":""}><b>Шаг ${n}</b><span>${esc((l.labels||[])[n-1]||"")}</span><a href="${esc(c.url)}#${esc(l.num)}-${n}" target="_blank" rel="noopener">открыть</a></label>`}).join("")}</div></details>`}).join("")}</div></details>`}).join("");
   box.querySelectorAll(".lall").forEach(cb=>{cb.onclick=e=>e.stopPropagation();cb.onchange=()=>{cb.closest(".pl").querySelectorAll(".tk").forEach(t=>t.checked=cb.checked);syncPicker()}});
   box.querySelectorAll(".tk").forEach(cb=>cb.onchange=syncPicker);
