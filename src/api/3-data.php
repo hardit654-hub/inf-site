@@ -113,6 +113,17 @@ function hw_progress(int $uid, array $tasks): array {
     }
     return ['total' => count($tasks), 'solved' => $solved];
 }
+function hw_unsolved(int $uid, array $tasks): array {
+    // задачи домашки, которые ученик ещё не решил (порядок сохраняется)
+    $st = [];
+    $out = [];
+    foreach ($tasks as $t) {
+        [$k, $sid] = explode('|', $t, 2);
+        if (!isset($st[$k])) { $r = one('SELECT data FROM inf_progress WHERE user_id = ? AND ckey = ?', [$uid, $k]); $st[$k] = $r ? (json_decode($r['data'], true)['st'] ?? []) : []; }
+        if (empty($st[$k][$sid]['ok'])) $out[] = $t;
+    }
+    return $out;
+}
 function clean_cat($c): string { return mb_substr(trim((string)$c), 0, 32, 'UTF-8'); }
 function clean_hw_input(): array {
     $hw = trim(str_replace("\r", '', (string)arg('homework')));

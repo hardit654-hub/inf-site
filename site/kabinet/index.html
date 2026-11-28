@@ -568,7 +568,14 @@ function deadlineHTML(i){
   return `<div class="dl ${cls}"><span class="dll">Сдать домашку до</span><b class="dld">${due.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"})}</b><span class="dlc">${left}</span></div>`;
 }
 function dayWord(n){const m=n%10,h=n%100;return m===1&&h!==11?"день":m>=2&&m<=4&&(h<12||h>14)?"дня":"дней"}
+function hwFresh(i){
+  /* срок домашки прошёл: решённые задачи убираем из кабинета, нерешённые остаются долгом */
+  if(!i.hw_due||!isLate(i.hw_due))return i;
+  const tasks=(i.hw_tasks||[]).filter(tk=>{const [key,sid]=tk.split("|");const st=((HWCTX.prog[key]||{}).data||{}).st||{};return!(st[sid]&&st[sid].ok)});
+  return Object.assign({},i,{hw_tasks:tasks,homework:i.hw_done?"":i.homework});
+}
 function infoCards(i){
+  i=hwFresh(i);
   const nb=nextLesson(i.schedule);
   const sch=i.schedule&&i.schedule.length?`<div class="days">${i.schedule.map(x=>`<div class="day"><b>${DAYS[x.day]}</b><span>${x.time}</span><small class="muted">${x.dur||60} мин</small></div>`).join("")}</div>${nb?`<div class="next">Следующее занятие<b>${fmtNext(nb)}</b></div>`:""}`
     :`<p class="muted" style="margin:0">Расписание пока не назначено.</p>`;

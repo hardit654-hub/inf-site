@@ -198,6 +198,11 @@ case 'hw_assign':
         if ($add) {
             // добавить к текущей домашке: задачи объединяются, текст дописывается с новой строки
             $o = info_of($id);
+            // срок прошлой домашки истёк: решённые задачи из неё убираем, нерешённые остаются долгом
+            if ($o['hw_due'] !== '' && $o['hw_due'] < date('Y-m-d')) {
+                $o['hw_tasks'] = hw_unsolved($id, $o['hw_tasks']);
+                if ($o['hw_done']) $o['homework'] = '';
+            }
             $t = clean_tasks(array_merge($o['hw_tasks'], $tasks));
             $x = $o['homework'] === '' ? $hw : ($hw === '' || strpos($o['homework'], $hw) !== false ? $o['homework'] : $o['homework'] . "\n\n" . $hw);
             if (mb_strlen($x, 'UTF-8') > 5000) $x = mb_substr($x, 0, 5000, 'UTF-8');
